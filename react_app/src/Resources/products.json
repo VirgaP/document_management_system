@@ -1,0 +1,124 @@
+{
+    "items": [
+    {
+    "id": 1,
+    "image_url": "http://placehold.it/700x400",
+    "price": 391,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 5,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 4,
+    "inStock": false
+    },
+    {
+    "id": 2,
+    "image_url": "http://placehold.it/700x400",
+    "price": 684,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 15,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": true
+    },
+    {
+    "id": 3,
+    "image_url": "http://placehold.it/700x400",
+    "price": 605,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 5,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": false
+    },
+    {
+    "id": 4,
+    "image_url": "http://placehold.it/700x400",
+    "price": 686,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 17,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": false
+    },
+    {
+    "id": 5,
+    "image_url": "http://placehold.it/700x400",
+    "price": 791,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 12,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": false
+    },
+    {
+    "id": 6,
+    "image_url": "http://placehold.it/700x400",
+    "price": 549,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 20,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": false
+    },
+    {
+    "id": 7,
+    "image_url": "http://placehold.it/700x400",
+    "price": 664,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 7,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum \t\tlorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": false
+    },
+    {
+    "id": 8,
+    "image_url": "http://placehold.it/700x400",
+    "price": 936,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 13,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": true
+    },
+    {
+    "id": 9,
+    "image_url": "http://placehold.it/700x400",
+    "price": 1215,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 1,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": true
+    },
+    {
+    "id": 10,
+    "image_url": "http://placehold.it/700x400",
+    "price": 1374,
+    "title": "bike",
+    "brand": "brand",
+    "gears": 3,
+    "description": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "size": "L",
+    "rating": 5,
+    "inStock": false
+    }
+    ]
+}

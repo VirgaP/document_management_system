@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  padding-top: 54px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.user_form input{
+  margin: 0 0 20px 0;
+}
+.book_form {
+  background-color: aquamarine;
+  margin-bottom: 70px;
+  padding: 20px;
+}
+.user_form{
+  margin-top: 150px;
+  margin-bottom: 150px;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+
+.quantity {
+  float: left;
+  margin-right: 15px;
+  background-color: #eee;
+  position: relative;
+  width: 80px;
+  overflow: hidden
+}
+
+.quantity input {
+  margin: 0;
+  text-align: center;
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  float: right;
+  color: #000;
+  font-size: 20px;
+  border: 0;
+  outline: 0;
+  background-color: #F6F6F6
+}
+
+.quantity input.qty {
+  position: relative;
+  border: 0;
+  width: 100%;
+  height: 40px;
+  padding: 10px 25px 10px 10px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 15px;
+  border-radius: 0;
+  background-clip: padding-box
+}
+
+.quantity .minus, .quantity .plus {
+  line-height: 0;
+  background-clip: padding-box;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-background-size: 6px 30px;
+  -moz-background-size: 6px 30px;
+  color: #bbb;
+  font-size: 20px;
+  position: absolute;
+  height: 50%;
+  border: 0;
+  right: 0;
+  padding: 0;
+  width: 25px;
+  z-index: 3
+}
+
+.quantity .minus:hover, .quantity .plus:hover {
+  background-color: #dad8da
+}
+
+.quantity .minus {
+  bottom: 0
+}
+.shopping-cart {
+  margin-top: 20px;
+}
+div.update{
+  position: relative;
+  height: 45px;
+}
+button.update-cart-button {
+  position: absolute;
+  right: 0px;
+}
+div.cart-header{
+  position: relative;
+  height: 80px;
+} 
+a.btn-continue{
+  position: absolute;
+  right: 0px;
+  margin-right: 2%;
+}
+div.cart-footer{
+  position: relative;
+  height: 140px;
+}
+div.checkout{
+  position: absolute;
+  right: 0px;
+}
