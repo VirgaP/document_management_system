@@ -4,25 +4,25 @@ import React, { Component } from 'react'
 export class InstitutionListContainer extends Component {
       
   render() {
-    console.log(this.props.institutions)
-    const result = this.props.institutions.filter(institution => institution.type === "library");
-    console.log("REsult", result)
+    console.log(this.props.documents)
+    // const result = this.props.documents.filter(document => document.type === "library");
+    // console.log("REsult", result)
     var rows = [];
-    this.props.institutions.forEach(function(institution) {
-      rows.push(<Institution institution={institution} />);   
+    this.props.documents.forEach(function(document) {
+      rows.push(<Institution document={document} />);   
     });
     
     return (
 
     <div className="container">
-   {rows.length < 2 
+   {/* {rows.length < 2 
    ? ( <div class="alert alert-danger" role="alert">Total of {rows.length} is registered. Need to regsiter at least 2</div> ) 
    :   null 
    }
    { result.length == 0
    ? ( <div class="alert alert-warning" role="alert">At least one library must be added</div> ) 
    : null
-   }
+   } */}
     <table className="table table-striped">
         <thead>
           <tr>

@@ -10,15 +10,15 @@ export class HomePage extends Component {
     super(props)
   
     this.state = {
-      institutions:[]
+      documents:[]
     }
   }
   componentDidMount = () => {
-    axios.get('http://localhost:8099/api/institutions')
+    axios.get('http://localhost:8099/api/documents')
           .then(result => {
-            const institutions = result.data
-          this.setState({institutions});
-          console.log("Institucijos", institutions)
+            const documents = result.data
+          this.setState({documents});
+          console.log("Dokumentai", documents)
           })
           .catch(function (error) {
             console.log(error);
@@ -26,12 +26,12 @@ export class HomePage extends Component {
   }
       
   render() {
-    var INSTITUTIONS = this.state.institutions;
+    var DOCUMENTS = this.state.documents;
 
     return (
       <div>
         {/* <BookListContainer/> */}
-        <InstitutionListContainer institutions={INSTITUTIONS}/>
+        <InstitutionListContainer documents={DOCUMENTS}/>
       </div>
     )
   }

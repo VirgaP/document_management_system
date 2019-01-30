@@ -2,18 +2,19 @@ import React, { Component } from 'react'
 
 
    const InstitutionListComponent = (props) => {
-       var InstitutionList = props.institutions.map((institution)=> {
-       console.log("intitucijos is props ", props.institutions)
+       var InstitutionList = props.documents.map((document)=> {
+       console.log("dokumentai is props ", props.documents)
     return (
-        <div className="container" key={institution.title}>
+        <div className="container" key={document.title}>
         <bookComponent 
-        title={institution.title}
-        city={institution.city}
-        category={institution.category}
-        type={institution.type}
-        subType={institution.subType}
-        image = {institution.image}
-        />  
+        title={document.title}
+        // title={institution.title}
+        // city={institution.city}
+        // category={institution.category}
+        // type={institution.type}
+        // subType={institution.subType}
+        // image = {institution.image}
+        /> 
    </div>
     )
     

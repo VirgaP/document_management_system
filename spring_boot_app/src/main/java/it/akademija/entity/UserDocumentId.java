@@ -1,34 +1,35 @@
 package it.akademija.entity;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Embeddable
-public class InstitutionBookId implements Serializable {
+public class UserDocumentId implements Serializable {
 
-    private Institution institution;
-    private Book book;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    public Institution getInstitution() {
-        return institution;
-    }
-
-    public void setInstitution(Institution institution) {
-        this.institution = institution;
-    }
+    private Document document;
+    private User user;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    public Book getBook() {
-        return book;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setDocument(Document document) {
+        this.document = document;
+    }
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public UserDocumentId() {
     }
 
     //    @Column(name = "institution_id")
