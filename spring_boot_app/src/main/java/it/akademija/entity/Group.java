@@ -1,5 +1,6 @@
 package it.akademija.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Group {
 
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy="userGroups")
     private Set<User> groupUsers = new HashSet<User>();
 

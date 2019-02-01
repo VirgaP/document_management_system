@@ -61,11 +61,11 @@ public class UserController {
 //        return userService.getTypeByTitle(title);
 //    }
 
-    @RequestMapping(path = "/{surname}", method = RequestMethod.GET)
-    @ApiOperation(value = "Get one user", notes = "Returns one user by surname")
-    public RequestUser getDocument(
-            @PathVariable final String surname) {
-        return userService.getUserWithDocuments(surname);
+    @RequestMapping(path = "/{email}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get one user", notes = "Returns one user by email")
+    public UserDTO getDocument(
+            @PathVariable final String email) {
+        return userService.getUser(email);
     }
 
 

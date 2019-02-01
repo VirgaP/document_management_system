@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
-import BookListComponent from './components/bookListComponent';
+import UserListComponent from './components/userListComponent';
 import axios from 'axios';
 
 
-export class BookListContainer extends Component {
+export class UserListContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            books: [] 
+            users: [] 
           };
         }  
 
     componentDidMount() {
-        axios.get('http://localhost:8099/api/books')
+        axios.get('http://localhost:8099/api/users')
           .then(result => {
-              const books = result.data;
-              console.log(books);
+              const users = result.data;
+              console.log(users);
             this.setState({ 
-              books
+              users
             })
         })
             .catch(function (error) {
@@ -25,9 +25,9 @@ export class BookListContainer extends Component {
               }); 
       }
   render() {
-    if(!this.state.books){
-        return <div className="container">No books are available at the moment. Sorry ...</div>
-    }
+    if(!this.state.users){
+      return <div className="container">Šiuo metu registruotų vartotojų nėra</div>
+  }
     return (
       <div>
           {/* {books.map(book =>
@@ -36,19 +36,19 @@ export class BookListContainer extends Component {
           </li>
         )} */}
         <div className="container">
-        <h2>List of available books</h2>
+        <h4>Registruoti vartotojai</h4>
         <table className="table">
         <thead>
           <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Author</th>
-            <th scope="col">No of pages</th>
-            <th scope="col">Image</th>
+            <th scope="col">Vardas</th>
+            <th scope="col">Pavardė</th>
+            <th scope="col">El. paštas</th>
+            <th scope="col">Vartotojų grupė</th>
             <th></th>
           </tr>
         </thead>
       
-        <BookListComponent books={this.state.books}/>
+        <UserListComponent users={this.state.users}/>
     
         </table>
         </div>
@@ -57,4 +57,4 @@ export class BookListContainer extends Component {
   }
 }
 
-export default BookListContainer;
+export default UserListContainer;

@@ -1,5 +1,6 @@
 package it.akademija.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
@@ -27,7 +28,7 @@ public class User {
 
     private Set<Group> userGroups = new HashSet<Group>();
 
-
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "users_groups",
             joinColumns = { @JoinColumn(name = "user_id") },

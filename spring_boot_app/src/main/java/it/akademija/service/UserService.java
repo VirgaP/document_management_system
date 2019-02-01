@@ -51,30 +51,32 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO getUser(String surname){
-        User user = userRepository.findBySurname(surname);
+    public UserDTO getUser(String email){
+        User user = userRepository.findByEmail(email);
         UserDTO userDTO = new UserDTO(
                 user.getName(),
                 user.getSurname(),
                 user.getEmail(),
-                user.getAdmin()
+                user.getAdmin(),
+                user.getUserGroups()
         );
+
 
         return userDTO;
     }
 
 
-    @Transactional
-    public RequestUser getUserWithDocuments(String surname){
-        User user = userRepository.findBySurname(surname);
-        RequestUser request = new RequestUser(
-                user.getName(),
-                user.getSurname(),
-                user.getEmail(),
-                user.getUserDocuments()
-        );
-        return request;
-    }
+//    @Transactional
+//    public RequestUser getUserWithDocuments(String surname){
+//        User user = userRepository.findBySurname(surname);
+//        RequestUser request = new RequestUser(
+//                user.getName(),
+//                user.getSurname(),
+//                user.getEmail(),
+//                user.getUserDocuments()
+//        );
+//        return request;
+//    }
 
     @Transactional
     public void createUser(RequestUser requestUser) {
@@ -87,7 +89,6 @@ public class UserService {
                 requestUser.getAdmin()
         );
         user.addGroup(group);
-        System.out.println("Adminas" + requestUser.getAdmin());
         userRepository.save(user);
     }
 

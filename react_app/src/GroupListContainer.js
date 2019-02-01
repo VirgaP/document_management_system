@@ -12,9 +12,7 @@ export class GroupListContainer extends Component {
     this.props.groups.forEach(function(group) {
       rows.push(<Group group={group} />);   
     });
-    
     return (
-
     <div className="container">
     <table className="table table-striped">
         <thead>
@@ -24,12 +22,9 @@ export class GroupListContainer extends Component {
         </thead>
         <tbody>{rows}</tbody>
     </table>
-    
     </div>  
       );
-
   }
 }
-
 
 export default GroupListContainer

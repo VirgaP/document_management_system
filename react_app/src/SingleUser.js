@@ -5,22 +5,27 @@ import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 
-export class SingleBook extends Component {
+export class SingleUser extends Component {
     constructor(props) {
         super(props)
           
         this.state = {
-           id: this.props.match.params.title, //is index.js paima url paima productId
-           book: {},          
+           id: this.props.match.params.email, //is index.js 
+           user: {},
+           userGroups:[]
         }
         console.log("id", this.state.id);
       }
     
       componentDidMount = () => {
-          axios.get(`http://localhost:8099/api/books/${this.state.id}`)
+          axios.get(`http://localhost:8099/api/users/${this.state.id}`)
           .then(result => {
-            const book = result.data
-          this.setState({book});
+            const user = result.data
+          this.setState({user});
+          const userGroups = result.data.userGroups
+          this.setState({userGroups})
+          console.log("USERIS", user)
+          console.log('Grupes', userGroups)
           })
           .catch(function (error) {
             console.log(error);
@@ -30,10 +35,10 @@ export class SingleBook extends Component {
       }
   
       DeleteItem = (event) => {
-          axios.delete(`http://localhost:8099/api/books/${this.state.id}`)
+          axios.delete(`http://localhost:8099/api/users/${this.state.id}`)
           .then(result => {
-            const book = result.data
-          this.setState({book});
+            const user = result.data
+          this.setState({user});
           })
           .catch(function (error) {
             console.log(error);
@@ -44,7 +49,7 @@ export class SingleBook extends Component {
       
   
     render() {
-     console.log("params url: ", this.props.match.params.title)
+     console.log("params url: ", this.props.match.params.email)
       return (
           <UserProvider>
           <UserContext.Consumer>
@@ -54,21 +59,24 @@ export class SingleBook extends Component {
   
            <div className="container" style={style}>
            <div className="card h-100">
-              <a href="#"><img className="card-img-top" src="http://placehold.it/700x400" alt={this.state.book.image}></img></a>
               <div className="card-body">
                     <h4 className="card-title">
                     </h4>
-                    <h5>{this.state.book.title}</h5>
-                    <h5>{this.state.book.author}</h5>
-                    <h5>{this.state.book.pageCount} EUR</h5>
+                    <h5>Vardas: {this.state.user.name}</h5>
+                    <h5>Pavardė: {this.state.user.surname}</h5>
+                    <h5>El.paštas: {this.state.user.email}</h5>
+                    <h5>Vartotojo rolė: {String(this.state.user.admin) === 'true' ? 'administratorius' : 'vartototojas'}</h5> 
+                    {/* converts boolean to String */}
+                    <div>
+                      <h5>Vartotojo grupės: </h5> 
+                    {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
+                    </div>
+                    <div>
+                      <h5>Vartotojo dokumentai</h5>
+                    </div>
               </div>
               <div className="card-footer">
-                <p>Rating &nbsp;    
-                </p>
-                {/* <AddInsTituTion context={context} product={this.state.product}/> */}
-                 {/* <Button type="default" onClick={this.addToCart.bind(this)}> Add to cart </Button>  */}
-                 &nbsp; &nbsp; 
-                 <Button type="danger" onClick={this.DeleteItem.bind(this)}> Delete </Button>
+                 <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti </Button>
               </div>
             </div>
           </div>
@@ -90,4 +98,4 @@ const style = {
     border:'solid 1 px grey',
     backgroundColor: 'yellow',
 }
-export default SingleBook
+export default SingleUser

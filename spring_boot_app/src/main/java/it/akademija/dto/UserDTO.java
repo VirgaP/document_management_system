@@ -1,5 +1,10 @@
 package it.akademija.dto;
 
+import it.akademija.entity.Group;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class UserDTO {
 
     private String name;
@@ -10,6 +15,9 @@ public class UserDTO {
 
     private boolean admin;
 
+    private Set<Group> userGroups = new HashSet<Group>();
+
+
     public UserDTO(String name, String surname, String email, boolean admin) {
         this.name = name;
         this.surname = surname;
@@ -18,6 +26,14 @@ public class UserDTO {
     }
 
     public UserDTO() {
+    }
+
+    public UserDTO(String name, String surname, String email, boolean admin, Set<Group> userGroups) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.admin = admin;
+        this.userGroups = userGroups;
     }
 
     public String getName() {
@@ -50,5 +66,14 @@ public class UserDTO {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+
+    public Set<Group> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(Set<Group> userGroups) {
+        this.userGroups = userGroups;
     }
 }

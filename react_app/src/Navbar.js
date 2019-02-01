@@ -51,7 +51,7 @@ class Navbar extends Component {
                 <Link className="nav-link" to='/register'>Kurti naują vartotoją</Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to='/booksList'>Books</Link>
+                <Link className="nav-link" to='/usersList'>Vartotojai</Link>
                 </li>
                 <li className="nav-item">
                 <Link className="nav-link" to='/groups'>Kurti vartotojų grupę </Link>
