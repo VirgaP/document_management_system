@@ -6,6 +6,14 @@ import axios from 'axios';
 
 export class Institution extends Component {
 
+    constructor() {
+        super();
+       
+        this.state = {
+          email:'user@email.com',
+        };
+        
+      }
     DeleteItem = (event) => {
         axios.delete(`http://localhost:8099/api/documents/${this.props.document.number}`)
         .then(result => {
@@ -18,11 +26,11 @@ export class Institution extends Component {
     }
 
     SubmitItem = (event) => {
-        axios.delete(`http://localhost:8099/api/documents/${this.props.document.number}/submit`)
-        .then(result => {
-          const document = result.data
-        this.setState({document});
-        })
+        const payload = {
+            email: this.state.email
+        }
+        axios.post(`http://localhost:8099/api/documents/${this.props.document.number}/submit`, payload)
+        .then(res => console.log("Send POST request", payload))
         .catch(function (error) {
           console.log(error);
         });    

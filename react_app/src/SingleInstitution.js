@@ -23,29 +23,11 @@ export class SingleInstitution extends Component {
            visible: false 
            
         }
-        this.handleRemove = this.handleRemove.bind(this);
         this.handleResultChange = this.handleResultChange.bind(this);
-        this.showDeleteConfirm = this.showDeleteConfirm.bind(this);
         // this.showConfirm = this.showConfirm.bind(this);
       }
       
-       showDeleteConfirm=()=> {
-       
-        confirm({
-          title: 'Are you sure delete this item?',
-          content: 'Some descriptions',
-          okText: 'Yes',
-          okType: 'danger',
-          cancelText: 'No',
-          onOk() {
-            console.log('OK');
-            
-          },
-          onCancel() {
-            console.log('Cancel');
-          },
-        });
-      }
+      
 
       handleResultChange(value) {
         console.log("VALUE", value)
@@ -68,35 +50,28 @@ export class SingleInstitution extends Component {
 
       
 
-      handleRemove (index) {
-       this.showDeleteConfirm();
-        const payload = {title: index}
-        var list = this.state.books;
+      // handleRemove (index) {
+      //  this.showDeleteConfirm();
+      //   const payload = {title: index}
+      //   var list = this.state.books;
        
-        let bookIdx = this.state.books.findIndex((book) => book.book.title === index); //find array elem index by title/index
-        const newList = list.splice(bookIdx, 1); //delets element and returns updated list of books
-        this.setState({ boks: newList }); 
+      //   let bookIdx = this.state.books.findIndex((book) => book.book.title === index); //find array elem index by title/index
+      //   const newList = list.splice(bookIdx, 1); //delets element and returns updated list of books
+      //   this.setState({ boks: newList }); 
 
-        axios.delete(`http://localhost:8099/api/institutions/${this.state.title}/removeBook`, {data: payload})
-            .then(res => {
-              console.log(res)
-              console.log('it works')
-          })
-          .catch(function (error) {
-              console.log(error);
-          }); 
+      //   axios.delete(`http://localhost:8099/api/institutions/${this.state.title}/removeBook`, {data: payload})
+      //       .then(res => {
+      //         console.log(res)
+      //         console.log('it works')
+      //     })
+      //     .catch(function (error) {
+      //         console.log(error);
+      //     }); 
         
-      }
+      // }
 
     render() {
 
-     console.log("Dynamice BOOKS", this.state.booksArray)
-     console.log("DB BOOKS", this.state.books)
-
-      var imgs={
-        vaga: require('./images/vaga.jpeg'),
-        vtvpmc: require('./images/vtvpmc.jpg')
-      }
       return (
           <UserProvider>
           <UserContext.Consumer>
@@ -105,10 +80,9 @@ export class SingleInstitution extends Component {
           <div style={username}>You are now logged in as : {context}</div>
   
            <div className="container" style={style}>
-
           
               <div className="card-body row">
-                <div className="col-lg-3 col-md-12">
+                <div className="col-lg-12 col-md-12">
                       <h3 className="card-title">{this.state.document.title}
                       </h3>
                       <h5>{this.state.document.description}</h5>

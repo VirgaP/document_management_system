@@ -72,53 +72,26 @@ public class DocumentController {
         documentService.updateDocument(request, uniqueNumber);
     }
 
-    @RequestMapping(path = "/{number}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{uniqueNumber}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete document", notes = "Deletes document by number")
-    void deleteDocument(@PathVariable final String number) {
-        documentService.deleteDocument(number);
+    void deleteDocument(@PathVariable final String uniqueNumber) {
+        documentService.deleteDocument(uniqueNumber);
 
     }
 
-//    @RequestMapping(path="/{title}/books", method = RequestMethod.GET)
-//    @ApiOperation(value="Get list of all books", notes="Returns list of all books in DB not bound to institution") //defined in bookservcie
-//    public List<BookInstitutionDTO> getAllBooksByInstitution(
-//            @PathVariable final String institutionTitle) {
-//        return bookService.getBooksByInstitution(institutionTitle);
-//    }
 
-
-    @RequestMapping(path = "/{title}", method = RequestMethod.POST)
-    @ApiOperation(value = "Add type", notes = "Add document type")
-    @ResponseStatus(HttpStatus.OK)
-    void addDocumentType(
-            @ApiParam(value = "Document data", required = true)
-            @PathVariable final String title,
-            @RequestBody RequestUser request
-            )
-    {
-        documentService.addUser(title, request);
-    }
-
-    @RequestMapping(path = "/{title}/removeType", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Delete document", notes = "Removes type from document")
-    void removeDocumentType(@PathVariable final String title,
-                    @RequestBody RequestUser requestUser) {
-        documentService.removeUser(title, requestUser);
-
-    }
-
-    @RequestMapping(path = "/{number}/submit", method = RequestMethod.POST)
+    @RequestMapping(path = "/{uniqueNumber}/submit", method = RequestMethod.POST)
     @ApiOperation(value = "Submit document", notes = "Submit document, change status")
     @ResponseStatus(HttpStatus.OK)
     void submitDocument(
             @ApiParam(value = "Document data", required = true)
-            @PathVariable final String number,
+            @PathVariable final String uniqueNumber,
             @RequestBody RequestDocument request
+
     )
     {
-        documentService.submitDocument(number, request);
+        documentService.submitDocument(uniqueNumber, request);
     }
 
 }

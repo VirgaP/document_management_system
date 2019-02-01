@@ -124,8 +124,8 @@ public class DocumentService {
     }
 
     @Transactional
-    public void deleteDocument(String title){
-        Document document = documentRepository.findByTitle(title);
+    public void deleteDocument(String uniqueNumber){
+        Document document = documentRepository.findByuniqueNumber(uniqueNumber);
 
 //        for (Book book : institution.getBookSet()) { // removing book from inverse side institution assocition and deleting institution
 //            book.getInstitutions().remove(institution);
@@ -144,7 +144,9 @@ public class DocumentService {
         User user = userRepository.findByEmail(request.getEmail());
 
         UserDocument userDocument = new UserDocument();
-//        UserDocument userDocument = userDocumentRepository.getOne()
+        userDocument.setUser(user);
+        userDocument.setDocument(document);
+
         userDocument.setSubmitted(true);
 
         userDocumentRepository.save(userDocument);

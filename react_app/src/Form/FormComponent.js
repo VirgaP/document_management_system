@@ -16,7 +16,7 @@ class Form extends Component {
           typeTitle: '',
           title: '',
           description: '',
-          email:'jonas@email.com',
+          email:'user@email.com',
           date: date,
           uniqueNumber:''
         };
