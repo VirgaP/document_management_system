@@ -55,8 +55,8 @@ public class GroupService {
     }
 
     @Transactional
-    public void deleteGroup(RequestGroup request){//arba String title
-        Group group = groupRepository.findByname(request.getName());
+    public void deleteGroup(String name){
+        Group group = groupRepository.findByname(name);
         groupRepository.delete(group);
     }
 

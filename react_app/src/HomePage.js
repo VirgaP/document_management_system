@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import BookListContainer from './BookListContainer';
 import axios from 'axios';
 import InstitutionListContainer from './InstitutionListContainer';
+import GroupListContainer from './GroupListContainer';
+import TypeListContainer from './TypeListContainer';
 
 
 export class HomePage extends Component {
@@ -10,7 +12,9 @@ export class HomePage extends Component {
     super(props)
   
     this.state = {
-      documents:[]
+      documents:[],
+      groups:[],
+      types:[]
     }
   }
   componentDidMount = () => {
@@ -23,15 +27,37 @@ export class HomePage extends Component {
           .catch(function (error) {
             console.log(error);
           });
+
+          axios.get('http://localhost:8099/api/group')
+          .then(result => {
+            const groups = result.data
+          this.setState({groups});
+          console.log("Grupes", groups)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          axios.get('http://localhost:8099/api/types')
+          .then(result => {
+            const types = result.data
+          this.setState({types});
+          console.log("Tipai", types)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
   }
       
   render() {
     var DOCUMENTS = this.state.documents;
-
+    var GROUPS = this.state.groups;
+    var TYPES = this.state.types;
     return (
       <div>
-        {/* <BookListContainer/> */}
         <InstitutionListContainer documents={DOCUMENTS}/>
+        <GroupListContainer groups={GROUPS}/>
+        <TypeListContainer types={TYPES}/>
       </div>
     )
   }

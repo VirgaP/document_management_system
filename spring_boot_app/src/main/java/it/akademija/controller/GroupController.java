@@ -52,14 +52,14 @@ public class GroupController {
     }
 
 
-    @RequestMapping(path = "/delete", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{name}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value="Data type", notes="Deletes group by name")
     public void deleteGroup(
             @ApiParam(value="Group data", required=true)
-            @RequestBody final RequestGroup requestBody)
+            @PathVariable final String name)
     {
-        groupService.deleteGroup(requestBody);
+        groupService.deleteGroup(name);
     }
 
 

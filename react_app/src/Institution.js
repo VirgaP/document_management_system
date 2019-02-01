@@ -35,6 +35,7 @@ export class Institution extends Component {
           console.log(error);
         });    
     }
+    
   render() {
       console.log("Dokumentas", this.props.document)
     return (
