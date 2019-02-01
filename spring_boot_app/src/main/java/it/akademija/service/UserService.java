@@ -2,10 +2,12 @@ package it.akademija.service;
 
 import it.akademija.dto.TypeDTO;
 import it.akademija.dto.UserDTO;
+import it.akademija.entity.Group;
 import it.akademija.entity.Type;
 import it.akademija.entity.User;
 import it.akademija.model.IncomingRequestBody;
 import it.akademija.model.RequestUser;
+import it.akademija.repository.GroupRepository;
 import it.akademija.repository.TypeRepository;
 import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.UserRepository;
@@ -25,11 +27,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
+    private final GroupRepository groupRepository;
+
 
     @Autowired
-    public UserService(UserRepository userRepository, DocumentRepository documentRepository) {
+    public UserService(UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository) {
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
+        this.groupRepository = groupRepository;
     }
 
     @Transactional
@@ -39,7 +44,8 @@ public class UserService {
                 .map(user -> new UserDTO(
                         user.getName(),
                         user.getSurname(),
-                        user.getEmail()
+                        user.getEmail(),
+                        user.getAdmin()
                         ))
                 .collect(Collectors.toList());
     }
@@ -50,7 +56,8 @@ public class UserService {
         UserDTO userDTO = new UserDTO(
                 user.getName(),
                 user.getSurname(),
-                user.getEmail()
+                user.getEmail(),
+                user.getAdmin()
         );
 
         return userDTO;
@@ -71,12 +78,16 @@ public class UserService {
 
     @Transactional
     public void createUser(RequestUser requestUser) {
+        Group group = groupRepository.findByname(requestUser.getGroupName());
         User user = new User(
                 new Long(0),
                 requestUser.getName(),
                 requestUser.getSurname(),
-                requestUser.getEmail()
+                requestUser.getEmail(),
+                requestUser.getAdmin()
         );
+        user.addGroup(group);
+        System.out.println("Adminas" + requestUser.getAdmin());
         userRepository.save(user);
     }
 
@@ -85,6 +96,7 @@ public class UserService {
         User user = userRepository.findBySurname(surname);
         userRepository.delete(user);
     }
+
 //
 //    @Transactional
 //    public void addBookToInstitution(String title, String documentTitle){

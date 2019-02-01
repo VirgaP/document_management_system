@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     Document findByTitle(String title);
+    Document findByuniqueNumber(String uniqueNumber);
 
 }

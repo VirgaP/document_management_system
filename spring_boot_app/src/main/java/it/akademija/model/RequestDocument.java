@@ -17,6 +17,8 @@ public final class RequestDocument {
 
     private String email;
 
+    private String uniqueNumber;
+
     private List<UserDocument> documentTypes;
 
 
@@ -40,6 +42,14 @@ public final class RequestDocument {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUniqueNumber() {
+        return uniqueNumber;
+    }
+
+    public void setUniqueNumber(String uniqueNumber) {
+        this.uniqueNumber = uniqueNumber;
     }
 
     public String getTypeTitle() {

@@ -8,6 +8,7 @@ import it.akademija.entity.User;
 import it.akademija.model.IncomingRequestBody;
 import it.akademija.model.RequestDocument;
 import it.akademija.model.RequestUser;
+import it.akademija.model.RequestUserDocument;
 import it.akademija.repository.TypeRepository;
 import it.akademija.repository.UserDocumentRepository;
 import it.akademija.repository.DocumentRepository;
@@ -50,6 +51,7 @@ public class DocumentService {
         UserDocument userDocument= new UserDocument();
         Document document = new Document(
                 new Long(1),
+                requestDocument.getUniqueNumber(),
                 requestDocument.getTitle(),
                 requestDocument.getDescription(),
                 new Date()
@@ -59,7 +61,7 @@ public class DocumentService {
 
         userDocument.setUser(user);//ok
 
-        userDocument.setDocument(documentRepository.findByTitle(requestDocument.getTitle()));//jei sutampa pavadinimas jpa nesupranta pagal kuri ieskoti, pakiesi i findbyunuique numbet
+        userDocument.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));//jei sutampa pavadinimas jpa nesupranta pagal kuri ieskoti, pakiesi i findbyunuique numbet
         document.addUser(userDocument);
         user.addUserDocument(userDocument);
 
@@ -72,6 +74,7 @@ public class DocumentService {
         List<DocumentDTO> documentDTOS = documentRepository.findAll().stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
+                        document.getUniqueNumber(),
                         document.getDescription(),
                         document.getCreatedDate(),
                         document.getType()))
@@ -94,11 +97,12 @@ public class DocumentService {
 
 
     @Transactional
-    public DocumentDTO getDocumentByTitle(String title){
-        Document document = documentRepository.findByTitle(title);
+    public DocumentDTO getDocumentByTitle(String uniqueNumber){
+        Document document = documentRepository.findByuniqueNumber(uniqueNumber);
 
         DocumentDTO documentDTO = new DocumentDTO(
                 document.getTitle(),
+                document.getUniqueNumber(),
                 document.getDescription(),
                 document.getCreatedDate(),
                 document.getType()
@@ -108,11 +112,15 @@ public class DocumentService {
     }
 
     @Transactional
-    public void updateDocument(RequestDocument requestDocument, String title){
-        Document document = documentRepository.findByTitle(title);
+    public void updateDocument(RequestDocument requestDocument, String uniqueNumber){
+        Document document = documentRepository.findByuniqueNumber(uniqueNumber);
+        Type type = typeRepository.findByTitle(requestDocument.getTypeTitle());
 
                 document.setTitle(requestDocument.getTitle());
                 document.setDescription(requestDocument.getDescription());
+                document.setType(type);
+
+                documentRepository.save(document);
     }
 
     @Transactional
@@ -131,21 +139,57 @@ public class DocumentService {
     }
 
     @Transactional
-    public void addUser(String title, RequestUser request){//pridet addType
-        Document document = documentRepository.findByTitle(title);
-
+    public void submitDocument(String number, RequestDocument request){
+        Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(request.getEmail());
 
-        UserDocument userDocument= new UserDocument();
+        UserDocument userDocument = new UserDocument();
+//        UserDocument userDocument = userDocumentRepository.getOne()
+        userDocument.setSubmitted(true);
 
-        userDocument.setUser(user);
-        userDocument.setDocument(document);
+        userDocumentRepository.save(userDocument);
+    }
+
+
+    @Transactional
+    public void confirmDocument(String number, RequestDocument request){
+        Document document = documentRepository.findByuniqueNumber(number);
+        User user = userRepository.findByEmail(request.getEmail());
+
+        UserDocument userDocument = new UserDocument();
+        userDocument.setConfirmed(true);
 
         userDocumentRepository.save(userDocument);
 
-        document.addUser(userDocument);
+    }
 
-        user.addUserDocument(userDocument);
+    @Transactional
+    public void rejectDocument(String number, RequestDocument request){
+        Document document = documentRepository.findByuniqueNumber(number);
+        User user = userRepository.findByEmail(request.getEmail());
+
+        UserDocument userDocument = new UserDocument();
+        userDocument.setRejected(true);
+
+        userDocumentRepository.save(userDocument);
+
+    }
+    @Transactional
+    public void addUser(String title, RequestUser request){//pridet addType
+//        Document document = documentRepository.findByTitle(title);
+//
+//        User user = userRepository.findByEmail(request.getEmail());
+//
+//        UserDocument userDocument= new UserDocument();
+//
+//        userDocument.setUser(user);
+//        userDocument.setDocument(document);
+//
+//        userDocumentRepository.save(userDocument);
+//
+//        document.addUser(userDocument);
+//
+//        user.addUserDocument(userDocument);
 
 //        bookRepository.save(book);
 //        institutionRepository.save(institution);
@@ -164,8 +208,6 @@ public class DocumentService {
 
         document.getUserDocuments().remove(userDocument);
         user.getUserDocuments().remove(userDocument);
-
-
     }
 
 }

@@ -7,6 +7,8 @@ import SingleInput from '../components/singleInput';
 class Form extends Component {
     constructor() {
         super();
+        var today = new Date(),
+            date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()+'-'+today.getHours()+'-'+today.getMinutes();
         this.state = {
           documents: [],
           redirect: false,
@@ -14,7 +16,9 @@ class Form extends Component {
           typeTitle: '',
           title: '',
           description: '',
-          email:'virga@rail.lt'
+          email:'jonas@email.com',
+          date: date,
+          uniqueNumber:''
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClearForm = this.handleClearForm.bind(this);
@@ -44,6 +48,13 @@ class Form extends Component {
           .catch(function (error) {
               console.log(error);
             }); 
+
+        //     const uniqueNumber = this.state.date + '-' + this.state.email;
+        //     console.log("Num not in state", uniqueNumber)
+        //     this.setState({uniqueNumber})
+        // console.log(this.state.date)
+        // // this.setState({documentNo: this.state.date + '' + this.state.email})
+        // console.log("Dok num", this.state.uniqueNumber)
     }
 
 
@@ -70,23 +81,13 @@ class Form extends Component {
       handleSubmit(e) {
         e.preventDefault();
 
-        // const { documents } = this.state,
-        // title = this.state.title,
-        // description = this.state.description,
-        // typeTitle = this.state.typeTitle
-        // this.setState({
-        //   documents: [...documents, {
-        //     title,
-        //     description,
-        //     typeTitle
-        //   }]
-          
-        // })
+        const uniqueNumber = this.state.date + '-' + this.state.email;
+
         console.log("Tipas ", this.state.typeTitle);
         console.log('Pavadinimas ', this.state.title);
         console.log('Aprasymas ', this.state.description)
         console.log('Email ', this.state.email)
-
+        console.log('Number', uniqueNumber)
 
         this.handleClearForm(e);
  
@@ -94,14 +95,15 @@ class Form extends Component {
           title: this.state.title,
           description: this.state.description,
           typeTitle: this.state.typeTitle,
-          email:this.state.email
-
+          email:this.state.email,
+          uniqueNumber: uniqueNumber
             })
             .then(function(response) {
               console.log("Tipas post", this.state.typeTitle);
               console.log('Pavadinimas post ', this.state.title);
               console.log('Aprasymas post', this.state.description)
               console.log('Email post', this.state.email)
+              console.log('Number', uniqueNumber)
 
                 console.log(response);
             }).catch(function (error) {
@@ -134,25 +136,7 @@ class Form extends Component {
               content={this.state.description}
               placeholder={'Dokumento aprasymas'}
              /> 
-            {/* <div className="form-group has-error form-group has-success">
-              <label className="control-label" for="inputError1">Pavadinimas</label>
-              <input type="text" ref="title" placeholder="Dokumento pavadinimas" className="form-control" id="inputError1" required/>
-            </div>
-            <div className="form-group has-error form-group has-success">
-              <label className="control-label" for="inputError1">Aprašymas</label>
-              <input type="text" ref="description" placeholder="Dokumento aprašymas" className="form-control" id="inputError1" required/>
-            </div> */}
-            {/* <div>
-                <label className="control-label">Pasirinkite dokumento tipą</label>
-                  <select ref={(input) => this.selectType = input} className="form-control" id="ntype" required>
-                    <option value = ""> ... </option>
-                    <option value = "library">Library</option>
-                    <option value = "bookstore">Bookstore</option>
-                    <option value = "book_archive">Book archive</option>
-                    <option value = "book_rental">Book rental</option>
-                </select>
-            </div> */}
-          
+            
             <div>
                 <label className="control-label">Pasirinkite dokumento tipą</label>
                 <select value={this.state.typeTitle} onChange={this.handleSelectChange} 

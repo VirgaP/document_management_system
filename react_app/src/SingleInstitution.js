@@ -15,8 +15,8 @@ export class SingleInstitution extends Component {
         super(props)
           
         this.state = {
-           title: this.props.match.params.title, 
-           institution: {},  
+           number: this.props.match.params.number, 
+           document: {},  
            books: [], 
            booksArray:[],
            image:'',
@@ -55,15 +55,11 @@ export class SingleInstitution extends Component {
       }
     
       componentDidMount = () => {
-          axios.get(`http://localhost:8099/api/institutions/${this.state.title}`)
+          axios.get(`http://localhost:8099/api/documents/${this.state.number}`)
           .then(result => {
-            const institution = result.data;
-          this.setState({institution});
-          const image = result.data.image;
-          this.setState({image});
-          const books = result.data.institutionBooks;
-          this.setState({books});
-          console.log(institution)
+            const document = result.data;
+          this.setState({document});
+          console.log(document)
           })
           .catch(function (error) {
             console.log(error);
@@ -110,22 +106,14 @@ export class SingleInstitution extends Component {
   
            <div className="container" style={style}>
 
-           <div className="card h-100">
-              <a href="#"><img className="card-img-top" 
-              src={this.state.institution.image === "vaga"? imgs.vaga : "http://placehold.it/700x400" ||this.state.institution.image === "vtvpmc"? imgs.vtvpmc : "http://placehold.it/700x400"}              
-              alt={this.state.institution.image}>
-              </img></a>
-              {this.state.books.length < 2 
-                  ? ( <div class="alert alert-danger" role="alert">Total of {this.state.books.length} book(s) are added. Need to contain at least 3 books</div> ) 
-                  :   null 
-              }
+          
               <div className="card-body row">
                 <div className="col-lg-3 col-md-12">
-                      <h3 className="card-title">{this.state.institution.title}
+                      <h3 className="card-title">{this.state.document.title}
                       </h3>
-                      <h5>{this.state.institution.city}</h5>
-                      <h5>{this.state.institution.category}</h5>
-                      <h5>{this.state.institution.type}</h5>
+                      <h5>{this.state.document.description}</h5>
+                      <h5>{this.state.document.createdDate}</h5>
+                      {/* <h5>{this.state.document.type.title}</h5> */}
                   </div>
                   <div className="col-lg-9 col-md-12">
                   <h4>Books in institution</h4>
@@ -155,7 +143,7 @@ export class SingleInstitution extends Component {
               title={this.state.title}/>
               </div>
             </div>
-          </div>
+       
               </React.Fragment> 
                   )}
               </UserContext.Consumer>

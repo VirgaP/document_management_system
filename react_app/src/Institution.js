@@ -7,36 +7,48 @@ import axios from 'axios';
 export class Institution extends Component {
 
     DeleteItem = (event) => {
-        axios.delete(`http://localhost:8099/api/institutions/${this.props.institution.title}`)
+        axios.delete(`http://localhost:8099/api/documents/${this.props.document.number}`)
         .then(result => {
-          const institution = result.data
-        this.setState({institution});
+          const document = result.data
+        this.setState({document});
         })
         .catch(function (error) {
           console.log(error);
         });
-        
+    }
+
+    SubmitItem = (event) => {
+        axios.delete(`http://localhost:8099/api/documents/${this.props.document.number}/submit`)
+        .then(result => {
+          const document = result.data
+        this.setState({document});
+        })
+        .catch(function (error) {
+          console.log(error);
+        });    
     }
   render() {
-      console.log("INSTITUVCIJA", this.props.institution)
+      console.log("Dokumentas", this.props.document)
     return (
         <tr>
-        <td>{this.props.institution.title}</td>
-        <td>{this.props.institution.city}</td>
-        <td>{this.props.institution.category}</td>
-        <td>{this.props.institution.type}</td>
-        <td>{this.props.institution.subtype}</td>
+        <td>{this.props.document.title}</td>
+        <td>{this.props.document.description}</td>
+        <td>{this.props.document.type.title}</td>
+        <td>{this.props.document.createdDate}</td>
         <td>
         <Button type="primary">
-            <Link to={`/institution/${this.props.institution.title}`}> View </Link>
+            <Link to={`/institution/${this.props.document.number}`}> Peržiūrėti </Link>
         </Button>
         </td>
         <td>
-        <Button type="danger" onClick={this.DeleteItem.bind(this)}> Delete </Button>
+        <Button type="primary" onClick={this.SubmitItem.bind(this)}>Pateikti</Button>
+        </td>
+        <td>
+        <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti </Button>
         </td>
         <td>
         <Button type="default">
-            <Link to={`/edit/institution/${this.props.institution.title}`}> Edit </Link>
+            <Link to={`/edit/institution/${this.props.document.number}`}> Redaguoti </Link>
         </Button>
         </td>
        

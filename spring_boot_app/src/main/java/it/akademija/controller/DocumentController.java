@@ -6,6 +6,7 @@ import it.akademija.dto.DocumentDTO;
 import it.akademija.model.IncomingRequestBody;
 import it.akademija.model.RequestDocument;
 import it.akademija.model.RequestUser;
+import it.akademija.model.RequestUserDocument;
 import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,28 +55,28 @@ public class DocumentController {
 //    }
 
 
-    @RequestMapping(path = "/{title}", method = RequestMethod.GET)
-    @ApiOperation(value = "Get one document", notes = "Returns one document by title")
+    @RequestMapping(path = "/{uniqueNumber}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get one document", notes = "Returns one document by number")
     public DocumentDTO getDocument(
-            @PathVariable final String title) {
-        return documentService.getDocumentByTitle(title);
+            @PathVariable final String uniqueNumber) {
+        return documentService.getDocumentByTitle(uniqueNumber);
     }
 
-    @RequestMapping(path = "/{title}/edit", method = RequestMethod.PUT)
-    @ApiOperation(value = "Get and update document", notes = "Returns document by document title and updates")
+    @RequestMapping(path = "/{uniqueNumber}/edit", method = RequestMethod.PUT)
+    @ApiOperation(value = "Get and update document", notes = "Returns document by document number and updates")
     @ResponseStatus(HttpStatus.OK)
     public void updateDocument(
             @ApiParam(value = "Document data", required = true)
-            @RequestBody RequestDocument document,
-            @PathVariable final String title){
-        documentService.updateDocument(document, title);
+            @RequestBody RequestDocument request,
+            @PathVariable final String uniqueNumber){
+        documentService.updateDocument(request, uniqueNumber);
     }
 
-    @RequestMapping(path = "/{title}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{number}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Delete document", notes = "Deletes document by title")
-    void deleteDocument(@PathVariable final String title) {
-        documentService.deleteDocument(title);
+    @ApiOperation(value = "Delete document", notes = "Deletes document by number")
+    void deleteDocument(@PathVariable final String number) {
+        documentService.deleteDocument(number);
 
     }
 
@@ -106,6 +107,18 @@ public class DocumentController {
                     @RequestBody RequestUser requestUser) {
         documentService.removeUser(title, requestUser);
 
+    }
+
+    @RequestMapping(path = "/{number}/submit", method = RequestMethod.POST)
+    @ApiOperation(value = "Submit document", notes = "Submit document, change status")
+    @ResponseStatus(HttpStatus.OK)
+    void submitDocument(
+            @ApiParam(value = "Document data", required = true)
+            @PathVariable final String number,
+            @RequestBody RequestDocument request
+    )
+    {
+        documentService.submitDocument(number, request);
     }
 
 }

@@ -2,10 +2,12 @@ package it.akademija.service;
 
 import it.akademija.dto.TypeDTO;
 import it.akademija.dto.UserDTO;
+import it.akademija.entity.Group;
 import it.akademija.entity.Type;
 import it.akademija.entity.User;
 import it.akademija.model.CreateUserCommand;
 import it.akademija.model.IncomingRequestBody;
+import it.akademija.model.RequestGroup;
 import it.akademija.repository.TypeRepository;
 import it.akademija.repository.UserRepository;
 import org.slf4j.Logger;
@@ -48,6 +50,12 @@ public class TypeService {
                 request.getTitle()
         );
         typeRepository.save(type);
+    }
+
+    @Transactional
+    public void editType(IncomingRequestBody request, String title){
+        Type type = typeRepository.findByTitle(title);
+        type.setTitle(request.getTitle());
     }
 
     @Transactional

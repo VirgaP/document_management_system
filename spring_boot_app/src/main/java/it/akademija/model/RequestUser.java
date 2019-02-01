@@ -13,12 +13,18 @@ public final class RequestUser {
 
     private String email;
 
+    private String groupName;
+
+    private boolean admin;
+
     private List<UserDocument> userDocuments;
 
-    public RequestUser(String name, String surname, String email) {
+    public RequestUser(String name, String surname, String email, String groupName, boolean admin) {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.groupName = groupName;
+        this.admin = admin;
     }
 
     public RequestUser() {
@@ -29,6 +35,14 @@ public final class RequestUser {
         this.surname = surname;
         this.email = email;
         this.userDocuments = userDocuments;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getName() {
@@ -53,6 +67,14 @@ public final class RequestUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public List<UserDocument> getUserDocuments() {

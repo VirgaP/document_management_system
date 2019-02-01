@@ -13,11 +13,20 @@ public class UserDocument {
 
     private UserDocumentId primaryKey = new UserDocumentId();
 
+    @Column(name="saved")
+    private boolean saved = true;
+
+    @Column(name="confirmed")
+    private boolean confirmed = false;
+
+    @Column(name="submitted")
+    private boolean submitted = false;
+
+    @Column(name="rejected")
+    private boolean rejected = false;
 
     public UserDocument() {
     }
-
-
 
     @EmbeddedId
     public UserDocumentId getPrimaryKey() {
@@ -46,8 +55,40 @@ public class UserDocument {
         getPrimaryKey().setUser(user);
     }
 
+    public boolean isSaved() {
+        return saved;
+    }
 
-//
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+
+    public boolean isSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
+    }
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
+    }
+
+    //
 //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) return true;

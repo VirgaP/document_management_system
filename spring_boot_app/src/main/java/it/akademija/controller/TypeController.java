@@ -7,6 +7,7 @@ import it.akademija.dto.TypeDTO;
 import it.akademija.dto.UserDTO;
 import it.akademija.model.CreateUserCommand;
 import it.akademija.model.IncomingRequestBody;
+import it.akademija.model.RequestGroup;
 import it.akademija.repository.TypeRepository;
 import it.akademija.service.TypeService;
 import it.akademija.service.UserService;
@@ -55,12 +56,23 @@ public class TypeController {
 
     @RequestMapping(path = "/{title}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value="Data type", notes="Deletes type by title")
-    public void deleteUser(
+    @ApiOperation(value="Type data", notes="Deletes type by title")
+    public void deleteType(
             @ApiParam(value="Type data", required=true)
             @RequestBody final IncomingRequestBody requestBody)
     {
         typeService.deleteType(requestBody);
+    }
+
+
+    @RequestMapping(path = "/{title}/edit", method = RequestMethod.PUT)
+    @ApiOperation(value = "Get and update type", notes = "Returns type by title and updates type information")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateType(
+            @ApiParam(value = "Type data", required = true)
+            @RequestBody IncomingRequestBody requestBody,
+            @PathVariable final String title){
+        typeService.editType(requestBody, title);
     }
 
 }

@@ -1,6 +1,7 @@
 package it.akademija.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.*;
@@ -10,6 +11,8 @@ public class Document {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+
+    private String uniqueNumber;
 
     private String title;
 
@@ -34,8 +37,9 @@ public class Document {
     public Document() {
     }
 
-    public Document(Long id, String title, String description, Type type, Date createdDate) {
+    public Document(Long id, String uniqueNumber, String title, String description, Type type, Date createdDate) {
         this.id = id;
+        this.uniqueNumber = uniqueNumber;
         this.title = title;
         this.description = description;
         this.type = type;
@@ -51,8 +55,9 @@ public class Document {
         this.userDocuments = userDocuments;
     }
 
-    public Document(Long id, String title, String description, Date createdDate) {
+    public Document(Long id, String uniqueNumber, String title, String description, Date createdDate) {
         this.id = id;
+        this.uniqueNumber = uniqueNumber;
         this.title = title;
         this.description = description;
         this.createdDate = createdDate;
@@ -86,9 +91,18 @@ public class Document {
     public void setId(Long id) {
         this.id = id;
     }
-//
-//    @NaturalId
-    @Column(updatable = true, nullable = false)
+
+    @NaturalId
+    @Column(updatable = false, nullable = false)
+    public String getUniqueNumber() {
+        return uniqueNumber;
+    }
+
+    public void setUniqueNumber(String uniqueNumber) {
+        this.uniqueNumber = uniqueNumber;
+    }
+
+
     public String getTitle() {
         return title;
     }

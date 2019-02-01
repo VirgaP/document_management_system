@@ -26,7 +26,7 @@ export class InstitutionListContainer extends Component {
     <table className="table table-striped">
         <thead>
           <tr>
-            <th>Title</th><th>City</th><th>Catgeory</th><th>Type</th><th>Subtype</th><th>view</th><th>delete</th><th>edit</th>
+            <th>Title</th><th>Description</th><th>Title</th><th>Date</th><th>view</th><th>delete</th><th>edit</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>

@@ -1,6 +1,5 @@
 package it.akademija.dto;
 
-import java.math.BigDecimal;
 
 
 public class TypeDTO {

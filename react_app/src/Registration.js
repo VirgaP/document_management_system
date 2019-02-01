@@ -12,12 +12,18 @@ class Register extends Component {
       name: '',
       surname: '',
       email:'',
+      groups:[],
+      groupName:'',
+      admin: false,
       redirect: false,
+      
     }
-
+    console.log("Admin state", this.state.admin)
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSurnameChange = this.handleSurnameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
+    this.handleChangeAdmin = this.handleChangeAdmin.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleClearForm = this.handleClearForm.bind(this);
   }
@@ -32,6 +38,19 @@ class Register extends Component {
   //     return <Redirect to='/' />
   //   }
   // }
+  componentDidMount = () => {
+    axios.get('http://localhost:8099/api/group')
+    .then(result => {
+        const groups = result.data;
+        console.log(groups);
+      this.setState({ 
+        groups
+      })
+  })
+      .catch(function (error) {
+          console.log(error);
+        });
+  }
 
   handleNameChange(e) {  
     this.setState({ name: e.target.value });
@@ -44,7 +63,16 @@ class Register extends Component {
   handleEmailChange(e) {  
     this.setState({ email: e.target.value });
   }
+  handleSelectChange(e) {  
+    this.setState({ groupName: e.target.value });
+  }
 
+  handleChangeAdmin(event){
+    this.setState({ admin : event.target.checked });
+
+      console.log("Admin", this.state.admin)
+    }
+  
   handleFormSubmit(e) {  
     e.preventDefault();
   
@@ -53,7 +81,9 @@ class Register extends Component {
     axios.post('http://localhost:8099/api/users/new', {
       name: this.state.name,
       surname: this.state.surname,
-      email:this.state.email
+      email:this.state.email,
+      groupName: this.state.groupName,
+      admin: this.state.admin,
         })
         .then(function(response) {
             console.log(response);
@@ -65,9 +95,11 @@ class Register extends Component {
   handleClearForm(e) {
     e.preventDefault();
     this.setState({
-    name: '',
-    surname: '',
-    email:''
+    name:'',
+    surname:'',
+    email:'',
+    groupName:'',
+    admin: false,
   });
   
 }
@@ -75,7 +107,7 @@ class Register extends Component {
   
     return (
       <div className="container user_form">
-      <h2>Register new user</h2>
+      <h2>Kurti naują vartotoją</h2>
       <form className="container  book_form" onSubmit={this.handleFormSubmit}>
       <SingleInput 
         inputType={'text'}
@@ -88,7 +120,7 @@ class Register extends Component {
         <SingleInput 
         inputType={'text'}
         title={'Vartotojo pavarde'}
-        name={'name'}
+        name={'surname'}
         controlFunc={this.handleSurnameChange}
         content={this.state.surname}
         placeholder={'Vartotojo pavarde'}
@@ -96,11 +128,26 @@ class Register extends Component {
         <SingleInput 
         inputType={'text'}
         title={'Vartotojo el.pastas'}
-        name={'name'}
+        name={'email'}
         controlFunc={this.handleEmailChange}
         content={this.state.email}
         placeholder={'Vartotojo el.pastas'}
         /> 
+        <div>
+                <label className="control-label">Pasirinkite vartotojo grupę</label>
+                <select value={this.state.groupName} onChange={this.handleSelectChange} 
+                className="form-control" id="ntype" required>{this.state.groups.map((type)=> <option key={type.name}>{type.name}</option>)}</select>
+            </div>
+             <div>
+            <label className="form-label capitalize">
+            <input
+                type="checkbox"
+                checked={this.state.admin}
+                onChange={this.handleChangeAdmin}
+              />Admin 
+         </label>
+       </div>
+ 
           
         {/* {this.renderRedirect()} */}
 

@@ -16,6 +16,7 @@ import SingleInstitution from './SingleInstitution';
 import InstitutionList from './InstitutionListContainer';
 import BookListContainer from './BookListContainer';
 import EditInstitution from './EditInstitution';
+import UserGroupFormContainer from './UserGroupFormContainer';
 
 
 ReactDOM.render((
@@ -25,11 +26,12 @@ ReactDOM.render((
                 <Route exact path='/' component={HomePage}/>
                 <Route path='/institutions' component={InstitutionList}/>
                 <Route path="/books" component={BookForm}/>
+                <Route path="/groups" component={UserGroupFormContainer}/>
                 <Route path="/booksList" component={BookListContainer}/>
                 {/* <Route path="/cart/:username" render={(props) => <CartPage {...props} />}/>  */}
                 <Route path="/admin" component={Form}/>
-                <Route path="/institution/:title" render={(props) => <SingleInstitution {...props} />}/> 
-                <Route path="/edit/institution/:title" component={EditInstitution} render={(props) => <EditInstitution {...props} /> }/>   
+                <Route path="/institution/:number" render={(props) => <SingleInstitution {...props} />}/> 
+                <Route path="/edit/institution/:number" component={EditInstitution} render={(props) => <EditInstitution {...props} /> }/>   
                 <Route path="/register" component={Registration}/>
                 <Route path="/book/:title" render={(props) => <SingleBook {...props} />}/>                 
                 <Route path="*" component={Nowhere}/>   

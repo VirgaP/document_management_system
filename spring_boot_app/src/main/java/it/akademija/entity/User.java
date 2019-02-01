@@ -5,7 +5,9 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -21,15 +23,32 @@ public class User {
 
     private String email;
 
+    private boolean admin = false;
+
+    private Set<Group> userGroups = new HashSet<Group>();
+
+
+    @ManyToMany
+    @JoinTable(name = "users_groups",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "group_id") })
+    public Set<Group> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(Set<Group> userGroups) {
+        this.userGroups = userGroups;
+    }
 
     public User() {
     }
 
-    public User(Long id, String name, String surname, String email) {
+    public User(Long id, String name, String surname, String email, boolean admin) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.admin = admin;
     }
 
     @JsonIgnore
@@ -47,7 +66,15 @@ public class User {
         this.userDocuments.add(userDocument);
     }
 
+    public void addGroup(Group group) {
+        this.userGroups.add(group);
+        group.getGroupUsers().add(this);
+    }
 
+    public void removeGroup(Group group) {
+        this.userGroups.remove(group);
+        group.getGroupUsers().remove(this);
+    }
 
     @Id
     @GeneratedValue
@@ -86,6 +113,15 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
 
     //    @Override
 //    public boolean equals(Object o) {

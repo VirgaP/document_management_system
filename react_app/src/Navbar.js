@@ -48,18 +48,20 @@ class Navbar extends Component {
         </UserContext.Consumer> */}
               </li>
                 <li className="nav-item">
-                <Link className="nav-link" to='/register'>Register</Link>
+                <Link className="nav-link" to='/register'>Kurti naują vartotoją</Link>
                 </li>
                 <li className="nav-item">
-
                 <Link className="nav-link" to='/booksList'>Books</Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to='/books'>Add new book</Link> 
+                <Link className="nav-link" to='/groups'>Kurti vartotojų grupę </Link>
+                </li>
+                <li className="nav-item">
+                <Link className="nav-link" to='/books'>Kurti dokumento tipą</Link> 
                   {/* <a className="nav-link" onClick={this.goProducts} href="/products">Products</a> */}
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to='/admin'>Add institution</Link> 
+                  <Link className="nav-link" to='/admin'>Kurti dokumentą</Link> 
                 </li>
               </ul>
             </div>

@@ -8,10 +8,13 @@ public class UserDTO {
 
     private String email;
 
-    public UserDTO(String name, String surname, String email) {
+    private boolean admin;
+
+    public UserDTO(String name, String surname, String email, boolean admin) {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.admin = admin;
     }
 
     public UserDTO() {
@@ -39,5 +42,13 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }

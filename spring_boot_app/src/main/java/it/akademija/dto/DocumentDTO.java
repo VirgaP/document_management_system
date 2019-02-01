@@ -14,11 +14,14 @@ public class DocumentDTO {
 
     private Date createdDate;
 
+    private String number;
+
     public DocumentDTO() {
     }
 
-    public DocumentDTO(String title, String description, Date createdDate, Type type) {
+    public DocumentDTO(String title, String number, String description, Date createdDate, Type type) {
         this.title = title;
+        this.number = number;
         this.description = description;
         this.createdDate = createdDate;
         this.type = type;
@@ -30,6 +33,14 @@ public class DocumentDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getDescription() {
