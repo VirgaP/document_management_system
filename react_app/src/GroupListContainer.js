@@ -17,7 +17,7 @@ export class GroupListContainer extends Component {
     <table className="table table-striped">
         <thead>
           <tr>
-            <th>Pavadinimas</th><th>trinti</th><th>redaguoti</th>
+            <th>Pavadinimas</th><th>žiūrėti</th><th>trinti</th><th>redaguoti</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>

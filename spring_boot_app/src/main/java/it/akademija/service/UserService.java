@@ -58,10 +58,9 @@ public class UserService {
                 user.getSurname(),
                 user.getEmail(),
                 user.getAdmin(),
-                user.getUserGroups()
+                user.getUserGroups(),
+                user.getUserDocuments()
         );
-
-
         return userDTO;
     }
 

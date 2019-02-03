@@ -1,8 +1,11 @@
 package it.akademija.dto;
 
 import it.akademija.entity.Group;
+import it.akademija.entity.UserDocument;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UserDTO {
@@ -17,6 +20,7 @@ public class UserDTO {
 
     private Set<Group> userGroups = new HashSet<Group>();
 
+    private List<UserDocument> userDocuments = new ArrayList<>();
 
     public UserDTO(String name, String surname, String email, boolean admin) {
         this.name = name;
@@ -28,12 +32,13 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(String name, String surname, String email, boolean admin, Set<Group> userGroups) {
+    public UserDTO(String name, String surname, String email, boolean admin, Set<Group> userGroups, List<UserDocument> userDocuments) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.admin = admin;
         this.userGroups = userGroups;
+        this.userDocuments = userDocuments;
     }
 
     public String getName() {
@@ -75,5 +80,13 @@ public class UserDTO {
 
     public void setUserGroups(Set<Group> userGroups) {
         this.userGroups = userGroups;
+    }
+
+    public List<UserDocument> getUserDocuments() {
+        return userDocuments;
+    }
+
+    public void setUserDocuments(List<UserDocument> userDocuments) {
+        this.userDocuments = userDocuments;
     }
 }

@@ -20,6 +20,8 @@ import EditGroup from './EditGroup';
 import EditType from './EditType';
 import TypeListContainer from './TypeListContainer';
 import { UserListContainer } from './UserListContainer';
+import { SingleGroup } from './SingleGroup';
+import SingleType from './SingleType';
 
 
 ReactDOM.render((
@@ -30,8 +32,10 @@ ReactDOM.render((
                 <Route path='/institutions' component={InstitutionList}/>
                 <Route path="/books" component={BookForm}/>
                 <Route path="/groups" component={UserGroupFormContainer}/>
+                <Route path="/group/:name" render={(props) => <SingleGroup {...props} />}/>  
                 <Route path="/edit/group/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/>   
                 <Route path="/types" component={TypeListContainer}/>
+                <Route path="/type/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/edit/type/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path="/usersList" component={UserListContainer}/>
                 <Route path="/user/:email" render={(props) => <SingleUser {...props} />}/>                 

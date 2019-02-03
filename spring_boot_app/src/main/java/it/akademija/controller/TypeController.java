@@ -75,4 +75,15 @@ public class TypeController {
         typeService.editType(requestBody, title);
     }
 
+    @RequestMapping(path="/{title}/addGroup", method = RequestMethod.POST)
+    @ApiOperation(value="Add user group", notes = "Adds user group to document type")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addUserGroup(
+            @ApiParam(value="Type data", required=true)
+            @PathVariable final String title,
+            @RequestBody final IncomingRequestBody requestBody){
+
+        typeService.addUserGroup(title, requestBody);
+    }
+
 }

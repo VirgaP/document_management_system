@@ -1,15 +1,17 @@
 package it.akademija.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "admin_group")
 public class Group {
+    private static final long serialVersionUID = 1L;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,6 +19,12 @@ public class Group {
     private Long id;
 
     private String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "primaryKey.group",
+            cascade = CascadeType.MERGE)
+    private List<TypeGroup> typeGroups = new ArrayList<>();
+
 
     @JsonBackReference
     @ManyToMany(mappedBy="userGroups")
@@ -28,6 +36,16 @@ public class Group {
     public Group(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+
+
+    public List<TypeGroup> getTypeGroups() {
+        return typeGroups;
+    }
+
+    public void setTypeGroups(List<TypeGroup> typeGroups) {
+        this.typeGroups = typeGroups;
     }
 
     public Long getId() {
@@ -56,5 +74,26 @@ public class Group {
 
     public void setGroupUsers(Set<User> groupUsers) {
         this.groupUsers = groupUsers;
+    }
+
+    public void addType(TypeGroup typeGroup){
+        this.typeGroups.add(typeGroup);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Group group = (Group) o;
+        return Objects.equals(id, group.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

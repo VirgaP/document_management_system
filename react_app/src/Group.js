@@ -21,6 +21,11 @@ export class Group extends Component {
         <tr>
         <td>{this.props.group.name}</td>
         <td>
+        <Button type="default">
+            <Link to={`/group/${this.props.group.name}`}> Peržiūrėti </Link>        
+        </Button>
+        </td>
+        <td>
         <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti </Button>
         </td>
         <td>

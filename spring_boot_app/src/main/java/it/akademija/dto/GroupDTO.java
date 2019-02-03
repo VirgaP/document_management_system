@@ -1,10 +1,22 @@
 package it.akademija.dto;
 
+import it.akademija.entity.User;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class GroupDTO {
 
-    String name;
+    private String name;
+
+    private Set<User> groupUsers = new HashSet<User>();
 
     public GroupDTO() {
+    }
+
+    public GroupDTO(String name, Set<User> groupUsers) {
+        this.name = name;
+        this.groupUsers = groupUsers;
     }
 
     public GroupDTO(String name) {

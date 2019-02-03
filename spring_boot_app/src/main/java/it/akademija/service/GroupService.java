@@ -41,7 +41,10 @@ public class GroupService {
     @Transactional
     public GroupDTO getGroupByName(String name){ //arba IncomingRequestBody request
         Group group = groupRepository.findByname(name);
-        GroupDTO groupDTO = new GroupDTO(group.getName());
+        GroupDTO groupDTO = new GroupDTO(
+                group.getName(),
+                group.getGroupUsers()
+        );
         return groupDTO;
     }
 

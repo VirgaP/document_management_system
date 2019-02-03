@@ -4,10 +4,13 @@ import it.akademija.dto.TypeDTO;
 import it.akademija.dto.UserDTO;
 import it.akademija.entity.Group;
 import it.akademija.entity.Type;
+import it.akademija.entity.TypeGroup;
 import it.akademija.entity.User;
 import it.akademija.model.CreateUserCommand;
 import it.akademija.model.IncomingRequestBody;
 import it.akademija.model.RequestGroup;
+import it.akademija.repository.GroupRepository;
+import it.akademija.repository.TypeGroupRepository;
 import it.akademija.repository.TypeRepository;
 import it.akademija.repository.UserRepository;
 import org.slf4j.Logger;
@@ -26,6 +29,12 @@ public class TypeService {
 
     @Autowired
     private TypeRepository typeRepository;
+
+    @Autowired
+    private TypeGroupRepository typeGroupRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
     @Transactional
     public List<TypeDTO> getTypes() {
@@ -62,5 +71,20 @@ public class TypeService {
     public void deleteType(IncomingRequestBody request){//arba String title
         Type type = typeRepository.findByTitle(request.getTitle());
         typeRepository.delete(type);
+    }
+
+    @Transactional
+    public void addUserGroup(String title, IncomingRequestBody request) {
+        Type type = typeRepository.findByTitle(title);
+        Group group = groupRepository.findByname(request.getGroupName());
+
+        TypeGroup typeGroup = new TypeGroup();
+        typeGroup.setGroup(group);
+        typeGroup.setType(type);
+
+        typeGroup.setReceive(request.isReceive());
+        typeGroup.setSend(request.isReceive());
+
+        typeGroupRepository.save(typeGroup);
     }
 }
