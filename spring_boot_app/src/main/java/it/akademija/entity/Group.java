@@ -33,7 +33,6 @@ public class Group implements Serializable {
     private Set<User> groupUsers = new HashSet<User>();
 
     public Group() {
-        super();
     }
 
     public Group(Long id, String name) {

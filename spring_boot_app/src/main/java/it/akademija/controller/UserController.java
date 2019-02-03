@@ -36,30 +36,12 @@ public class UserController {
         userService.createUser(requestUser);
     }
 
-
-//    @RequestMapping(path = "/add/{typeTitle}", method = RequestMethod.POST)
-//    @ResponseStatus(HttpStatus.OK)
-//    @ApiOperation(value="Add type to a document", notes="Adds type to selected document")
-//    public void addTypetoDocument(
-//            @PathVariable final String title,
-//            @RequestBody final String documentTitle
-//            ){
-//        userService.addBookToInstitution(title,institutionTitle);
-//    }
-
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value="Get all users", notes="Returns list of all users")
     public List<UserDTO> getAllUsers() {
 
         return userService.getUserWithoutDocuments();
     }
-
-//
-//    @RequestMapping(path = "/institution/{typeTitle}", method = RequestMethod.GET)
-//    @ApiOperation(value="Get one type", notes="Returns one type by title bound to document")
-//    public RequestUser getTypeByTitle(@PathVariable final String title){
-//        return userService.getTypeByTitle(title);
-//    }
 
     @RequestMapping(path = "/{email}", method = RequestMethod.GET)
     @ApiOperation(value = "Get one user", notes = "Returns one user by email")
@@ -69,21 +51,31 @@ public class UserController {
     }
 
 
-    @RequestMapping(path = "/{surname}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{email}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value="Delete user", notes="Deletes user by surname")
     public void deleteUser(@PathVariable final String surname){
         userService.deleteUser(surname);
     }
 
-//    @RequestMapping(path = "/remove/{typeTitle}", method = RequestMethod.GET)
-//    @ResponseStatus(HttpStatus.OK)
-//    @ApiOperation(value="Remove type from document", notes="Remove  type from document")
-//    public void removeTypeFromDocument(
-//            @PathVariable final String title,
-//            @RequestBody final String documentTitle
-//    ){
-//        userService.(title,institutionTitle);
-//    }
+    @RequestMapping(path = "/{email}/addGroup", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value="Add group to a user", notes="Adds group to selected user")
+    public void addUserGroup(
+            @PathVariable final String email,
+            @RequestBody final RequestUser requestUser){
+        userService.addGroupToUser(email,requestUser);
+    }
+
+    @RequestMapping(path = "/{email}/removeGroup", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value="Remove group", notes="Remove group form users groups list")
+    public void removeTypeFromDocument(
+            @PathVariable final String email,
+//            @RequestBody final String groupName
+            @RequestBody final RequestUser requestUser
+    ){
+        userService.removeGroupFromUser(email, requestUser);
+    }
 
 }

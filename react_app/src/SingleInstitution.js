@@ -15,13 +15,14 @@ export class SingleInstitution extends Component {
         super(props)
           
         this.state = {
-           number: this.props.match.params.number, 
+          //  number: this.props.match.params.number, 
+           groups:[],
+           groupName:'',
+           email:'user@email.com',
            document: {},  
            books: [], 
-           booksArray:[],
-           image:'',
-           visible: false 
-           
+           groupsArray:[],
+           userGroups:[]
         }
         this.handleResultChange = this.handleResultChange.bind(this);
         // this.showConfirm = this.showConfirm.bind(this);
@@ -37,38 +38,53 @@ export class SingleInstitution extends Component {
       }
     
       componentDidMount = () => {
-          axios.get(`http://localhost:8099/api/documents/${this.state.number}`)
+        axios.get(`http://localhost:8099/api/users/${this.state.email}`)
+        .then(result => {
+        const user = result.data
+        this.setState({user});
+        var userGroups = result.data.userGroups.map(group=>group.name);
+        this.setState({userGroups})
+        console.log("USERIS", user)
+        console.log('Grupes', userGroups)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+          axios.get('http://localhost:8099/api/group')
           .then(result => {
-            const document = result.data;
-          this.setState({document});
-          console.log(document)
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+              const groups = result.data;
+              console.log(groups);
+            this.setState({ 
+              groups
+            })
+        })
+            .catch(function (error) {
+                console.log(error);
+              });
       }
 
       
 
-      // handleRemove (index) {
-      //  this.showDeleteConfirm();
-      //   const payload = {title: index}
-      //   var list = this.state.books;
+      handleRemove (index) {
+       this.showDeleteConfirm();
+        const payload = {title: index}
+        var list = this.state.books;
        
-      //   let bookIdx = this.state.books.findIndex((book) => book.book.title === index); //find array elem index by title/index
-      //   const newList = list.splice(bookIdx, 1); //delets element and returns updated list of books
-      //   this.setState({ boks: newList }); 
+        let bookIdx = this.state.books.findIndex((book) => book.book.title === index); //find array elem index by title/index
+        const newList = list.splice(bookIdx, 1); //delets element and returns updated list of books
+        this.setState({ boks: newList }); 
 
-      //   axios.delete(`http://localhost:8099/api/institutions/${this.state.title}/removeBook`, {data: payload})
-      //       .then(res => {
-      //         console.log(res)
-      //         console.log('it works')
-      //     })
-      //     .catch(function (error) {
-      //         console.log(error);
-      //     }); 
+        axios.delete(`http://localhost:8099/api/user/${this.state.email}/removeGroup`, {data: payload})
+            .then(res => {
+              console.log(res)
+              console.log('it works')
+          })
+          .catch(function (error) {
+              console.log(error);
+          }); 
         
-      // }
+      }
 
     render() {
 
@@ -80,26 +96,32 @@ export class SingleInstitution extends Component {
           <div style={username}>You are now logged in as : {context}</div>
   
            <div className="container" style={style}>
-          
-              <div className="card-body row">
-                <div className="col-lg-12 col-md-12">
-                      <h3 className="card-title">{this.state.document.title}
-                      </h3>
-                      <h5>{this.state.document.description}</h5>
-                      <h5>{this.state.document.createdDate}</h5>
-                      {/* <h5>{this.state.document.type.title}</h5> */}
-                  </div>
-                  <div className="col-lg-9 col-md-12">
-                  <h4>Books in institution</h4>
-                 
+           <div className="card h-100">
+              <div className="card-body">
+                    <h4 className="card-title">
+                    </h4>
+                    <h5>Vardas: {this.state.user.name}</h5>
+                    <h5>Pavardė: {this.state.user.surname}</h5>
+                    <h5>El.paštas: {this.state.user.email}</h5>
+                    <h5>Vartotojo rolė: {String(this.state.user.admin) === 'true' ? 'administratorius' : 'vartototojas'}</h5> 
+                    {/* converts boolean to String */}
+                    <div>
+                      <h5>Vartotojo grupės: </h5> 
+                    {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
+                        <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}
+                        <button className="btn-default" 
+                  onClick={this.handleRemove.bind(this, group.name)}
+                  >x</button>
+                        </li>))}</ul>}
+                    </div>
                     <div>
                     <h5>You added following books, refresh page to see updated list.</h5>
-                    <ul>{this.state.booksArray.map((book)=>
-                  <li key={book.title}>{book.title}, q: {book.quantity}, {book.price} EUR </li> 
+                    <ul>{this.state.groupsArray.map((newGroup)=>
+                  <li key={newGroup.name}>{newGroup.name}</li> 
                   )}
                   </ul> 
                     </div>
-
+{/* 
                   <ul>{this.state.books.map((book)=>
                  <li key={book.book.title}><a href='#'>{book.book.title}</a>, by {book.book.author}, number of pages: {book.book.pageCount} (Quantity: {book.quantity}, Price: {book.price} EUR) 
                  
@@ -108,13 +130,13 @@ export class SingleInstitution extends Component {
                   >x</button>
                   </li> 
                   )}
-                  </ul>
+                  </ul> */}
                   </div>
               </div>
               <div className="card-footer">
               <AddBook 
               onResultChange={this.handleResultChange}
-              title={this.state.title}/>
+              email={this.state.user.email}/>
               </div>
             </div>
        

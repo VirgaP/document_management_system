@@ -5,6 +5,7 @@ import it.akademija.dto.UserDTO;
 import it.akademija.entity.Group;
 import it.akademija.entity.Type;
 import it.akademija.entity.User;
+import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.model.IncomingRequestBody;
 import it.akademija.model.RequestUser;
 import it.akademija.repository.GroupRepository;
@@ -88,11 +89,8 @@ public class UserService {
                 requestUser.getEmail(),
                 requestUser.getAdmin()
         );
-        Set<Group> userGroups = requestUser.getUserGroups();
-        for(Group groups : userGroups){
-            groups.addUser(user);
-        }
-//            user.addGroup(group);
+
+        user.addGroup(group);
         userRepository.save(user);
     }
 
@@ -102,28 +100,31 @@ public class UserService {
         userRepository.delete(user);
     }
 
-//
-//    @Transactional
-//    public void addBookToInstitution(String title, String documentTitle){
-//        User type = typeRepository.findByTitle(title);
-//        book.addInstitution(institutionRepository.findByTitle(institutionTitle));
-//
-//    }
 
-//    @Transactional
-//    public void removeBookFromInstitution(String title, String institutionTitle){
+    @Transactional
+    public void addGroupToUser(String email, RequestUser request){
+        User user = userRepository.findByEmail(email);
+        Group group = groupRepository.findByname(request.getGroupName());
+        user.addGroup(group);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void removeGroupFromUser(String email, RequestUser request){
+        User user = userRepository.findByEmail(email);
+        Group group = groupRepository.findByname(request.getGroupName());
 //        Institution institution = institutionRepository.findByTitle(institutionTitle); //removing book (owning side) from many to many association
-////         bookRepository.findByInstitutionTitle(institutionTitle)
-////                .stream()
-////                .map(book -> book.getInstitutions().remove(institution));
-//
+//         bookRepository.findByInstitutionTitle(institutionTitle)
+//                .stream()
+//                .map(book -> book.getInstitutions().remove(institution));
+
 //        Book book = bookRepository.findByTitle(title);
-////        Set<Book> bookSet = institution.getBookSet();
-//
-////        if (!bookSet.contains(book)) {
-////            throw new ResourceNotFoundException("the book is not found");
-////        } else {
-////            institution.removeBook(book);
-////        }
-//    }
+        Set<Group> userGroups = user.getUserGroups();
+
+        if (!userGroups.contains(group)) {
+            throw new ResourceNotFoundException("the group is not found");
+        } else {
+            user.removeGroup(group);
+        }
+    }
 }

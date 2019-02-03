@@ -38,7 +38,7 @@ ReactDOM.render((
                 <Route path="/type/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/edit/type/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path="/usersList" component={UserListContainer}/>
-                <Route path="/user/:email" render={(props) => <SingleUser {...props} />}/>                 
+                <Route path="/user/:email" render={(props) => <SingleUser {...props} />}/>   
                 <Route path="/admin" component={Form}/>
                 <Route path="/institution/:number" render={(props) => <SingleInstitution {...props} />}/> 
                 <Route path="/edit/institution/:number" component={EditInstitution} render={(props) => <EditInstitution {...props} /> }/>   
