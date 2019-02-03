@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.TypeDTO;
 import it.akademija.dto.UserDTO;
+import it.akademija.entity.Type;
+import it.akademija.entity.TypeGroup;
 import it.akademija.model.CreateUserCommand;
 import it.akademija.model.IncomingRequestBody;
 import it.akademija.model.RequestGroup;
@@ -35,6 +37,20 @@ public class TypeController {
     public List<TypeDTO> getTypes() {
 
         return typeService.getTypes();
+    }
+
+    @RequestMapping(path = "/typeGroup", method = RequestMethod.GET)
+    @ApiOperation(value="Get list of types", notes="Returns list of types mapped to groups")
+    public List<TypeGroup> getTypesByGroup() {
+
+        return typeService.getGroupTypes();
+    }
+
+    @RequestMapping(path = "/{email}/userDocumentTypes", method = RequestMethod.GET)
+    @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
+    public List<Type> getTypesByUser(@PathVariable final String email) {
+
+        return typeService.getUserGroupTypes(email);
     }
 
     @RequestMapping(path = "/{title}", method = RequestMethod.GET)

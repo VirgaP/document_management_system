@@ -5,12 +5,17 @@ import SingleInput from '../components/singleInput';
 
 
 class Form extends Component {
+  
     constructor() {
         super();
         var today = new Date(),
             date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()+'-'+today.getHours()+'-'+today.getMinutes();
         this.state = {
           documents: [],
+          groups: [],
+          userGroups:[],
+          userType:[],
+          serTypes:[],
           redirect: false,
           types: [],
           typeTitle: '',
@@ -18,7 +23,8 @@ class Form extends Component {
           description: '',
           email:'user@email.com',
           date: date,
-          uniqueNumber:''
+          uniqueNumber:'',
+          documentTypes:[]
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClearForm = this.handleClearForm.bind(this);
@@ -26,37 +32,68 @@ class Form extends Component {
         this.handleDocumentDescriptionChange = this.handleDocumentDescriptionChange.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
       }
-      // setRedirect = () => {
-      //   this.setState({
-      //     redirect: true
-      //   })
-      // }
-      renderRedirect = () => {
-        if (this.state.redirect) {
-          return <Redirect to='/' />
-        }
-      }
+    
       componentDidMount = () => {
-        axios.get('http://localhost:8099/api/types')
+        axios.get('http://localhost:8099/api/types/typeGroup')
         .then(result => {
             const types = result.data;
-            console.log(types);
-          this.setState({ 
-            types
+            this.setState({ 
+              types
+            })
+            console.log("tipai", types)
+            var groups = [];
+            types.forEach(element => {
+              groups.push(element.group.name);
+            });
+            this.setState({
+              groups
+            })
           })
-      })
           .catch(function (error) {
               console.log(error);
             }); 
 
-        //     const uniqueNumber = this.state.date + '-' + this.state.email;
-        //     console.log("Num not in state", uniqueNumber)
-        //     this.setState({uniqueNumber})
-        // console.log(this.state.date)
-        // // this.setState({documentNo: this.state.date + '' + this.state.email})
-        // console.log("Dok num", this.state.uniqueNumber)
+          axios.get(`http://localhost:8099/api/types/${this.state.email}/userDocumentTypes`)
+           .then(result => {
+            const tipai = result.data;
+            var documentTypes = [];
+            tipai.forEach(element => {
+              documentTypes.push(element.title);
+            });
+
+            this.setState({ 
+              documentTypes
+            })
+            console.log("DOKU TIPAI", documentTypes)
+            // var groups = [];
+            // types.forEach(element => {
+            //   groups.push(element.group.name);
+            // });
+            // this.setState({
+            //   groups
+            // })
+          })
+          .catch(function (error) {
+              console.log(error);
+            }); 
+
+          axios.get(`http://localhost:8099/api/users/${this.state.email}`)
+            .then(result => {
+            const user = result.data
+            this.setState({user});
+            var userGroups = result.data.userGroups.map(group=>group.name);
+
+            this.setState({userGroups})
+            console.log("USERIS", user)
+            console.log('Grupes', userGroups)
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+             
     }
 
+  
 
   handleDocumentTitleChange(e) {  
     this.setState({ title: e.target.value });
@@ -110,13 +147,45 @@ class Form extends Component {
                 console.log(error);
             })
 
-        // this.setRedirect();
+      }
+      getMatches(){
+        var matches = [];
+        var a = this.state.groups;
+        var b = this.state.userGroups;
+        for ( var i = 0; i < a.length; i++ ) {
+            for ( var e = 0; e < b.length; e++ ) {
+                if ( a[i] === b[e] ) matches.push( a[i] );
+            }
+        }
+        console.log("MATCHES", matches)
+        var match = matches.toString();
+
+        const userTypes = [];
+        this.state.types.forEach(element => {
+        if(element.group.name === match){ 
+        console.log("inside foreach", element.group.name === match)
+          userTypes.push(element.type.title)
+        }
+        });
+        // this.setState({userTypes})
+        console.log("User types", userTypes)
+
+        return userTypes;
+        // return matches
+        
       }
     
       render() {
-       
+        console.log("User groups", this.state.userGroups);
+        console.log("All groups", this.state.groups);   
+        console.log("user group types", this.state.userTypes); 
+        const options = this.state.documentTypes.map(type =>
+          <option key={type} value={type}>{type}</option>  
+        )
         return (   
+          
           <div className="container">
+          <span>{this.getMatches()}</span>
             <h2>Sukurti naują dokumentą</h2>
             <form onSubmit={this.handleSubmit}>
             <SingleInput 
@@ -136,14 +205,21 @@ class Form extends Component {
               content={this.state.description}
               placeholder={'Dokumento aprasymas'}
              /> 
-            
+            {/* <div>
+                <label className="control-label">Pasirinkite dokumento tipą</label>
+                <select value={this.state.typeTitle} onChange={this.handleSelectChange} 
+                className="form-control" id="ntype" required>{this.getMatches().map((type)=> <option key={type}>{type}</option>)}</select>
+            </div> */}
+          
             <div>
                 <label className="control-label">Pasirinkite dokumento tipą</label>
                 <select value={this.state.typeTitle} onChange={this.handleSelectChange} 
-                className="form-control" id="ntype" required>{this.state.types.map((type)=> <option key={type.title}>{type.title}</option>)}</select>
+                className="form-control" id="ntype" required>
+                 <option value="">...</option>
+              {options}
+                </select>
             </div>
-                
-            {this.renderRedirect()}
+          
               <button className="btn btn-primary" type="submit">Saugoti dokumentą</button>
             </form>
           

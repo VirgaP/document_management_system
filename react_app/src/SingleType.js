@@ -108,8 +108,6 @@ export class SingleType extends Component {
             this.handleClearForm(e);
       }
 
-      
-  
     render() {
       return (
           <UserProvider>

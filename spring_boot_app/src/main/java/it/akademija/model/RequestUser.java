@@ -1,9 +1,15 @@
 package it.akademija.model;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.akademija.entity.Group;
+import it.akademija.entity.User;
 import it.akademija.entity.UserDocument;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class RequestUser {
 
@@ -18,6 +24,8 @@ public final class RequestUser {
     private boolean admin;
 
     private List<UserDocument> userDocuments;
+
+    private Set<Group> userGroups;
 
     public RequestUser(String name, String surname, String email, String groupName, boolean admin) {
         this.name = name;
@@ -83,5 +91,25 @@ public final class RequestUser {
 
     public void setUserDocuments(List<UserDocument> userDocuments) {
         this.userDocuments = userDocuments;
+    }
+
+    public Set<Group> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(Set<Group> userGroups) {
+        this.userGroups = userGroups;
+    }
+
+    @Override
+    public String toString(){
+        String serialized ="";
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            serialized = objectMapper.writeValueAsString(this);
+        }catch(JsonProcessingException jpe){
+            jpe.printStackTrace();
+        }
+        return serialized;
     }
 }

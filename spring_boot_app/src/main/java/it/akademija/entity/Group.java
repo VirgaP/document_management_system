@@ -2,16 +2,18 @@ package it.akademija.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "admin_group")
-public class Group {
+public class Group implements Serializable {
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,6 +33,7 @@ public class Group {
     private Set<User> groupUsers = new HashSet<User>();
 
     public Group() {
+        super();
     }
 
     public Group(Long id, String name) {
@@ -47,6 +50,7 @@ public class Group {
     public void setTypeGroups(List<TypeGroup> typeGroups) {
         this.typeGroups = typeGroups;
     }
+
 
     public Long getId() {
         return id;
@@ -76,10 +80,26 @@ public class Group {
         this.groupUsers = groupUsers;
     }
 
+    public void addUser(User user) {
+        this.groupUsers.add(user);
+        user.getUserGroups().add(this);
+    }
+
     public void addType(TypeGroup typeGroup){
         this.typeGroups.add(typeGroup);
     }
 
+    @Override
+    public String toString(){
+        String serialized ="";
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            serialized = objectMapper.writeValueAsString(this);
+        }catch(JsonProcessingException jpe){
+            jpe.printStackTrace();
+        }
+        return serialized;
+    }
 
     @Override
     public boolean equals(Object o) {

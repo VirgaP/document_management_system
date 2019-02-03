@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,7 +88,11 @@ public class UserService {
                 requestUser.getEmail(),
                 requestUser.getAdmin()
         );
-        user.addGroup(group);
+        Set<Group> userGroups = requestUser.getUserGroups();
+        for(Group groups : userGroups){
+            groups.addUser(user);
+        }
+//            user.addGroup(group);
         userRepository.save(user);
     }
 

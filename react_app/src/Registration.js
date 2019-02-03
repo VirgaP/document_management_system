@@ -14,6 +14,7 @@ class Register extends Component {
       email:'',
       groups:[],
       groupName:'',
+      userGroups:[],
       admin: false,
       redirect: false,
       
@@ -28,16 +29,6 @@ class Register extends Component {
     this.handleClearForm = this.handleClearForm.bind(this);
   }
  
-  // setRedirect = () => {
-  //   this.setState({
-  //     redirect: true
-  //   })
-  // }
-  // renderRedirect = () => {
-  //   if (this.state.redirect) {
-  //     return <Redirect to='/' />
-  //   }
-  // }
   componentDidMount = () => {
     axios.get('http://localhost:8099/api/group')
     .then(result => {
@@ -64,7 +55,7 @@ class Register extends Component {
     this.setState({ email: e.target.value });
   }
   handleSelectChange(e) {  
-    this.setState({ groupName: e.target.value });
+    this.setState({ groupName: e.target.value });   
   }
 
   handleChangeAdmin(event){
@@ -82,7 +73,8 @@ class Register extends Component {
       name: this.state.name,
       surname: this.state.surname,
       email:this.state.email,
-      groupName: this.state.groupName,
+      // groupName: this.state.groupName,
+      userGroups: this.state.userGroups,
       admin: this.state.admin,
         })
         .then(function(response) {
@@ -104,7 +96,7 @@ class Register extends Component {
   
 }
   render() {
-  
+    const options = this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)
     return (
       <div className="container user_form">
       <h2>Kurti naują vartotoją</h2>
@@ -133,12 +125,15 @@ class Register extends Component {
         content={this.state.email}
         placeholder={'Vartotojo el.pastas'}
         /> 
-        <div>
-                <label className="control-label">Pasirinkite vartotojo grupę</label>
+          <div>
+            <label className="control-label">Pasirinkite pagrindinę vartotojo grupę</label>
                 <select value={this.state.groupName} onChange={this.handleSelectChange} 
-                className="form-control" id="ntype" required>{this.state.groups.map((type)=> <option key={type.name}>{type.name}</option>)}</select>
+                className="form-control" id="ntype" required>
+                  <option value="">...</option>
+                    {options}
+                </select>
             </div>
-             <div>
+            <div>
             <label className="form-label capitalize">
             <input
                 type="checkbox"
@@ -147,10 +142,6 @@ class Register extends Component {
               />Admin 
          </label>
        </div>
- 
-          
-        {/* {this.renderRedirect()} */}
-
         <input
           type="submit"
           className="btn btn-primary float-right"
