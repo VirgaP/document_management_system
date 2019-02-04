@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 
 
-export class EditInstitution extends Component {
+export class EditDocument extends Component {
     constructor(props) {
         super(props)
           
@@ -13,7 +13,8 @@ export class EditInstitution extends Component {
            documents: [],
            types: [],
            typeTitle: '',
-           redirect: false,        
+           redirect: false,
+           documentTypes:[]        
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -47,17 +48,24 @@ export class EditInstitution extends Component {
           console.log(error);
         });
 
-        axios.get('http://localhost:8099/api/types')
-        .then(result => {
-            const types = result.data;
-            console.log(types);
-          this.setState({ 
-            types
-          })
-        })
-        .catch(function (error) {
-          console.log(error);
-        }); 
+        //pass user email form context
+      //   axios.get(`http://localhost:8099/api/types/${this.state.email}/userDocumentTypes`)
+      //   .then(result => {
+      //    const tipai = result.data;
+      //    var documentTypes = [];
+      //    tipai.forEach(element => {
+      //      documentTypes.push(element.title);
+      //    });
+
+      //    this.setState({ 
+      //      documentTypes
+      //    })
+      //    console.log("DOKU TIPAI", documentTypes)
+     
+      //  })
+      //  .catch(function (error) {
+      //      console.log(error);
+      //    }); 
   }
 
      handleChangeFor = (title, description) => (event) => {
@@ -89,7 +97,8 @@ export class EditInstitution extends Component {
         this.setRedirect();
       }
   render() {
-
+    // const options = this.state.documentTypes.map(type =>
+    //   <option key={type} value={type}>{type}</option>)
         return (   
           <div className="container">
             <h2>Redaguoti dokumentą</h2>
@@ -103,11 +112,14 @@ export class EditInstitution extends Component {
               <input type="text" ref="description"  onChange={this.handleChangeFor('description')} value={this.state.document.description} className="form-control" id="inputError1" required/>
             </div>
             <div>
-            <div>
+            {/* <div>
                 <label className="control-label">Pasirinkite dokumento tipą</label>
                 <select value={this.state.typeTitle} onChange={this.handleSelectChange} 
-                className="form-control" id="ntype" required>{this.state.types.map((type)=> <option key={type.title}>{type.title}</option>)}</select>
-            </div>
+                className="form-control" id="ntype" required>
+                 <option value="">...</option>
+              {options}
+                </select>
+            </div> */}
             </div>
                 
             {this.renderRedirect()}
@@ -118,4 +130,4 @@ export class EditInstitution extends Component {
   }
 }
 
-export default EditInstitution
+export default EditDocument

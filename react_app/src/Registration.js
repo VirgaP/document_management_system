@@ -73,7 +73,7 @@ class Register extends Component {
       name: this.state.name,
       surname: this.state.surname,
       email:this.state.email,
-      // groupName: this.state.groupName,
+      groupName: this.state.groupName,
       userGroups: this.state.userGroups,
       admin: this.state.admin,
         })

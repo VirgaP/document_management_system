@@ -1,10 +1,15 @@
 package it.akademija.repository;
 
-import it.akademija.entity.UserDocument;
-import it.akademija.entity.UserDocumentId;
+import it.akademija.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface UserDocumentRepository extends JpaRepository<UserDocument, UserDocumentId> {
-//    List<InstitutionBook> findByInstitutionBookId(Long bookId);
+
+   @Query(value="select * FROM user_document ud join user u ON (ud.user_id = u.id) WHERE u.email=:email", nativeQuery = true)
+   List<UserDocument> findByUserEmail(@Param("email") String email);
 
 }

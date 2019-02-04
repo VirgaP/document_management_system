@@ -27,6 +27,8 @@ public final class RequestUser {
 
     private Set<Group> userGroups;
 
+    private String group;
+
     public RequestUser(String name, String surname, String email, String groupName, boolean admin) {
         this.name = name;
         this.surname = surname;
@@ -101,15 +103,11 @@ public final class RequestUser {
         this.userGroups = userGroups;
     }
 
-    @Override
-    public String toString(){
-        String serialized ="";
-        try{
-            ObjectMapper objectMapper = new ObjectMapper();
-            serialized = objectMapper.writeValueAsString(this);
-        }catch(JsonProcessingException jpe){
-            jpe.printStackTrace();
-        }
-        return serialized;
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

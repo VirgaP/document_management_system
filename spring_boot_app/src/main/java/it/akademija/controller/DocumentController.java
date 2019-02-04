@@ -36,6 +36,13 @@ public class DocumentController {
         documentService.createDocument(requestDocument);
     }
 
+    @RequestMapping(path="/{email}/documents", method = RequestMethod.GET)
+    @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
+    List<DocumentDTO> getAllUserDocuments( @PathVariable final String email) {
+        return documentService.getAllUserDocuments(email);
+    }
+
+
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get all documents", notes = "Returns list of all documents in database")
     List<DocumentDTO> getAlldocuments() {
@@ -80,16 +87,13 @@ public class DocumentController {
 
     }
 
-
     @RequestMapping(path = "/{uniqueNumber}/submit", method = RequestMethod.POST)
     @ApiOperation(value = "Submit document", notes = "Submit document, change status")
     @ResponseStatus(HttpStatus.OK)
     void submitDocument(
             @ApiParam(value = "Document data", required = true)
             @PathVariable final String uniqueNumber,
-            @RequestBody RequestDocument request
-
-    )
+            @RequestBody RequestDocument request)
     {
         documentService.submitDocument(uniqueNumber, request);
     }

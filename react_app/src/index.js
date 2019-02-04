@@ -14,7 +14,6 @@ import HomePage from './HomePage';
 import SingleUser from './SingleUser';
 import SingleInstitution from './SingleInstitution';
 import InstitutionList from './InstitutionListContainer';
-import EditInstitution from './EditInstitution';
 import UserGroupFormContainer from './UserGroupFormContainer';
 import EditGroup from './EditGroup';
 import EditType from './EditType';
@@ -22,6 +21,8 @@ import TypeListContainer from './TypeListContainer';
 import { UserListContainer } from './UserListContainer';
 import { SingleGroup } from './SingleGroup';
 import SingleType from './SingleType';
+import UserHomePage from './UserHomePage';
+import EditDocument from './EditDocument';
 
 
 ReactDOM.render((
@@ -38,10 +39,11 @@ ReactDOM.render((
                 <Route path="/type/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/edit/type/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path="/usersList" component={UserListContainer}/>
-                <Route path="/user/:email" render={(props) => <SingleUser {...props} />}/>   
+                <Route path="/user/:email" render={(props) => <SingleUser {...props} />}/>
+                {/* <Route path='/user/profile' component={UserHomePage}/> */}
                 <Route path="/admin" component={Form}/>
-                <Route path="/institution/:number" render={(props) => <SingleInstitution {...props} />}/> 
-                <Route path="/edit/institution/:number" component={EditInstitution} render={(props) => <EditInstitution {...props} /> }/>   
+                <Route path="/document/:number" render={(props) => <SingleInstitution {...props} />}/> 
+                <Route path="/edit/document/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>   
                 <Route path="/register" component={Registration}/>
                 <Route path="*" component={Nowhere}/>   
             </Switch>

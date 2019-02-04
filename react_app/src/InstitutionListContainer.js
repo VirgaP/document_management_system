@@ -2,18 +2,21 @@ import Institution from './Institution';
 import React, { Component } from 'react'
 
 export class InstitutionListContainer extends Component {
-      
+      state={
+        id:this.props.id
+      }
   render() {
-    console.log(this.props.documents)
+    console.log("ILC ", this.props.documents)
+    console.log("ID from ILC",this.state.id )
 
     var rows = [];
     this.props.documents.forEach(function(document) {
-      rows.push(<Institution document={document} />);   
+      rows.push(<Institution document={document}/>);   
     });
     
     return (
 
-    <div className="container">
+    <div className="container user_document_list">
     <table className="table table-striped">
         <thead>
           <tr>

@@ -5,6 +5,7 @@ import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import AddBook from './AddBook';
+import UserDocumentListContainer from './UserDocumentListContainer'
 
 export class SingleUser extends Component {
     constructor(props) {
@@ -16,14 +17,12 @@ export class SingleUser extends Component {
            groups:[],
            userGroups:[],
            groupsArray:[],
+           email:''
 
         }
-
         console.log("id", this.state.id);
         this.handleResultChange = this.handleResultChange.bind(this);
-
       }
-    
       componentDidMount = () => {
           axios.get(`http://localhost:8099/api/users/${this.state.id}`)
           .then(result => {
@@ -31,7 +30,10 @@ export class SingleUser extends Component {
           this.setState({user});
           const userGroups = result.data.userGroups
           this.setState({userGroups})
+          const email = user.email
+          this.setState({email})
           console.log("USERIS", user)
+          console.log("EMAIL", email)
           console.log('Grupes', userGroups)
           })
           .catch(function (error) {
@@ -41,7 +43,6 @@ export class SingleUser extends Component {
 
       handleResultChange(value) {
         console.log("VALUE", value)
-        // var newArray = this.state.groupsArray.slice(); 
         var newArray = this.state.userGroups.slice();       
         newArray.push(value);   
         console.log("NEW ARRAY", newArray)
@@ -78,7 +79,6 @@ export class SingleUser extends Component {
            .catch(function (error) {
                console.log(error);
            }); 
-         
        }
   
     render() {
@@ -104,33 +104,40 @@ export class SingleUser extends Component {
                       <h5>Vartotojo grupės: </h5> 
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
                     </div> */}
+                     {String(this.state.user.admin) === 'true'?
                     <div>
                       <h5>Vartotojo grupės: </h5> 
+                     
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
                         <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}
                         <button className="btn-default" 
                   onClick={this.handleRemove.bind(this, group.name)}
                   >x</button>
                         </li>))}</ul>}
-                    </div>
+                    </div> : 
                     <div>
-                    <h5>You added following books, refresh page to see updated list.</h5>
-                    <ul>{this.state.groupsArray.map((newGroup)=>
-                  <li key={newGroup.groupName}>{newGroup.groupName}</li> 
-                  )}
-                  </ul> 
+                      <h5>Jūsų grupės: </h5> 
+                      {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
+                        <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
                     </div>
-                    <AddBook 
-              onResultChange={this.handleResultChange}
-              id={this.state.id}/>
-              </div>
-                    <div>
-                      <h5>Vartotojo dokumentai</h5>
+                     }
+                    {String(this.state.user.admin) === 'true'?
+                      <AddBook 
+                      onResultChange={this.handleResultChange}
+                      id={this.state.id}/> 
+                      : <span></span>
+                        }
                     </div>
               </div>
               <div className="card-footer">
+              <div>
+                      <h5>Vartotojo dokumentai</h5>
+                      <UserDocumentListContainer email={this.state.id}/>
+                    </div>
+                    {String(this.state.user.admin) === 'true'?
                  <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti vartototoją </Button>
-              </div>
+                      : <span></span> }   
+                 </div>
            
           </div>
               </React.Fragment> 

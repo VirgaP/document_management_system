@@ -21,7 +21,7 @@ class Form extends Component {
           typeTitle: '',
           title: '',
           description: '',
-          email:'user@email.com',
+          email:'jonas@email.com',
           date: date,
           uniqueNumber:'',
           documentTypes:[]
@@ -65,13 +65,7 @@ class Form extends Component {
               documentTypes
             })
             console.log("DOKU TIPAI", documentTypes)
-            // var groups = [];
-            // types.forEach(element => {
-            //   groups.push(element.group.name);
-            // });
-            // this.setState({
-            //   groups
-            // })
+        
           })
           .catch(function (error) {
               console.log(error);
@@ -167,11 +161,9 @@ class Form extends Component {
           userTypes.push(element.type.title)
         }
         });
-        // this.setState({userTypes})
         console.log("User types", userTypes)
 
         return userTypes;
-        // return matches
         
       }
     

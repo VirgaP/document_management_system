@@ -105,10 +105,27 @@ public class DocumentService {
                 document.getUniqueNumber(),
                 document.getDescription(),
                 document.getCreatedDate(),
-                document.getType()
+                document.getType(),
+                document.getUserDocuments()
         );
 
         return documentDTO;
+    }
+
+    @Transactional
+    public List<DocumentDTO>  getAllUserDocuments(String email){
+        List<DocumentDTO> documents = documentRepository.findAllUserDocumentsl(email).stream()
+                .map(document -> new DocumentDTO(
+                        document.getTitle(),
+                        document.getUniqueNumber(),
+                        document.getDescription(),
+                        document.getCreatedDate(),
+                        document.getType(),
+                        document.getUserDocuments()
+                ))
+                .collect(Collectors.toList());
+
+        return documents;
     }
 
     @Transactional

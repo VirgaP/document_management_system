@@ -47,6 +47,9 @@ class Navbar extends Component {
         )}
         </UserContext.Consumer> */}
               </li>
+                {/* <li className="nav-item">
+                <Link className="nav-link" to='/user/profile'>Vartotojo paskyra</Link>
+                </li> */}
                 <li className="nav-item">
                 <Link className="nav-link" to='/register'>Kurti naują vartotoją</Link>
                 </li>

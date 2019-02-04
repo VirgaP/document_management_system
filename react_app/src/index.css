@@ -7,6 +7,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.user_document_list{
+  overflow-x:auto;
+}
 
 .user_form input{
   margin: 0 0 20px 0;

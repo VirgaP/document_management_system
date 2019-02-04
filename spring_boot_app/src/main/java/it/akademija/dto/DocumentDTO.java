@@ -1,8 +1,11 @@
 package it.akademija.dto;
 
 import it.akademija.entity.Type;
+import it.akademija.entity.UserDocument;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DocumentDTO {
 
@@ -16,8 +19,21 @@ public class DocumentDTO {
 
     private String number;
 
+    private List<UserDocument> userDocuments = new ArrayList<>();
+
+
     public DocumentDTO() {
     }
+
+    public DocumentDTO(String title, String number, String description, Date createdDate, Type type, List<UserDocument> userDocuments) {
+        this.title = title;
+        this.number = number;
+        this.description = description;
+        this.createdDate = createdDate;
+        this.type = type;
+        this.userDocuments = userDocuments;
+    }
+
 
     public DocumentDTO(String title, String number, String description, Date createdDate, Type type) {
         this.title = title;
@@ -26,6 +42,7 @@ public class DocumentDTO {
         this.createdDate = createdDate;
         this.type = type;
     }
+
 
     public String getTitle() {
         return title;
@@ -65,5 +82,13 @@ public class DocumentDTO {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public List<UserDocument> getUserDocuments() {
+        return userDocuments;
+    }
+
+    public void setUserDocuments(List<UserDocument> userDocuments) {
+        this.userDocuments = userDocuments;
     }
 }
