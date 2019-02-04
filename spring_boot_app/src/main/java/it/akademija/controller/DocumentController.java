@@ -3,10 +3,7 @@ package it.akademija.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.DocumentDTO;
-import it.akademija.model.IncomingRequestBody;
-import it.akademija.model.RequestDocument;
-import it.akademija.model.RequestUser;
-import it.akademija.model.RequestUserDocument;
+import it.akademija.payload.RequestDocument;
 import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,19 +45,6 @@ public class DocumentController {
     List<DocumentDTO> getAlldocuments() {
         return documentService.getDocuments();
     }
-//
-//    @RequestMapping(path="/category", method = RequestMethod.GET)
-//    @ApiOperation(value = "Get all by category", notes = "Returns list of all instituions in databse by category")
-//    List<RequestInstitution> getAllInstitutionsByCategory() {
-//        return institutionService.getInstitutionsByCategory();
-//    }
-
-//    @RequestMapping(path="/category/type", method = RequestMethod.GET)
-//    @ApiOperation(value = "Get all by category and type", notes = "Returns list of all instituions in databse by category and type")
-//    List<RequestInstitution> getAllInstitutionsByCategoryAndType() {
-//        return institutionService.getInstitutionsByCategoryAndType();
-//    }
-
 
     @RequestMapping(path = "/{uniqueNumber}", method = RequestMethod.GET)
     @ApiOperation(value = "Get one document", notes = "Returns one document by number")

@@ -1,13 +1,9 @@
-package it.akademija.model;
+package it.akademija.payload;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import it.akademija.entity.Group;
-import it.akademija.entity.User;
 import it.akademija.entity.UserDocument;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 

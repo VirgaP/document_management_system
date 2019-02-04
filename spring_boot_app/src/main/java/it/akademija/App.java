@@ -3,6 +3,7 @@ package it.akademija;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -14,6 +15,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
+@EnableConfigurationProperties({
+        FileStorageProperties.class
+})
 public class App extends SpringBootServletInitializer {
     public static void main(String[] args) {
 
@@ -36,7 +40,7 @@ public class App extends SpringBootServletInitializer {
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("IT Akademija Knygu Sistema REST Documentation")
+                .title("IT Akademija Document anagement system REST API Documentation")
                 .version("0.0.1-SNAPSHOT")
                 .build();
     }

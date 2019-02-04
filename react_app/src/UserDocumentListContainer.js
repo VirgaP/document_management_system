@@ -31,7 +31,10 @@ export class UserDocumentListContainer extends Component {
     var DOCUMENTS = this.state.documents;
     return (
       <div>
-        <InstitutionListContainer documents={DOCUMENTS} id={this.state.email}/>
+        {(this.state.documents.length === 0 ? <div>Vartotojo dokumentai nerasti</div> :
+         <InstitutionListContainer documents={DOCUMENTS} id={this.state.email}/>
+        )}
+       
       </div>
     )
   }

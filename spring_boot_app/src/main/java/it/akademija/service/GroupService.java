@@ -1,13 +1,10 @@
 package it.akademija.service;
 
 import it.akademija.dto.GroupDTO;
-import it.akademija.dto.TypeDTO;
 import it.akademija.entity.*;
-import it.akademija.model.IncomingRequestBody;
-import it.akademija.model.RequestGroup;
-import it.akademija.model.RequestUser;
+import it.akademija.payload.RequestGroup;
+import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
-import it.akademija.repository.TypeRepository;
 import it.akademija.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

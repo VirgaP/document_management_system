@@ -1,18 +1,10 @@
 package it.akademija.service;
 
 import it.akademija.dto.DocumentDTO;
-import it.akademija.entity.Document;
-import it.akademija.entity.Type;
-import it.akademija.entity.UserDocument;
-import it.akademija.entity.User;
-import it.akademija.model.IncomingRequestBody;
-import it.akademija.model.RequestDocument;
-import it.akademija.model.RequestUser;
-import it.akademija.model.RequestUserDocument;
-import it.akademija.repository.TypeRepository;
-import it.akademija.repository.UserDocumentRepository;
-import it.akademija.repository.DocumentRepository;
-import it.akademija.repository.UserRepository;
+import it.akademija.entity.*;
+import it.akademija.payload.RequestDocument;
+import it.akademija.payload.RequestUser;
+import it.akademija.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +31,9 @@ public class DocumentService {
     @Autowired
     private UserDocumentRepository userDocumentRepository;
 
+    @Autowired
+    private DBFileRepository dbFileRepository;
+
     @Transactional
     public List<Document> getAll(){
         return documentRepository.findAll().stream().collect(Collectors.toList());
@@ -48,6 +43,8 @@ public class DocumentService {
     public void createDocument(RequestDocument requestDocument){
         Type type = typeRepository.findByTitle(requestDocument.getTypeTitle());
         User user = userRepository.findByEmail(requestDocument.getEmail());
+        DBFile file = dbFileRepository.findByFileName(requestDocument.getFileName());
+
         UserDocument userDocument= new UserDocument();
         Document document = new Document(
                 new Long(1),
@@ -57,7 +54,12 @@ public class DocumentService {
                 new Date()
         );
         document.setType(type);
+
+        document.addDbFile(file);
+
         documentRepository.save(document);
+
+        file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
 
         userDocument.setUser(user);//ok
 
@@ -108,7 +110,6 @@ public class DocumentService {
                 document.getType(),
                 document.getUserDocuments()
         );
-
         return documentDTO;
     }
 

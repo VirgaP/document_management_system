@@ -1,8 +1,5 @@
-package it.akademija.model;
+package it.akademija.payload;
 
-
-
-import java.math.BigDecimal;
 
 public final class IncomingRequestBody {
 

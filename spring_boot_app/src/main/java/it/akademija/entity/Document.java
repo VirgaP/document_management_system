@@ -1,6 +1,8 @@
 package it.akademija.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -23,6 +25,8 @@ public class Document {
     private Date createdDate;
 
     private List<UserDocument> userDocuments = new ArrayList<>();
+
+    private List<DBFile> dbFiles = new ArrayList<DBFile>();
 
     @Column(name = "CREATED_DATE")
     @Temporal(TemporalType.DATE)
@@ -129,29 +133,25 @@ public class Document {
         this.type = type;
     }
 
-    //    public void addBook(Book book) {
-//        InstitutionBook institutionBook = new InstitutionBook(this, book);
-//        institutionBooks.add(institutionBook);
-//        book.getInstitutions().add(institutionBook);
-//    }
-//
-//    public void removeBook(Book book) {
-//        for (Iterator<InstitutionBook> iterator = institutionBooks.iterator();
-//             iterator.hasNext(); ) {
-//            InstitutionBook institutionBook = iterator.next();
-//
-//            if (institutionBook.getInstitution().equals(this) &&
-//                    institutionBook.getBook().equals(book)) {
-//                iterator.remove();
-//                institutionBook.getBook().getInstitutions().remove(institutionBook);
-//                institutionBook.setInstitution(null);
-//                institutionBook.setBook(null);
-//            }
-//        }
-//    }
 
     public void addUser(UserDocument user){
         this.userDocuments.add(user);
+    }
+
+    public void addDbFile(DBFile file) {
+        this.dbFiles.add(file);
+        file.setDocument(this);
+    }
+
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @JsonIgnore
+    public List<DBFile> getDbFiles() {
+        return dbFiles;
+    }
+
+    public void setDbFiles(List<DBFile> dbFiles) {
+        this.dbFiles = dbFiles;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package it.akademija.model;
+package it.akademija.payload;
 
 import it.akademija.entity.Type;
 import it.akademija.entity.UserDocument;
@@ -18,6 +18,8 @@ public final class RequestDocument {
     private String email;
 
     private String uniqueNumber;
+
+    private String fileName;
 
     private List<UserDocument> documentTypes;
 
@@ -91,4 +93,14 @@ public final class RequestDocument {
     public void setDocumentTypes(List<UserDocument> documentTypes) {
         this.documentTypes = documentTypes;
     }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+
 }

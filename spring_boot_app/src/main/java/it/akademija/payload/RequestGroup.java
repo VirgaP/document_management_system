@@ -1,4 +1,4 @@
-package it.akademija.model;
+package it.akademija.payload;
 
 public final  class RequestGroup {
 

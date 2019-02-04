@@ -1,11 +1,5 @@
-package it.akademija.model;
+package it.akademija.payload;
 
-
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import java.math.BigDecimal;
 
 public final class RequestUserDocument {
 

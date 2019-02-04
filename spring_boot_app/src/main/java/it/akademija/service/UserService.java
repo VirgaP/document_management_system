@@ -1,15 +1,11 @@
 package it.akademija.service;
 
-import it.akademija.dto.TypeDTO;
 import it.akademija.dto.UserDTO;
 import it.akademija.entity.Group;
-import it.akademija.entity.Type;
 import it.akademija.entity.User;
 import it.akademija.exceptions.ResourceNotFoundException;
-import it.akademija.model.IncomingRequestBody;
-import it.akademija.model.RequestUser;
+import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
-import it.akademija.repository.TypeRepository;
 import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.UserRepository;
 import org.slf4j.Logger;

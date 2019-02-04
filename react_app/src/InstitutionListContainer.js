@@ -20,7 +20,7 @@ export class InstitutionListContainer extends Component {
     <table className="table table-striped">
         <thead>
           <tr>
-            <th>Pavadinimas</th><th>Aprašymas</th><th>Tipas</th><th>Sukūrimo data</th><th>peržiūra</th><th>pateikti</th><th>trinti</th><th>redaguoti</th>
+            <th>Pavadinimas</th><th>Aprašymas</th><th>Tipas</th><th>Sukūrimo data</th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
