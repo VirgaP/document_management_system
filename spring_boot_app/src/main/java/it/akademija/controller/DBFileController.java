@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/files")
+@CrossOrigin(value = {"*"}, exposedHeaders = {"Content-Disposition"})
 public class DBFileController {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 

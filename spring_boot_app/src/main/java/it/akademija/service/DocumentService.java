@@ -45,6 +45,7 @@ public class DocumentService {
         User user = userRepository.findByEmail(requestDocument.getEmail());
         DBFile file = dbFileRepository.findByFileName(requestDocument.getFileName());
 
+
         UserDocument userDocument= new UserDocument();
         Document document = new Document(
                 new Long(1),
@@ -108,7 +109,8 @@ public class DocumentService {
                 document.getDescription(),
                 document.getCreatedDate(),
                 document.getType(),
-                document.getUserDocuments()
+                document.getUserDocuments(),
+                document.getDbFiles()
         );
         return documentDTO;
     }
@@ -122,7 +124,8 @@ public class DocumentService {
                         document.getDescription(),
                         document.getCreatedDate(),
                         document.getType(),
-                        document.getUserDocuments()
+                        document.getUserDocuments(),
+                        document.getDbFiles()
                 ))
                 .collect(Collectors.toList());
 

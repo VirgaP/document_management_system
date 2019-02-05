@@ -19,7 +19,8 @@ export class SingleInstitution extends Component {
            email:'user@email.com',
            document: {},
            userDocument:[],
-           user:[]  
+           user:[],
+           userFiles:[]  
         }
        
       }
@@ -38,6 +39,11 @@ export class SingleInstitution extends Component {
           }
         });
 
+        const userFiles = []
+        document.dbFiles.forEach(element=>{
+            userFiles.push(element) 
+        });
+
         const userDocument = [];
         document.userDocuments.forEach(element => {
           if(element.document.id === element.primaryKey.document.id){
@@ -46,7 +52,9 @@ export class SingleInstitution extends Component {
         });
         console.log(userDocument)
         console.log("User", user)
+        console.log("Failai", userFiles)
         this.setState({user});
+        this.setState({userFiles})
         this.setState({userDocument})
         })
         .catch(function (error) {
@@ -55,8 +63,24 @@ export class SingleInstitution extends Component {
 
       }
 
-    render() {
+      handleDownlaod = (index) => {
+        // const payload = {fileName: index}
+        console.log("File index", index)
+        // axios.get(`http://localhost:8099/api/files/downloadFile/${index}`)
+        fetch(`http://localhost:8099/api/files/downloadFile/${index}`)
+          .then(response => {
+            const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+            response.blob().then(blob => {
+              let url = window.URL.createObjectURL(blob);
+              let a = document.createElement('a');
+              a.href = url;
+              a.download = filename;
+              a.click();
+          });
+       });
+      }
 
+    render() {
       return (
           <UserProvider>
           <UserContext.Consumer>
@@ -67,7 +91,7 @@ export class SingleInstitution extends Component {
            <div className="container" style={style}>
            <div className="card h-100">
               <div className="card-body">
-                    <h4 className="card-title">Pavadinimas {this.state.document.title}</h4>
+                    <h4 className="card-title">{this.state.document.title}</h4>
                     <h5>sukurimo data: {this.state.document.createdDate}</h5>
                     <h5>Dokumento nr.: {this.state.document.number}</h5>
                     <h5>Dokumento tipas: {(this.state.document.type !=null) ? this.state.document.type.title : 'tipas nepriskirtas'}</h5>
@@ -89,7 +113,17 @@ export class SingleInstitution extends Component {
               </div>
               <div className="card-footer">
               <p>{this.state.document.description}</p>
+              <div>
+                  <h5>Pateikti dokumentai </h5> 
+                      {(this.state.userFiles.length === 0) ? <span>Pateiktų dokumentų nėra</span> : 
+                    <ul>{this.state.userFiles.map((file) => (<li key={file.id}>{file.fileName} 
+                      <button onClick={this.handleDownlaod.bind(this, file.id )}>Download</button></li>))}</ul>}
               </div>
+                {/* <div className="App-intro">
+                  <h3>Atsisiųsti dokumentą</h3>
+                  <button onClick={this.downloadRandomImage}>Download</button>
+                  </div> */}
+                </div>
             </div>
        
               </React.Fragment> 

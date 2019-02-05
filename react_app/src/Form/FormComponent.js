@@ -130,7 +130,7 @@ handleClearForm(e) {
       console.log("FILENAME", this.state.file.name);
        
       const fileName = this.state.date + '-' + this.state.file.name; 
-      console.log("FILENAME PLUS DATE", fileName);
+      // console.log("FILENAME PLUS DATE", this.state.fileName);
 
       axios.post('http://localhost:8099/api/documents/new', {
         title: this.state.title,
@@ -151,6 +151,7 @@ handleClearForm(e) {
           }).catch(function (error) {
               console.log(error);
           })
+          // this.props.history.push("/");
     }
 
     onChange(e) {
@@ -161,6 +162,7 @@ handleClearForm(e) {
       const url = 'http://localhost:8099/api/files/uploadFile';
       const formData = new FormData();
       formData.append('file',file)
+      formData.append('fileName', this.state.date + this.state.file.name)
       const config = {
           headers: {
               'content-type': 'multipart/form-data'
