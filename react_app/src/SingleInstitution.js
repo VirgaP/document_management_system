@@ -63,21 +63,8 @@ export class SingleInstitution extends Component {
 
       }
 
-      handleDownlaod = (index) => {
-      //   console.log("File index", index)
-      //   fetch(`http://localhost:8099/api/files/downloadFile/${index}`)
-      //     .then(response => {
-      //       console.log(response.headers)
-      //       const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
-      //       response.blob().then(blob => {
-      //         let url = window.URL.createObjectURL(blob);
-      //         let a = document.createElement('a');
-      //         a.href = url;
-      //         a.download = filename;
-      //         a.click();
-      //     });
-      //  });
-
+      handleDownlaod = (index, filename) => {
+    
       axios(`http://localhost:8099/api/files/downloadFile/${index}`, {
         method: 'GET',
         responseType: 'blob' //Force to receive data in a Blob Format
@@ -95,7 +82,7 @@ export class SingleInstitution extends Component {
         //download file      
           let a = document.createElement('a');
           a.href = fileURL;
-          a.download = file;
+          a.download = filename;
           a.click();
       } if(response.data.type === 'image/png'){ //dowload png format
         const file = new Blob(
@@ -107,7 +94,20 @@ export class SingleInstitution extends Component {
         //download file      
           let a = document.createElement('a');
           a.href = fileURL;
-          a.download = file;
+          a.download = filename;
+          a.click();
+      }
+      if(response.data.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){ //dowload png format
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'} 
+        );
+        //Build a URL from the file
+        const fileURL = URL.createObjectURL(file);
+        //download file      
+          let a = document.createElement('a');
+          a.href = fileURL;
+          a.download = filename;
           a.click();
       }
           //alternatevly open the URL in new Window
@@ -155,7 +155,7 @@ export class SingleInstitution extends Component {
                   <h5>Pateikti dokumentai </h5> 
                       {(this.state.userFiles.length === 0) ? <span>Pateiktų dokumentų nėra</span> : 
                     <ul>{this.state.userFiles.map((file) => (<li key={file.id}>{file.fileName} 
-                      <button onClick={this.handleDownlaod.bind(this, file.id )}>Download</button></li>))}</ul>}
+                      <button onClick={this.handleDownlaod.bind(this, file.id, file.fileName )}>Download</button></li>))}</ul>}
               </div>
                 {/* <div className="App-intro">
                   <h3>Atsisiųsti visus dokumentus</h3>
