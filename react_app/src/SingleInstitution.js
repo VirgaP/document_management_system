@@ -64,20 +64,58 @@ export class SingleInstitution extends Component {
       }
 
       handleDownlaod = (index) => {
-        // const payload = {fileName: index}
-        console.log("File index", index)
-        // axios.get(`http://localhost:8099/api/files/downloadFile/${index}`)
-        fetch(`http://localhost:8099/api/files/downloadFile/${index}`)
-          .then(response => {
-            const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
-            response.blob().then(blob => {
-              let url = window.URL.createObjectURL(blob);
-              let a = document.createElement('a');
-              a.href = url;
-              a.download = filename;
-              a.click();
+      //   console.log("File index", index)
+      //   fetch(`http://localhost:8099/api/files/downloadFile/${index}`)
+      //     .then(response => {
+      //       console.log(response.headers)
+      //       const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+      //       response.blob().then(blob => {
+      //         let url = window.URL.createObjectURL(blob);
+      //         let a = document.createElement('a');
+      //         a.href = url;
+      //         a.download = filename;
+      //         a.click();
+      //     });
+      //  });
+
+      axios(`http://localhost:8099/api/files/downloadFile/${index}`, {
+        method: 'GET',
+        responseType: 'blob' //Force to receive data in a Blob Format
+    })
+    .then(response => {
+      console.log("Response", response.data);
+      if(response.data.type === 'application/pdf'){
+        //Create a Blob from the PDF Stream
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/pdf'},
+        );
+        //Build a URL from the file
+        const fileURL = URL.createObjectURL(file);
+        //download file      
+          let a = document.createElement('a');
+          a.href = fileURL;
+          a.download = file;
+          a.click();
+      } if(response.data.type === 'image/png'){ //dowload png format
+        const file = new Blob(
+          [response.data], 
+          {type: 'image/png'} 
+        );
+        //Build a URL from the file
+        const fileURL = URL.createObjectURL(file);
+        //download file      
+          let a = document.createElement('a');
+          a.href = fileURL;
+          a.download = file;
+          a.click();
+      }
+          //alternatevly open the URL in new Window
+              // window.open(fileURL);
+          })
+          .catch(error => {
+              console.log(error);
           });
-       });
       }
 
     render() {
@@ -120,7 +158,7 @@ export class SingleInstitution extends Component {
                       <button onClick={this.handleDownlaod.bind(this, file.id )}>Download</button></li>))}</ul>}
               </div>
                 {/* <div className="App-intro">
-                  <h3>Atsisiųsti dokumentą</h3>
+                  <h3>Atsisiųsti visus dokumentus</h3>
                   <button onClick={this.downloadRandomImage}>Download</button>
                   </div> */}
                 </div>
