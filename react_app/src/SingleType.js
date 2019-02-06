@@ -14,28 +14,27 @@ export class SingleType extends Component {
            type: {},
            groups:[],
            groupName:'',
+           typeGroups: [],
            send: false,
            receive: false,
         }
-
         this.handleChangeSend = this.handleChangeSend.bind(this);
         this.handleChangeReceive = this.handleChangeReceive.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClearForm = this.handleClearForm.bind(this);
-
-        console.log("id", this.state.title);
       }
     
       componentDidMount = () => {
-          axios.get(`http://localhost:8099/api/types/${this.state.title}`)
+          axios.get(`http://localhost:8099/api/types/groups/${this.state.title}`)
           .then(result => {
             const type = result.data
           this.setState({type});
-        //   const groupUsers = result.data.groupUsers
-        //   this.setState({groupUsers})
+
+          const typeGroups = result.data.typeGroups
+          this.setState({typeGroups})
           console.log("Tipai", type)
-        //   console.log('Useriai', groupUsers)
+          console.log('typeGroups', typeGroups)
           })
           .catch(function (error) {
             console.log(error);
@@ -49,9 +48,6 @@ export class SingleType extends Component {
           .catch(function (error) {
             console.log(error);
           });
-
-        
-        
       }
   
       DeleteItem = (event) => {
@@ -63,7 +59,6 @@ export class SingleType extends Component {
           .catch(function (error) {
             console.log(error);
           });
-          
           this.props.history.push('/') //redirects Home after delete
       }
 
@@ -122,11 +117,10 @@ export class SingleType extends Component {
                     <h4 className="card-title">
                     </h4>
                     <h5>Pavadinimas: {this.state.type.title}</h5>
-                   
-                    {/* <div>
-                      <h5>Grupės vartotojai: </h5> 
-                    {(!this.state.groupUsers.length) ? <span>Grupei vartotojai neprisikirti</span> : <ul>{this.state.groupUsers.map((user) => (<li key={user.email}>{user.name}</li>))}</ul>}
-                    </div> */}
+                    <div>
+                      <h5>Šio tipo dokumentas priskirtas grupėms: </h5> 
+                    {(!this.state.typeGroups.length) ? <span>Grupei vartotojai neprisikirti</span> : <ul>{this.state.typeGroups.map((group) => (<li key={group.group.name}>{group.group.name}</li>))}</ul>}
+                    </div>
               </div>
             
             <div className="card-footer">
@@ -135,7 +129,9 @@ export class SingleType extends Component {
             <div>
                 <label className="control-label">Pasirinkite varototjų grupę</label>
                 <select value={this.state.groupName} onChange={this.handleSelectChange} 
-                className="form-control" id="ntype" required>{this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)}</select>
+                className="form-control" id="ntype" required>
+                {this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)}
+                </select>
             </div>
             <label className="form-label capitalize">
             <input

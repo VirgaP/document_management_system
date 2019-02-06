@@ -9,7 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class DBFileStorageService {
@@ -39,4 +45,55 @@ public class DBFileStorageService {
         return dbFileRepository.findById(fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
     }
+
+    public List<DBFile> getUserFiles(String email) {
+       return dbFileRepository.findAllUserFiles(email).stream().collect(Collectors.toList());
+
+    }
+
+    public List<String> getUserFileNames(String email) {
+
+       List<DBFile> dbFiles = dbFileRepository.findAllUserFiles(email);
+       List<String> filenames = new ArrayList<>();
+
+       for(DBFile dBfile : dbFiles){
+           filenames.add(dBfile.getFileName());
+       }
+
+       return filenames;
+
+    }
+
+    public byte[] getUserFileData(String email) {
+
+       byte[] bytes = dbFileRepository.findAllUserFilesData(email);
+
+        return bytes;
+
+    }
+
+
+
+    public InputStream getCompressed(InputStream is )
+            throws IOException
+    {
+        byte data[] = new byte[2048];
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream( bos );
+        BufferedInputStream entryStream = new BufferedInputStream( is, 2048);
+        ZipEntry entry = new ZipEntry( "" );
+        zos.putNextEntry( entry );
+        int count;
+        while ( ( count = entryStream.read( data, 0, 2048) ) != -1 )
+        {
+            zos.write( data, 0, count );
+        }
+        entryStream.close();
+        zos.closeEntry();
+        zos.close();
+
+        return new ByteArrayInputStream( bos.toByteArray() );
+    }
+
+
 }

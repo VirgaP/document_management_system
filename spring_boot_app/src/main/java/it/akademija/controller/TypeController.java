@@ -54,6 +54,12 @@ public class TypeController {
         return typeService.getTypeByTitle(title);
     }
 
+    @RequestMapping(path = "/groups/{title}", method = RequestMethod.GET)
+    @ApiOperation(value="Get type ", notes="Returns type")
+    public TypeDTO getTypeGroups(@PathVariable final String title){
+        return typeService.getTypeGroups(title);
+    }
+
     @RequestMapping(path="/new", method = RequestMethod.POST)
     @ApiOperation(value="Create type", notes = "Creates new type of the document")
     @ResponseStatus(HttpStatus.CREATED)

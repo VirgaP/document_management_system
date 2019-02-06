@@ -51,9 +51,19 @@ public class TypeService {
     }
 
     @Transactional
-    public TypeDTO getTypeByTitle(String title){ //arba IncomingRequestBody request
+    public TypeDTO getTypeByTitle(String title){
         Type type = typeRepository.findByTitle(title);
         TypeDTO typeDTO = new TypeDTO(type.getTitle());
+        return typeDTO;
+    }
+
+    @Transactional
+    public TypeDTO getTypeGroups(String title){
+        Type type = typeRepository.findByTitle(title);
+        TypeDTO typeDTO = new TypeDTO(
+                type.getTitle(),
+                type.getTypeGroups()
+        );
         return typeDTO;
     }
 

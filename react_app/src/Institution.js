@@ -39,7 +39,7 @@ export class Institution extends Component {
         const payload = {
             email: this.state.email
         }
-        axios.post(`http://localhost:8099/api/documents/${this.props.document.number}/submit`, payload)
+        axios.patch(`http://localhost:8099/api/documents/${this.props.document.number}/submit`, payload)
         .then(res => console.log("Send POST request", payload))
         .catch(function (error) {
           console.log(error);

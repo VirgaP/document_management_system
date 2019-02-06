@@ -6,8 +6,11 @@ import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import AddBook from './AddBook';
 import UserDocumentListContainer from './UserDocumentListContainer'
+import {jszip} from 'jszip';
+
 
 export class SingleUser extends Component {
+
     constructor(props) {
         super(props)
           
@@ -62,6 +65,7 @@ export class SingleUser extends Component {
           
           this.props.history.push('/') //redirects Home after delete
       }
+
       handleRemove(index) {
        
          const payload = {groupName: index}
@@ -81,6 +85,51 @@ export class SingleUser extends Component {
            }); 
        }
   
+
+       handleZip = () => {
+  
+
+        axios(`http://localhost:8099/api/files/archive/${this.state.id}`, {
+          method: 'GET',
+          responseType: 'arraybuffer' //Force to receive data in a Blob Format
+      })
+      .then(response => {
+        console.log("Response zip", response.data);
+        const data = response.data;
+        const fileName = "my.zip";
+      
+        this.saveFile(data, fileName);
+
+        // const file = new Blob(
+        //   [response.data], 
+        //   {type: 'application/zip'},
+        // );
+        //   const fileURL = URL.createObjectURL(file);
+        //     let a = document.createElement('a');
+        //     a.href = fileURL;
+        //     a.click();
+        })
+            .catch(error => {
+                console.log(error);
+            });
+          
+        }
+        saveFile(blob, filename) {
+          if (window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, filename);
+          } else {
+            const a = document.createElement('a');
+            document.body.appendChild(a);
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = filename;
+            a.click();
+            setTimeout(() => {
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+            }, 0)
+          }
+        }
     render() {
      console.log("params url: ", this.props.match.params.email)
       return (
@@ -95,6 +144,7 @@ export class SingleUser extends Component {
               <div className="card-body">
                     <h4 className="card-title">
                     </h4>
+                    <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button>
                     <h5>Vardas: {this.state.user.name}</h5>
                     <h5>Pavardė: {this.state.user.surname}</h5>
                     <h5>El.paštas: {this.state.user.email}</h5>
@@ -105,7 +155,7 @@ export class SingleUser extends Component {
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
                     </div> */}
                      {String(this.state.user.admin) === 'true'?
-                    <div>
+                    <div> 
                       <h5>Vartotojo grupės: </h5> 
                      
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
@@ -138,7 +188,6 @@ export class SingleUser extends Component {
                  <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   
                  </div>
-           
           </div>
               </React.Fragment> 
                   )}

@@ -30,4 +30,12 @@ public class GroupDTO {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Set<User> getGroupUsers() {
+        return groupUsers;
+    }
+
+    public void setGroupUsers(Set<User> groupUsers) {
+        this.groupUsers = groupUsers;
+    }
 }

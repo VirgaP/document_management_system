@@ -62,19 +62,6 @@ public class UserService {
         return userDTO;
     }
 
-
-//    @Transactional
-//    public RequestUser getUserWithDocuments(String surname){
-//        User user = userRepository.findBySurname(surname);
-//        RequestUser request = new RequestUser(
-//                user.getName(),
-//                user.getSurname(),
-//                user.getEmail(),
-//                user.getUserDocuments()
-//        );
-//        return request;
-//    }
-
     @Transactional
     public void createUser(RequestUser requestUser) {
         Group group = groupRepository.findByname(requestUser.getGroupName());
@@ -85,9 +72,9 @@ public class UserService {
                 requestUser.getEmail(),
                 requestUser.getAdmin()
         );
-
         user.addGroup(group);
         userRepository.save(user);
+        group.addUser(user);
     }
 
     @Transactional
@@ -103,6 +90,7 @@ public class UserService {
         Group group = groupRepository.findByname(request.getGroupName());
         user.addGroup(group);
         userRepository.save(user);
+        group.addUser(user);
     }
 
     @Transactional

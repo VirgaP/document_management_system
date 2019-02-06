@@ -71,7 +71,7 @@ public class DocumentController {
 
     }
 
-    @RequestMapping(path = "/{uniqueNumber}/submit", method = RequestMethod.POST)
+    @RequestMapping(path = "/{uniqueNumber}/submit", method = RequestMethod.PATCH)
     @ApiOperation(value = "Submit document", notes = "Submit document, change status")
     @ResponseStatus(HttpStatus.OK)
     void submitDocument(

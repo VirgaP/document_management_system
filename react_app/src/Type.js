@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from 'antd';
 import axios from 'axios';
 
@@ -22,7 +22,7 @@ export class Type extends Component {
         <td>{this.props.type.title}</td>
         <td>
         <Button type="default">
-            <Link to={`/type/${this.props.type.title}`}> Peržiūrėti </Link>
+            <Link to={`/type/${this.props.type.title}`} > Peržiūrėti </Link>
         </Button>
         </td>
         <td>

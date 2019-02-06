@@ -22,9 +22,9 @@ export class SingleGroup extends Component {
           .then(result => {
             const group = result.data
           this.setState({group});
-        //   const groupUsers = result.data.groupUsers
-        //   this.setState({groupUsers})
-          console.log("Grupe", group)
+          const groupUsers = result.data.groupUsers
+          this.setState({groupUsers})
+          console.log("Grupe", groupUsers)
         //   console.log('Useriai', groupUsers)
           })
           .catch(function (error) {
@@ -50,6 +50,7 @@ export class SingleGroup extends Component {
   
     render() {
      console.log("params url: ", this.props.match.params.groupName)
+     console.log('GRUPE', this.state.group)
       return (
           <UserProvider>
           <UserContext.Consumer>
@@ -66,7 +67,7 @@ export class SingleGroup extends Component {
                    
                     <div>
                       <h5>Grupės vartotojai: </h5> 
-                    {(!this.state.groupUsers.length) ? <span>Grupei vartotojai neprisikirti</span> : <ul>{this.state.groupUsers.map((user) => (<li key={user.email}>{user.name}</li>))}</ul>}
+                    {(!this.state.groupUsers.length) ? <span>Grupei vartotojai neprisikirti</span> : <ul>{this.state.groupUsers.map((user) => (<li key={user.email}>{user.name} {user.surname}</li>))}</ul>}
                     </div>
               </div>
               <div className="card-footer">

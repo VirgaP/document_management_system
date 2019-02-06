@@ -1,6 +1,10 @@
 package it.akademija.payload;
 
 
+import it.akademija.entity.User;
+
+import java.util.Set;
+
 public final class IncomingRequestBody {
 
 
@@ -14,8 +18,7 @@ public final class IncomingRequestBody {
 
     private boolean receive;
 
-
-    //    private InstitutionBook institutionBook = new InstitutionBook();
+    private Set<User> groupUsers;
 
     public String getTitle() {
         return title;
@@ -64,12 +67,11 @@ public final class IncomingRequestBody {
         this.email = email;
     }
 
-    //
-//    public InstitutionBook getInstitutionBook() {
-//        return institutionBook;
-//    }
-//
-//    public void setInstitutionBook(InstitutionBook institutionBook) {
-//        this.institutionBook = institutionBook;
-//    }
+    public Set<User> getGroupUsers() {
+        return groupUsers;
+    }
+
+    public void setGroupUsers(Set<User> groupUsers) {
+        this.groupUsers = groupUsers;
+    }
 }
