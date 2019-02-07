@@ -1,6 +1,7 @@
 package it.akademija.payload;
 
 
+import it.akademija.Role;
 import it.akademija.entity.Group;
 import it.akademija.entity.UserDocument;
 
@@ -15,6 +16,8 @@ public final class RequestUser {
 
     private String email;
 
+    private String password;
+
     private String groupName;
 
     private boolean admin;
@@ -22,6 +25,8 @@ public final class RequestUser {
     private List<UserDocument> userDocuments;
 
     private Set<Group> userGroups;
+
+    private Set<String> roles;
 
     private String group;
 
@@ -75,6 +80,10 @@ public final class RequestUser {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public boolean getAdmin() {
         return admin;
     }
@@ -106,4 +115,9 @@ public final class RequestUser {
     public void setGroup(String group) {
         this.group = group;
     }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
 }

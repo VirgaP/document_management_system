@@ -70,7 +70,9 @@ public class UserService {
                 requestUser.getName(),
                 requestUser.getSurname(),
                 requestUser.getEmail(),
-                requestUser.getAdmin()
+                requestUser.getPassword(),
+                requestUser.getAdmin(),
+                requestUser.getRoles()
         );
         user.addGroup(group);
         userRepository.save(user);
