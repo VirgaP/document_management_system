@@ -143,7 +143,7 @@ public class Document {
         file.setDocument(this);
     }
 
-    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @JsonIgnore
     public List<DBFile> getDbFiles() {

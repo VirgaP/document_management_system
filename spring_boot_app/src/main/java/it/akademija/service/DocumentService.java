@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,7 @@ public class DocumentService {
         document.setType(type);
 
         document.addDbFile(file);
+        System.out.println("dbfilas" + file.getFileName());
 
         documentRepository.save(document);
 
@@ -116,7 +118,7 @@ public class DocumentService {
     }
 
     @Transactional
-    public List<DocumentDTO>  getAllUserDocuments(String email){
+    public List<DocumentDTO> getAllUserDocuments(String email){
         List<DocumentDTO> documents = documentRepository.findAllUserDocumentsl(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
@@ -147,16 +149,16 @@ public class DocumentService {
     @Transactional
     public void deleteDocument(String uniqueNumber){
         Document document = documentRepository.findByuniqueNumber(uniqueNumber);
+        document.setType(null);
 
-//        for (Book book : institution.getBookSet()) { // removing book from inverse side institution assocition and deleting institution
-//            book.getInstitutions().remove(institution);
-//        }
+        List<DBFile> dbFiles = document.getDbFiles();
+
+        for (Iterator<DBFile> iterator = dbFiles.iterator(); iterator.hasNext(); ) {
+            DBFile value = iterator.next();
+                iterator.remove();
+            }
+
         documentRepository.delete(document);
-
-       // arba
-//        Institution institution = institutionRepository.findByTitle(title);
-//        institution.getBookSet().removeAll(institution.getBookSet());
-//        institutionRepository.delete(institution);
     }
 
     @Transactional
@@ -197,27 +199,7 @@ public class DocumentService {
         userDocumentRepository.save(userDocument);
 
     }
-    @Transactional
-    public void addUser(String title, RequestUser request){//pridet addType
-//        Document document = documentRepository.findByTitle(title);
-//
-//        User user = userRepository.findByEmail(request.getEmail());
-//
-//        UserDocument userDocument= new UserDocument();
-//
-//        userDocument.setUser(user);
-//        userDocument.setDocument(document);
-//
-//        userDocumentRepository.save(userDocument);
-//
-//        document.addUser(userDocument);
-//
-//        user.addUserDocument(userDocument);
 
-//        bookRepository.save(book);
-//        institutionRepository.save(institution);
-
-    }
     @Transactional
     public void removeUser(String title, RequestUser request){
         Document document = documentRepository.findByTitle(title);

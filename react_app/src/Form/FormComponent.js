@@ -27,7 +27,9 @@ class Form extends Component {
         uniqueNumber:'',
         documentTypes:[],
         file:null,
-        fileName: ''
+        fileName: '',
+        displayAddFiles: false,
+        responseStatus:''
       };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleClearForm = this.handleClearForm.bind(this);
@@ -90,122 +92,117 @@ class Form extends Component {
             console.log(error);
           });
            
-  }
-handleDocumentTitleChange(e) {  
-  this.setState({ title: e.target.value });
-}
+    }
+    handleDocumentTitleChange(e) {  
+      this.setState({ title: e.target.value });
+    }
 
-handleDocumentDescriptionChange(e) {
-  this.setState({ description: e.target.value });
-}
+    handleDocumentDescriptionChange(e) {
+      this.setState({ description: e.target.value });
+    }
 
-handleSelectChange(e) {  
-  this.setState({ typeTitle: e.target.value });
-}
+    handleSelectChange(e) {  
+      this.setState({ typeTitle: e.target.value });
+    }
 
-handleClearForm(e) {
-  e.preventDefault();
-  this.setState({
-  title: '',
-  description: '',
-  typeTitle: '',
-  file: null
-});
-}
-    handleSubmit(e) {
+    handleClearForm(e) {
       e.preventDefault();
-
-      const uniqueNumber = this.state.date + '-' + this.state.email;
-
-      console.log("Tipas ", this.state.typeTitle);
-      console.log('Pavadinimas ', this.state.title);
-      console.log('Aprasymas ', this.state.description)
-      console.log('Email ', this.state.email)
-      console.log('Number', uniqueNumber)
-
-      this.fileUpload(this.state.file).then((response)=>{
-        console.log(response.data)
-      })
-      this.handleClearForm(e);
-      console.log("FILENAME", this.state.file.name);
-       
-      const fileName = this.state.date + '-' + this.state.file.name; 
-      // console.log("FILENAME PLUS DATE", this.state.fileName);
-
-      axios.post('http://localhost:8099/api/documents/new', {
-        title: this.state.title,
-        description: this.state.description,
-        typeTitle: this.state.typeTitle,
-        email:this.state.email,
-        uniqueNumber: uniqueNumber,
-        fileName: this.state.file.name
-          })
-          .then(function(response) {
-            console.log("Tipas post", this.state.typeTitle);
-            console.log('Pavadinimas post ', this.state.title);
-            console.log('Aprasymas post', this.state.description)
-            console.log('Email post', this.state.email)
-            console.log('Number', uniqueNumber)
-            console.log('Filename', this.fileName)
-              console.log(response);
-          }).catch(function (error) {
-              console.log(error);
-          })
-          // this.props.history.push("/");
-    }
-
-    onChange(e) {
-      this.setState({file:e.target.files[0]})
-    }
-
-    fileUpload(file){
-      const url = 'http://localhost:8099/api/files/uploadFile';
-      const formData = new FormData();
-      formData.append('file',file)
-      formData.append('fileName', this.state.date + this.state.file.name)
-      const config = {
-          headers: {
-              'content-type': 'multipart/form-data'
-          }
-      }
-      return  axios.post(url, formData,config)
-    }
-    getMatches(){
-      var matches = [];
-      var a = this.state.groups;
-      var b = this.state.userGroups;
-      for ( var i = 0; i < a.length; i++ ) {
-          for ( var e = 0; e < b.length; e++ ) {
-              if ( a[i] === b[e] ) matches.push( a[i] );
-          }
-      }
-      console.log("MATCHES", matches)
-      var match = matches.toString();
-
-      const userTypes = [];
-      this.state.types.forEach(element => {
-      if(element.group.name === match){ 
-      console.log("inside foreach", element.group.name === match)
-        userTypes.push(element.type.title)
-      }
-      });
-      console.log("User types", userTypes)
-
-      return userTypes;
-      
+      this.setState({
+      title: '',
+      description: '',
+      typeTitle: '',
+    });
     }
   
-    render() {
-      console.log("User groups", this.state.userGroups);
-      console.log("All groups", this.state.groups);   
-      console.log("user group types", this.state.userTypes); 
+  handleSubmit(e) {
+      e.preventDefault();
+
+  const uniqueNumber = this.state.date + '-' + this.state.email;
+
+  console.log("Tipas ", this.state.typeTitle);
+  console.log('Pavadinimas ', this.state.title);
+  console.log('Aprasymas ', this.state.description)
+  console.log('Email ', this.state.email)
+  console.log('Number', uniqueNumber)
+  console.log("Filename", this.state.fileName)
+
+  this.fileUpload(this.state.file).then((response)=>{
+    console.log(response.data)
+  })
+  this.handleClearForm(e);
+  // console.log("FILENAME", this.state.file.name);
+   
+  // const fileName = this.state.date + '-' + this.state.file.name; 
+  // console.log("FILENAME PLUS DATE", this.state.fileName);
+
+  axios.post('http://localhost:8099/api/documents/new', {
+    title: this.state.title,
+    description: this.state.description,
+    typeTitle: this.state.typeTitle,
+    email:this.state.email,
+    uniqueNumber: uniqueNumber,
+    fileName: this.state.file.name
+      })
+      .then(response => {
+          console.log("Response", response);
+          const responseStatus = response.status
+          this.setState({responseStatus})
+         console.log(responseStatus)
+         if(responseStatus >= 200 && responseStatus < 300){ 
+          this.props.history.push(`/document/${uniqueNumber}`) }
+      }).catch(function (error) {
+          console.log(error);
+      })
+      console.log(this.state.responseStatus)
+      // if(this.state.responseStatus >= 200 && this.state.responseStatus < 300){ 
+      //   this.context.router.history.push(`/document/${this.state.uniqueNumber}`) }
+         
+         
+        // this.props.history.push(`/document/${this.state.uniqueNumber}`)
+
+}
+
+onChange(e) {
+  this.setState({file:e.target.files[0]})
+
+  switch (e.target.name) {
+    // Updated this
+    case 'selectedFile':
+      if(e.target.files.length > 0) {
+          // Accessed .name from file 
+          this.setState({ fileName: e.target.files[0].name });
+      }
+    break;
+    default:
+      this.setState({ [e.target.name]: e.target.value });
+   }
+}
+fileUpload(file){
+  const url = 'http://localhost:8099/api/files/uploadFile';
+  const formData = new FormData();
+  formData.append('file',file)
+  formData.append('fileName', this.state.date + this.state.file.name)
+  const config = {
+      headers: {
+          'content-type': 'multipart/form-data'
+      }
+  }
+  return  axios.post(url, formData,config)
+}
+
+  render() {
+    const { fileName } = this.state;
+    let selected = null;
+ 
+    selected = fileName 
+       ? ( <span>Pasirinkta - {fileName}</span>) 
+       : ( <span>Pasirinkite dokumentą...</span> );
+ 
       const options = this.state.documentTypes.map(type =>
         <option key={type} value={type}>{type}</option>  
       )
       return (   
-        
         <div className="container">
-        <span>{this.getMatches()}</span>
           <h2>Sukurti naują dokumentą</h2>
           <form onSubmit={this.handleSubmit}>
           <SingleInput 
@@ -216,7 +213,6 @@ handleClearForm(e) {
             content={this.state.title}
             placeholder={'Dokumento pavadinimas'}
            /> 
-
           <SingleInput 
             inputType={'text'}
             title={'Dokumento aprasymas'}
@@ -225,12 +221,6 @@ handleClearForm(e) {
             content={this.state.description}
             placeholder={'Dokumento aprasymas'}
            /> 
-          {/* <div>
-              <label className="control-label">Pasirinkite dokumento tipą</label>
-              <select value={this.state.typeTitle} onChange={this.handleSelectChange} 
-              className="form-control" id="ntype" required>{this.getMatches().map((type)=> <option key={type}>{type}</option>)}</select>
-          </div> */}
-        
           <div>
               <label className="control-label">Pasirinkite dokumento tipą</label>
               <select value={this.state.typeTitle} onChange={this.handleSelectChange} 
@@ -240,15 +230,15 @@ handleClearForm(e) {
               </select>
           </div>
           <br></br>
-          {/* <UploadFile number={this.state.uniqueNumber}/> */}
-          <div>
-          <input type="file" name="" id="" onChange={this.onChange} required/>
-          {/* <button type="submit">Upload</button> */}
+          <div class="custom-file" id="customFile" lang="es">
+          <input type="file" class="custom-file-input" name="selectedFile" id="exampleInputFile" aria-describedby="fileHelp" onChange={this.onChange} required/>
+          <label class="custom-file-label" htmlFor="file">{selected}</label>
           </div>
           <br></br>
-            <button className="btn btn-primary" type="submit">Saugoti dokumentą</button>
+          <br></br>
+          <button className="btn btn-primary" type="submit">Saugoti dokumentą</button>
           </form>
-    <br></br>
+          <br></br>
         </div>
       ) 
     }

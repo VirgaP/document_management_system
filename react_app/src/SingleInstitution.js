@@ -50,7 +50,7 @@ export class SingleInstitution extends Component {
             userDocument.push(element)
           }
         });
-        console.log(userDocument)
+        console.log(document.userDocument)
         console.log("User", user)
         console.log("Failai", userFiles)
         this.setState({user});

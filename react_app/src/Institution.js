@@ -10,18 +10,19 @@ export class Institution extends Component {
         super();
        
         this.state = {
-          email:'user@email.com',
+          email:'virga@email.com',
           userDocumentStatus:[]
         };
         
       }
       componentDidMount = () => {
-        const userDocumentStatus = [];
-        this.props.document.userDocuments.forEach(element => {
-            userDocumentStatus.push(element)
-            // console.log("From foreach", element)
-        });
-        this.setState({userDocumentStatus})
+        // const userDocumentStatus = [];
+        // this.props.document.userDocuments.forEach(element => {
+        //     userDocumentStatus.push(element)
+        //     // console.log("From foreach", element)
+        // });
+        // this.setState({userDocumentStatus})
+        console.log( "ud status", this.props.document.userDocuments)
       }
       
     DeleteItem = (event) => {
@@ -60,7 +61,7 @@ export class Institution extends Component {
             <Link to={`/document/${this.props.document.number}`}> Peržiūrėti </Link>
         </Button>
         </td>
-        {this.state.userDocumentStatus.map(el=>(String (el.submitted)) === 'false'? 
+        {this.props.document.userDocuments.map(el=>(String (el.submitted)) === 'false'? 
         <td>
         <Button type="primary" onClick={this.SubmitItem.bind(this)}>Pateikti</Button>
         </td> : 
@@ -68,7 +69,7 @@ export class Institution extends Component {
         <Button type="primary disabled">Pateikti</Button>
         </td>
         )}
-        {this.state.userDocumentStatus.map(el=>(String (el.submitted)) === 'true'? 
+        {this.props.document.userDocuments.map(el=>(String (el.submitted)) === 'true'? 
         <td>
         <Button type="danger disabled">Trinti</Button>
         </td> :
@@ -77,7 +78,7 @@ export class Institution extends Component {
         </td>
          )}
 
-        {this.state.userDocumentStatus.map(el=>(String (el.submitted)) === 'true'? 
+        {this.props.document.userDocuments.map(el=>(String (el.submitted)) === 'true'? 
         <td>
             <Button type="default disabled">Redaguoti</Button>
         </td> :

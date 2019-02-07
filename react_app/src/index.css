@@ -10,7 +10,12 @@ body {
 .user_document_list{
   overflow-x:auto;
 }
-
+#customFile .custom-file-control:lang(en)::after {
+  content: "Pasirinkti...";
+}
+.custom-file-input ~ .custom-file-label::after {
+  content: "Pasirinkti";
+}
 .user_form input{
   margin: 0 0 20px 0;
 }
