@@ -10,7 +10,7 @@ import Nowhere from './Nowhere';
 import BookForm from './BookFormContainer';
 import Form from './Form/FormComponent';
 import Registration from './Registration';
-import HomePage from './HomePage';
+import HomePage from './Homepage/Homepage';
 import SingleUser from './SingleUser';
 import SingleInstitution from './SingleInstitution';
 import InstitutionList from './InstitutionListContainer';

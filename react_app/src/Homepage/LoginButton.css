@@ -1,0 +1,45 @@
+.LoginGroup {
+    /*margin-left: -280px;*/
+}
+
+.login-card {
+    border: 1px solid transparent;
+    border-radius: 15px;
+    width: 15%;
+    display: inline-block;
+    margin-left: 30px;
+    background-color: rgb(184, 197, 255);
+}
+
+.login-card:hover {
+    background-color: rgb(136, 158, 255);
+}
+
+img {
+    width: 80%;
+    height: auto; }
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li {
+    display: inline;
+}
+
+.login-header {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.user-type {
+    color: black;
+    font-size: 110%;
+
+}
+
+
+

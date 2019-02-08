@@ -13,7 +13,7 @@ public class SecurityTestController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     // Preauthorized galima or, secured - tik and
-    // @PreAuthorize("hasRole('HR')") //
+    // @PreAuthorize("hasRole('ADMIN')") //
     @Secured("ROLE_ADMIN")
     public String test() {
         return "AUTHENTICATED";
