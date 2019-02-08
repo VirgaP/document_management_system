@@ -3,93 +3,55 @@ import {Link } from "react-router-dom";
 import { Button } from 'antd';
 import axios from 'axios';
 
-
 export class Institution extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
        
         this.state = {
           email:'virga@email.com',
-          userDocumentStatus:[]
+          userDocumentStatus:[],
+          message:'',
+          document: props.current
         };
-        
+        console.log("dokas", this.state.document)
       }
-      componentDidMount = () => {
-        // const userDocumentStatus = [];
-        // this.props.document.userDocuments.forEach(element => {
-        //     userDocumentStatus.push(element)
-        //     // console.log("From foreach", element)
-        // });
-        // this.setState({userDocumentStatus})
-        console.log( "ud status", this.props.document.userDocuments)
-      }
-      
-    DeleteItem = (event) => {
-        axios.delete(`http://localhost:8099/api/documents/${this.props.document.number}`)
+
+    deleteDocument(number){
+        alert("Ar tikrai norite ištrinti šį dokumentą?")
+        axios.delete(`http://localhost:8099/api/documents/${number}`)
         .then(result => {
-          const document = result.data
-        this.setState({document});
+            console.log(result);
+            // this.props.deleteItem(id);
+            this.props.deleteItem(number);
+        //   const document = result.data
+        // this.setState({document});
+        const responseStatus = result.status
+        console.log(result)
+        if(responseStatus >= 200 && responseStatus < 300){ 
+        alert('dokumentas istrintas') }
         })
         .catch(function (error) {
           console.log(error);
         });
     }
 
-    SubmitItem = (event) => {
-        const payload = {
-            email: this.state.email
-        }
-        axios.patch(`http://localhost:8099/api/documents/${this.props.document.number}/submit`, payload)
-        .then(res => console.log("Send POST request", payload))
-        .catch(function (error) {
-          console.log(error);
-        });    
-    }
-    
   render() {
-      console.log("Dokumentas in Institution", this.props.document)
-      console.log("Status", this.state.userDocumentStatus)
+    const {document} = this.state
     return (
-        <tr>
-        <td>{this.props.document.title}</td>
-        <td>{this.props.document.description}</td>
-        <td>{(this.props.document.type !=null) ? this.props.document.type.title : 'tipas nepriskirtas'}</td>
-        <td>{this.props.document.createdDate}</td>
+        <tr key={document.number}>
+        <td>{document.title}</td>
+        <td>{document.description}</td>
+        <td>{(document.type !=null) ? document.type.title : 'tipas nepriskirtas'}</td>
+        <td>{document.createdDate}</td>
         <td>
         <Button type="primary">
-            <Link to={`/document/${this.props.document.number}`}> Peržiūrėti </Link>
+            <Link to={`/document/${document.number}`}> Peržiūrėti </Link>
         </Button>
         </td>
-        {this.props.document.userDocuments.map(el=>(String (el.submitted)) === 'false'? 
-        <td>
-        <Button type="primary" onClick={this.SubmitItem.bind(this)}>Pateikti</Button>
-        </td> : 
-        <td>
-        <Button type="primary disabled">Pateikti</Button>
-        </td>
-        )}
-        {this.props.document.userDocuments.map(el=>(String (el.submitted)) === 'true'? 
-        <td>
-        <Button type="danger disabled">Trinti</Button>
-        </td> :
-         <td>
-        <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti </Button>
-        </td>
-         )}
-
-        {this.props.document.userDocuments.map(el=>(String (el.submitted)) === 'true'? 
-        <td>
-            <Button type="default disabled">Redaguoti</Button>
-        </td> :
-        <td>
-        <Button type="default">
-            <Link to={`/edit/document/${this.props.document.number}`}>Redaguoti</Link>
-        </Button>
-        </td>
-        )}
-      </tr>);
-    
+      </tr>
+      
+      );
   }
 }
 

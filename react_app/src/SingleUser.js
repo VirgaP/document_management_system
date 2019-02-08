@@ -50,7 +50,7 @@ export class SingleUser extends Component {
         newArray.push(value);   
         console.log("NEW ARRAY", newArray)
         this.setState({userGroups:[...newArray]})
-        
+
       }
   
       DeleteItem = (event) => {
@@ -88,7 +88,6 @@ export class SingleUser extends Component {
 
        handleZip = () => {
   
-
         axios(`http://localhost:8099/api/files/archive/${this.state.id}`, {
           method: 'GET',
           responseType: 'arraybuffer' //Force to receive data in a Blob Format
@@ -150,10 +149,6 @@ export class SingleUser extends Component {
                     <h5>El.paštas: {this.state.user.email}</h5>
                     <h5>Vartotojo rolė: {String(this.state.user.admin) === 'true' ? 'administratorius' : 'vartototojas'}</h5> 
                     {/* converts boolean to String */}
-                    {/* <div>
-                      <h5>Vartotojo grupės: </h5> 
-                    {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
-                    </div> */}
                      {String(this.state.user.admin) === 'true'?
                     <div> 
                       <h5>Vartotojo grupės: </h5> 

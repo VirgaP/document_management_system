@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
-import InstitutionList from './InstitutionListContainer';
+import InstitutionList from './DocumentListContainer';
 import axios from 'axios';
 
 

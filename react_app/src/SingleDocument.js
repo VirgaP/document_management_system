@@ -7,9 +7,7 @@ import UserContext from './UserContext';
 import AddBook from './AddBook';
 
 
-const confirm = Modal.confirm;
-
-export class SingleInstitution extends Component {
+export class SingleDocument extends Component {
   
     constructor(props) {
         super(props)
@@ -183,4 +181,4 @@ const style = {
     backgroundColor: 'yellow',
 }
 
-export default SingleInstitution
+export default SingleDocument

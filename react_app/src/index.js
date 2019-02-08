@@ -12,8 +12,8 @@ import Form from './Form/FormComponent';
 import Registration from './Registration';
 import HomePage from './HomePage';
 import SingleUser from './SingleUser';
-import SingleInstitution from './SingleInstitution';
-import InstitutionList from './InstitutionListContainer';
+import SingleDocument from './SingleDocument';
+import InstitutionList from './DocumentListContainer';
 import UserGroupFormContainer from './UserGroupFormContainer';
 import EditGroup from './EditGroup';
 import EditType from './EditType';
@@ -42,7 +42,7 @@ ReactDOM.render((
                 <Route path="/user/:email" render={(props) => <SingleUser {...props} />}/>
                 {/* <Route path='/user/profile' component={UserHomePage}/> */}
                 <Route path="/admin" component={Form}/>
-                <Route path="/document/:number" render={(props) => <SingleInstitution {...props} />}/> 
+                <Route path="/document/:number" render={(props) => <SingleDocument {...props} />}/> 
                 <Route path="/edit/document/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>   
                 <Route path="/register" component={Registration}/>
                 <Route path="*" component={Nowhere}/>   
