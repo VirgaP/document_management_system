@@ -29,7 +29,6 @@ class Form extends Component {
         file:null,
         fileName: '',
         displayAddFiles: false,
-        responseStatus:''
       };
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleClearForm = this.handleClearForm.bind(this);
@@ -146,20 +145,15 @@ class Form extends Component {
       .then(response => {
           console.log("Response", response);
           const responseStatus = response.status
-          this.setState({responseStatus})
          console.log(responseStatus)
          if(responseStatus >= 200 && responseStatus < 300){ 
           this.props.history.push(`/document/${uniqueNumber}`) }
+          else{
+            
+          }
       }).catch(function (error) {
           console.log(error);
       })
-      console.log(this.state.responseStatus)
-      // if(this.state.responseStatus >= 200 && this.state.responseStatus < 300){ 
-      //   this.context.router.history.push(`/document/${this.state.uniqueNumber}`) }
-         
-         
-        // this.props.history.push(`/document/${this.state.uniqueNumber}`)
-
 }
 
 onChange(e) {

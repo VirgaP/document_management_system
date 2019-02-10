@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import InstitutionListContainer from './InstitutionListContainer';
+import DocumentListContainer from './DocumentListContainer';
 import GroupListContainer from './GroupListContainer';
 import TypeListContainer from './TypeListContainer';
 
@@ -13,19 +13,42 @@ export class HomePage extends Component {
     this.state = {
       documents:[],
       groups:[],
-      types:[]
+      types:[],
+      
     }
+    this.handleInput=this.handleInput.bind(this);  
   }
-  componentDidMount = () => {
+
+  handleInput(event){
+    let value = event.target.value;
+    this.setState({
+      input:value
+    });
+  }
+  fetchData() {
     axios.get('http://localhost:8099/api/documents')
-          .then(result => {
-            const documents = result.data
-          this.setState({documents});
-          console.log("Dokumentai", documents)
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        .then(response => {
+            this.setState({
+                documents: response.data
+            });
+        })
+        .catch(error => {
+            this.setState({
+                error: 'Error while fetching data.'
+            });
+        });
+    }
+
+  componentDidMount = () => {
+    // axios.get('http://localhost:8099/api/documents')
+    //       .then(result => {
+    //         const documents = result.data
+    //       this.setState({documents});
+    //       console.log("Dokumentai", documents)
+    //       })
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       });
 
           axios.get('http://localhost:8099/api/group')
           .then(result => {
@@ -47,14 +70,15 @@ export class HomePage extends Component {
             console.log(error);
           });
   }
-      
+
   render() {
     var DOCUMENTS = this.state.documents;
     var GROUPS = this.state.groups;
     var TYPES = this.state.types;
     return (
       <div>
-        <InstitutionListContainer documents={DOCUMENTS}/>
+        <h1>{this.state.input}</h1>
+        <DocumentListContainer documents={DOCUMENTS}/>
         <GroupListContainer groups={GROUPS}/>
         <TypeListContainer types={TYPES}/>
       </div>

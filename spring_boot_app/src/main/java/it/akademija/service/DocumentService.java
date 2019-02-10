@@ -57,8 +57,9 @@ public class DocumentService {
         );
         document.setType(type);
 
-        document.addDbFile(file);
         System.out.println("dbfilas" + file.getFileName());
+        document.addDbFile(file);
+
 
         documentRepository.save(document);
 
