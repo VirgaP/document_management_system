@@ -16,27 +16,21 @@ public class UserDTO {
 
     private String email;
 
-    private boolean admin;
-
     private Set<Group> userGroups = new HashSet<Group>();
 
     private List<UserDocument> userDocuments = new ArrayList<>();
 
-    public UserDTO(String name, String surname, String email, boolean admin) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.admin = admin;
-    }
-
     public UserDTO() {
     }
 
-    public UserDTO(String name, String surname, String email, boolean admin, Set<Group> userGroups, List<UserDocument> userDocuments) {
+    public UserDTO(String name, String surname, String email) {
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.admin = admin;
+    }
+
+    public UserDTO(String name, String surname, String email, Set<Group> userGroups, List<UserDocument> userDocuments) {
+        this(name, surname, email);
         this.userGroups = userGroups;
         this.userDocuments = userDocuments;
     }
@@ -64,15 +58,6 @@ public class UserDTO {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public boolean getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
 
     public Set<Group> getUserGroups() {
         return userGroups;

@@ -42,8 +42,7 @@ public class UserService {
                 .map(user -> new UserDTO(
                         user.getName(),
                         user.getSurname(),
-                        user.getEmail(),
-                        user.getAdmin()
+                        user.getEmail()
                         ))
                 .collect(Collectors.toList());
     }
@@ -55,11 +54,16 @@ public class UserService {
                 user.getName(),
                 user.getSurname(),
                 user.getEmail(),
-                user.getAdmin(),
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
         return userDTO;
+    }
+
+    @Transactional
+    public User getUserById(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No user with id " + id + " exists."));
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.UserDTO;
 import it.akademija.payload.RequestUser;
+import it.akademija.service.AccountService;
 import it.akademija.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,11 @@ import java.util.List;
 @RequestMapping(value = "/api/users")
 public class UserController {
 
-    public final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private AccountService accountService;
 
     @RequestMapping(path="/new", method = RequestMethod.POST)
     @ApiOperation(value="Create user", notes = "Creates new user")

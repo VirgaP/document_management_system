@@ -1,14 +1,25 @@
 package it.akademija.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.NaturalId;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.NaturalId;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -24,9 +35,11 @@ public class User {
 
     private String email;
 
-    private boolean admin = false;
-
     private Set<Group> userGroups = new HashSet<Group>();
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore // hide sensitive info by default
+    private Account account;
 
     @JsonIgnore
     @ManyToMany
@@ -49,7 +62,6 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.admin = admin;
     }
 
     @JsonIgnore
@@ -115,14 +127,13 @@ public class User {
         this.email = email;
     }
 
-    public boolean getAdmin() {
-        return admin;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
+    public void setAccount(Account account) {
+        this.account = account;
     }
-
 
     //    @Override
 //    public boolean equals(Object o) {
