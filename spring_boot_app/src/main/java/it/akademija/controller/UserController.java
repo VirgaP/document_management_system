@@ -5,9 +5,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.UserDTO;
 import it.akademija.payload.RequestUser;
+import it.akademija.payload.UserIdentityAvailability;
+import it.akademija.repository.UserRepository;
+import it.akademija.security.CurrentUser;
+import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +23,10 @@ import java.util.List;
 public class UserController {
 
     public final UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Autowired
     public UserController(UserService userService) {
@@ -32,6 +41,21 @@ public class UserController {
             @RequestBody final RequestUser requestUser){
 
         userService.createUser(requestUser);
+    }
+
+    @GetMapping("/user/me")
+    @PreAuthorize("hasRole('USER')")
+    public UserDTO getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+        UserDTO user = new UserDTO(
+                currentUser.getEmail()
+        );
+        return user;
+    }
+
+    @GetMapping("/user/checkEmailAvailability")
+    public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
+        Boolean isAvailable = !userRepository.existsByEmail(email);
+        return new UserIdentityAvailability(isAvailable);
     }
 
     @RequestMapping(method = RequestMethod.GET)

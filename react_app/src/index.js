@@ -23,6 +23,21 @@ import { SingleGroup } from './SingleGroup';
 import SingleType from './SingleType';
 import UserHomePage from './UserHomePage';
 import EditDocument from './EditDocument';
+import Login from './security/Login';
+
+export const ACCESS_TOKEN = 'accessToken';
+export const API_BASE_URL = 'http://localhost:8099'
+
+export const NAME_MIN_LENGTH = 2;
+export const NAME_MAX_LENGTH = 40;
+
+export const SURNAME_MIN_LENGTH = 3;
+export const SURNAME_MAX_LENGTH = 40;
+
+export const EMAIL_MAX_LENGTH = 40;
+
+export const PASSWORD_MIN_LENGTH = 5;
+export const PASSWORD_MAX_LENGTH = 20;
 
 
 ReactDOM.render((
@@ -30,6 +45,8 @@ ReactDOM.render((
         <NavbarContainer>
             <Switch>
                 <Route exact path='/' component={HomePage}/>
+                <Route path="/login" 
+                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                 <Route path='/institutions' component={InstitutionList}/>
                 <Route path="/naujas-tipas" component={BookForm}/>
                 <Route path="/groups" component={UserGroupFormContainer}/>

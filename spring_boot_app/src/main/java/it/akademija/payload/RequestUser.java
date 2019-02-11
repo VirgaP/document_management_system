@@ -4,18 +4,32 @@ package it.akademija.payload;
 import it.akademija.entity.Group;
 import it.akademija.entity.UserDocument;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
 public final class RequestUser {
 
+    @NotBlank
+    @Size(min = 1, max = 40)
     private String name;
 
+    @NotBlank
+    @Size(min = 1, max = 40)
     private String surname;
 
+    @NotBlank
+    @Size(max = 40)
+    @Email
     private String email;
 
     private String groupName;
+
+    @NotBlank
+    @Size(min = 6, max = 20)
+    private String password;
 
     private boolean admin;
 
@@ -73,6 +87,14 @@ public final class RequestUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean getAdmin() {

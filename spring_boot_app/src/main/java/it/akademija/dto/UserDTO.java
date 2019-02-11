@@ -22,6 +22,9 @@ public class UserDTO {
 
     private List<UserDocument> userDocuments = new ArrayList<>();
 
+    public UserDTO() {
+    }
+
     public UserDTO(String name, String surname, String email, boolean admin) {
         this.name = name;
         this.surname = surname;
@@ -29,7 +32,8 @@ public class UserDTO {
         this.admin = admin;
     }
 
-    public UserDTO() {
+    public UserDTO(String email) {
+        this.email = email;
     }
 
     public UserDTO(String name, String surname, String email, boolean admin, Set<Group> userGroups, List<UserDocument> userDocuments) {

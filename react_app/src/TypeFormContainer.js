@@ -15,6 +15,11 @@ class TypeFormContainer extends Component {
     this.handleClearForm = this.handleClearForm.bind(this);
     this.handleTypeTitleChange = this.handleTypeTitleChange.bind(this);
    
+    notification.config({
+      placement: 'topRight',
+      top: 70,
+      duration: 3,
+    }); 
   }
   
   handleTypeTitleChange(e) {  

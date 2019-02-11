@@ -14,6 +14,7 @@ class Register extends Component {
       name: '',
       surname: '',
       email:'',
+      password:'',
       groups:[],
       groupName:'',
       userGroups:[],
@@ -25,6 +26,7 @@ class Register extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSurnameChange = this.handleSurnameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleChangeAdmin = this.handleChangeAdmin.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -56,6 +58,11 @@ class Register extends Component {
   handleEmailChange(e) {  
     this.setState({ email: e.target.value });
   }
+
+  handlePasswordChange(e){
+    this.setState({password: e.target.value})
+  }
+
   handleSelectChange(e) {  
     this.setState({ groupName: e.target.value });   
   }
@@ -71,10 +78,11 @@ class Register extends Component {
   
     this.handleClearForm(e);
 
-    axios.post('http://localhost:8099/api/users/new', {
+    axios.post('http://localhost:8099/api/auth/newUser', {
       name: this.state.name,
       surname: this.state.surname,
       email:this.state.email,
+      password: this.state.password,
       groupName: this.state.groupName,
       userGroups: this.state.userGroups,
       admin: this.state.admin,
@@ -104,6 +112,7 @@ class Register extends Component {
     name:'',
     surname:'',
     email:'',
+    password:'',
     groupName:'',
     admin: false,
   });
@@ -138,6 +147,14 @@ class Register extends Component {
         controlFunc={this.handleEmailChange}
         content={this.state.email}
         placeholder={'Vartotojo el.pastas'}
+        /> 
+         <SingleInput 
+        inputType={'text'}
+        title={'Vartotojo slaptažodis'}
+        name={'password'}
+        controlFunc={this.handlePasswordChange}
+        content={this.state.password}
+        placeholder={'Vartotojo slaptažodis'}
         /> 
           <div>
             <label className="control-label">Pasirinkite pagrindinę vartotojo grupę</label>

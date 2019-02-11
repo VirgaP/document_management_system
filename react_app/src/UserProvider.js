@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default class UserProvider extends Component {
     state = {
-        username: '' || 'default_user'
+        username: '' || this.props.currentUser
     }
 
   componentDidMount = () => {
