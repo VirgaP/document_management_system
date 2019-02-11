@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import SingleInput from '../components/singleInput';
 import UploadFile from '../UploadFile';
+import {notification } from 'antd';
+import 'antd/dist/antd.css';
 
 
 class Form extends Component {
@@ -77,19 +79,19 @@ class Form extends Component {
             console.log(error);
           }); 
 
-        axios.get(`http://localhost:8099/api/users/${this.state.email}`)
-          .then(result => {
-          const user = result.data
-          this.setState({user});
-          var userGroups = result.data.userGroups.map(group=>group.name);
+        // axios.get(`http://localhost:8099/api/users/${this.state.email}`)
+        //   .then(result => {
+        //   const user = result.data
+        //   this.setState({user});
+        //   var userGroups = result.data.userGroups.map(group=>group.name);
 
-          this.setState({userGroups})
-          console.log("USERIS", user)
-          console.log('Grupes', userGroups)
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        //   this.setState({userGroups})
+        //   console.log("USERIS", user)
+        //   console.log('Grupes', userGroups)
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
            
     }
     handleDocumentTitleChange(e) {  
@@ -147,13 +149,25 @@ class Form extends Component {
           const responseStatus = response.status
          console.log(responseStatus)
          if(responseStatus >= 200 && responseStatus < 300){ 
+          notification.success({
+            message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+            description: 'Dokumentas sukurtas sėkmingai!'
+        });    
           this.props.history.push(`/document/${uniqueNumber}`) }
-          else{
-            
-          }
-      }).catch(function (error) {
-          console.log(error);
       })
+      .catch(error => {
+        if(error.status === 500) {
+            notification.error({
+                message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                description: 'Atsiprašome įvyko klaida įkeliant dokumentą, perkraukite puslapį ir bandykite dar kartą!'
+            });                    
+        } else {
+            notification.error({
+                message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                description: error.message || 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+            });                                            
+        }
+    });
 }
 
 onChange(e) {

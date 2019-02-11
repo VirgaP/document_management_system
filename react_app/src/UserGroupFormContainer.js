@@ -1,6 +1,8 @@
 import React, {Component} from 'react';   
 import SingleInput from './components/singleInput';
 import axios from 'axios';
+import {notification } from 'antd';
+import 'antd/dist/antd.css';
 
 class UserGroupFormContainer extends Component {  
   constructor(props) {
@@ -23,14 +25,6 @@ class UserGroupFormContainer extends Component {
   handleFormSubmit(e) {  
     e.preventDefault();
   
-    // const formPayload = {
-    //   title: this.state.title,
-    //   author: this.state.author,
-    //   pageCount: this.state.pageCount,
-    //   image: this.state.image,
-    // };
-  
-    // console.log('Send this in a POST request:', formPayload);
     const { groups } = this.state,
     name = this.state.name
     this.setState({
@@ -44,11 +38,22 @@ class UserGroupFormContainer extends Component {
     axios.post('http://localhost:8099/api/group/new', {
       name: this.state.name,
         })
-        .then(function(response) {
-            console.log(response);
-        }).catch(function (error) {
-            console.log(error);
-        })
+        .then(response => {
+          console.log(response);
+          const responseStatus = response.status
+         if(responseStatus >= 200 && responseStatus < 300){ 
+          notification.success({
+            message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+            description: 'Vartotojų grupė sukurta sėkmingai!'
+        });
+        }
+      })
+        .catch(error => {
+              notification.error({
+                  message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                  description: 'Atsiprašome įvyko klaida bandykite dar kartą!'
+              });                    
+      });
   }
 
   handleClearForm(e) {
@@ -61,7 +66,8 @@ class UserGroupFormContainer extends Component {
 
   render() {
     return (
-      <form className="container  book_form" onSubmit={this.handleFormSubmit}>
+      <div className="container user_form">
+       <form className="container  type_form" onSubmit={this.handleFormSubmit}>
         <h5>Sukurti vartotojų grupę </h5>
         <SingleInput 
         inputType={'text'}
@@ -80,6 +86,7 @@ class UserGroupFormContainer extends Component {
           className="btn btn-link float-left"
           onClick={this.handleClearForm}>Išvalyti formą</button>
       </form>
+      </div>
     );
     }
 }

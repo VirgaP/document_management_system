@@ -4,6 +4,8 @@ import 'antd/dist/antd.css';
 import axios from 'axios';
 import SingleInput from './components/singleInput'
 import { Redirect } from 'react-router-dom';
+import {notification } from 'antd';
+import 'antd/dist/antd.css';
 
 class Register extends Component {
   constructor(props) {
@@ -77,11 +79,23 @@ class Register extends Component {
       userGroups: this.state.userGroups,
       admin: this.state.admin,
         })
-        .then(function(response) {
-            console.log(response);
-        }).catch(function (error) {
-            console.log(error);
-        })
+        .then(response => {
+          console.log(response);
+          const responseStatus = response.status
+         if(responseStatus >= 200 && responseStatus < 300){ 
+          notification.success({
+            message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+            description: 'Vartotojas sukurtas sėkmingai!'
+        });
+        }
+      })
+        .catch(error => {
+          console.log(error)
+              notification.error({
+                  message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                  description: 'Atsiprašome įvyko klaida bandykite dar kartą!'
+              });                    
+      })
   }
 
   handleClearForm(e) {
@@ -100,7 +114,7 @@ class Register extends Component {
     return (
       <div className="container user_form">
       <h2>Kurti naują vartotoją</h2>
-      <form className="container  book_form" onSubmit={this.handleFormSubmit}>
+      <form className="container  type_form" onSubmit={this.handleFormSubmit}>
       <SingleInput 
         inputType={'text'}
         title={'Vartotojo vardas'}
@@ -145,10 +159,10 @@ class Register extends Component {
         <input
           type="submit"
           className="btn btn-primary float-right"
-          value="Submit"/>
+          value="Saugoti"/>
         <button
           className="btn btn-link float-left"
-          onClick={this.handleClearForm}>Clear form</button>
+          onClick={this.handleClearForm}>Išvalyti įvestus duomenis</button>
       </form>
        </div>
     );

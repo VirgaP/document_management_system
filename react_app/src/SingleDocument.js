@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
-import AddBook from './AddBook';
+import AddGroup from './AddGroup';
 
 
 export class SingleDocument extends Component {
@@ -173,7 +173,7 @@ export class SingleDocument extends Component {
 const style = {
     margin:'auto',
     marginTop:'20px',
-    marginBottom:'20px',
+    marginBottom:'10%',
     width: '70%'
   }
   const username = {

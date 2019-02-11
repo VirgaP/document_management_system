@@ -3,6 +3,9 @@ import axios from 'axios';
 import DocumentListContainer from './DocumentListContainer';
 import GroupListContainer from './GroupListContainer';
 import TypeListContainer from './TypeListContainer';
+import { Button } from 'antd';
+import 'antd/dist/antd.css';
+import {Link} from 'react-router-dom'
 
 
 export class HomePage extends Component {
@@ -14,6 +17,10 @@ export class HomePage extends Component {
       documents:[],
       groups:[],
       types:[],
+      displayDocuments: true,
+      displayGroups: true,
+      displayTypes: true
+
       
     }
     this.handleInput=this.handleInput.bind(this);  
@@ -40,15 +47,6 @@ export class HomePage extends Component {
     }
 
   componentDidMount = () => {
-    // axios.get('http://localhost:8099/api/documents')
-    //       .then(result => {
-    //         const documents = result.data
-    //       this.setState({documents});
-    //       console.log("Dokumentai", documents)
-    //       })
-    //       .catch(function (error) {
-    //         console.log(error);
-    //       });
 
           axios.get('http://localhost:8099/api/group')
           .then(result => {
@@ -71,17 +69,63 @@ export class HomePage extends Component {
           });
   }
 
+  toggleDocuments () {
+    this.setState({
+      displayDocuments: !this.state.displayDocuments
+    })
+  }
+
+  toggleGroups () {
+    this.setState({
+      displayGroups: !this.state.displayGroups
+    })
+  }
+
+  toggleTypes () {
+    this.setState({
+      displayTypes: !this.state.displayTypes
+    })
+  }
+
   render() {
     var DOCUMENTS = this.state.documents;
     var GROUPS = this.state.groups;
     var TYPES = this.state.types;
     return (
-      <div>
-        <h1>{this.state.input}</h1>
-        <DocumentListContainer documents={DOCUMENTS}/>
-        <GroupListContainer groups={GROUPS}/>
-        <TypeListContainer types={TYPES}/>
+      // <div>
+      //   <h1>{this.state.input}</h1>
+      //   <DocumentListContainer documents={DOCUMENTS}/>
+      //   <GroupListContainer groups={GROUPS}/>
+      //   <TypeListContainer types={TYPES}/>
+      // </div>
+      <div className="container-fluid admin_page">
+      <div className="row">
+      <Button size="large" type="primary" onClick={this.toggleDocuments.bind(this)} >
+        Peržiūrėti vartotojų dokumentus
+      </Button>
+      {!this.state.displayDocuments && <DocumentListContainer documents={DOCUMENTS}/>}
+      <br></br>
+      <Button size="large" type="primary" onClick={this.toggleGroups.bind(this)} >
+        Peržiūrėti vartotojų grupes
+      </Button>
+      {!this.state.displayGroups && <GroupListContainer groups={GROUPS}/>}
+      <br></br>
+      <Button size="large" type="primary" onClick={this.toggleTypes.bind(this)} >
+        Peržiūrėti dokumentų tipus
+      </Button>
+      {!this.state.displayTypes && <TypeListContainer types={TYPES}/>}
+      <br></br>
+      <Button size="large" type="primary">
+        <Link to={'/naujas-tipas'}> Kurti dokumento tipą</Link>
+      </Button>
+      <Button size="large" type="primary">
+        <Link to='/groups'>Kurti vartotojų grupę </Link>
+      </Button>
+      <Button size="large" type="primary">
+        <Link to='/register'>Kurti naują vartotoją</Link>
+      </Button>
       </div>
+    </div>
     )
   }
 }

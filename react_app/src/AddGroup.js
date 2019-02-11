@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-export class AddBook extends Component {
+export class AddGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -73,4 +73,4 @@ console.log("Groupname", this.state.groupName)
   }
 }
 
-export default AddBook
+export default AddGroup

@@ -60,7 +60,6 @@ public class DocumentService {
         System.out.println("dbfilas" + file.getFileName());
         document.addDbFile(file);
 
-
         documentRepository.save(document);
 
         file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
@@ -68,8 +67,8 @@ public class DocumentService {
         userDocument.setUser(user);//ok
 
         userDocument.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));//jei sutampa pavadinimas jpa nesupranta pagal kuri ieskoti, pakiesi i findbyunuique numbet
-        document.addUser(userDocument);
-        user.addUserDocument(userDocument);
+//        document.addUser(userDocument);
+//        user.addUserDocument(userDocument);
 
         userDocumentRepository.save(userDocument);
 

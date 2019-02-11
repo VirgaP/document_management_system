@@ -8,9 +8,6 @@ const NavbarContainer = (props) =>{
             <div>
                 {/* <Navbar history={props.history}/> */}
                 <Navbar/>
-
-                <div>List of institutions from navbarContainer</div>
-                <div>List of booksfrom navbarContainer</div>
             </div>
               {props.children}
               <Footer/>

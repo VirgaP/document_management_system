@@ -7,7 +7,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import NavbarContainer from './NavbarContainer';
 import Nowhere from './Nowhere';
-import BookForm from './BookFormContainer';
+import BookForm from './TypeFormContainer';
 import Form from './Form/FormComponent';
 import Registration from './Registration';
 import HomePage from './HomePage';
@@ -31,7 +31,7 @@ ReactDOM.render((
             <Switch>
                 <Route exact path='/' component={HomePage}/>
                 <Route path='/institutions' component={InstitutionList}/>
-                <Route path="/books" component={BookForm}/>
+                <Route path="/naujas-tipas" component={BookForm}/>
                 <Route path="/groups" component={UserGroupFormContainer}/>
                 <Route path="/group/:name" render={(props) => <SingleGroup {...props} />}/>  
                 <Route path="/edit/group/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/>   

@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
-import AddBook from './AddBook';
+import AddGroup from './AddGroup';
 import UserDocumentListContainer from './UserDocumentListContainer'
 import {jszip} from 'jszip';
 
@@ -78,14 +78,13 @@ export class SingleUser extends Component {
          axios.delete(`http://localhost:8099/api/users/${this.state.id}/removeGroup`, {data: payload})
              .then(res => {
                console.log(res)
-               console.log('it works')
+               
            })
            .catch(function (error) {
                console.log(error);
            }); 
        }
   
-
        handleZip = () => {
   
         axios(`http://localhost:8099/api/files/archive/${this.state.id}`, {
@@ -138,12 +137,12 @@ export class SingleUser extends Component {
               <React.Fragment>  
           <div style={username}>You are now logged in as : {context}</div>
   
-           <div className="container" style={style}>
+           <div className="container user_form" style={style}>
            <div className="card h-100">
               <div className="card-body">
                     <h4 className="card-title">
                     </h4>
-                    <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button>
+                    {/* <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button> */}
                     <h5>Vardas: {this.state.user.name}</h5>
                     <h5>Pavardė: {this.state.user.surname}</h5>
                     <h5>El.paštas: {this.state.user.email}</h5>
@@ -167,7 +166,7 @@ export class SingleUser extends Component {
                     </div>
                      }
                     {String(this.state.user.admin) === 'true'?
-                      <AddBook 
+                      <AddGroup 
                       onResultChange={this.handleResultChange}
                       id={this.state.id}/> 
                       : <span></span>
@@ -195,7 +194,7 @@ export class SingleUser extends Component {
 const style = {
     margin:'auto',
     marginTop:'20px',
-    marginBottom:'20px',
+    marginBottom:'10%',
     width: '70%'
   }
   const username = {

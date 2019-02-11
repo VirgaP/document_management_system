@@ -60,7 +60,7 @@ class Navbar extends Component {
                 <Link className="nav-link" to='/groups'>Kurti vartotojų grupę </Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to='/books'>Kurti dokumento tipą</Link> 
+                <Link className="nav-link" to='/naujas-tipas'>Kurti dokumento tipą</Link> 
                   {/* <a className="nav-link" onClick={this.goProducts} href="/products">Products</a> */}
                 </li>
                 <li className="nav-item">
