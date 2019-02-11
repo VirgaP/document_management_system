@@ -7,8 +7,7 @@ export class AddGroup extends Component {
         this.state = {
             groups: [],
             groupName:'',
-            institutionBooks: [],
-            institutionBook: {},
+           
             id:this.props.id,
           };
           console.log("URL",this.state.id)

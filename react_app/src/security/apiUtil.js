@@ -33,7 +33,7 @@ export function login(loginRequest) {
 
 export function signup(signupRequest) {
     return request({
-        url: API_BASE_URL + "api/auth/newUser",
+        url: API_BASE_URL + "/api/auth/newUser",
         method: 'POST',
         body: JSON.stringify(signupRequest)
     });
@@ -48,7 +48,7 @@ export function checkUsernameAvailability(username) {
 
 export function checkEmailAvailability(email) {
     return request({
-        url: API_BASE_URL + "api/users/user/checkEmailAvailability?email=" + email,
+        url: API_BASE_URL + "/api/users/user/checkEmailAvailability?email=" + email,
         method: 'GET'
     });
 }
@@ -60,7 +60,7 @@ export function getCurrentUser() {
     }
 
     return request({
-        url: API_BASE_URL + "api/users/user/me",
+        url: API_BASE_URL + "/api/users/user/me",
         method: 'GET'
     });
     

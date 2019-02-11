@@ -23,14 +23,7 @@ export class AdminPage extends Component {
 
       
     }
-    this.handleInput=this.handleInput.bind(this);  
-  }
-
-  handleInput(event){
-    let value = event.target.value;
-    this.setState({
-      input:value
-    });
+     
   }
   fetchData() {
     axios.get('http://localhost:8099/api/documents')

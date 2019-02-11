@@ -42,6 +42,8 @@ import UserProvider from './UserProvider';
 import Registration from './Registration';
 import HomePage from './HomePage';
 import SingleGroup from './SingleGroup';
+import Navbar from './Navbar'
+import AdminPage from './AdminPage';
 const { Content } = Layout;
 
 class App extends Component {
@@ -69,12 +71,14 @@ class App extends Component {
     });
     getCurrentUser()
     .then(response => {
+        console.log("User reposne", response)
       this.setState({
         currentUser: response,
         isAuthenticated: true,
         isLoading: false
       });
     }).catch(error => {
+        console.log("Error in getuser", error)
       this.setState({
         isLoading: false
       });  
@@ -86,7 +90,7 @@ class App extends Component {
   }
 
   // Handle Logout, Set currentUser and isAuthenticated state which will be passed to other components
-  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(redirectTo="/login", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
 
     this.setState({
@@ -125,15 +129,22 @@ class App extends Component {
           <UserProvider isAuthenticated={this.state.isAuthenticated} 
             currentUser={this.state.currentUser} 
             onLogout={this.handleLogout} />
+        <Navbar isAuthenticated={this.state.isAuthenticated} 
+            currentUser={this.state.currentUser} 
+            onLogout={this.handleLogout} />
 
           <Content className="app-content">
             <div className="container">
               <Switch>      
-              <Route exact path='/' component={HomePage}/>
+              {/* <Route exact path='/' component={HomePage}/> */}
+              <Route exact path='/'
+                  render={(props) => <HomePage isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
+                </Route>
                 {/* <Route exact path="/" 
                   render={(props) => <PollList isAuthenticated={this.state.isAuthenticated} 
                       currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
                 </Route> */}
+                <Route path='/adminpage' component={AdminPage}/>
                 <Route path="/login" 
                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                 {/* <Route path="/signup" component={Signup}></Route> */}

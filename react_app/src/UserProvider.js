@@ -7,6 +7,7 @@ export default class UserProvider extends Component {
     state = {
         username: '' || this.props.currentUser
     }
+   
 
   componentDidMount = () => {
     axios.get('http://localhost:8099/api/users/') //retrieve last registered user username from DB
@@ -21,6 +22,7 @@ export default class UserProvider extends Component {
     });
 }
   render() {
+    console.log("USerprovider", this.props.currentUser)
     return (
       <div>
           {/* defines context state=username and passes to children */}
