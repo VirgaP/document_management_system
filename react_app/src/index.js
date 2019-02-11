@@ -23,6 +23,7 @@ import { SingleGroup } from './SingleGroup';
 import SingleType from './SingleType';
 import UserHomePage from './UserHomePage';
 import EditDocument from './EditDocument';
+import LoginForm from './Login';
 
 
 ReactDOM.render((
@@ -30,6 +31,7 @@ ReactDOM.render((
         <NavbarContainer>
             <Switch>
                 <Route exact path='/' component={HomePage}/>
+                <Route path="/login" component={LoginForm}/>
                 <Route path='/institutions' component={InstitutionList}/>
                 <Route path="/books" component={BookForm}/>
                 <Route path="/groups" component={UserGroupFormContainer}/>

@@ -3,19 +3,22 @@ import axios from 'axios';
 import DocumentListContainer from './DocumentListContainer';
 import GroupListContainer from './GroupListContainer';
 import TypeListContainer from './TypeListContainer';
+import NavbarContainer from './NavbarContainer';
+import LoginForm from './Login';
 
 
 export class HomePage extends Component {
 
   constructor(props) {
     super(props)
-  
-    this.state = {
+
+      this.state = {
       documents:[],
       groups:[],
       types:[],
-      
+      showLoginForm: false
     }
+
     this.handleInput=this.handleInput.bind(this);  
   }
 
@@ -71,12 +74,19 @@ export class HomePage extends Component {
           });
   }
 
-  render() {
+  render(){
+  const {showLoginForm}= this.state; 
     var DOCUMENTS = this.state.documents;
     var GROUPS = this.state.groups;
     var TYPES = this.state.types;
     return (
       <div>
+       <div onShowLoginForm={() =>{
+         this.setState({
+           showLoginForm:true,
+         });
+       }}></div>
+       {showLoginForm ? <LoginForm/> : null}
         <h1>{this.state.input}</h1>
         <DocumentListContainer documents={DOCUMENTS}/>
         <GroupListContainer groups={GROUPS}/>

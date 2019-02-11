@@ -6,6 +6,7 @@ import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import InstitutionList from './DocumentListContainer';
 import axios from 'axios';
+import LoginForm from './Login'
 
 
 
@@ -19,13 +20,17 @@ class Navbar extends Component {
     this.state = {
       institutions:[]
     }
+
+    
   }
   
   // goProducts = (props) => this.props.history.push("products");
   render() {
-    return (    
-        // <!-- Navigation -->
+    
+    return (  
+      
         <UserProvider>
+        
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
           <div className="container">
             {/* <a className="navbar-brand" href="#">Home</a> */}
@@ -36,7 +41,7 @@ class Navbar extends Component {
             <div className="collapse navbar-collapse" id="navbarResponsive">
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item active">
-                  <Link className="nav-link" to='/'> Home</Link> 
+                  <Link className="nav-link" to='/login'> Prisijunkite</Link> 
                     <span className="sr-only">(current)</span>
                 </li>
                 <li className="nav-item">
@@ -73,6 +78,7 @@ class Navbar extends Component {
       className="btn btn-primary">Go to Products</button></p> */}
         </nav>
         </UserProvider>
+      
       
     );
   }
