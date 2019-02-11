@@ -31,31 +31,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired // Bean in App.java
 	private PasswordEncoder passwordEncoder;
 
-	/**
-	 * Method obtaining authentication manager which in turn processes
-	 * Authentication requests.
-	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder builder) throws Exception {
 		builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
-	/**
-	 * Method exposing the AuthenticationManager from
-	 * configure(AuthenticationManagerBuilder) to be exposed as a Bean.
-	 */
+
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 
-	/**
-	 * Method defining the behaviour of global and path-specific security
-	 * interceptors.
-	 *
-	 * Creates a filter chain with order = 0.
-	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http

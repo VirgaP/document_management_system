@@ -3,8 +3,6 @@ package it.akademija.dto;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,7 +14,6 @@ import it.akademija.entity.Account;
 @JsonInclude(JsonInclude.Include.NON_NULL) // include non null values only
 public class AccountDTO {
 
-	private static final Logger logger = LogManager.getLogger(AccountDTO.class);
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Europe/Vilnius", locale = "lt")
 	private Date createdOn;
@@ -43,10 +40,9 @@ public class AccountDTO {
 	}
 
 	public static AccountDTO toDTO(Account entity) {
-		logger.debug("AccountDTO toDTO invoked");
-		AccountDTO account = new AccountDTO(entity.getUsername(), entity.getRoles(), entity.getCreatedOn(),
+	AccountDTO account = new AccountDTO(entity.getUsername(), entity.getRoles(), entity.getCreatedOn(),
 				entity.getEnabled());
-		logger.debug("AccountFullDTO created " + account);
+
 		return account;
 	}
 

@@ -26,9 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "ACCOUNTS")
-/**
- * User account entity. Separates sensitive user account details
- */
+
 public class Account implements UserDetails {
 
     private static final long serialVersionUID = 5891741116301575767L;
@@ -74,9 +72,6 @@ public class Account implements UserDetails {
     @Transient
     private boolean credentialsNonExpired;
 
-    /**
-     * Determines whether user can authenticate
-     */
     @Column(name = "ACCOUNT_ENABLED")
     private boolean enabled;
 

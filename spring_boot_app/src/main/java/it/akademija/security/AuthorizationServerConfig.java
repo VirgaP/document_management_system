@@ -23,11 +23,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-/**
- *
- * OAuth2 authorization server configurer.
- *
- */
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -44,9 +40,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired // Bean in WebSecurityConfig.java
     private AuthenticationManager authenticationManager;
 
-    /**
-     * Configures the non-security features of the Authorization Server endpoints.
-     */
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
@@ -56,9 +50,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenConverter(accessTokenConverter());
     }
 
-    /**
-     * Configures the security of the Authorization Server.
-     */
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
@@ -66,13 +58,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
     }
 
-    /**
-     * Configures ClientDetailsService by declaring individual clients and their properties.
-     */
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-        		.withClient("dvs-webapp") // make sure to use this on frontend side
+        		.withClient("dvs-webapp") // NAUDOTI FRONTENDE
                     .authorizedGrantTypes("client_credentials", "password", "refresh_token")
                     .authorities("ROLE_TRUSTED_CLIENT") // please don't confuse client role with user roles
                     .scopes("read", "write")
@@ -82,10 +72,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .secret("uJMmzskjqhKUCup9qSc8H6HQ6Vs9nqEx");
     }
 
-    /**
-     * Exposes as a bean a TokenStore implementation that just reads data from
-     * the tokens themselves. Does not persist anything.
-     */
     @Bean
     public TokenStore tokenStore() {
         return new JwtTokenStore(accessTokenConverter());
@@ -94,11 +80,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private SigningKeyProvider signingKeyProvider;
 
-    /**
-     *  Bean providing a helper that translates between JWT encoded 
-     *  token values and OAuth authentication information (in both 
-     *  directions).
-     */
+
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -110,11 +92,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
         return converter;
     }
-    
-    /**
-     * Build and expose token service as a bean
-     * @return
-     */
+
     @Bean
     @Primary
     public DefaultTokenServices tokenServices() {
