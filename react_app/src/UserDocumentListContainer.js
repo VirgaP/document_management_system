@@ -26,23 +26,10 @@ export class UserDocumentListContainer extends Component {
 
     fetchData() {
       axios.get(`http://localhost:8099/api/documents/${this.state.email}/documents`)
-          // .then(response => {
-          //     this.setState({
-          //         documents: response.data
-          //     }); 
-          //     // this.setState({
-          //     //   status: response.data.userDocuments.map(el=>(String (el.submitted))) 
-          //     // });
-              
-          // })
-          .then(result => {
-            const documents = result.data
-          this.setState({documents});
-          const status = result.data.userDocuments
-          console.log('statusas', status)
-          this.setState({status})
-          
-          
+          .then(response => {
+              this.setState({
+                  documents: response.data
+              }); 
           })
           .catch(error => {
               this.setState({
@@ -64,7 +51,7 @@ export class UserDocumentListContainer extends Component {
     }
     updateStatus(number) {
       this.setState(prevState=>{
-        const newStatus = prevState.documents.filter((document)=>document.number===!number);
+        const newStatus = prevState.documents.userDocuments.filter((document)=>document.number===!number);
         return {
             status: newStatus
         }

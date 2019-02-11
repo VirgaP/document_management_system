@@ -22,14 +22,13 @@ export class UserDocument extends Component {
         axios.delete(`http://localhost:8099/api/documents/${number}`)
         .then(result => {
             console.log(result);
-            // this.props.deleteItem(id);
             this.props.deleteItem(number);
         //   const document = result.data
         // this.setState({document});
         const responseStatus = result.status
         console.log(result)
         if(responseStatus >= 200 && responseStatus < 300){ 
-        alert('dokumentas istrintas') }
+        alert('Dokumentas ištrintas !') }
         })
         .catch(function (error) {
           console.log(error);
@@ -43,17 +42,23 @@ export class UserDocument extends Component {
         axios.patch(`http://localhost:8099/api/documents/${number}/submit`, payload)
         .then(result => {
             console.log(result);
+            const statusas = [] 
+            this.state.document.userDocuments.filter(el=>statusas.push(el.submitted))
+            console.log("statusas", statusas)
             this.props.updateStatus(number);
         const responseStatus = result.status
         console.log(result)
         if(responseStatus >= 200 && responseStatus < 300){ 
-        alert('dokumentas dokumento busena atnaujinta') }
+        alert('dokumento busena atnaujinta') }
         })
         .catch(function (error) {
           console.log(error);
-        });    
+        });   
+
     }
   render() {
+    //   const statusas =  this.state.document.userDocuments.filter(el=>console.log(el.submitted))
+    //   console.log("statusas", statusas)
     const {document} = this.state
     return (
         <tr key={document.number}>
