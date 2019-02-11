@@ -40,6 +40,8 @@ import { Layout, notification } from 'antd';
 import SingleUser from './SingleUser';
 import UserProvider from './UserProvider';
 import Registration from './Registration';
+import HomePage from './HomePage';
+import SingleGroup from './SingleGroup';
 const { Content } = Layout;
 
 class App extends Component {
@@ -127,6 +129,7 @@ class App extends Component {
           <Content className="app-content">
             <div className="container">
               <Switch>      
+              <Route exact path='/' component={HomePage}/>
                 {/* <Route exact path="/" 
                   render={(props) => <PollList isAuthenticated={this.state.isAuthenticated} 
                       currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
@@ -139,6 +142,7 @@ class App extends Component {
                 </Route>
                 <Route path="/register" component={Registration}/>
                 <Route path="/groups" component={UserGroupFormContainer}/>
+                <Route path="/group/:name" render={(props) => <SingleGroup {...props} />}/>  
 
                 <PrivateRoute authenticated={this.state.isAuthenticated} path="/user/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute>
                 {/* <Route component={NotFound}></Route> */}

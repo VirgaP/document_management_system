@@ -51,6 +51,7 @@ class LoginForm extends Component {
                 });
             }
         });
+        //redirects in index.js 
     }
 
     render() {
