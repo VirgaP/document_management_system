@@ -1,81 +1,48 @@
 import React, { Component } from 'react';
 // import './App.css';
+import { Layout, Menu, Dropdown, Icon } from 'antd';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import UserProvider from './UserProvider';
-import UserContext from './UserContext';
-import DocumentList from './DocumentListContainer';
-import axios from 'axios';
 
 
 
 
 class Navbar extends Component {
-  
-  
   constructor(props) {
-    super(props)
-  
+    super(props);   
     this.state = {
-      institutions:[]
+      current: '/pagrindinis',
+    }
+}
+ 
+  handleClick = (e) => {
+    console.log('click ', e);
+    this.setState({
+      current: e.key,
+    });
+    if(e.key === "logout") {
+      this.props.onLogout();
     }
   }
-  
-  // goProducts = (props) => this.props.history.push("products");
+
   render() {
-    return (    
-        // <!-- Navigation -->
-        <UserProvider>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-          <div className="container">
-            {/* <a className="navbar-brand" href="#">Home</a> */}
-            <Link className="navbar-brand" to='/'>Home</Link> 
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarResponsive">
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item active">
-                  <Link className="nav-link" to='/'> Home</Link> 
-                    <span className="sr-only">(current)</span>
-                </li>
-                <li className="nav-item">
-        {/* <UserContext.Consumer>
-        {(context)=> (
-            <Link className="nav-link" to={`/cart/${context}`}>Cart<FontAwesomeIcon icon="shopping-cart"/>
-            </Link> 
-        )}
-        </UserContext.Consumer> */}
-              </li>
-                {/* <li className="nav-item">
-                <Link className="nav-link" to='/user/profile'>Vartotojo paskyra</Link>
-                </li> */}
-                <li className="nav-item">
-                <Link className="nav-link" to='/naujas-vartotojas'>Kurti naują vartotoją</Link>
-                </li>
-                <li className="nav-item">
-                <Link className="nav-link" to='/vartotojai'>Vartotojai</Link>
-                </li>
-                <li className="nav-item">
-                <Link className="nav-link" to='/nauja-grupe'>Kurti vartotojų grupę </Link>
-                </li>
-                <li className="nav-item">
-                <Link className="nav-link" to='/naujas-tipas'>Kurti dokumento tipą</Link> 
-                  {/* <a className="nav-link" onClick={this.goProducts} href="/products">Products</a> */}
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to='/naujas-dokumentas'>Kurti dokumentą</Link> 
-                </li>
-              </ul>
-            </div>
-          </div>
-          {/* <p><button onClick={this.goProducts}
-      className="btn btn-primary">Go to Products</button></p> */}
-        </nav>
-        </UserProvider>
-      
+    return (
+      <Menu
+        onClick={this.handleClick}
+        selectedKeys={[this.state.current]}
+        mode="horizontal"
+      >
+        <Menu.Item key="/pagrindinis">
+          <Link to="/pagrindinis">
+                <Icon type="home" className="nav-icon" /> brkdbr
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="logout">
+          <Icon type="user" />Atsijungti
+        </Menu.Item>
+      </Menu>
     );
   }
+  
 }
 
 export default Navbar;

@@ -56,6 +56,7 @@ import SingleDocument from './SingleDocument';
 import UserHomePage from './UserHomePage';
 import Nowhere from './Nowhere';
 import Footer from './Footer';
+import UserContext from './UserContext';
 const { Content } = Layout;
 
 class App extends Component {
@@ -102,7 +103,7 @@ class App extends Component {
   }
 
   // Handle Logout, Set currentUser and isAuthenticated state which will be passed to other components
-  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(redirectTo="/", notificationType="success", description="Atsijungimas sėkmingas.") {
     localStorage.removeItem(ACCESS_TOKEN);
 
     this.setState({
@@ -129,7 +130,7 @@ class App extends Component {
       description: "Prisijungimas sėkmingas.",
     });
     this.loadCurrentUser();
-    this.props.history.push("/");
+    this.props.history.push("/pagrindinis");
   }
 
   render() {
@@ -138,18 +139,18 @@ class App extends Component {
     }
     return (
         <Layout className="app-container">
-        <UserProvider isAuthenticated={this.state.isAuthenticated} 
-            currentUser={this.state.currentUser} 
-            onLogout={this.handleLogout} />
+            {(this.state.isAuthenticated) ?
         <Navbar isAuthenticated={this.state.isAuthenticated} 
             currentUser={this.state.currentUser} 
-            onLogout={this.handleLogout} />
-
+            onLogout={this.handleLogout} /> :
+            <span></span>}   
           <Content className="app-content">
             <div className="container">
+            <UserContext.Provider value={this.state.currentUser}>
               <Switch>      
-              {/* <Route exact path='/' component={HomePage}/> */}
-              <Route exact path='/'
+              <Route exact path="/" 
+                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
+              <Route exact path='/pagrindinis'
                   render={(props) => <HomePage isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>
                 <Route path='/dokumentai' component={DocumentList}/>
@@ -161,8 +162,8 @@ class App extends Component {
                 <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path='/adminpage' component={AdminPage}/>
                 <Route path='/vartotojo-paskyra' component={UserHomePage}/>
-                <Route path="/login" 
-                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
+                {/* <Route path="/login" 
+                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route> */}
                 <Route path="/naujas-vartotojas" component={Registration}/>
                 <Route path="/nauja-grupe" component={UserGroupFormContainer}/>
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
@@ -172,6 +173,7 @@ class App extends Component {
                 <Route path="/vartotojas/:email" render={(props) => <SingleUser {...props} />}/>
                 <Route path="*" component={Nowhere}/>  
               </Switch>
+              </UserContext.Provider>
             </div>
           </Content>
           <Footer/>

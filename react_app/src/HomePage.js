@@ -11,17 +11,17 @@ export class HomePage extends Component {
         super(props);
        
         this.state = {
-          email:'virga@email.com',
+          email:this.props.currentUser.email,
           user:{},
+          currentUser: ' '
         //   email: ''
         //   currentUser: this.props.currentUser
         }; 
-        var email = this.props.currentUser;
-        console.log("Current", email)     
-      }
- 
-     
-
+        const user = props.currentUser;
+          console.log("props", user) 
+        //   console.log(Object.entries(props.currentUser))
+    }
+          
       componentDidMount = () => {
         // const {email} = this.props.currentUser
         // this.setState({
@@ -42,13 +42,19 @@ export class HomePage extends Component {
       }
       
   render() {
-   
+    // const {
+    //     currentUser: { 
+    //       email 
+    //     }
+    //   } = this.props;
+
+    //   console.log("Email", email)
     return (
-        <UserProvider>
+        // <UserProvider>
         <UserContext.Consumer>
            {(context)=> (  
             <React.Fragment>  
-                 <div style={username}>You are now logged in as : {context}</div>
+                 <div style={username}>You are now logged in as : {this.props.currentUser.email}</div>
         <div className="container-fluid admin_page">
         <div className="row">
         {String(this.state.user.admin) === 'true' ?
@@ -58,14 +64,14 @@ export class HomePage extends Component {
         : <span></span>
         }
        <Button size="large" type="primary" >
-            <Link to={'/'}>Vartotojo paskyra</Link>
+            <Link to={'/vartotojo-paskyra'}>Vartotojo paskyra</Link>
         </Button>
       </div>
       </div>
         </React.Fragment> 
                   )}
         </UserContext.Consumer>
-        </UserProvider>
+        // </UserProvider>
     )
   }
 }

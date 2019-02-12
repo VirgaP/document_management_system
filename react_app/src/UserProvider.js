@@ -4,40 +4,16 @@ import axios from 'axios';
 
 
 export default class UserProvider extends Component {
-    state = {
-        username: '' 
-    }
-
-    componentDidMount = () => {
-      // const {email} = this.props.currentUser
-      //    this.setState({
-      //     username: email
-      //    })
-    }
-    
-    
+  constructor(props) {
+    super(props);
    
-  //  componentWillReceiveProps(){
-  //    const {email} = this.props.currentUser
-  //    this.setState({
-  //     username: email
-  //    })
-  //  }
-
-  // componentDidMount = () => {
-  //   axios.get('http://localhost:8099/api/users/') //retrieve last registered user username from DB
-  //   .then(result => {
-  //   var idx = result.data.length - 1 - result.data.slice().reverse().findIndex( (o) => o.username);//finds index of last username from data array 
-  //   console.log("index:", idx )
-  //   const username = result.data[idx].username
-  //   this.setState({username});
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-// }
-  render() {
-    console.log("USerprovider email", this.state.username)
+    this.state = {
+        username: '',
+    }
+    console.log("Props in userprovider", this.props)
+  }
+  
+  render()  {
     return (
       <div>
           {/* defines context state=username and passes to children */}
