@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 
 
-   const InstitutionListComponent = (props) => {
-       var InstitutionList = props.documents.map((document)=> {
+   const DocumentListComponent = (props) => {
+       var DocumentList = props.documents.map((document)=> {
        console.log("dokumentai is props ", props.documents)
     return (
         <div className="container" key={document.title}>
@@ -22,10 +22,10 @@ import React, { Component } from 'react'
 
     return( 
         <div className="container">
-        {InstitutionList}
+        {DocumentList}
         </div>
       
     )
 }
 
-export default InstitutionListComponent
+export default DocumentListComponent

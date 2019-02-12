@@ -13,15 +13,23 @@ export class HomePage extends Component {
         this.state = {
           email:'virga@email.com',
           user:{},
-          currentUser: this.props.currentUser
-         
-        };
-        console.log("Current", this.props.currentUser)
-        
+        //   email: ''
+        //   currentUser: this.props.currentUser
+        }; 
+        var email = this.props.currentUser;
+        console.log("Current", email)     
       }
+ 
+     
 
       componentDidMount = () => {
-         axios.get(`http://localhost:8099/api/users/${this.state.currentUser}`)
+        // const {email} = this.props.currentUser
+        // this.setState({
+        //  username: email
+        // })
+        
+     
+         axios.get(`http://localhost:8099/api/users/${this.state.email}`)
         //  axios.get(`http://localhost:8099/api/users/${this.state.email}`)
           .then(result => {
           const user = result.data
@@ -34,7 +42,7 @@ export class HomePage extends Component {
       }
       
   render() {
-
+   
     return (
         <UserProvider>
         <UserContext.Consumer>

@@ -22,7 +22,7 @@ export class Group extends Component {
         <td>{this.props.group.name}</td>
         <td>
         <Button type="default">
-            <Link to={`/group/${this.props.group.name}`}> Peržiūrėti </Link>        
+            <Link to={`/grupe/${this.props.group.name}`}> Peržiūrėti </Link>        
         </Button>
         </td>
         <td>
@@ -30,7 +30,7 @@ export class Group extends Component {
         </td>
         <td>
         <Button type="default">
-            <Link to={`/edit/group/${this.props.group.name}`}> Redaguoti </Link>
+            <Link to={`/redaguoti/grupe/${this.props.group.name}`}> Redaguoti </Link>
         </Button>
         </td>
        

@@ -26,7 +26,7 @@ export class SingleType extends Component {
       }
     
       componentDidMount = () => {
-          axios.get(`http://localhost:8099/api/types/groups/${this.state.title}`)
+          axios.get(`http://localhost:8099/api/types/grupes/${this.state.title}`)
           .then(result => {
             const type = result.data
           this.setState({type});

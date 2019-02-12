@@ -46,7 +46,7 @@ export class Institution extends Component {
         <td>{document.createdDate}</td>
         <td>
         <Button type="primary">
-            <Link to={`/document/${document.number}`}> Peržiūrėti </Link>
+            <Link to={`/dokumentas/${document.number}`}> Peržiūrėti </Link>
         </Button>
         </td>
       </tr>

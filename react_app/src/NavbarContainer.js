@@ -27,12 +27,14 @@ import {
 
 import { getCurrentUser } from './security/apiUtil';
 import { ACCESS_TOKEN } from './index';
-
+import './index.css';
 // import PollList from '../poll/PollList';
 // import NewPoll from '../poll/NewPoll';
 import Login from './security/Login';
 // import Signup from '../user/signup/Signup';
 // import NotFound from '../common/NotFound';
+import TypeForm from './TypeFormContainer';
+import DocumentList from './DocumentListContainer';
 import LoadingIndicator from './layout/LoadingIndicator'
 import PrivateRoute from './security/PrivateRoute';
 import UserGroupFormContainer from './UserGroupFormContainer';
@@ -44,6 +46,15 @@ import HomePage from './HomePage';
 import SingleGroup from './SingleGroup';
 import Navbar from './Navbar'
 import AdminPage from './AdminPage';
+import EditGroup from './EditGroup';
+import SingleType from './SingleType';
+import EditType from './EditType';
+import UserDocumentListContainer from './UserDocumentListContainer';
+import Form from './Form/FormComponent';
+import EditDocument from './EditDocument';
+import SingleDocument from './SingleDocument';
+import Nowhere from './Nowhere';
+import Footer from './Footer';
 const { Content } = Layout;
 
 class App extends Component {
@@ -90,7 +101,7 @@ class App extends Component {
   }
 
   // Handle Logout, Set currentUser and isAuthenticated state which will be passed to other components
-  handleLogout(redirectTo="/login", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
 
     this.setState({
@@ -126,7 +137,7 @@ class App extends Component {
     }
     return (
         <Layout className="app-container">
-          <UserProvider isAuthenticated={this.state.isAuthenticated} 
+        <UserProvider isAuthenticated={this.state.isAuthenticated} 
             currentUser={this.state.currentUser} 
             onLogout={this.handleLogout} />
         <Navbar isAuthenticated={this.state.isAuthenticated} 
@@ -140,26 +151,27 @@ class App extends Component {
               <Route exact path='/'
                   render={(props) => <HomePage isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>
-                {/* <Route exact path="/" 
-                  render={(props) => <PollList isAuthenticated={this.state.isAuthenticated} 
-                      currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
-                </Route> */}
+                <Route path='/dokumentai' component={DocumentList}/>
+                <Route path="/naujas-dokumentas" component={Form}/>
+                <Route path="/dokumentas/:number" render={(props) => <SingleDocument {...props} />}/> 
+                <Route path="/redaguoti/dokumentas/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>
+                <Route path="/naujas-tipas" component={TypeForm}/>
+                <Route path="/tipas/:title" render={(props) => <SingleType {...props} />}/>                 
+                <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path='/adminpage' component={AdminPage}/>
                 <Route path="/login" 
                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-                {/* <Route path="/signup" component={Signup}></Route> */}
-                <Route path="/user/:email" 
-                  render={(props) => <SingleUser isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
-                </Route>
-                <Route path="/register" component={Registration}/>
-                <Route path="/groups" component={UserGroupFormContainer}/>
-                <Route path="/group/:name" render={(props) => <SingleGroup {...props} />}/>  
-
-                <PrivateRoute authenticated={this.state.isAuthenticated} path="/user/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute>
-                {/* <Route component={NotFound}></Route> */}
+                <Route path="/naujas-vartotojas" component={Registration}/>
+                <Route path="/nauja-grupe" component={UserGroupFormContainer}/>
+                <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
+                <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
+                <Route path="/vartotojai" component={UserDocumentListContainer}/>
+                <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute>
+                <Route path="*" component={Nowhere}/>  
               </Switch>
             </div>
           </Content>
+          <Footer/>
         </Layout>
     );
   }

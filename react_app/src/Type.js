@@ -22,7 +22,7 @@ export class Type extends Component {
         <td>{this.props.type.title}</td>
         <td>
         <Button type="default">
-            <Link to={`/type/${this.props.type.title}`} > Peržiūrėti </Link>
+            <Link to={`/tipas/${this.props.type.title}`} > Peržiūrėti </Link>
         </Button>
         </td>
         <td>
@@ -30,7 +30,7 @@ export class Type extends Component {
         </td>
         <td>
         <Button type="default">
-            <Link to={`/edit/type/${this.props.type.title}`}> Redaguoti </Link>
+            <Link to={`/redaguoti/tipas/${this.props.type.title}`}> Redaguoti </Link>
         </Button>
         </td>
       </tr>);

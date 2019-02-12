@@ -161,38 +161,7 @@ isFormInvalid() {
     <div className="container signup-container">
       <h2>Kurti naują vartotoją</h2>
       <Form className="signup-form" onSubmit={this.handleFormSubmit}>
-      {/* <SingleInput 
-        inputType={'text'}
-        title={'Vartotojo vardas'}
-        name={'name'}
-        controlFunc={this.handleNameChange}
-        content={this.state.title}
-        placeholder={'Vartotojo vardas'}
-        /> 
-        <SingleInput 
-        inputType={'text'}
-        title={'Vartotojo pavarde'}
-        name={'surname'}
-        controlFunc={this.handleSurnameChange}
-        content={this.state.surname}
-        placeholder={'Vartotojo pavarde'}
-        /> 
-        <SingleInput 
-        inputType={'text'}
-        title={'Vartotojo el.pastas'}
-        name={'email'}
-        controlFunc={this.handleEmailChange}
-        content={this.state.email}
-        placeholder={'Vartotojo el.pastas'}
-        /> 
-         <SingleInput 
-        inputType={'text'}
-        title={'Vartotojo slaptažodis'}
-        name={'password'}
-        controlFunc={this.handlePasswordChange}
-        content={this.state.password}
-        placeholder={'Vartotojo slaptažodis'}
-        />  */}
+     
         <FormItem 
                           validateStatus={this.state.name.validateStatus}
                           help={this.state.name.errorMsg}>

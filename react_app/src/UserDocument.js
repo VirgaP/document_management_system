@@ -68,7 +68,7 @@ export class UserDocument extends Component {
         <td>{document.createdDate}</td>
         <td>
         <Button type="primary">
-            <Link to={`/document/${document.number}`}> Peržiūrėti </Link>
+            <Link to={`/dokumentas/${document.number}`}> Peržiūrėti </Link>
         </Button>
         </td>
         {document.userDocuments.map(el=>(String (el.submitted)) === 'false'? 
@@ -96,7 +96,7 @@ export class UserDocument extends Component {
         </td> :
         <td>
         <Button type="default">
-            <Link to={`/edit/document/${document.number}`}>Redaguoti</Link>
+            <Link to={`/redaguoti/dokumentas/${document.number}`}>Redaguoti</Link>
         </Button>
         </td>
         )}

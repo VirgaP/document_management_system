@@ -112,10 +112,10 @@ export class AdminPage extends Component {
         <Link to={'/naujas-tipas'}> Kurti dokumento tipą</Link>
       </Button>
       <Button size="large" type="primary">
-        <Link to='/groups'>Kurti vartotojų grupę </Link>
+        <Link to='/nauja-grupe'>Kurti vartotojų grupę </Link>
       </Button>
       <Button size="large" type="primary">
-        <Link to='/register'>Kurti naują vartotoją</Link>
+        <Link to='/naujas-vartotojas'>Kurti naują vartotoją</Link>
       </Button>
       </div>
     </div>

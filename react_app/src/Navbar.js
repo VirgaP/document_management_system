@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
-import InstitutionList from './DocumentListContainer';
+import DocumentList from './DocumentListContainer';
 import axios from 'axios';
 
 
@@ -51,20 +51,20 @@ class Navbar extends Component {
                 <Link className="nav-link" to='/user/profile'>Vartotojo paskyra</Link>
                 </li> */}
                 <li className="nav-item">
-                <Link className="nav-link" to='/register'>Kurti naują vartotoją</Link>
+                <Link className="nav-link" to='/naujas-vartotojas'>Kurti naują vartotoją</Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to='/usersList'>Vartotojai</Link>
+                <Link className="nav-link" to='/vartotojai'>Vartotojai</Link>
                 </li>
                 <li className="nav-item">
-                <Link className="nav-link" to='/groups'>Kurti vartotojų grupę </Link>
+                <Link className="nav-link" to='/nauja-grupe'>Kurti vartotojų grupę </Link>
                 </li>
                 <li className="nav-item">
                 <Link className="nav-link" to='/naujas-tipas'>Kurti dokumento tipą</Link> 
                   {/* <a className="nav-link" onClick={this.goProducts} href="/products">Products</a> */}
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to='/admin'>Kurti dokumentą</Link> 
+                  <Link className="nav-link" to='/naujas-dokumentas'>Kurti dokumentą</Link> 
                 </li>
               </ul>
             </div>
