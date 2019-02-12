@@ -49,10 +49,11 @@ import AdminPage from './AdminPage';
 import EditGroup from './EditGroup';
 import SingleType from './SingleType';
 import EditType from './EditType';
-import UserDocumentListContainer from './UserDocumentListContainer';
+import UserListContainer from './UserListContainer'
 import Form from './Form/FormComponent';
 import EditDocument from './EditDocument';
 import SingleDocument from './SingleDocument';
+import UserHomePage from './UserHomePage';
 import Nowhere from './Nowhere';
 import Footer from './Footer';
 const { Content } = Layout;
@@ -159,14 +160,16 @@ class App extends Component {
                 <Route path="/tipas/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path='/adminpage' component={AdminPage}/>
+                <Route path='/vartotojo-paskyra' component={UserHomePage}/>
                 <Route path="/login" 
                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                 <Route path="/naujas-vartotojas" component={Registration}/>
                 <Route path="/nauja-grupe" component={UserGroupFormContainer}/>
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
                 <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
-                <Route path="/vartotojai" component={UserDocumentListContainer}/>
-                <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute>
+                <Route path="/vartotojai" component={UserListContainer}/>
+                {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
+                <Route path="/vartotojas/:email" render={(props) => <SingleUser {...props} />}/>
                 <Route path="*" component={Nowhere}/>  
               </Switch>
             </div>

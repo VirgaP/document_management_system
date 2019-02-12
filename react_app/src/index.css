@@ -7,9 +7,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.navbar{
-  z-index: -1;
-}
+
 .user_document_list{
   overflow-x:auto;
 }
@@ -39,7 +37,7 @@ code {
 .footer{
   position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: -5%;
   width: 100%;
   color: white;
   text-align: center;
@@ -61,8 +59,22 @@ code {
 }
 
 .login-form-button {
-  width: 100%;
+  width: 80%;
 }
+
+.signup-container {
+  max-width: 420px;
+  /* margin: 0 auto; */
+  margin-top: 40px; 
+  background-color: darkgray;
+  padding-bottom: 7%;
+}
+
+.signup-form-button {
+  width: 100%;
+  margin-top: 15px;
+}
+
 
 @media (min-width: 992px) {
   body {
