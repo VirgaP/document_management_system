@@ -44,18 +44,29 @@ code {
 }
 
 .admin_page{
-  height: auto;
+  height:auto;
 }
 .admin_page button{ 
   margin: 20px;
+}
 
+.profile_page{
+  margin-top: 5%;
+  margin-bottom: 10%;
+  width: 60%;
+  
+}
+.profile_page .card{
+  margin: auto;
+  /* margin-left: 30px */
 }
 
 .login-container {
-  max-width: 420px;
+  max-width: 50%;
   margin: 0 auto;
   margin: 0 auto;
   margin-top: 40px;
+  text-align: center;
 }
 
 .login-form-button {
@@ -73,6 +84,9 @@ code {
 .signup-form-button {
   width: 100%;
   margin-top: 15px;
+}
+.cards a{
+  color: white;
 }
 
 

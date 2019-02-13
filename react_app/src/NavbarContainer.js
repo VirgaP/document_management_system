@@ -57,6 +57,7 @@ import UserHomePage from './UserHomePage';
 import Nowhere from './Nowhere';
 import Footer from './Footer';
 import UserContext from './UserContext';
+import UserDocumentListContainer from './UserDocumentListContainer';
 const { Content } = Layout;
 
 class App extends Component {
@@ -146,7 +147,7 @@ class App extends Component {
             <span></span>}   
           <Content className="app-content">
             <div className="container">
-            <UserContext.Provider value={this.state.currentUser}>
+          
               <Switch>      
               <Route exact path="/" 
                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
@@ -154,27 +155,26 @@ class App extends Component {
                   render={(props) => <HomePage isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>
                 <Route path='/dokumentai' component={DocumentList}/>
-                <Route path="/naujas-dokumentas" component={Form}/>
+                {/* <Route path="/naujas-dokumentas" component={Form}/> */}
+                <Route path="/naujas-dokumentas" render={(props) => <Form currentUser={this.state.currentUser} {...props} />}/>
                 <Route path="/dokumentas/:number" render={(props) => <SingleDocument {...props} />}/> 
                 <Route path="/redaguoti/dokumentas/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>
+                <Route path="/mano-dokumentai" render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
                 <Route path="/naujas-tipas" component={TypeForm}/>
                 <Route path="/tipas/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path='/adminpage' component={AdminPage}/>
                 <Route path='/vartotojo-paskyra' component={UserHomePage}/>
-                {/* <Route path="/login" 
-                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route> */}
                 <Route path="/naujas-vartotojas" component={Registration}/>
                 <Route path="/nauja-grupe" component={UserGroupFormContainer}/>
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
                 <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
                 <Route path="/vartotojai" component={UserListContainer}/>
                 {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
-                <Route path="/vartotojas/:email" render={(props) => <SingleUser {...props} />}/>
+                <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
                 <Route path="*" component={Nowhere}/>  
               </Switch>
-              </UserContext.Provider>
-            </div>
+              </div>
           </Content>
           <Footer/>
         </Layout>

@@ -50,27 +50,37 @@ export class HomePage extends Component {
 
     //   console.log("Email", email)
     return (
-        // <UserProvider>
-        <UserContext.Consumer>
-           {(context)=> (  
+        <UserContext.Provider 
+        // value={this.props.currentUser.email}
+        >
             <React.Fragment>  
-                 <div style={username}>You are now logged in as : {this.props.currentUser.email}</div>
-        <div className="container-fluid admin_page">
-        <div className="row">
+        <div className="container-fluid profile_page">
+        <div className="row ">
         {String(this.state.user.admin) === 'true' ?
-        <Button size="large" type="primary" >
-            <Link to={'/adminpage'}>Administratoriaus paskyra</Link>
-        </Button>
-        : <span></span>
-        }
-       <Button size="large" type="primary" >
-            <Link to={'/vartotojo-paskyra'}>Vartotojo paskyra</Link>
-        </Button>
+        <div className="card">
+            <div className="card-body">Content</div> 
+            <div className="card-footer"> 
+            <Button size="large" type="primary" >
+                <Link to={'/adminpage'}>Administratoriaus paskyra</Link>
+            </Button>
+            </div>
+        </div>
+            : <span></span>
+            }
+        <div className="card">
+            <div className="card-body">Content</div> 
+            <div className="card-footer"> 
+            <Button size="large" type="primary" >
+                {/* <Link to={'/vartotojo-paskyra'}>Vartotojo paskyra</Link> */}
+                <Link to={`/vartotojas/${this.props.currentUser.email}`}> Vartotojo paskyra </Link>           
+             </Button>
+        </div>
+        </div>
       </div>
       </div>
         </React.Fragment> 
-                  )}
-        </UserContext.Consumer>
+               
+        </UserContext.Provider>
         // </UserProvider>
     )
   }

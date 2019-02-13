@@ -76,8 +76,8 @@ public class UserController {
     @RequestMapping(path = "/{email}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value="Delete user", notes="Deletes user by surname")
-    public void deleteUser(@PathVariable final String surname){
-        userService.deleteUser(surname);
+    public void deleteUser(@PathVariable final String email){
+        userService.deleteUser(email);
     }
 
     @RequestMapping(path = "/{email}/addGroup", method = RequestMethod.POST)

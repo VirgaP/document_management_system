@@ -45,6 +45,9 @@ public class UserDTO {
         this.userDocuments = userDocuments;
     }
 
+    public UserDTO(String email, String toString) {
+    }
+
     public String getName() {
         return name;
     }

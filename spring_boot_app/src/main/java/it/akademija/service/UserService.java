@@ -78,8 +78,9 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(String surname){
-        User user = userRepository.findBySurname(surname);
+    public void deleteUser(String email){
+        User user = userRepository.findBySurname(email);
+        System.out.println("trinti" + user.getEmail());
         userRepository.delete(user);
     }
 

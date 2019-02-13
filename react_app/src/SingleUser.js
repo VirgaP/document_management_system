@@ -7,6 +7,7 @@ import UserContext from './UserContext';
 import AddGroup from './AddGroup';
 import UserDocumentListContainer from './UserDocumentListContainer'
 import {jszip} from 'jszip';
+import {Link} from 'react-router-dom';
 
 
 export class SingleUser extends Component {
@@ -17,12 +18,14 @@ export class SingleUser extends Component {
         this.state = {
            id: this.props.match.params.email, //is index.js 
            user: {},
+           currentUser:this.props.currentUser.admin,
            groups:[],
            userGroups:[],
            groupsArray:[],
            email:''
 
         }
+        console.log('PROPS', props)
         console.log("id", this.state.id);
         this.handleResultChange = this.handleResultChange.bind(this);
       }
@@ -54,6 +57,7 @@ export class SingleUser extends Component {
       }
   
       DeleteItem = (event) => {
+      
           axios.delete(`http://localhost:8099/api/users/${this.state.id}`)
           .then(result => {
             const user = result.data
@@ -63,7 +67,7 @@ export class SingleUser extends Component {
             console.log(error);
           });
           
-          this.props.history.push('/') //redirects Home after delete
+          this.props.history.push('/pagrindinis') //redirects Home after delete
       }
 
       handleRemove(index) {
@@ -131,7 +135,6 @@ export class SingleUser extends Component {
     render() {
      console.log("params url: ", this.props.match.params.email)
       return (
-          <UserProvider>
           <UserContext.Consumer>
              {(context)=> (  
               <React.Fragment>  
@@ -165,7 +168,7 @@ export class SingleUser extends Component {
                         <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
                     </div>
                      }
-                    {String(this.state.user.admin) === 'true'?
+                    {String(this.state.currentUser) === 'false'?//false nes spring negrazina teisingai
                       <AddGroup 
                       onResultChange={this.handleResultChange}
                       id={this.state.id}/> 
@@ -175,7 +178,7 @@ export class SingleUser extends Component {
               </div>
               <div className="card-footer">
               <div>
-                      <h5>Vartotojo dokumentai</h5>
+                      <div className="row user_document"><h5>Vartotojo dokumentai</h5>&nbsp;&nbsp;<button className="btn"><Link to={'/naujas-dokumentas'}>Kurti naują dokumentą</Link></button></div>
                       <UserDocumentListContainer email={this.state.id}/>
                     </div>
                     {String(this.state.user.admin) === 'true'?
@@ -186,7 +189,6 @@ export class SingleUser extends Component {
               </React.Fragment> 
                   )}
               </UserContext.Consumer>
-              </UserProvider>
       );
     }
 }

@@ -118,12 +118,6 @@ export class SingleDocument extends Component {
 
     render() {
       return (
-          <UserProvider>
-          <UserContext.Consumer>
-             {(context)=> (  
-              <React.Fragment>  
-          <div style={username}>You are now logged in as : {context}</div>
-  
            <div className="container" style={style}>
            <div className="card h-100">
               <div className="card-body">
@@ -161,11 +155,6 @@ export class SingleDocument extends Component {
                   </div> */}
                 </div>
             </div>
-       
-              </React.Fragment> 
-                  )}
-              </UserContext.Consumer>
-              </UserProvider>
       );
     }
 }

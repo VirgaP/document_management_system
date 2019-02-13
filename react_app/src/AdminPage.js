@@ -85,12 +85,7 @@ export class AdminPage extends Component {
     var GROUPS = this.state.groups;
     var TYPES = this.state.types;
     return (
-      // <div>
-      //   <h1>{this.state.input}</h1>
-      //   <DocumentListContainer documents={DOCUMENTS}/>
-      //   <GroupListContainer groups={GROUPS}/>
-      //   <TypeListContainer types={TYPES}/>
-      // </div>
+     
       <div className="container-fluid admin_page">
       <div className="row">
       <Button size="large" type="primary" onClick={this.toggleDocuments.bind(this)} >
@@ -108,16 +103,29 @@ export class AdminPage extends Component {
       </Button>
       {!this.state.displayTypes && <TypeListContainer types={TYPES}/>}
       <br></br>
-      <Button size="large" type="primary">
-        <Link to={'/naujas-tipas'}> Kurti dokumento tipą</Link>
-      </Button>
-      <Button size="large" type="primary">
-        <Link to='/nauja-grupe'>Kurti vartotojų grupę </Link>
-      </Button>
-      <Button size="large" type="primary">
-        <Link to='/naujas-vartotojas'>Kurti naują vartotoją</Link>
-      </Button>
-      </div>
+    </div>
+  <div class="card-columns">
+  <div class="card bg-info">
+    <div class="card-body text-center">
+      <p class="card-text"><Link to={'/naujas-tipas'}> Kurti dokumento tipą</Link></p>
+    </div>
+  </div>
+  <div class="card bg-warning">
+    <div class="card-body text-center">
+      <p class="card-text"> <Link to='/nauja-grupe'>Kurti vartotojų grupę </Link></p>
+    </div>
+  </div>
+  <div class="card bg-success">
+    <div class="card-body text-center">
+      <p class="card-text"><Link to='/vartotojai'>Peržiūrėti sukurtus vartotojus </Link></p>
+    </div>
+  </div>
+  <div class="card bg-danger">
+    <div class="card-body text-center">
+      <p class="card-text"><Link to='/naujas-vartotojas'>Kurti naują vartotoją</Link></p>
+    </div>
+  </div> 
+</div>
     </div>
     )
   }

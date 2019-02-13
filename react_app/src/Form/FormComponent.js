@@ -5,12 +5,13 @@ import SingleInput from '../components/singleInput';
 import UploadFile from '../UploadFile';
 import {notification } from 'antd';
 import 'antd/dist/antd.css';
+import UserProvider from '../UserProvider';
 
 
 class Form extends Component {
   
-  constructor() {
-      super();
+  constructor(props) {
+      super(props);
       var today = new Date(),
           date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()+'-'+today.getHours()+'-'+today.getMinutes();
       this.state = {
@@ -24,7 +25,8 @@ class Form extends Component {
         typeTitle: '',
         title: '',
         description: '',
-        email:'virga@email.com',
+        // email:'virga@email.com',
+        email: props.currentUser.email,
         date: date,
         uniqueNumber:'',
         documentTypes:[],
@@ -32,6 +34,8 @@ class Form extends Component {
         fileName: '',
         displayAddFiles: false,
       };
+
+      console.log("form", props)
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleClearForm = this.handleClearForm.bind(this);
       this.handleDocumentTitleChange = this.handleDocumentTitleChange.bind(this);
@@ -153,7 +157,7 @@ class Form extends Component {
             message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
             description: 'Dokumentas sukurtas sėkmingai!'
         });    
-          this.props.history.push(`/document/${uniqueNumber}`) }
+          this.props.history.push(`/dokumentas/${uniqueNumber}`) }
       })
       .catch(error => {
         if(error.status === 500) {
@@ -209,7 +213,8 @@ fileUpload(file){
       const options = this.state.documentTypes.map(type =>
         <option key={type} value={type}>{type}</option>  
       )
-      return (   
+      return (
+       
         <div className="container">
           <h2>Sukurti naują dokumentą</h2>
           <form onSubmit={this.handleSubmit}>
@@ -238,9 +243,9 @@ fileUpload(file){
               </select>
           </div>
           <br></br>
-          <div class="custom-file" id="customFile" lang="es">
-          <input type="file" class="custom-file-input" name="selectedFile" id="exampleInputFile" aria-describedby="fileHelp" onChange={this.onChange} required/>
-          <label class="custom-file-label" htmlFor="file">{selected}</label>
+          <div className="custom-file" id="customFile" lang="es">
+          <input type="file" className="custom-file-input" name="selectedFile" id="exampleInputFile" aria-describedby="fileHelp" onChange={this.onChange} required/>
+          <label className="custom-file-label" htmlFor="file">{selected}</label>
           </div>
           <br></br>
           <br></br>
@@ -248,9 +253,14 @@ fileUpload(file){
           </form>
           <br></br>
         </div>
+      
       ) 
     }
 
+}
+const username = {
+  border:'solid 1 px grey',
+  backgroundColor: 'yellow',
 }
 
 export default Form;

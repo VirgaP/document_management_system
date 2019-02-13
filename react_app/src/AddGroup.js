@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {notification } from 'antd';
 
 export class AddGroup extends Component {
     constructor(props) {
@@ -41,8 +42,26 @@ export class AddGroup extends Component {
         }
     console.log("Payload  ", payload)
        axios.post(`http://localhost:8099/api/users/${this.state.id}/addGroup`,  payload)
-       .then(res => console.log("Send POST request", payload));
-        
+      //  .then(res => console.log("Send POST request", payload));
+      .then(response => {
+        console.log("Response", response);
+        const responseStatus = response.status
+       console.log(responseStatus)
+      if(responseStatus >= 200 && responseStatus < 300){ 
+        notification.success({
+          message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+          description: 'Vartotojas priskirtas grupei'
+      });    
+       }
+    })
+    .catch(error => {
+      if(error.status >= 400 && error.status == 500) {
+          notification.error({
+              message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+              description: 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+          });  
+        }})
+
        this.setState({
             groupName:''
         })
@@ -51,7 +70,6 @@ export class AddGroup extends Component {
 
   render() {
     const options = this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)
-console.log("Groupname", this.state.groupName)
     return (
       <div>
         <h4>Pridėti vartotojo grupę</h4>

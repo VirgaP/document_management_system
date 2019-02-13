@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import UserContext from './UserContext';
 import axios from 'axios';
 
+const UserContext = React.createContext();
 
-export default class UserProvider extends Component {
+class UserProvider extends Component {
   constructor(props) {
     super(props);
    
     this.state = {
-        username: '',
+        email: '',
+        isAuthenticated: false
     }
     console.log("Props in userprovider", this.props)
   }
@@ -17,10 +18,17 @@ export default class UserProvider extends Component {
     return (
       <div>
           {/* defines context state=username and passes to children */}
-        <UserContext.Provider value={this.state.username}> 
+        <UserContext.Provider 
+        value={this.state.email}
+        // value={{ isAuthenticated: this.state.isAuthenticated }}
+        > 
             {this.props.children}
         </UserContext.Provider>
       </div>
     )
   }
 }
+
+const UserConsumer = UserContext.Consumer
+
+export default {UserProvider, UserConsumer}

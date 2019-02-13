@@ -4,6 +4,8 @@ import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
+import {notification } from 'antd';
+
 
 export class SingleType extends Component {
     constructor(props) {
@@ -26,7 +28,7 @@ export class SingleType extends Component {
       }
     
       componentDidMount = () => {
-          axios.get(`http://localhost:8099/api/types/grupes/${this.state.title}`)
+          axios.get(`http://localhost:8099/api/types/${this.state.title}`)
           .then(result => {
             const type = result.data
           this.setState({type});
@@ -59,7 +61,7 @@ export class SingleType extends Component {
           .catch(function (error) {
             console.log(error);
           });
-          this.props.history.push('/') //redirects Home after delete
+          this.props.history.push('/pagrindinis') //redirects Home after delete
       }
 
       handleSelectChange(e) {  
@@ -94,22 +96,32 @@ export class SingleType extends Component {
           send: this.state.send,
           receive: this.state.receive
             })
-            .then(function(response) {
-                console.log(response);
-            }).catch(function (error) {
-                console.log(error);
-            })
+            .then(response => {
+              console.log("Response", response);
+              const responseStatus = response.status
+             console.log(responseStatus)
+            if(responseStatus >= 200 && responseStatus < 300){ 
+              notification.success({
+                message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                description: 'Grupe priskirta'
+            });    
+             }
+          })
+          .catch(error => {
+            if(error.status >= 400 && error.status == 500) {
+                notification.error({
+                    message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                    description: 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+                });  
+              }})
 
             this.handleClearForm(e);
       }
 
     render() {
+      const options = this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)
+
       return (
-          <UserProvider>
-          <UserContext.Consumer>
-             {(context)=> (  
-              <React.Fragment>  
-          <div style={username}>You are now logged in as : {context}</div>
   
            <div className="container" style={style}>
            <div className="card h-100">
@@ -119,18 +131,19 @@ export class SingleType extends Component {
                     <h5>Pavadinimas: {this.state.type.title}</h5>
                     <div>
                       <h5>Šio tipo dokumentas priskirtas grupėms: </h5> 
-                    {(!this.state.typeGroups.length) ? <span>Grupei vartotojai neprisikirti</span> : <ul>{this.state.typeGroups.map((group) => (<li key={group.group.name}>{group.group.name}</li>))}</ul>}
+                    {(!this.state.typeGroups.length) ? <span>Dokumentas grupei nepriskirtas</span> : <ul>{this.state.typeGroups.map((group) => (<li key={group.group.name}>{group.group.name}</li>))}</ul>}
                     </div>
               </div>
             
             <div className="card-footer">
-            <h5>Priskirti varototjų grupę</h5>
+            <h5>Priskirti vartototjų grupę</h5>
             <form onSubmit={this.handleSubmit}>
             <div>
-                <label className="control-label">Pasirinkite varototjų grupę</label>
+                <label className="control-label">Pasirinkite vartototjų grupę</label>
                 <select value={this.state.groupName} onChange={this.handleSelectChange} 
                 className="form-control" id="ntype" required>
-                {this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)}
+                  <option value="">...</option>
+                    {options}
                 </select>
             </div>
             <label className="form-label capitalize">
@@ -155,11 +168,7 @@ export class SingleType extends Component {
 
               </div>
             </div>
-  
-              </React.Fragment> 
-                  )}
-              </UserContext.Consumer>
-              </UserProvider>
+
       );
 }
 }
