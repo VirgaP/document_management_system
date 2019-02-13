@@ -105,22 +105,22 @@ export class AdminPage extends Component {
       <br></br>
     </div>
   <div class="card-columns">
-  <div class="card bg-info">
+  <div class="card bg-light">
     <div class="card-body text-center">
       <p class="card-text"><Link to={'/naujas-tipas'}> Kurti dokumento tipą</Link></p>
     </div>
   </div>
-  <div class="card bg-warning">
+  <div class="card bg-light">
     <div class="card-body text-center">
       <p class="card-text"> <Link to='/nauja-grupe'>Kurti vartotojų grupę </Link></p>
     </div>
   </div>
-  <div class="card bg-success">
+  <div class="card bg-light">
     <div class="card-body text-center">
       <p class="card-text"><Link to='/vartotojai'>Peržiūrėti sukurtus vartotojus </Link></p>
     </div>
   </div>
-  <div class="card bg-danger">
+  <div class="card bg-light">
     <div class="card-body text-center">
       <p class="card-text"><Link to='/naujas-vartotojas'>Kurti naują vartotoją</Link></p>
     </div>

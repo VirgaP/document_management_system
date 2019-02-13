@@ -5,6 +5,7 @@ import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import AddGroup from './AddGroup';
+import {notification } from 'antd';
 
 
 export class SingleDocument extends Component {
@@ -18,9 +19,13 @@ export class SingleDocument extends Component {
            document: {},
            userDocument:[],
            user:[],
-           userFiles:[]  
+           userFiles:[],
+           file:null,
+           fileName: '',  
         }
-       
+        this.onChange = this.onChange.bind(this)
+        this.fileUpload = this.fileUpload.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
       }
     
       componentDidMount = () => {
@@ -61,7 +66,54 @@ export class SingleDocument extends Component {
 
       }
 
-      handleDownlaod = (index, filename) => {
+      handleResultChange(value) {
+        console.log("VALUE", value)
+        var fileName = value;
+        var newFile ={fileName}
+        var newArray = this.state.userFiles.slice();       
+        newArray.push(newFile);   
+        console.log("NEW ARRAY", newArray)
+        this.setState({userFiles:[...newArray]})
+
+      }
+
+      handleSubmit(e){
+        e.preventDefault();
+        this.fileUpload(this.state.file).then((response)=>{
+          console.log(response.data)
+        })
+      axios.post(`http://localhost:8099/api/documents/${this.state.number}/file`, {
+        fileName: this.state.file.name
+          })
+          .then(response => {
+              console.log("Response", response);
+              const responseStatus = response.status
+             console.log(responseStatus)
+             if(responseStatus >= 200 && responseStatus < 300){ 
+              notification.success({
+                message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                description: 'Dokumentas pateiktas sėkmingai!'
+            });    
+            this.handleResultChange(this.state.fileName)
+            }
+          })
+          .catch(error => {
+            if(error.status === 500) {
+                notification.error({
+                    message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                    description: 'Atsiprašome įvyko klaida įkeliant dokumentą, perkraukite puslapį ir bandykite dar kartą!'
+                });                    
+            } else {
+                notification.error({
+                    message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                    description: error.message || 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+                });                                            
+            }
+        });
+       
+      }
+
+    handleDownlaod = (index, filename) => {
     
       axios(`http://localhost:8099/api/files/downloadFile/${index}`, {
         method: 'GET',
@@ -114,9 +166,46 @@ export class SingleDocument extends Component {
           .catch(error => {
               console.log(error);
           });
+          
+      }
+
+
+      onChange(e) {
+        this.setState({file:e.target.files[0]})
+
+        switch (e.target.name) {
+          // Updated this
+          case 'selectedFile':
+            if(e.target.files.length > 0) {
+                // Accessed .name from file 
+                this.setState({ fileName: e.target.files[0].name });
+            }
+          break;
+          default:
+            this.setState({ [e.target.name]: e.target.value });
+        }
+      }
+
+      fileUpload(file){
+        const url = 'http://localhost:8099/api/files/uploadFile';
+        const formData = new FormData();
+        formData.append('file',file)
+        // formData.append('fileName', this.state.date + this.state.file.name)
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        return  axios.post(url, formData,config)
       }
 
     render() {
+      const {fileName} = this.state
+      let selected = null;
+      selected = fileName 
+      ? ( <span>Pasirinkta - {fileName}</span>) 
+      : ( <span>Pasirinkite dokumentą...</span> );
+
       return (
            <div className="container" style={style}>
            <div className="card h-100">
@@ -149,10 +238,19 @@ export class SingleDocument extends Component {
                     <ul>{this.state.userFiles.map((file) => (<li key={file.id}>{file.fileName} 
                       <button onClick={this.handleDownlaod.bind(this, file.id, file.fileName )}>Download</button></li>))}</ul>}
               </div>
-                {/* <div className="App-intro">
-                  <h3>Atsisiųsti visus dokumentus</h3>
-                  <button onClick={this.downloadRandomImage}>Download</button>
-                  </div> */}
+              
+              {this.state.userDocument.map(el=>(String (el.submitted)) !== 'true' ? 
+            <div>
+              <h5>Pateikti papildomus dokumentus</h5>
+             <form onSubmit={this.handleSubmit}>
+                <div className="custom-file" id="customFile" lang="es">
+                <input type="file" className="custom-file-input" name="selectedFile" id="exampleInputFile" aria-describedby="fileHelp" onChange={this.onChange} required/>
+                <label className="custom-file-label" htmlFor="file">{selected}</label>
+                </div>
+                <button className="btn btn-primary" type="submit">Pateikti</button>
+              </form>
+              </div> : <span></span> 
+                    )} <br></br>
                 </div>
             </div>
       );

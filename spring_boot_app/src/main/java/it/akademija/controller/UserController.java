@@ -65,6 +65,13 @@ public class UserController {
         return userService.getUserWithoutDocuments();
     }
 
+    @RequestMapping(path = "/emails", method = RequestMethod.GET)
+    @ApiOperation(value="Get all emails", notes="Returns list of all emails")
+    public List<UserDTO> getAllUsersEmails() {
+
+        return userService.getUserEmails();
+    }
+
     @RequestMapping(path = "/{email}", method = RequestMethod.GET)
     @ApiOperation(value = "Get one user", notes = "Returns one user by email")
     public UserDTO getDocument(

@@ -49,6 +49,16 @@ public class UserService {
     }
 
     @Transactional
+    public List<UserDTO> getUserEmails() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new UserDTO(
+                        user.getEmail()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public UserDTO getUser(String email){
         User user = userRepository.findByEmail(email);
         UserDTO userDTO = new UserDTO(
@@ -61,6 +71,7 @@ public class UserService {
         );
         return userDTO;
     }
+
 
     @Transactional
     public void createUser(RequestUser requestUser) {

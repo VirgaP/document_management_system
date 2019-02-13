@@ -39,6 +39,14 @@ public class DocumentController {
         return documentService.getAllUserDocuments(email);
     }
 
+    @RequestMapping(path="/{uniqueNumber}/file", method = RequestMethod.POST)
+    @ApiOperation(value = "Add file", notes = "Add additional attachements to created document")
+    void addAdditionalFiles(
+            @PathVariable final String uniqueNumber,
+            @RequestBody RequestDocument request) {
+        documentService.additionalFile(uniqueNumber, request);
+    }
+
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get all documents", notes = "Returns list of all documents in database")

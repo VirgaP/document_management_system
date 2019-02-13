@@ -176,7 +176,7 @@ class App extends Component {
               </Switch>
               </div>
           </Content>
-          <Footer/>
+          {/* <Footer/> */}
         </Layout>
     );
   }

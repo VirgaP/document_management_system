@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 @Service
@@ -75,6 +76,26 @@ public class DocumentService {
     }
 
     @Transactional
+    public void additionalFile(String uniqueNumber,RequestDocument requestDocument){
+        Document document = documentRepository.findByuniqueNumber(uniqueNumber);
+        DBFile file = dbFileRepository.findByFileName(requestDocument.getFileName());
+
+        List<DBFile> files = document.getDbFiles();
+
+        System.out.println("failas" + requestDocument.getFileName());
+        document.addDbFile(file);
+
+        System.out.println("listas pries " +  files);
+        ListIterator<DBFile> listIterator = files.listIterator();
+        listIterator.add(file);
+        System.out.println("listas po " + files) ;
+
+        file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
+        documentRepository.save(document);
+    }
+
+
+    @Transactional
     public List<DocumentDTO> getDocuments(){
         List<DocumentDTO> documentDTOS = documentRepository.findAll().stream()
                 .map(document -> new DocumentDTO(
@@ -114,6 +135,7 @@ public class DocumentService {
                 document.getUserDocuments(),
                 document.getDbFiles()
         );
+        System.out.println("failai " + document.getDbFiles());
         return documentDTO;
     }
 

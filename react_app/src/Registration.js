@@ -32,6 +32,7 @@ class Register extends Component {
       userGroups:[],
       admin: false,
       redirect: false,
+      emails: []
       
     }
     console.log("Admin state", this.state.admin)
@@ -60,23 +61,23 @@ class Register extends Component {
       .catch(function (error) {
           console.log(error);
         });
+
+        axios.get('http://localhost:8099/api/users/emails')
+        .then(result => {
+            const emailsRegistered = result.data;
+          
+            let emails = [];
+            emailsRegistered.filter(el=>emails.push(el.email));
+          this.setState({ 
+            emails
+          })
+          console.log(emails);
+      })
+          .catch(function (error) {
+              console.log(error);
+            });
   }
 
-  // handleNameChange(e) {  
-  //   this.setState({ name: e.target.value });
-  // }
-
-  // handleSurnameChange(e) {  
-  //   this.setState({ surname: e.target.value });
-  // }
-
-  // handleEmailChange(e) {  
-  //   this.setState({ email: e.target.value });
-  // }
-
-  // handlePasswordChange(e){
-  //   this.setState({password: e.target.value})
-  // }
 
   handleInputChange(event, validationFun) {
     const target = event.target;
@@ -91,14 +92,19 @@ class Register extends Component {
     });
 }
 
+checkEmail(event){
+  const emailValue = event.target.value;
+    if(this.state.emails.filter(email => email === emailValue)){
+console.log('exits')
+    }
+}
+
   handleSelectChange(e) {  
     this.setState({ groupName: e.target.value });   
   }
 
   handleChangeAdmin(event){
     this.setState({ admin : event.target.checked });
-
-      console.log("Admin", this.state.admin)
     }
   
   handleFormSubmit(e) {  
@@ -163,7 +169,7 @@ isFormInvalid() {
       <Form className="signup-form" onSubmit={this.handleFormSubmit}>
      
         <FormItem 
-                          validateStatus={this.state.name.validateStatus}
+                      validateStatus={this.state.name.validateStatus}
                           help={this.state.name.errorMsg}>
                           <Input 
                                 size="large"
@@ -195,6 +201,7 @@ isFormInvalid() {
                                 autoComplete="off"
                                 placeholder="Vartotojo el. paštas"
                                 value={this.state.email.value} 
+                                onMouseLeave={(event)=>this.checkEmail(event)}
                                 onBlur={this.validateEmailAvailability}
                                 onChange={(event) => this.handleInputChange(event, this.validateEmail)} />    
                         </FormItem>
@@ -346,7 +353,7 @@ validateEmailAvailability() {
                     errorMsg: null
                 }
             });
-        } else {
+        } else  {
             this.setState({
                 email: {
                     value: emailValue,

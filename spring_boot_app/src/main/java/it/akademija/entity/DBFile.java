@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "files")
@@ -76,5 +77,18 @@ public class DBFile {
 
     public void setDocument(Document document) {
         this.document = document;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DBFile)) return false;
+        DBFile dbFile = (DBFile) o;
+        return Objects.equals(getId(), dbFile.getId()) && Objects.equals(getFileName(), dbFile.getFileName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFileName());
     }
 }
