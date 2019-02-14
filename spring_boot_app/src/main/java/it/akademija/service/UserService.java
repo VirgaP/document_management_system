@@ -3,6 +3,8 @@ package it.akademija.service;
 import it.akademija.dto.UserDTO;
 import it.akademija.entity.Group;
 import it.akademija.entity.User;
+import it.akademija.entity.UserDocument;
+import it.akademija.entity.UserDocumentId;
 import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
@@ -90,8 +92,10 @@ public class UserService {
 
     @Transactional
     public void deleteUser(String email){
-        User user = userRepository.findBySurname(email);
-        System.out.println("trinti" + user.getEmail());
+        User user = userRepository.findByEmail(email);
+
+
+
         userRepository.delete(user);
     }
 

@@ -95,7 +95,7 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "primaryKey.user",
-            cascade = CascadeType.MERGE)
+            cascade = CascadeType.ALL)
     public List<UserDocument> getUserDocuments() {
         return userDocuments;
     }

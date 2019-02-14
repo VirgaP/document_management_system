@@ -40,7 +40,6 @@ export class Type extends Component {
         </Button>
         </td>
         <td>
-        {/* <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti </Button> */}
         <Button type="danger" onClick={() => this.DeleteItem(this.props.type.title)}> Trinti </Button>
         </td>
         <td>

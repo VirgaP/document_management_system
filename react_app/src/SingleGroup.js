@@ -52,12 +52,6 @@ export class SingleGroup extends Component {
      console.log("params url: ", this.props.match.params.groupName)
      console.log('GRUPE', this.state.group)
       return (
-          // <UserProvider>
-          // <UserContext.Consumer>
-          //    {(context)=> (  
-          //     <React.Fragment>  
-          // <div style={username}>You are now logged in as : {context}</div>
-  
            <div className="container" style={style}>
            <div className="card h-100">
               <div className="card-body">
@@ -71,14 +65,10 @@ export class SingleGroup extends Component {
                     </div>
               </div>
               <div className="card-footer">
-                 <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti </Button>
+              <p>galim prideti dokumentu tipus priskirtu grupei</p>
               </div>
             </div>
-          </div>
-              // </React.Fragment> 
-              //     )}
-              // </UserContext.Consumer>
-              // </UserProvider>
+          </div> 
       );
 }
 }

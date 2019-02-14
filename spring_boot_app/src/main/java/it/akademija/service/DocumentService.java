@@ -47,7 +47,6 @@ public class DocumentService {
         User user = userRepository.findByEmail(requestDocument.getEmail());
         DBFile file = dbFileRepository.findByFileName(requestDocument.getFileName());
 
-
         UserDocument userDocument= new UserDocument();
         Document document = new Document(
                 new Long(1),

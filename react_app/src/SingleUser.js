@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
@@ -47,27 +47,42 @@ export class SingleUser extends Component {
           });
       }
 
-      handleResultChange(value) {
-        console.log("VALUE", value)
+       handleResultChange(value) {
+       var name = {value};
         var newArray = this.state.userGroups.slice();       
-        newArray.push(value);   
+        newArray.push(name);   
         console.log("NEW ARRAY", newArray)
         this.setState({userGroups:[...newArray]})
-
       }
   
       DeleteItem = (event) => {
       
           axios.delete(`http://localhost:8099/api/users/${this.state.id}`)
-          .then(result => {
-            const user = result.data
-          this.setState({user});
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+          .then(response => {
+            console.log("Response", response);
+            const responseStatus = response.status
+           console.log(responseStatus)
+           if(responseStatus >= 200 && responseStatus < 300){ 
+            notification.success({
+              message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+              description: 'Vartotojas ištrintas sėkmingai!'
+          });    
+          this.props.history.push('/vartotojai')           }
+        })
+        .catch(error => {
+          if(error.status === 500) {
+              notification.error({
+                  message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                  description: 'Atsiprašome įvyko klaida įkeliant dokumentą, perkraukite puslapį ir bandykite dar kartą!'
+              });                    
+          } else {
+              notification.error({
+                  message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                  description: error.message || 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+              });                                            
+          }
+      });
           
-          this.props.history.push('/pagrindinis') //redirects Home after delete
       }
 
       handleRemove(index) {
@@ -151,7 +166,7 @@ export class SingleUser extends Component {
                     <h5>El.paštas: {this.state.user.email}</h5>
                     <h5>Vartotojo rolė: {String(this.state.user.admin) === 'true' ? 'administratorius' : 'vartototojas'}</h5> 
                     {/* converts boolean to String */}
-                     {String(this.state.user.admin) === 'true'?
+                     {String(this.state.currentUser) === 'false'?
                     <div> 
                       <h5>Vartotojo grupės: </h5> 
                      
@@ -181,7 +196,7 @@ export class SingleUser extends Component {
                       <div className="row user_document"><h5>Vartotojo dokumentai</h5>&nbsp;&nbsp;<button className="btn"><Link to={'/naujas-dokumentas'}>Kurti naują dokumentą</Link></button></div>
                       <UserDocumentListContainer email={this.state.id}/>
                     </div>
-                    {String(this.state.user.admin) === 'true'?
+                    {String(this.state.currentUser) === 'false'?
                  <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   
                  </div>
