@@ -8,6 +8,7 @@ import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -79,15 +80,15 @@ public class DocumentController {
 
     }
 
-    @RequestMapping(path = "/{uniqueNumber}/submit", method = RequestMethod.PATCH)
+    @RequestMapping(path = "/{uniqueNumber}/{email}/submit", method = RequestMethod.PATCH)
     @ApiOperation(value = "Submit document", notes = "Submit document, change status")
     @ResponseStatus(HttpStatus.OK)
     void submitDocument(
             @ApiParam(value = "Document data", required = true)
             @PathVariable final String uniqueNumber,
-            @RequestBody RequestDocument request)
+            @PathVariable final String email)
     {
-        documentService.submitDocument(uniqueNumber, request);
+        documentService.submitDocument(uniqueNumber, email);
     }
 
 }

@@ -184,9 +184,10 @@ public class DocumentService {
     }
 
     @Transactional
-    public void submitDocument(String number, RequestDocument request){
+    public void submitDocument(String number, String email){
         Document document = documentRepository.findByuniqueNumber(number);
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(email);
+        System.out.println("userid + " + user.getEmail());
 
         UserDocument userDocument = new UserDocument();
         userDocument.setUser(user);

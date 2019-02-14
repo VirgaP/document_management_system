@@ -37,10 +37,6 @@ class Register extends Component {
     }
     console.log("Admin state", this.state.admin)
     this.handleInputChange = this.handleInputChange.bind(this);
-    // this.handleNameChange = this.handleNameChange.bind(this);
-    // this.handleSurnameChange = this.handleSurnameChange.bind(this);
-    // this.handleEmailChange = this.handleEmailChange.bind(this);
-    // this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleChangeAdmin = this.handleChangeAdmin.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);

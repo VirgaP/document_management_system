@@ -14,17 +14,15 @@ export class UserDocumentListContainer extends Component {
       email: this.props.email,
       error:'',
       userDocuments: [],
-      status: null,
     }
     console.log("PROPS", this.props)
 
   this.fetchData = this.fetchData.bind(this);
   this.deleteItem = this.deleteItem.bind(this);
-  this.updateStatus = this.updateStatus.bind(this);
   console.log("Userio dokai", this.state.documents)
 }
 
-    fetchData() {
+  fetchData() {
       axios.get(`http://localhost:8099/api/documents/${this.state.email}/documents`)
           .then(response => {
               this.setState({
@@ -49,38 +47,9 @@ export class UserDocumentListContainer extends Component {
           }
       })
     }
-    updateStatus(number) {
-      this.setState(prevState=>{
-        const newStatus = prevState.documents.userDocuments.filter((document)=>document.number===!number);
-        return {
-            status: newStatus
-        }
-    })
-    }
-  // componentDidMount = () => {
-  //   axios.get(`http://localhost:8099/api/documents/${this.state.email}/documents`)
-  //         .then(result => {
-  //           const documents = result.data
-  //         this.setState({documents});
-  //         console.log("Dokumentai", documents)
-  //         })
-  //         .catch(function (error) {
-  //           console.log(error);
-  //         });
-  // }
       
   render() {
-    
-    // console.log("DOCUMENTS",this.state.documents)
-    // var DOCUMENTS = this.state.documents;
-    // return (
-    //   <div>
-    //     {(this.state.documents.length === 0 ? <div>Vartotojo dokumentai nerasti</div> :
-    //      <DocumentListContainer documents={DOCUMENTS} id={this.state.email}/>
-    //     )}
-       
-    //   </div>
-    // )
+  
     const { documents, error } = this.state;
     console.log("dokumentai", documents)
         if (error) {
@@ -92,13 +61,10 @@ export class UserDocumentListContainer extends Component {
         }
     
     var rows = [];
-    
-    // // this.props.documents.forEach(function(document) {
-    //   // rows.push(<Institution document={document}/>);     
-    // });
-      documents.map((document) => (                                        
+  
+    documents.map((document) => (                                        
           rows.push(<UserDocument current={document} key={document.number} 
-            deleteItem={this.deleteItem} updateStatus={this.updateStatus}/>)                    
+            deleteItem={this.deleteItem} />)                    
             ))
     return (
     <div className="container user_document_list">

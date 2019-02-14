@@ -15,7 +15,7 @@ export class SingleDocument extends Component {
           
         this.state = {
            number: this.props.match.params.number, 
-           email:'user@email.com',
+          //  email:'user@email.com',
            document: {},
            userDocument:[],
            user:[],
@@ -67,7 +67,6 @@ export class SingleDocument extends Component {
       }
 
       handleResultChange(value) {
-        console.log("VALUE", value)
         var fileName = value;
         var newFile ={fileName}
         var newArray = this.state.userFiles.slice();       
@@ -112,6 +111,35 @@ export class SingleDocument extends Component {
         });
        
       }
+
+      SubmitDocument(number) {
+        var email = this.state.user.map(el=>el.email)
+        console.log("EMAIL", typeof email)
+        email = email.toString();
+        console.log("EMAIL", typeof email, email)
+        
+        axios.patch(`http://localhost:8099/api/documents/${number}/${email}/submit`)
+        .then(response => {
+          console.log("Response", response);
+          const responseStatus = response.status
+         console.log(responseStatus)
+        if(responseStatus >= 200 && responseStatus < 300){ 
+          notification.success({
+            message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+            description: 'Dokumentas pateiktas!'
+        }); 
+        this.props.history.push(`/vartotojas/${email}`)   
+         }
+      })
+      .catch(error => {
+        if(error.status >= 400 && error.status == 500) {
+            notification.error({
+                message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+                description: 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+            });  
+          }})
+  
+    }
 
     handleDownlaod = (index, filename) => {
     
@@ -169,7 +197,6 @@ export class SingleDocument extends Component {
           
       }
 
-
       onChange(e) {
         this.setState({file:e.target.files[0]})
 
@@ -211,7 +238,7 @@ export class SingleDocument extends Component {
            <div className="card h-100">
               <div className="card-body">
                     <h4 className="card-title">{this.state.document.title}</h4>
-                    <h5>sukurimo data: {this.state.document.createdDate}</h5>
+                    <h5>Sukūrimo data: {this.state.document.createdDate}</h5>
                     <h5>Dokumento nr.: {this.state.document.number}</h5>
                     <h5>Dokumento tipas: {(this.state.document.type !=null) ? this.state.document.type.title : 'tipas nepriskirtas'}</h5>
                     <h5>Vartotojas: {this.state.user.map(el=>el.name + ' ' + el.surname)}</h5>
@@ -223,9 +250,9 @@ export class SingleDocument extends Component {
                     )} <br></br>
                     {this.state.userDocument.map(el=>(String (el.submitted)) === 'true' ? 'pateiktas' : 'nepateiktas' 
                     )} <br></br>
-                    {this.state.userDocument.map(el=>(String (el.confirmed)) === 'true' ? 'patvirtintas' : 'nepatvirtintas' 
+                    {this.state.userDocument.map(el=>(String (el.confirmed)) === 'true' ? 'patvirtintas' : '' 
                     )} <br></br>
-                    {this.state.userDocument.map(el=>(String (el.rejected)) === 'true' ? 'atmestas' : 'neatmestas' 
+                    {this.state.userDocument.map(el=>(String (el.rejected)) === 'true' ? 'atmestas' : '' 
                     )}  
                      </h5>
               </div>
@@ -246,11 +273,12 @@ export class SingleDocument extends Component {
                 <div className="custom-file" id="customFile" lang="es">
                 <input type="file" className="custom-file-input" name="selectedFile" id="exampleInputFile" aria-describedby="fileHelp" onChange={this.onChange} required/>
                 <label className="custom-file-label" htmlFor="file">{selected}</label>
-                </div>
-                <button className="btn btn-primary" type="submit">Pateikti</button>
+                </div><br></br>
+                <button className="btn btn-primary" type="submit">Pridėti failą</button>
               </form>
               </div> : <span></span> 
                     )} <br></br>
+                    <Button type="primary" onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button>
                 </div>
             </div>
       );

@@ -76,9 +76,9 @@ public class TypeController {
     @ApiOperation(value="Type data", notes="Deletes type by title")
     public void deleteType(
             @ApiParam(value="Type data", required=true)
-            @RequestBody final IncomingRequestBody requestBody)
+            @PathVariable final String title)
     {
-        typeService.deleteType(requestBody);
+        typeService.deleteType(title);
     }
 
 

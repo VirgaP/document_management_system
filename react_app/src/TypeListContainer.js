@@ -5,14 +5,33 @@ import { Redirect } from 'react-router-dom';
 import Type from './Type';
 
 export class TypeListContainer extends Component {
-      
-  render() {
-    console.log(this.props.types)
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      types: this.props.types,
+    }
 
+    console.log("props Types", this.props)
+  this.deleteType = this.deleteType.bind(this);
+}
+
+  deleteType(title) {
+   
+    this.setState(prevState=>{
+        const newItems = prevState.types.filter((type)=>type.title!==title);
+        return {
+            types: newItems
+        }
+    })
+  }
+
+  render() {
+  
     var rows = [];
-    this.props.types.forEach(function(type) {
-      rows.push(<Type type={type} />);   
-    });
+    this.state.types.map((type) => (
+      rows.push(<Type type={type} key={type.title} deleteType={this.deleteType}/>)  
+    ));
     
     return (
 

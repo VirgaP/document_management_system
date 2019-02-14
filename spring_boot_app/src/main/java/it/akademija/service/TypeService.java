@@ -1,6 +1,7 @@
 package it.akademija.service;
 
 import it.akademija.dto.TypeDTO;
+import it.akademija.entity.Document;
 import it.akademija.entity.Group;
 import it.akademija.entity.Type;
 import it.akademija.entity.TypeGroup;
@@ -83,8 +84,17 @@ public class TypeService {
     }
 
     @Transactional
-    public void deleteType(IncomingRequestBody request){//arba String title
-        Type type = typeRepository.findByTitle(request.getTitle());
+    public void deleteType(String title){//arba String title
+        Type type = typeRepository.findByTitle(title);
+
+//        StudentContact contact = em.find(StudentContact.class,38);
+//        Student student = contact.getStudent();
+//        student.setContact(null);
+//        contact.setStudent(null);
+//        em.merge(student);
+//        em.remove(em.merge(contact));
+
+
         typeRepository.delete(type);
     }
 

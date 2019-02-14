@@ -97,26 +97,6 @@ code {
   color: white;
 }
 
-.nav-pills.nav-pills-rose .nav-item .nav-link.active, .nav-pills.nav-pills-rose .nav-item .nav-link.active:focus, .nav-pills.nav-pills-rose .nav-item .nav-link.active:hover {
-  background-color: #e91e63;
-  box-shadow: 0 5px 20px 0 rgba(0,0,0,.2), 0 13px 24px -11px rgba(233,30,99,.6);
-  color: #fff;
-}
-
-.nav-pills .nav-item .nav-link {
-  line-height: 24px;
-  font-size: 12px;
-  font-weight: 500;
-  min-width: 100px;
-  color: #555;
-  transition: all .3s;
-  border-radius: 30px;
-  padding: 10px 15px;
-  text-align: center;
-  border-radius: 4px;
-}
-
-
 @media (min-width: 992px) {
   body {
     padding-top: 56px;

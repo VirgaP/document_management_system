@@ -37,56 +37,8 @@ export class UserDocument extends Component {
         });
     }
   
-    // SubmitItem(number) {
-    //     const payload = {
-    //         email: this.state.email
-    //     }
-    //     axios.patch(`http://localhost:8099/api/documents/${number}/submit`, payload)
-    //     .then(result => {
-    //         console.log(result);
-    //         const statusas = [] 
-    //         this.state.document.userDocuments.filter(el=>statusas.push(el.submitted))
-    //         console.log("statusas", statusas)
-    //         this.props.updateStatus(number);
-    //     const responseStatus = result.status
-    //     console.log(result)
-    //     if(responseStatus >= 200 && responseStatus < 300){ 
-    //     alert('dokumento busena atnaujinta') }
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     });   
-
-    // }
-
-    SubmitItem(number) {
-      const payload = {
-          email: this.state.email
-      }
-      axios.patch(`http://localhost:8099/api/documents/${number}/submit`, payload)
-      .then(response => {
-        console.log("Response", response);
-        const responseStatus = response.status
-       console.log(responseStatus)
-      if(responseStatus >= 200 && responseStatus < 300){ 
-        notification.success({
-          message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
-          description: 'Dokumentas pateiktas!'
-      });    
-       }
-    })
-    .catch(error => {
-      if(error.status >= 400 && error.status == 500) {
-          notification.error({
-              message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
-              description: 'Atsiprašome įvyko klaida, bandykite dar kartą!'
-          });  
-        }})
-
-  }
   render() {
-    //   const statusas =  this.state.document.userDocuments.filter(el=>console.log(el.submitted))
-    //   console.log("statusas", statusas)
+  
     const {document} = this.state
     return (
         <tr key={document.number}>
@@ -99,17 +51,7 @@ export class UserDocument extends Component {
             <Link to={`/dokumentas/${document.number}`}> Peržiūrėti </Link>
         </Button>
         </td>
-        {document.userDocuments.map(el=>(String (el.submitted)) === 'false'? 
-        <td>
-        {/* <Button type="primary" onClick={this.SubmitItem.bind(this)}>Pateikti</Button> */}
-        {/* <Button type="primary" onClick={() =>
-         this.SubmitItem(document.userDocuments.map(el=>(el.submitted)))}>Pateikti</Button> */}
-        <Button type="primary" onClick={() => this.SubmitItem(document.number)}>Pateikti</Button>
-        </td> : 
-        <td>
-        <Button type="primary disabled">Pateikti</Button>
-        </td>
-        )}
+       
         {document.userDocuments.map(el=>(String (el.submitted)) === 'true'? 
         <td>
         <Button type="danger disabled">Trinti</Button>
@@ -131,9 +73,6 @@ export class UserDocument extends Component {
       </tr>
       
       );
-
-      
-    
   }
 }
 

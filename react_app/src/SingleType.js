@@ -51,18 +51,6 @@ export class SingleType extends Component {
             console.log(error);
           });
       }
-  
-      DeleteItem = (event) => {
-          axios.delete(`http://localhost:8099/api/types/${this.state.title}`)
-          .then(result => {
-            const type = result.data
-          this.setState({type});
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-          this.props.history.push('/pagrindinis') //redirects Home after delete
-      }
 
       handleSelectChange(e) {  
         this.setState({ groupName: e.target.value });
@@ -163,9 +151,6 @@ export class SingleType extends Component {
               <button className="btn btn-primary" type="submit">Saugoti</button>           
             </form>
               </div>
-          
-                <Button type="danger" onClick={this.DeleteItem.bind(this)}>Trinti</Button>
-
               </div>
             </div>
 
