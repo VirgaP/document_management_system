@@ -21,7 +21,7 @@ public class DBFile {
     private String fileType;
 
 //    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id")
     @JsonBackReference
     private Document document;

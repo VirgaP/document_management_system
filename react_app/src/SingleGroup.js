@@ -30,8 +30,6 @@ export class SingleGroup extends Component {
           .catch(function (error) {
             console.log(error);
           });
-        
-        
       }
   
       DeleteItem = (event) => {
@@ -43,8 +41,7 @@ export class SingleGroup extends Component {
           .catch(function (error) {
             console.log(error);
           });
-          
-          this.props.history.push('/') //redirects Home after delete
+          this.props.history.push('/pagrindinis') 
       }
       
   

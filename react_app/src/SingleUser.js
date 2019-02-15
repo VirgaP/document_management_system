@@ -160,7 +160,7 @@ export class SingleUser extends Component {
                     <h5>El.paštas: {this.state.user.email}</h5>
                     <h5>Vartotojo rolė: {String(this.state.user.admin) === 'true' ? 'administratorius' : 'vartototojas'}</h5> 
                     {/* converts boolean to String */}
-                     {String(this.state.currentUser) === 'false'?
+                     {String(this.state.currentUser) === 'true'?
                     <div> 
                       <h5>Vartotojo grupės: </h5> 
                      
@@ -177,7 +177,7 @@ export class SingleUser extends Component {
                         <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
                     </div>
                      }
-                    {String(this.state.currentUser) === 'false'?//false nes spring negrazina teisingai
+                    {String(this.state.currentUser) === 'true'?
                       <AddGroup 
                       userGroups={this.state.userGroups}
                       onResultChange={this.handleResultChange}
@@ -191,7 +191,7 @@ export class SingleUser extends Component {
                       <div className="row user_document"><h5>Vartotojo dokumentai</h5>&nbsp;&nbsp;<button className="btn"><Link to={'/naujas-dokumentas'}>Kurti naują dokumentą</Link></button></div>
                       <UserDocumentListContainer email={this.state.id}/>
                     </div>
-                    {String(this.state.currentUser) === 'false'?
+                    {String(this.state.currentUser) === 'true'?
                  <Button type="danger" onClick={this.DeleteUser.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   
                  </div>

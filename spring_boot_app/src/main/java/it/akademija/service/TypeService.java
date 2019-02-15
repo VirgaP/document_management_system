@@ -84,16 +84,8 @@ public class TypeService {
     }
 
     @Transactional
-    public void deleteType(String title){//arba String title
+    public void deleteType(String title){
         Type type = typeRepository.findByTitle(title);
-
-//        StudentContact contact = em.find(StudentContact.class,38);
-//        Student student = contact.getStudent();
-//        student.setContact(null);
-//        contact.setStudent(null);
-//        em.merge(student);
-//        em.remove(em.merge(contact));
-
 
         typeRepository.delete(type);
     }
@@ -108,7 +100,7 @@ public class TypeService {
         typeGroup.setType(type);
 
         typeGroup.setReceive(request.isReceive());
-        typeGroup.setSend(request.isReceive());
+        typeGroup.setSend(request.isSend());
 
         typeGroupRepository.save(typeGroup);
     }

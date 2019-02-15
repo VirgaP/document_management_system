@@ -3,8 +3,6 @@ package it.akademija.service;
 import it.akademija.dto.UserDTO;
 import it.akademija.entity.Group;
 import it.akademija.entity.User;
-import it.akademija.entity.UserDocument;
-import it.akademija.entity.UserDocumentId;
 import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
@@ -93,9 +91,6 @@ public class UserService {
     @Transactional
     public void deleteUser(String email){
         User user = userRepository.findByEmail(email);
-
-
-
         userRepository.delete(user);
     }
 
@@ -113,12 +108,7 @@ public class UserService {
     public void removeGroupFromUser(String email, String groupName){
         User user = userRepository.findByEmail(email);
         Group group = groupRepository.findByname(groupName);
-//        Institution institution = institutionRepository.findByTitle(institutionTitle); //removing book (owning side) from many to many association
-//         bookRepository.findByInstitutionTitle(institutionTitle)
-//                .stream()
-//                .map(book -> book.getInstitutions().remove(institution));
 
-//        Book book = bookRepository.findByTitle(title);
         Set<Group> userGroups = user.getUserGroups();
 
         if (!userGroups.contains(group)) {

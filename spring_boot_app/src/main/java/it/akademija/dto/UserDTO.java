@@ -48,6 +48,13 @@ public class UserDTO {
     public UserDTO(String email, String toString) {
     }
 
+    public UserDTO(boolean admin, String email, String name, String surname) {
+        this.admin = admin;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+    }
+
     public String getName() {
         return name;
     }

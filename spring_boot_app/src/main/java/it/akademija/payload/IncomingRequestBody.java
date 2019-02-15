@@ -74,4 +74,6 @@ public final class IncomingRequestBody {
     public void setGroupUsers(Set<User> groupUsers) {
         this.groupUsers = groupUsers;
     }
+
+
 }

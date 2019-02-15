@@ -47,7 +47,10 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public UserDTO getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         UserDTO user = new UserDTO(
-                currentUser.getEmail()
+                currentUser.getAdmin(),
+                currentUser.getEmail(),
+                currentUser.getName(),
+                currentUser.getSurname()
         );
         return user;
     }
