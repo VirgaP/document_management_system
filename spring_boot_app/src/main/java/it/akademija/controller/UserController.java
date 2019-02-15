@@ -87,24 +87,24 @@ public class UserController {
         userService.deleteUser(email);
     }
 
-    @RequestMapping(path = "/{email}/addGroup", method = RequestMethod.POST)
+    @RequestMapping(path = "/{email}/{groupName}/add", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value="Add group to a user", notes="Adds group to selected user")
     public void addUserGroup(
             @PathVariable final String email,
-            @RequestBody final RequestUser requestUser){
-        userService.addGroupToUser(email,requestUser);
+            @PathVariable final String groupName
+    ){
+        userService.addGroupToUser(email,groupName);
     }
 
-    @RequestMapping(path = "/{email}/removeGroup", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{email}/{groupName}/remove", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value="Remove group", notes="Remove group form users groups list")
     public void removeTypeFromDocument(
             @PathVariable final String email,
-//            @RequestBody final String groupName
-            @RequestBody final RequestUser requestUser
+            @PathVariable final String groupName
     ){
-        userService.removeGroupFromUser(email, requestUser);
+        userService.removeGroupFromUser(email, groupName);
     }
 
 }

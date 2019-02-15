@@ -23,7 +23,6 @@ export class SingleUser extends Component {
            userGroups:[],
            groupsArray:[],
            email:''
-
         }
         console.log('PROPS', props)
         console.log("id", this.state.id);
@@ -48,15 +47,15 @@ export class SingleUser extends Component {
       }
 
        handleResultChange(value) {
-       var name = {value};
+        var name = value;
+        var newGroup = {name};
         var newArray = this.state.userGroups.slice();       
-        newArray.push(name);   
+        newArray.push(newGroup);   
         console.log("NEW ARRAY", newArray)
         this.setState({userGroups:[...newArray]})
       }
   
-      DeleteItem = (event) => {
-      
+      DeleteUser = (event) => {
           axios.delete(`http://localhost:8099/api/users/${this.state.id}`)
           .then(response => {
             console.log("Response", response);
@@ -81,23 +80,19 @@ export class SingleUser extends Component {
                   description: error.message || 'Atsiprašome įvyko klaida, bandykite dar kartą!'
               });                                            
           }
-      });
-          
-      }
+        });
+        }
 
       handleRemove(index) {
-       
-         const payload = {groupName: index}
-         var list = this.state.groups;
-        
-         let groupIdx = this.state.groups.findIndex((group) => group.group.name === index); //find array elem index by title/index
-         const newList = list.splice(groupIdx, 1); //delets element and returns updated list of groups
-         this.setState({ groups: newList }); 
- 
-         axios.delete(`http://localhost:8099/api/users/${this.state.id}/removeGroup`, {data: payload})
+        let userGroups = this.state.userGroups
+         let groupIdx = this.state.userGroups.findIndex((group) => group.name === index); //find array elem index by name/index
+        console.log("Index", groupIdx)
+          const newList = this.state.userGroups.splice(groupIdx, 1); //delets element and returns removed element
+         this.setState({ userGroups: [...userGroups] }); 
+
+         axios.delete(`http://localhost:8099/api/users/${this.state.id}/${index}/remove`)
              .then(res => {
                console.log(res)
-               
            })
            .catch(function (error) {
                console.log(error);
@@ -105,7 +100,6 @@ export class SingleUser extends Component {
        }
   
        handleZip = () => {
-  
         axios(`http://localhost:8099/api/files/archive/${this.state.id}`, {
           method: 'GET',
           responseType: 'arraybuffer' //Force to receive data in a Blob Format
@@ -172,7 +166,7 @@ export class SingleUser extends Component {
                      
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
                         <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}
-                        <button className="btn-default" 
+                  &nbsp;<button className="btn-default" 
                   onClick={this.handleRemove.bind(this, group.name)}
                   >x</button>
                         </li>))}</ul>}
@@ -185,6 +179,7 @@ export class SingleUser extends Component {
                      }
                     {String(this.state.currentUser) === 'false'?//false nes spring negrazina teisingai
                       <AddGroup 
+                      userGroups={this.state.userGroups}
                       onResultChange={this.handleResultChange}
                       id={this.state.id}/> 
                       : <span></span>
@@ -197,7 +192,7 @@ export class SingleUser extends Component {
                       <UserDocumentListContainer email={this.state.id}/>
                     </div>
                     {String(this.state.currentUser) === 'false'?
-                 <Button type="danger" onClick={this.DeleteItem.bind(this)}> Trinti vartototoją </Button>
+                 <Button type="danger" onClick={this.DeleteUser.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   
                  </div>
           </div>

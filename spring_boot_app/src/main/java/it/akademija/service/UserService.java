@@ -101,18 +101,18 @@ public class UserService {
 
 
     @Transactional
-    public void addGroupToUser(String email, RequestUser request){
+    public void addGroupToUser(String email, String groupName){
         User user = userRepository.findByEmail(email);
-        Group group = groupRepository.findByname(request.getGroupName());
+        Group group = groupRepository.findByname(groupName);
         user.addGroup(group);
         userRepository.save(user);
         group.addUser(user);
     }
 
     @Transactional
-    public void removeGroupFromUser(String email, RequestUser request){
+    public void removeGroupFromUser(String email, String groupName){
         User user = userRepository.findByEmail(email);
-        Group group = groupRepository.findByname(request.getGroupName());
+        Group group = groupRepository.findByname(groupName);
 //        Institution institution = institutionRepository.findByTitle(institutionTitle); //removing book (owning side) from many to many association
 //         bookRepository.findByInstitutionTitle(institutionTitle)
 //                .stream()
