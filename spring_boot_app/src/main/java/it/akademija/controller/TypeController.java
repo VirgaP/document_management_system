@@ -43,9 +43,9 @@ public class TypeController {
 
     @RequestMapping(path = "/{email}/userDocumentTypes", method = RequestMethod.GET)
     @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
-    public List<Type> getTypesByUser(@PathVariable final String email) {
+    public List<Type> getSenderTypesByUser(@PathVariable final String email) {
 
-        return typeService.getUserGroupTypes(email);
+        return typeService.getUserSenderGroupTypes(email);
     }
 
     @RequestMapping(path = "/{title}", method = RequestMethod.GET)
@@ -101,6 +101,16 @@ public class TypeController {
             @RequestBody final IncomingRequestBody requestBody){
 
         typeService.addUserGroup(title, requestBody);
+    }
+
+    @RequestMapping(path = "/{title}/{groupName}/remove", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value="Remove group", notes="Remove group form type groups list")
+    public void removeTypeFromDocument(
+            @PathVariable final String title,
+            @PathVariable final String groupName
+    ){
+        typeService.removeUserGroup(title, groupName);
     }
 
 }

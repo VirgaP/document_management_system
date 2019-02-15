@@ -10,7 +10,7 @@ export class EditType extends Component {
            typeTitle: this.props.match.params.title, //is index.js 
            title:'',
            type: {},
-           redirect: false,             
+           redirect: false,            
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -22,7 +22,7 @@ export class EditType extends Component {
       }
       renderRedirect = () => {
         if (this.state.redirect) {
-          return <Redirect to='/' />
+          return <Redirect to='/pagrindinis' />
         }
       }
       handleTitleChange = (title) => (event) => {
@@ -39,12 +39,14 @@ export class EditType extends Component {
         .then(result => {
           const type = result.data
         this.setState({type});
-        console.log("Type from edit", type)
+        console.log("Type from edit", result.data)
         })
         .catch(function (error) {
           console.log(error);
         });
     }
+    
+
     handleSubmit(e) {
         e.preventDefault();
        
@@ -63,12 +65,13 @@ export class EditType extends Component {
   render() {
     return (
         <div className="container">
-        <h2>Redaguoti dokumento tipą</h2>
+        <h3>Redaguoti dokumento tipą</h3>
         <form onSubmit={this.handleSubmit}>
         <div className="form-group has-error form-group has-success">
           <label className="control-label" for="inputError1">Dokumento tipo pavadinimas</label>
           <input type="text" onChange={this.handleTitleChange('title')} value={this.state.type.title} className="form-control" id="inputError1" required/>
         </div>
+       
         {this.renderRedirect()}
           <button className="btn btn-primary" type="submit">Išsaugoti</button>
         </form>          

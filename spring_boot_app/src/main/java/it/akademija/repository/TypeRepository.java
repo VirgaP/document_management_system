@@ -18,7 +18,7 @@ public interface TypeRepository extends JpaRepository<Type, Long> {
 //    @Query("select u from User u join Document d where TITLE(d.title) =:title")
 ////    List<Type> getUserGroupTypes(@Param("title") String title);
 
-    @Query(value="SELECT * FROM type t JOIN type_group tg ON (t.id = tg.type_id) JOIN users_groups ug ON (tg.group_id=ug.group_id) JOIN user u ON (ug.user_id = u.id) WHERE u.email=:email", nativeQuery = true)
+    @Query(value="SELECT * FROM type t JOIN type_group tg ON (t.id = tg.type_id) JOIN users_groups ug ON (tg.group_id=ug.group_id) JOIN user u ON (ug.user_id = u.id) WHERE u.email=:email AND send=true", nativeQuery = true)
     List<Type> getUserGroupTypes(@Param("email") String email);
 
 }

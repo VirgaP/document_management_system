@@ -98,6 +98,33 @@ export class SingleType extends Component {
           });
     }
 
+    handleRemove(index) {
+      let typeGroups = this.state.typeGroups
+       let groupIdx = this.state.typeGroups.findIndex((group) => group.name === index); //find array elem index by name/index
+      console.log("Index", groupIdx)
+        const newList = this.state.typeGroups.splice(groupIdx, 1); //delets element and returns removed element
+       this.setState({ typeGroups: [...typeGroups] }); 
+
+       axios.delete(`http://localhost:8099/api/types/${this.state.title}/${index}/remove`)
+          .then(response => {
+            console.log("Response", response);
+            const responseStatus = response.status
+          console.log(responseStatus)
+          if(responseStatus >= 200 && responseStatus < 300){ 
+            notification.success({
+              message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+              description: 'Dokumento tipo grupė sėkmingai pašalinta!'
+          });    
+          }
+        })
+         .catch(function (error) {
+             console.log(error);
+             notification.error({
+              message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+              description: error.message || 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+          }); 
+         }); 
+     }
     handleSubmit(e) {
         e.preventDefault();
       
@@ -160,6 +187,9 @@ export class SingleType extends Component {
                        (<li key={element.group.name}>{element.group.name} - 
                        {element.receive.toString() === 'true' ? 'Gavėjai' : 'negali gauti' } - 
                        {element.send.toString() === 'true' ? 'Siuntėjai' : 'negali siųsti' }
+                       &nbsp;<button className="btn-default" 
+                  onClick={this.handleRemove.bind(this, element.group.name)}
+                  >x</button>
                       </li>))}</ul>}
                     </div>
               </div>

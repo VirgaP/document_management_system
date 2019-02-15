@@ -24,7 +24,7 @@ export class Type extends Component {
         console.log(error)
             notification.error({
                 message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
-                description: 'Įrašo ištrinti negalima!'
+                description: 'Įrašo ištrinti negalima! Tipas priskirtas egzistuojančiam dokumentui.'
             });                    
     })
     }

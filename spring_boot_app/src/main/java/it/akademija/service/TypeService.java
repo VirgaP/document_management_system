@@ -1,10 +1,8 @@
 package it.akademija.service;
 
 import it.akademija.dto.TypeDTO;
-import it.akademija.entity.Document;
-import it.akademija.entity.Group;
-import it.akademija.entity.Type;
-import it.akademija.entity.TypeGroup;
+import it.akademija.entity.*;
+import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.IncomingRequestBody;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.TypeGroupRepository;
@@ -15,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,7 +47,7 @@ public class TypeService {
     }
 
     @Transactional
-    public List<Type> getUserGroupTypes(String email) {
+    public List<Type> getUserSenderGroupTypes(String email) {
         return typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
     }
 
@@ -103,5 +103,20 @@ public class TypeService {
         typeGroup.setSend(request.isSend());
 
         typeGroupRepository.save(typeGroup);
+    }
+
+    @Transactional
+    public void removeUserGroup(String title, String groupName){
+        Type type = typeRepository.findByTitle(title);
+        Group group = groupRepository.findByname(groupName);
+
+        TypeGroup typeGroup = new TypeGroup();
+        typeGroup.setGroup(group);
+        typeGroup.setType(type);
+
+        typeGroupRepository.delete(typeGroup);
+
+        type.getTypeGroups().remove(typeGroup);
+        group.getTypeGroups().remove(typeGroup);
     }
 }

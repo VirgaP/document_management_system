@@ -62,6 +62,9 @@ public class Type {
         this.typeGroups.add(typeGroup);
     }
 
-
+    public void removeGroup(Group group) {
+        this.typeGroups.remove(group);
+        group.getGroupUsers().remove(this);
+    }
 
 }
