@@ -52,6 +52,11 @@ public class TypeService {
     }
 
     @Transactional
+    public List<Type> getUserReceiverGroupTypes(String email) {
+        return typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
+    }
+
+    @Transactional
     public TypeDTO getTypeByTitle(String title){
         Type type = typeRepository.findByTitle(title);
         TypeDTO typeDTO = new TypeDTO(type.getTitle());

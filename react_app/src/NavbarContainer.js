@@ -58,6 +58,9 @@ import Nowhere from './Nowhere';
 import Footer from './Footer';
 import UserContext from './UserContext';
 import UserDocumentListContainer from './UserDocumentListContainer';
+import { AuthProvider } from './context/AuthContext';
+// import ReceivedUserDocuments from './ReceivedUserDocuments'
+
 const { Content } = Layout;
 
 class App extends Component {
@@ -148,7 +151,8 @@ class App extends Component {
           <Content className="app-content">
             <div className="container">
           
-              <Switch>      
+              <Switch>  
+              {/* <AuthProvider>     */}
               <Route exact path="/" 
                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
               <Route exact path='/pagrindinis'
@@ -172,7 +176,9 @@ class App extends Component {
                 <Route path="/vartotojai" component={UserListContainer}/>
                 {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
                 <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
+                {/* <Route path="/vartotojas/gauti" render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/> */}
                 <Route path="*" component={Nowhere}/>  
+                {/* </AuthProvider> */}
               </Switch>
               </div>
           </Content>

@@ -8,6 +8,7 @@ import AddGroup from './AddGroup';
 import UserDocumentListContainer from './UserDocumentListContainer'
 import {jszip} from 'jszip';
 import {Link} from 'react-router-dom';
+import ReceivedUserDocuments from './ReceivedUserDocuments'
 
 
 export class SingleUser extends Component {
@@ -162,6 +163,8 @@ export class SingleUser extends Component {
                     {/* converts boolean to String */}
                      {String(this.state.currentUser) === 'true'?
                     <div> 
+                      <h4>Gauti dokumentai</h4>
+                      <ReceivedUserDocuments email={this.state.id}/>
                       <h5>Vartotojo grupės: </h5> 
                      
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 

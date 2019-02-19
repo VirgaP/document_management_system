@@ -138,9 +138,15 @@ public class Document {
         this.userDocuments.add(user);
     }
 
-    public void addDbFile(DBFile file) {
-        this.dbFiles.add(file);
-        file.setDocument(this);
+//    public void addDbFile(DBFile file) {
+//        this.dbFiles.add(file);
+//        file.setDocument(this);
+//    }
+
+    public void addDbFile(DBFile f) {
+        this.dbFiles.add(f);
+        if(f.getDocument() != this)
+            f.setDocument(this);
     }
 
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

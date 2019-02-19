@@ -78,7 +78,8 @@ export class SingleDocument extends Component {
 
       handleSubmit(e){
         e.preventDefault();
-        this.fileUpload(this.state.file).then((response)=>{
+      
+      this.fileUpload(this.state.file).then((response)=>{
           console.log(response.data)
         })
       axios.post(`http://localhost:8099/api/documents/${this.state.number}/file`, {
@@ -114,9 +115,7 @@ export class SingleDocument extends Component {
 
       SubmitDocument(number) {
         var email = this.state.user.map(el=>el.email)
-        console.log("EMAIL", typeof email)
         email = email.toString();
-        console.log("EMAIL", typeof email, email)
         
         axios.patch(`http://localhost:8099/api/documents/${number}/${email}/submit`)
         .then(response => {

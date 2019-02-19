@@ -40,6 +40,12 @@ public class DocumentController {
         return documentService.getAllUserDocuments(email);
     }
 
+    @RequestMapping(path="/{email}/received", method = RequestMethod.GET)
+    @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
+    List<DocumentDTO> getAllUserReceivedDocuments( @PathVariable final String email) {
+        return documentService.getAllUserReceivedDocuments(email);
+    }
+
     @RequestMapping(path="/{uniqueNumber}/file", method = RequestMethod.POST)
     @ApiOperation(value = "Add file", notes = "Add additional attachements to created document")
     void addAdditionalFiles(

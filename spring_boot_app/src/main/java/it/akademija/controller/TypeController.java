@@ -48,6 +48,13 @@ public class TypeController {
         return typeService.getUserSenderGroupTypes(email);
     }
 
+    @RequestMapping(path = "/{email}/userReceivedDocumentTypes", method = RequestMethod.GET)
+    @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
+    public List<Type> getReceiverTypesByUser(@PathVariable final String email) {
+
+        return typeService.getUserReceiverGroupTypes(email);
+    }
+
     @RequestMapping(path = "/{title}", method = RequestMethod.GET)
     @ApiOperation(value="Get type ", notes="Returns type")
     public TypeDTO getType(@PathVariable final String title){

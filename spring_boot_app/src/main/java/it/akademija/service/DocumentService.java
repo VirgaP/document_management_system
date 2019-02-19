@@ -82,15 +82,19 @@ public class DocumentService {
         List<DBFile> files = document.getDbFiles();
 
         System.out.println("failas" + requestDocument.getFileName());
+        file.setDocument(document);
         document.addDbFile(file);
+        dbFileRepository.save(file);
 
         System.out.println("listas pries " +  files);
         ListIterator<DBFile> listIterator = files.listIterator();
         listIterator.add(file);
         System.out.println("listas po " + files) ;
 
-        file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
+
+        document.setDbFiles(files);
         documentRepository.save(document);
+
     }
 
 
@@ -141,6 +145,23 @@ public class DocumentService {
     @Transactional
     public List<DocumentDTO> getAllUserDocuments(String email){
         List<DocumentDTO> documents = documentRepository.findAllUserDocumentsl(email).stream()
+                .map(document -> new DocumentDTO(
+                        document.getTitle(),
+                        document.getUniqueNumber(),
+                        document.getDescription(),
+                        document.getCreatedDate(),
+                        document.getType(),
+                        document.getUserDocuments(),
+                        document.getDbFiles()
+                ))
+                .collect(Collectors.toList());
+
+        return documents;
+    }
+
+    @Transactional
+    public List<DocumentDTO> getAllUserReceivedDocuments(String email){
+        List<DocumentDTO> documents = documentRepository.findReceivedUserDocuments(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
                         document.getUniqueNumber(),
