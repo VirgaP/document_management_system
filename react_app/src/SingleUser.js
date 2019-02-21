@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, notification } from 'antd';
+import { Button, notification, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
@@ -9,6 +9,7 @@ import UserDocumentListContainer from './UserDocumentListContainer'
 import {jszip} from 'jszip';
 import {Link} from 'react-router-dom';
 import ReceivedUserDocuments from './ReceivedUserDocuments'
+import SingleUserComponent from './user/SingleUserComponent';
 
 
 export class SingleUser extends Component {
@@ -17,7 +18,7 @@ export class SingleUser extends Component {
         super(props)
           
         this.state = {
-           id: this.props.match.params.email, //is index.js 
+           id: this.props.match.params.email,
            user: {},
            currentUser:this.props.currentUser.admin,
            groups:[],
@@ -145,40 +146,27 @@ export class SingleUser extends Component {
     render() {
      console.log("params url: ", this.props.match.params.email)
       return (
-          <UserContext.Consumer>
-             {(context)=> (  
-              <React.Fragment>  
-          <div style={username}>You are now logged in as : {context}</div>
-  
-           <div className="container user_form" style={style}>
-           <div className="card h-100">
-              <div className="card-body">
-                    <h4 className="card-title">
-                    </h4>
+        
+        <div className="container single-user">
+                    <SingleUserComponent user={this.state.user}/>
                     {/* <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button> */}
-                    <h5>Vardas: {this.state.user.name}</h5>
-                    <h5>Pavardė: {this.state.user.surname}</h5>
-                    <h5>El.paštas: {this.state.user.email}</h5>
-                    <h5>Vartotojo rolė: {String(this.state.user.admin) === 'true' ? 'administratorius' : 'vartototojas'}</h5> 
-                    {/* converts boolean to String */}
-                     {String(this.state.currentUser) === 'true'?
-                    <div> 
-                      <h4>Gauti dokumentai</h4>
-                      <ReceivedUserDocuments email={this.state.id}/>
-                      <h5>Vartotojo grupės: </h5> 
-                     
+                
+              <div className="container user-groups"> 
+              <div className="row"> 
+                {String(this.state.currentUser) === 'true'?
+                
+                <div className="col-lg-6 col-md-6">
+                      <h5>Vartotojo grupės: </h5>                    
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
                         <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}
-                  &nbsp;<button className="btn-default" 
-                  onClick={this.handleRemove.bind(this, group.name)}
-                  >x</button>
+                  &nbsp;<Icon type="close-circle" onClick={this.handleRemove.bind(this, group.name)}/>
                         </li>))}</ul>}
-                    </div> : 
-                    <div>
+                </div> : 
+                <div className="container user-groups">
                       <h5>Jūsų grupės: </h5> 
                       {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
                         <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}</li>))}</ul>}
-                    </div>
+                </div>
                      }
                     {String(this.state.currentUser) === 'true'?
                       <AddGroup 
@@ -187,33 +175,25 @@ export class SingleUser extends Component {
                       id={this.state.id}/> 
                       : <span></span>
                         }
-                    </div>
-              </div>
+                  </div> 
+                </div>        
+                    
+              {/* <h4>Gauti dokumentai</h4>
+                      <ReceivedUserDocuments email={this.state.id}/> */}
               <div className="card-footer">
               <div>
-                      <div className="row user_document"><h5>Vartotojo dokumentai</h5>&nbsp;&nbsp;<button className="btn"><Link to={'/naujas-dokumentas'}>Kurti naują dokumentą</Link></button></div>
-                      <UserDocumentListContainer email={this.state.id}/>
+                      <div className="row user_document"><h5>Vartotojo dokumentai</h5>&nbsp;&nbsp;
+                      <button className="btn"><Link to={'/naujas-dokumentas'}>Kurti naują dokumentą</Link></button></div>
+                     
                     </div>
                     {String(this.state.currentUser) === 'true'?
                  <Button type="danger" onClick={this.DeleteUser.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   
                  </div>
           </div>
-              </React.Fragment> 
-                  )}
-              </UserContext.Consumer>
+              
       );
     }
 }
 
-const style = {
-    margin:'auto',
-    marginTop:'20px',
-    marginBottom:'10%',
-    width: '70%'
-  }
-  const username = {
-    border:'solid 1 px grey',
-    backgroundColor: 'yellow',
-}
 export default SingleUser

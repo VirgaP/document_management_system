@@ -86,7 +86,7 @@ public class DocumentController {
 
     }
 
-    @RequestMapping(path = "/{uniqueNumber}/{email}/submit", method = RequestMethod.PATCH)
+    @RequestMapping(path = "/{uniqueNumber}/{email}/submit", method = RequestMethod.PUT)
     @ApiOperation(value = "Submit document", notes = "Submit document, change status")
     @ResponseStatus(HttpStatus.OK)
     void submitDocument(
@@ -95,6 +95,28 @@ public class DocumentController {
             @PathVariable final String email)
     {
         documentService.submitDocument(uniqueNumber, email);
+    }
+
+    @RequestMapping(path = "/{uniqueNumber}/{email}/confirm", method = RequestMethod.PUT)
+    @ApiOperation(value = "Submit document", notes = "Submit document, change status")
+    @ResponseStatus(HttpStatus.OK)
+    void confirmDocument(
+            @ApiParam(value = "Document data", required = true)
+            @PathVariable final String uniqueNumber,
+            @PathVariable final String email)
+    {
+        documentService.confirmDocument(uniqueNumber, email);
+    }
+
+    @RequestMapping(path = "/{uniqueNumber}/{email}/reject", method = RequestMethod.PUT)
+    @ApiOperation(value = "Submit document", notes = "Submit document, change status")
+    @ResponseStatus(HttpStatus.OK)
+    void rejectDocument(
+            @ApiParam(value = "Document data", required = true)
+            @PathVariable final String uniqueNumber,
+            @PathVariable final String email)
+    {
+        documentService.rejectDocument(uniqueNumber, email);
     }
 
 }

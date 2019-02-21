@@ -207,7 +207,6 @@ public class DocumentService {
     public void submitDocument(String number, String email){
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
-        System.out.println("userid + " + user.getEmail());
 
         UserDocument userDocument = new UserDocument();
         userDocument.setUser(user);
@@ -220,11 +219,15 @@ public class DocumentService {
 
 
     @Transactional
-    public void confirmDocument(String number, RequestDocument request){
+    public void confirmDocument(String number, String email){
         Document document = documentRepository.findByuniqueNumber(number);
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(email);
 
         UserDocument userDocument = new UserDocument();
+        userDocument.setUser(user);
+        userDocument.setDocument(document);
+
+        userDocument.setSubmitted(true);
         userDocument.setConfirmed(true);
 
         userDocumentRepository.save(userDocument);
@@ -232,12 +235,17 @@ public class DocumentService {
     }
 
     @Transactional
-    public void rejectDocument(String number, RequestDocument request){
+    public void rejectDocument(String number, String email){
         Document document = documentRepository.findByuniqueNumber(number);
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(email);
 
         UserDocument userDocument = new UserDocument();
+
+        userDocument.setUser(user);
+        userDocument.setDocument(document);
+
         userDocument.setRejected(true);
+
 
         userDocumentRepository.save(userDocument);
 

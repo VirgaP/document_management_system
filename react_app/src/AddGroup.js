@@ -7,8 +7,7 @@ export class AddGroup extends Component {
         super(props);
         this.state = {
             groups: [],
-            name:'',
-           
+            name:'',      
             id:this.props.id,
           };
           console.log("URL",this.state.id)
@@ -80,11 +79,11 @@ export class AddGroup extends Component {
   render() {
     const options = this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)
     return (
-      <div>
+      <div className="col-lg-6 col-md-6 add-group">
 
-        <h4>Pridėti vartotojo grupę</h4>
+        <h5>Pridėti vartotojo grupę</h5>
             <form onSubmit={this.handleSubmit}>
-            <div>
+            <div >
             <label className="control-label">Pasirinkite vartotojo grupę</label>
                 <select value={this.state.name} key={this.state.name} onChange={this.handleSelectChange} 
                 className="form-control" id="ntype" required>

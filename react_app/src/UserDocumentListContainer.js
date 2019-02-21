@@ -11,7 +11,8 @@ export class UserDocumentListContainer extends Component {
   
     this.state = {
       documents:[],
-      email: this.props.email,
+      // email: this.props.email,
+      email: this.props.match.params.email,
       error:'',
       userDocuments: [],
     }
@@ -68,11 +69,12 @@ export class UserDocumentListContainer extends Component {
             ))
     return (
     <div className="container user_document_list">
+    <h4>Vartotojo dokumentai</h4>
     <table className="table table-striped">
         <thead>
-          <tr>
+          {/* <tr>
             <th>Pavadinimas</th><th>Aprašymas</th><th>Tipas</th><th>Sukūrimo data</th>
-          </tr>
+          </tr> */}
         </thead>
         <tbody>{rows}</tbody>
     </table>

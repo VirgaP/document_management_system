@@ -6,6 +6,8 @@ import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import AddGroup from './AddGroup';
 import {notification } from 'antd';
+import SingleDocumentComponent from './document/SingleDocumentComponent';
+import FileDownloadContainer from './FileDownloadContainer';
 
 
 export class SingleDocument extends Component {
@@ -53,9 +55,7 @@ export class SingleDocument extends Component {
             userDocument.push(element)
           }
         });
-        console.log(document.userDocument)
-        console.log("User", user)
-        console.log("Failai", userFiles)
+        
         this.setState({user});
         this.setState({userFiles})
         this.setState({userDocument})
@@ -117,7 +117,7 @@ export class SingleDocument extends Component {
         var email = this.state.user.map(el=>el.email)
         email = email.toString();
         
-        axios.patch(`http://localhost:8099/api/documents/${number}/${email}/submit`)
+        axios.put(`http://localhost:8099/api/documents/${number}/${email}/submit`)
         .then(response => {
           console.log("Response", response);
           const responseStatus = response.status
@@ -139,62 +139,6 @@ export class SingleDocument extends Component {
           }})
   
     }
-
-    handleDownlaod = (index, filename) => {
-    
-      axios(`http://localhost:8099/api/files/downloadFile/${index}`, {
-        method: 'GET',
-        responseType: 'blob' //Force to receive data in a Blob Format
-    })
-    .then(response => {
-      console.log("Response", response.data);
-      if(response.data.type === 'application/pdf'){
-        //Create a Blob from the PDF Stream
-        const file = new Blob(
-          [response.data], 
-          {type: 'application/pdf'},
-        );
-        //Build a URL from the file
-        const fileURL = URL.createObjectURL(file);
-        //download file      
-          let a = document.createElement('a');
-          a.href = fileURL;
-          a.download = filename;
-          a.click();
-      } if(response.data.type === 'image/png'){ //dowload png format
-        const file = new Blob(
-          [response.data], 
-          {type: 'image/png'} 
-        );
-        //Build a URL from the file
-        const fileURL = URL.createObjectURL(file);
-        //download file      
-          let a = document.createElement('a');
-          a.href = fileURL;
-          a.download = filename;
-          a.click();
-      }
-      if(response.data.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){ //dowload png format
-        const file = new Blob(
-          [response.data], 
-          {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'} 
-        );
-        //Build a URL from the file
-        const fileURL = URL.createObjectURL(file);
-        //download file      
-          let a = document.createElement('a');
-          a.href = fileURL;
-          a.download = filename;
-          a.click();
-      }
-          //alternatevly open the URL in new Window
-              // window.open(fileURL);
-          })
-          .catch(error => {
-              console.log(error);
-          });
-          
-      }
 
       onChange(e) {
         this.setState({file:e.target.files[0]})
@@ -227,72 +171,43 @@ export class SingleDocument extends Component {
 
     render() {
       const {fileName} = this.state
+      const user = this.state.user.map(el=>el.email);
+      const current = this.props.currentUser.email;
+      console.log("useriai ", user + current)
       let selected = null;
       selected = fileName 
       ? ( <span>Pasirinkta - {fileName}</span>) 
       : ( <span>Pasirinkite dokumentą...</span> );
 
       return (
-           <div className="container" style={style}>
-           <div className="card h-100">
-              <div className="card-body">
-                    <h4 className="card-title">{this.state.document.title}</h4>
-                    <h5>Sukūrimo data: {this.state.document.createdDate}</h5>
-                    <h5>Dokumento nr.: {this.state.document.number}</h5>
-                    <h5>Dokumento tipas: {(this.state.document.type !=null) ? this.state.document.type.title : 'tipas nepriskirtas'}</h5>
-                    <h5>Vartotojas: {this.state.user.map(el=>el.name + ' ' + el.surname)}</h5>
-                    <h5>Vartotojo el.paštas: {this.state.user.map(el=>el.email)}</h5>
-
-                    <h5>Dokumento būsena: 
-                      <br></br>
-                    {this.state.userDocument.map(el=>(String (el.saved)) === 'true' ? 'sukurtas' : 'neišsaugotas' 
-                    )} <br></br>
-                    {this.state.userDocument.map(el=>(String (el.submitted)) === 'true' ? 'pateiktas' : 'nepateiktas' 
-                    )} <br></br>
-                    {this.state.userDocument.map(el=>(String (el.confirmed)) === 'true' ? 'patvirtintas' : '' 
-                    )} <br></br>
-                    {this.state.userDocument.map(el=>(String (el.rejected)) === 'true' ? 'atmestas' : '' 
-                    )}  
-                     </h5>
-              </div>
-              </div>
-              <div className="card-footer">
-              <p>{this.state.document.description}</p>
-              <div>
-                  <h5>Pateikti dokumentai </h5> 
-                      {(this.state.userFiles.length === 0) ? <span>Pateiktų dokumentų nėra</span> : 
-                    <ul>{this.state.userFiles.map((file) => (<li key={file.id}>{file.fileName} 
-                      <button onClick={this.handleDownlaod.bind(this, file.id, file.fileName )}>Download</button></li>))}</ul>}
-              </div>
+           <div className="container single-document">
+           <SingleDocumentComponent document={this.state.document} userDocument={this.state.userDocument} user={this.state.user}/>
+           <FileDownloadContainer userFiles={this.state.userFiles}/>
               
-              {this.state.userDocument.map(el=>(String (el.submitted)) !== 'true' ? 
+            <div className="file-upload">
+              {this.state.userDocument.map(el=>(String (el.submitted)) !== 'true'  ? 
             <div>
               <h5>Pateikti papildomus dokumentus</h5>
-             <form onSubmit={this.handleSubmit}>
-                <div className="custom-file" id="customFile" lang="es">
+             <form classsName="form-row" onSubmit={this.handleSubmit}>
+                <div className="custom-file col-lg-10 col-md-10" id="customFile" lang="es">
                 <input type="file" className="custom-file-input" name="selectedFile" id="exampleInputFile" aria-describedby="fileHelp" onChange={this.onChange} required/>
                 <label className="custom-file-label" htmlFor="file">{selected}</label>
-                </div><br></br>
-                <button className="btn btn-primary" type="submit">Pridėti failą</button>
+                </div>
+                <button className="btn btn-primary col-lg-2 col-md-2" type="submit">Pridėti failą</button>
               </form>
               </div> : <span></span> 
                     )} <br></br>
-                    <Button type="primary" onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button>
+
                 </div>
-            </div>
+                {/* user !== current */}
+                {  this.state.userDocument.map(el=>(String (el.submitted)) === 'true') ?  <span></span> : //dokumenta pateikti gali tik jo sukurejas
+                    <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
+                }
+                <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
+
+                </div>
       );
     }
-}
-
-const style = {
-    margin:'auto',
-    marginTop:'20px',
-    marginBottom:'10%',
-    width: '70%'
-  }
-  const username = {
-    border:'solid 1 px grey',
-    backgroundColor: 'yellow',
 }
 
 export default SingleDocument

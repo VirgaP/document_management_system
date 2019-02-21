@@ -13,3 +13,9 @@ public interface UserDocumentRepository extends JpaRepository<UserDocument, User
    List<UserDocument> findByUserEmail(@Param("email") String email);
 
 }
+
+// retrun number of created documents by user
+//   SELECT COUNT (DOCUMENT_ID)
+//   FROM USER_DOCUMENT JOIN USER ON USER_DOCUMENT.USER_ID = USER.ID
+//        WHERE USER.EMAIL ='virga@email.com';
+//AND USER_DOCUMENT.SUBMITTED = true ; //number of submitted documents

@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom'
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
+import ReceivedUserDocuments from './ReceivedUserDocuments';
 
 export class HomePage extends Component {
     constructor(props) {
@@ -13,9 +14,9 @@ export class HomePage extends Component {
         this.state = {
           email:this.props.currentUser.email,
           user:{},
-          currentUser: ' '
+          currentUser: ' ',
         //   email: ''
-        //   currentUser: this.props.currentUser
+          // currentUser: this.props.currentUser
         }; 
         const user = props.currentUser;
           console.log("props", user) 
@@ -67,13 +68,18 @@ export class HomePage extends Component {
         </div>
             : <span></span>
             }
+            
         <div className="card">
-            <div className="card-body">Content</div> 
+            <div className="card-body">
+             
+            </div> 
             <div className="card-footer"> 
-            <Button size="large" type="primary" >
+            
                 {/* <Link to={'/vartotojo-paskyra'}>Vartotojo paskyra</Link> */}
-                <Link to={`/vartotojas/${this.props.currentUser.email}`}> Vartotojo paskyra </Link>           
-             </Button>
+                <Link to={`/vartotojas/${this.props.currentUser.email}`}> Vartotojo paskyra </Link> 
+                <Link to={`/gauti/vartotojas/${this.props.currentUser.email}`}>Gauti dokumentai</Link> 
+                <Link to={`/siusti/vartotojas/${this.props.currentUser.email}`}>Sukurti dokumentai</Link> 
+ 
         </div>
         </div>
       </div>

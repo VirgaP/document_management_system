@@ -3,6 +3,7 @@ import {Link } from "react-router-dom";
 import { Button } from 'antd';
 import axios from 'axios';
 import {notification } from 'antd';
+import UserDocumentComponent from './document/UserDocumentComponent';
 
 
 export class UserDocument extends Component {
@@ -11,9 +12,7 @@ export class UserDocument extends Component {
         super(props);
        
         this.state = {
-          email:'virga@email.com',
-          userDocumentStatus:[],
-          message:'',
+         
           document: props.current
         };
         console.log("dokas", this.state.document)
@@ -42,10 +41,7 @@ export class UserDocument extends Component {
     const {document} = this.state
     return (
         <tr key={document.number}>
-        <td>{document.title}</td>
-        <td>{document.description}</td>
-        <td>{(document.type !=null) ? document.type.title : 'tipas nepriskirtas'}</td>
-        <td>{document.createdDate}</td>
+        <UserDocumentComponent document={document}/>
         <td>
         <Button type="primary">
             <Link to={`/dokumentas/${document.number}`}> Peržiūrėti </Link>

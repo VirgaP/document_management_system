@@ -72,6 +72,7 @@ public class Document {
     @OneToMany(
             mappedBy = "primaryKey.document",
             cascade = CascadeType.MERGE,
+            fetch=FetchType.EAGER,
             orphanRemoval = true)
     public List<UserDocument> getUserDocuments() {
         return userDocuments;

@@ -59,6 +59,8 @@ import Footer from './Footer';
 import UserContext from './UserContext';
 import UserDocumentListContainer from './UserDocumentListContainer';
 import { AuthProvider } from './context/AuthContext';
+import SingleReceivedDocument from './SingleReceivedDocument';
+import ReceivedUserDocuments from './ReceivedUserDocuments';
 // import ReceivedUserDocuments from './ReceivedUserDocuments'
 
 const { Content } = Layout;
@@ -161,14 +163,17 @@ class App extends Component {
                 <Route path='/dokumentai' component={DocumentList}/>
                 {/* <Route path="/naujas-dokumentas" component={Form}/> */}
                 <Route path="/naujas-dokumentas" render={(props) => <Form currentUser={this.state.currentUser} {...props} />}/>
-                <Route path="/dokumentas/:number" render={(props) => <SingleDocument {...props} />}/> 
+                <Route path="/dokumentas/:number" render={(props) => <SingleDocument currentUser={this.state.currentUser} {...props} />}/> 
+                <Route path="/gautas/dokumentas/:number" render={(props) => <SingleReceivedDocument currentUser={this.state.currentUser} {...props} />}/> 
                 <Route path="/redaguoti/dokumentas/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>
                 <Route path="/mano-dokumentai" render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
                 <Route path="/naujas-tipas" component={TypeForm}/>
                 <Route path="/tipas/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path='/adminpage' component={AdminPage}/>
-                <Route path='/vartotojo-paskyra' component={UserHomePage}/>
+                <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
+                <Route path='/gauti/vartotojas/:email/' render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/>
+                <Route path='/siusti/vartotojas/:email/' render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
                 <Route path="/naujas-vartotojas" component={Registration}/>
                 <Route path="/nauja-grupe" component={UserGroupFormContainer}/>
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
