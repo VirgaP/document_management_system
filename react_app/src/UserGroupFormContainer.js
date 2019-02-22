@@ -3,6 +3,8 @@ import SingleInput from './components/singleInput';
 import axios from 'axios';
 import {notification } from 'antd';
 import 'antd/dist/antd.css';
+import UserDocumentListContainer from './UserDocumentListContainer';
+import GroupListContainer from './GroupListContainer';
 
 class UserGroupFormContainer extends Component {  
   constructor(props) {
@@ -66,8 +68,9 @@ class UserGroupFormContainer extends Component {
 
   render() {
     return (
-      <div className="container user_form">
-       <form className="container  type_form" onSubmit={this.handleFormSubmit}>
+      
+      <div className="container new-form">
+       <form className="container" id="type_form" onSubmit={this.handleFormSubmit}>
         <h5>Sukurti vartotojų grupę </h5>
         <SingleInput 
         inputType={'text'}
@@ -87,6 +90,7 @@ class UserGroupFormContainer extends Component {
           onClick={this.handleClearForm}>Išvalyti formą</button>
       </form>
       </div>
+    
     );
     }
 }

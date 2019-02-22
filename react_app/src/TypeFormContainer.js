@@ -76,8 +76,8 @@ class TypeFormContainer extends Component {
 
   render() {
     return (
-      <div className="container user_form">
-      <form className="type_form" onSubmit={this.handleFormSubmit}>
+      <div className="container new-form">
+      <form className="container" id="type_form" onSubmit={this.handleFormSubmit}>
         <h5>Sukurti dokumento tipą </h5>
         <SingleInput 
         inputType={'text'}

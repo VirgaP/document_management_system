@@ -15,11 +15,13 @@ export class UserDocumentListContainer extends Component {
       email: this.props.match.params.email,
       error:'',
       userDocuments: [],
+      filter:''
     }
     console.log("PROPS", this.props)
 
   this.fetchData = this.fetchData.bind(this);
   this.deleteItem = this.deleteItem.bind(this);
+  this.changeView = this.changeView.bind(this);
   console.log("Userio dokai", this.state.documents)
 }
 
@@ -48,10 +50,21 @@ export class UserDocumentListContainer extends Component {
           }
       })
     }
+
+    changeView(e) {
+      console.log(e)
+      this.setState({
+        filter: e.target.value,
+    });
+    Object.keys(this.state.documents).map(el=>el.userDocuments)
+      .filter(key => this.state.documents.userDocuments[key].this.state.filter == true)
+      
+  }
       
   render() {
-  
+   
     const { documents, error } = this.state;
+
     console.log("dokumentai", documents)
         if (error) {
             return (
@@ -63,13 +76,27 @@ export class UserDocumentListContainer extends Component {
     
     var rows = [];
   
+
+    // {Object.keys(this.state.dataGoal)
+    //   .filter(key => key.main == true)
+    //   .map( (key, index) => {
+    //     return <div key={key}>
+    //              <h1>{this.state.dataGoal[key].name}</h1>
+    //              <p>{this.state.dataGoal[key].main}</p>
+    //            </div>
+    //   })}
+
     documents.map((document) => (                                        
           rows.push(<UserDocument current={document} key={document.number} 
             deleteItem={this.deleteItem} />)                    
             ))
+    
     return (
+      
     <div className="container user_document_list">
+   
     <h4>Vartotojo dokumentai</h4>
+    <button btn btn-default onClick={this.changeView} value='confirmed'>Patvirtinti</button>
     <table className="table table-striped">
         <thead>
           {/* <tr>

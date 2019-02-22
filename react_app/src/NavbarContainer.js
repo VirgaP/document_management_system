@@ -34,7 +34,7 @@ import Login from './security/Login';
 // import Signup from '../user/signup/Signup';
 // import NotFound from '../common/NotFound';
 import TypeForm from './TypeFormContainer';
-import DocumentList from './DocumentListContainer';
+import DocumentList, { DocumentListContainer } from './DocumentListContainer';
 import LoadingIndicator from './layout/LoadingIndicator'
 import PrivateRoute from './security/PrivateRoute';
 import UserGroupFormContainer from './UserGroupFormContainer';
@@ -45,7 +45,6 @@ import Registration from './Registration';
 import HomePage from './HomePage';
 import SingleGroup from './SingleGroup';
 import Navbar from './Navbar'
-import AdminPage from './AdminPage';
 import EditGroup from './EditGroup';
 import SingleType from './SingleType';
 import EditType from './EditType';
@@ -61,6 +60,8 @@ import UserDocumentListContainer from './UserDocumentListContainer';
 import { AuthProvider } from './context/AuthContext';
 import SingleReceivedDocument from './SingleReceivedDocument';
 import ReceivedUserDocuments from './ReceivedUserDocuments';
+import GroupListContainer from './GroupListContainer';
+import TypeListContainer from './TypeListContainer';
 // import ReceivedUserDocuments from './ReceivedUserDocuments'
 
 const { Content } = Layout;
@@ -168,14 +169,16 @@ class App extends Component {
                 <Route path="/redaguoti/dokumentas/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>
                 <Route path="/mano-dokumentai" render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
                 <Route path="/naujas-tipas" component={TypeForm}/>
+                <Route path='/visi-tipai' component={TypeListContainer}/>
                 <Route path="/tipas/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
-                <Route path='/adminpage' component={AdminPage}/>
                 <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
                 <Route path='/gauti/vartotojas/:email/' render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/>
                 <Route path='/siusti/vartotojas/:email/' render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
+                <Route path='/visi-dokumentai' component={DocumentListContainer}/>
                 <Route path="/naujas-vartotojas" component={Registration}/>
                 <Route path="/nauja-grupe" component={UserGroupFormContainer}/>
+                <Route path='/visos-grupes' component={GroupListContainer}/>
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
                 <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
                 <Route path="/vartotojai" component={UserListContainer}/>

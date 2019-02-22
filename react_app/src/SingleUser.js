@@ -18,7 +18,7 @@ export class SingleUser extends Component {
         super(props)
           
         this.state = {
-           id: this.props.match.params.email,
+           id: this.props.match.params.email, 
            user: {},
            currentUser:this.props.currentUser.admin,
            groups:[],
@@ -144,12 +144,11 @@ export class SingleUser extends Component {
           }
         }
     render() {
-     console.log("params url: ", this.props.match.params.email)
       return (
         
         <div className="container single-user">
-                    <SingleUserComponent user={this.state.user}/>
-                    {/* <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button> */}
+              <SingleUserComponent user={this.state.user}/>
+                {/* <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button> */}
                 
               <div className="container user-groups"> 
               <div className="row"> 
@@ -181,11 +180,7 @@ export class SingleUser extends Component {
               {/* <h4>Gauti dokumentai</h4>
                       <ReceivedUserDocuments email={this.state.id}/> */}
               <div className="card-footer">
-              <div>
-                      <div className="row user_document"><h5>Vartotojo dokumentai</h5>&nbsp;&nbsp;
-                      <button className="btn"><Link to={'/naujas-dokumentas'}>Kurti naują dokumentą</Link></button></div>
-                     
-                    </div>
+              
                     {String(this.state.currentUser) === 'true'?
                  <Button type="danger" onClick={this.DeleteUser.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   

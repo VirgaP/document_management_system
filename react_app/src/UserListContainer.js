@@ -30,12 +30,7 @@ export class UserListContainer extends Component {
   }
     return (
       <div>
-          {/* {books.map(book =>
-          <li key={book.title}>
-            <a href={book.author}>{book.pageCount}</a>
-          </li>
-        )} */}
-        <div className="container">
+        <div className="container item-list">
         <h4>Registruoti vartotojai</h4>
         <table className="table">
         <thead>

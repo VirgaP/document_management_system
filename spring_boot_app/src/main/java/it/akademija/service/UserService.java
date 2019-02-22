@@ -37,6 +37,7 @@ public class UserService {
 
     @Transactional
     public List<UserDTO> getUserWithoutDocuments() {
+        LOG.info("Finding all users");
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserDTO(
@@ -60,6 +61,7 @@ public class UserService {
 
     @Transactional
     public UserDTO getUser(String email){
+        LOG.info("Finding one user");
         User user = userRepository.findByEmail(email);
         UserDTO userDTO = new UserDTO(
                 user.getName(),
@@ -69,6 +71,7 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
+        LOG.info("Found {} user", user.getEmail());
         return userDTO;
     }
 

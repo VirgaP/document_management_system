@@ -4,18 +4,27 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.UserDTO;
+import it.akademija.entity.User;
 import it.akademija.payload.RequestUser;
 import it.akademija.payload.UserIdentityAvailability;
 import it.akademija.repository.UserRepository;
 import it.akademija.security.CurrentUser;
 import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
+import it.akademija.util.WriteDataToCSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Api(value="user")
@@ -108,6 +117,29 @@ public class UserController {
             @PathVariable final String groupName
     ){
         userService.removeGroupFromUser(email, groupName);
+    }
+
+
+    @GetMapping("/download/csv")
+    public void downloadCSV(HttpServletResponse response) throws IOException{
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=user.csv");
+
+        List<User> users = (List<User>) userRepository.findAll();
+        WriteDataToCSV.writeObjectToCSV(response.getWriter(), users);
+    }
+
+
+    @GetMapping("/{email}/download/csv")
+    public void downloadUserCSV(HttpServletResponse response, @PathVariable final String email) throws IOException{
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=vartotojas.csv");
+
+//        Type type = typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
+        User user = userRepository.findByEmail(email);
+        String.valueOf(user);
+
+        WriteDataToCSV.writeUserByEmailToCSV(response.getWriter(), user);
     }
 
 }

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button } from 'antd';
+import { Button, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom'
-import UserProvider from './UserProvider';
-import UserContext from './UserContext';
 import ReceivedUserDocuments from './ReceivedUserDocuments';
+import SingleUser from './SingleUser';
 
 export class HomePage extends Component {
     constructor(props) {
@@ -15,23 +14,14 @@ export class HomePage extends Component {
           email:this.props.currentUser.email,
           user:{},
           currentUser: ' ',
-        //   email: ''
-          // currentUser: this.props.currentUser
+        
         }; 
         const user = props.currentUser;
           console.log("props", user) 
-        //   console.log(Object.entries(props.currentUser))
     }
           
-      componentDidMount = () => {
-        // const {email} = this.props.currentUser
-        // this.setState({
-        //  username: email
-        // })
-        
-     
+      componentDidMount = () => {   
          axios.get(`http://localhost:8099/api/users/${this.state.email}`)
-        //  axios.get(`http://localhost:8099/api/users/${this.state.email}`)
           .then(result => {
           const user = result.data
           this.setState({user});
@@ -41,6 +31,36 @@ export class HomePage extends Component {
             console.log(error);
           });
       }
+      handleDownlaod = (index, filename) => {
+    
+        axios(`http://localhost:8099/api/users/${this.state.email}/download/csv`, {
+          method: 'GET',
+          responseType: 'blob' //Force to receive data in a Blob Format
+      })
+      .then(response => {
+        console.log("Response", response.data);
+        if(response.data.type === 'text/csv'){
+          //Create a Blob from the PDF Stream
+          const file = new Blob(
+            [response.data], 
+            {type: 'text/csv'},
+          );
+          //Build a URL from the file
+          const fileURL = URL.createObjectURL(file);
+          //download file      
+            let a = document.createElement('a');
+            a.href = fileURL;
+            a.download = filename;
+            a.click();
+        } 
+            //alternatevly open the URL in new Window
+                // window.open(fileURL);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+            
+        }
       
   render() {
     // const {
@@ -51,49 +71,25 @@ export class HomePage extends Component {
 
     //   console.log("Email", email)
     return (
-        <UserContext.Provider 
-        // value={this.props.currentUser.email}
-        >
-            <React.Fragment>  
-        <div className="container-fluid profile_page">
-        <div className="row ">
-        {String(this.state.user.admin) === 'true' ?
-        <div className="card">
-            <div className="card-body">Content</div> 
-            <div className="card-footer"> 
-            <Button size="large" type="primary" >
-                <Link to={'/adminpage'}>Administratoriaus paskyra</Link>
-            </Button>
-            </div>
-        </div>
-            : <span></span>
-            }
-            
-        <div className="card">
-            <div className="card-body">
-             
-            </div> 
-            <div className="card-footer"> 
-            
-                {/* <Link to={'/vartotojo-paskyra'}>Vartotojo paskyra</Link> */}
-                <Link to={`/vartotojas/${this.props.currentUser.email}`}> Vartotojo paskyra </Link> 
-                <Link to={`/gauti/vartotojas/${this.props.currentUser.email}`}>Gauti dokumentai</Link> 
-                <Link to={`/siusti/vartotojas/${this.props.currentUser.email}`}>Sukurti dokumentai</Link> 
- 
-        </div>
-        </div>
+      
+      <div className="container homepage">
+        <p>Packed out reflective so dear proud fanciful grasshopper sheep more when a wombat jeepers ouch thanks into as ritually after shrank according exquisitely hedgehog redid thanks wove that impious due one much and below. <br></br> Desolately hamster much bawdy superb where adequate this yet misheard more.
+        Cockily bird whimpered less hey in flew this some truculently notwithstanding a mature lizard stuck dog monumentally ambiguous left that iguana outbid much toward genially improper.
+        </p>
+        <div className="container homepage-link-list">
+          <div className="row">
+          <span id="hp1"><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon type="idcard" /> Vartotojo paskyra</Link></span>
+          <span id="hp2"> <Link to={'/naujas-dokumentas'}><Icon type="file-add" /> Kurti naują dokumentą</Link></span>
+          <span id="hp3"><Link to={`/siusti/vartotojas/${this.props.currentUser.email}`}><Icon type="folder" /> Sukurti dokumentai</Link></span>
+          <span id="hp4"><Link to={`/gauti/vartotojas/${this.props.currentUser.email}`}><Icon type="inbox" /> Gauti dokumentai</Link> </span>
+          <button className="btn btn-default" onClick={this.handleDownlaod.bind(this)}>Gauti csv</button>
+          </div>   
+        </div>       
       </div>
-      </div>
-        </React.Fragment> 
-               
-        </UserContext.Provider>
-        // </UserProvider>
+       
     )
   }
 }
-const username = {
-    border:'solid 1 px grey',
-    backgroundColor: 'yellow',
-}
+
 
 export default HomePage

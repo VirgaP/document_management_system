@@ -161,8 +161,8 @@ isFormInvalid() {
     const options = this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)
     return (
     <div className="container signup-container">
-      <h2>Kurti naują vartotoją</h2>
-      <Form className="signup-form" onSubmit={this.handleFormSubmit}>
+      <h4>Kurti naują vartotoją</h4>
+      <Form id="signup-form" onSubmit={this.handleFormSubmit}>
      
         <FormItem 
                       validateStatus={this.state.name.validateStatus}
