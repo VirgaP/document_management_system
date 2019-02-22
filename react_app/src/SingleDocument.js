@@ -113,7 +113,7 @@ export class SingleDocument extends Component {
        
       }
 
-      SubmitDocument(number) {
+    SubmitDocument(number) {
         var email = this.state.user.map(el=>el.email)
         email = email.toString();
         
@@ -128,7 +128,7 @@ export class SingleDocument extends Component {
             description: 'Dokumentas pateiktas!'
         }); 
         this.props.history.push(`/vartotojas/${email}`)   
-         }
+        }
       })
       .catch(error => {
         if(error.status >= 400 && error.status == 500) {
@@ -137,7 +137,6 @@ export class SingleDocument extends Component {
                 description: 'Atsiprašome įvyko klaida, bandykite dar kartą!'
             });  
           }})
-  
     }
 
       onChange(e) {

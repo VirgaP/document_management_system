@@ -126,16 +126,27 @@ public class UserController {
         response.setHeader("Content-Disposition", "attachment; file=user.csv");
 
         List<User> users = (List<User>) userRepository.findAll();
-        WriteDataToCSV.writeObjectToCSV(response.getWriter(), users);
+        WriteDataToCSV.writeUsersToCSV(response.getWriter(), users);
     }
 
 
-    @GetMapping("/{email}/download/csv")
+    @GetMapping("/{email}/download/documentsCsv")
+    public void downloadUserDocumentsCSV(HttpServletResponse response, @PathVariable final String email) throws IOException{
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=vartotojas.csv");
+
+        User user = userRepository.findByEmail(email);
+        String.valueOf(user);
+
+        WriteDataToCSV.writeUserDocumentsToCSV(response.getWriter(), user);
+    }
+
+
+    @GetMapping("/{email}/download/userCsv")
     public void downloadUserCSV(HttpServletResponse response, @PathVariable final String email) throws IOException{
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; file=vartotojas.csv");
 
-//        Type type = typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
         User user = userRepository.findByEmail(email);
         String.valueOf(user);
 

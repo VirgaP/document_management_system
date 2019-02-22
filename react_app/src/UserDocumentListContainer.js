@@ -99,11 +99,11 @@ export class UserDocumentListContainer extends Component {
     <button btn btn-default onClick={this.changeView} value='confirmed'>Patvirtinti</button>
     <table className="table table-striped">
         <thead>
-          {/* <tr>
-            <th>Pavadinimas</th><th>Aprašymas</th><th>Tipas</th><th>Sukūrimo data</th>
-          </tr> */}
+          
         </thead>
-        <tbody>{rows}</tbody>
+        {documents.length === 0 ? 
+            <tbody>Jūs dar nesukūrėte dokumentų</tbody>:
+            <tbody>{rows}</tbody>}
     </table>
     
     </div> )

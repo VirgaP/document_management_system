@@ -25,14 +25,11 @@ import {
   Switch
 } from 'react-router-dom';
 
-import { getCurrentUser } from './security/apiUtil';
+import { getCurrentUser, getReceivedDocuments } from './security/apiUtil';
 import { ACCESS_TOKEN } from './index';
 import './index.css';
-// import PollList from '../poll/PollList';
-// import NewPoll from '../poll/NewPoll';
+import axios from 'axios';
 import Login from './security/Login';
-// import Signup from '../user/signup/Signup';
-// import NotFound from '../common/NotFound';
 import TypeForm from './TypeFormContainer';
 import DocumentList, { DocumentListContainer } from './DocumentListContainer';
 import LoadingIndicator from './layout/LoadingIndicator'
@@ -72,7 +69,7 @@ class App extends Component {
     this.state = {
       currentUser: null,
       isAuthenticated: false,
-      isLoading: false
+      isLoading: false,
     }
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -95,7 +92,8 @@ class App extends Component {
       this.setState({
         currentUser: response,
         isAuthenticated: true,
-        isLoading: false
+        isLoading: false,
+        email: response.email
       });
     }).catch(error => {
         console.log("Error in getuser", error)
@@ -105,10 +103,12 @@ class App extends Component {
     });
   }
 
+  
   componentDidMount() {
     this.loadCurrentUser();
-  }
 
+  }
+  
   // Handle Logout, Set currentUser and isAuthenticated state which will be passed to other components
   handleLogout(redirectTo="/", notificationType="success", description="Atsijungimas sėkmingas.") {
     localStorage.removeItem(ACCESS_TOKEN);
@@ -145,7 +145,7 @@ class App extends Component {
       return <LoadingIndicator />
     }
     return (
-        <Layout className="app-container">
+        <Layout className="app-container" id="app-container">
             {(this.state.isAuthenticated) ?
         <Navbar isAuthenticated={this.state.isAuthenticated} 
             currentUser={this.state.currentUser} 

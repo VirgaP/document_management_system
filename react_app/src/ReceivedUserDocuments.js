@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import ReceivedDocument from './ReceivedDocument';
-import { Button, notification } from 'antd';
+import { Button, notification, Icon } from 'antd';
+import {Link} from 'react-router-dom'
+import LoadingIndicator from './layout/LoadingIndicator';
 
 
 class ReceivedUserDocuments extends React.Component {
@@ -11,44 +13,45 @@ class ReceivedUserDocuments extends React.Component {
       
         this.state = {
           documentsReceived:[],
-          // email: this.props.email,
           email: this.props.match.params.email,
-          // email:this.props.currentUser.email,
-          error: ''
+          error: '',
+          count: '',
+          isLoading: false,
         }
-    
-        console.log("EMAIL" ,this.state.email)
-        console.log("PROPS", this.props.email)
+        console.log("from Link ", this.props.location.state)
       this.fetchData = this.fetchData.bind(this);
-    
-      console.log("Userio dokai", this.state.documentTypes)
     }
     
       fetchData() {
+        this.setState({
+          isLoading: true
+        });
         axios.get(`http://localhost:8099/api/documents/${this.state.email}/received`)
         .then(result => {
        
-        //  var documentsReceived = [];
-        //  gauti.forEach(element => {
-        //     documentsReceived.push(element.title);
-        //  });
         const documentsReceived = result.data;
-        console.log("GAUTI ", result.data)
          this.setState({ 
-            documentsReceived
+            documentsReceived,
+            isLoading: false,
          })
+         this.setState({count:documentsReceived.length})
+         const count = documentsReceived.length
+         this.setState({
+           count:count
+         })
+         console.log("COUNT", this.state.count)
          console.log("Gauti dokumentai", documentsReceived)
-     
-       })
-       .catch(error => {
-        this.setState({
-            error: 'Error while fetching data.'
+        })
+        .catch(error => {
+          this.setState({
+              error: 'Error while fetching data.',
+              isLoading: false
+          });
         });
-    });
-    }
+      }
 
     componentWillMount() {
-          this.fetchData();
+        this.fetchData();
     }
 
     deleteItem(number) {
@@ -71,6 +74,9 @@ class ReceivedUserDocuments extends React.Component {
             );
         }
     
+        if(this.state.isLoading) {
+          return <LoadingIndicator />
+        }
         var rows = [];
   
         documentsReceived.map((document) => (                                        
@@ -79,15 +85,17 @@ class ReceivedUserDocuments extends React.Component {
                 ))
         return (
         <div className="container user_document_list">
+        <h3>Gauti dokumentai</h3>
+        {this.state.isLoading ? <LoadingIndicator /> : 
         <table className="table table-striped">
             <thead>
-              <tr>
-                <h3>Gauti dokumentai</h3>
-              </tr>
+             
             </thead>
-            <tbody>{rows}</tbody>
+            {documentsReceived.length === 0 ? 
+            <tbody>Nėra gautų dokumentų.</tbody>:
+            <tbody>{rows}</tbody>}
         </table>
-        
+        }
         </div> )
       }
   }
