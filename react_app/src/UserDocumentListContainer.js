@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import DocumentListContainer from './DocumentListContainer';
+import LoadingIndicator from './layout/LoadingIndicator';
 import UserDocument from './UserDocument';
 
 
@@ -15,30 +16,40 @@ export class UserDocumentListContainer extends Component {
       email: this.props.match.params.email,
       error:'',
       userDocuments: [],
-      filter:''
+      filter:'',
+      isLoading: false,
+      confirmed:''
     }
-    console.log("PROPS", this.props)
-
   this.fetchData = this.fetchData.bind(this);
   this.deleteItem = this.deleteItem.bind(this);
   this.changeView = this.changeView.bind(this);
-  console.log("Userio dokai", this.state.documents)
 }
 
+setconfirmed(value) {
+  this.setState({ confirmed: value });
+}
   fetchData() {
+    this.setState({
+      isLoading: true
+    });
       axios.get(`http://localhost:8099/api/documents/${this.state.email}/documents`)
           .then(response => {
+            console.log(response)
               this.setState({
-                  documents: response.data
+                  documents: response.data,
+                  isLoading: false,
               }); 
           })
           .catch(error => {
               this.setState({
-                  error: 'Error while fetching data.'
+                  error: 'Error while fetching data.',
+                  isLoading: false
+
               });
           });
       }
-    componentWillMount() {
+
+  componentWillMount() {
       this.fetchData();
   }
   
@@ -60,6 +71,8 @@ export class UserDocumentListContainer extends Component {
       .filter(key => this.state.documents.userDocuments[key].this.state.filter == true)
       
   }
+
+  
       
   render() {
    
@@ -88,25 +101,29 @@ export class UserDocumentListContainer extends Component {
 
     documents.map((document) => (                                        
           rows.push(<UserDocument current={document} key={document.number} 
-            deleteItem={this.deleteItem} />)                    
+            deleteItem={this.deleteItem} getConfirmedStatus={ color => this.setConfirmed(color)} />)                    
             ))
+
     
     return (
       
     <div className="container user_document_list">
-   
-    <h4>Vartotojo dokumentai</h4>
     <button btn btn-default onClick={this.changeView} value='confirmed'>Patvirtinti</button>
+    <h4>Vartotojo dokumentai</h4>
+    {this.state.isLoading ? <LoadingIndicator/> :
     <table className="table table-striped">
         <thead>
-          
+         {/* add tabs  */}
         </thead>
         {documents.length === 0 ? 
             <tbody>Jūs dar nesukūrėte dokumentų</tbody>:
             <tbody>{rows}</tbody>}
     </table>
-    
-    </div> )
+    }
+    </div> 
+   
+        
+    )
   }
 }
 

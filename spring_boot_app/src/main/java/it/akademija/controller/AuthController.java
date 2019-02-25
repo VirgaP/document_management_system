@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
@@ -97,10 +98,24 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+//                Role userRole = roleRepository.findByName(
+//                        requestUser.getAdmin() == true ? RoleName.ROLE_ADMIN : RoleName.ROLE_USER
+//                ).orElseThrow(() -> new AppException("User Role not set."));
+
+        Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
 
-        user.setRoles(Collections.singleton(userRole));
+        Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                .orElseThrow(() -> new AppException("User Role not set."));
+
+        if(requestUser.getAdmin() == true){
+            user.setRoles(Collections.singleton(userRole2));
+        } else {
+            user.setRoles(Collections.singleton(userRole1));
+        }
+
+//        user.setRoles(Collections.singleton(userRole));
+
 
         User result = userRepository.save(user);
 

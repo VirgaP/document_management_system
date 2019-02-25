@@ -9,7 +9,6 @@ export class Institution extends Component {
         super(props);
        
         this.state = {
-          email:'virga@email.com',
           userDocumentStatus:[],
           message:'',
           document: props.current

@@ -1,21 +1,3 @@
-// import React from 'react';
-// import Navbar from './Navbar';
-// import Footer from './Footer';
-
-// const NavbarContainer = (props) =>{
-//     return(
-//         <div>
-//             <div>
-//                 {/* <Navbar history={props.history}/> */}
-//                 <Navbar/>
-//             </div>
-//               {props.children}
-//               <Footer/>
-//         </div>
-//     );
-// }
-
-// export default NavbarContainer;
 
 import React, { Component } from 'react';
 import './index.css';
@@ -24,6 +6,7 @@ import {
   withRouter,
   Switch
 } from 'react-router-dom';
+import { Redirect } from 'react-router'
 
 import { getCurrentUser, getReceivedDocuments } from './security/apiUtil';
 import { ACCESS_TOKEN } from './index';
@@ -56,10 +39,11 @@ import UserContext from './UserContext';
 import UserDocumentListContainer from './UserDocumentListContainer';
 import { AuthProvider } from './context/AuthContext';
 import SingleReceivedDocument from './SingleReceivedDocument';
-import ReceivedUserDocuments from './ReceivedUserDocuments';
+import ReceivedUserDocuments, { DocumentContext } from './ReceivedUserDocuments';
 import GroupListContainer from './GroupListContainer';
 import TypeListContainer from './TypeListContainer';
-// import ReceivedUserDocuments from './ReceivedUserDocuments'
+import DocumentProvider from './ReceivedUserDocuments'
+import AdminRoute from './security/AdminRoute';
 
 const { Content } = Layout;
 
@@ -70,7 +54,11 @@ class App extends Component {
       currentUser: null,
       isAuthenticated: false,
       isLoading: false,
+      isAdmin: false
     }
+
+    console.log("received" , this.state.receivedDocuments )
+
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
@@ -93,8 +81,10 @@ class App extends Component {
         currentUser: response,
         isAuthenticated: true,
         isLoading: false,
+        isAdmin: response.admin,
         email: response.email
       });
+    
     }).catch(error => {
         console.log("Error in getuser", error)
       this.setState({
@@ -102,11 +92,9 @@ class App extends Component {
       });  
     });
   }
-
   
   componentDidMount() {
     this.loadCurrentUser();
-
   }
   
   // Handle Logout, Set currentUser and isAuthenticated state which will be passed to other components
@@ -115,7 +103,8 @@ class App extends Component {
 
     this.setState({
       currentUser: null,
-      isAuthenticated: false
+      isAuthenticated: false,
+      isAdmin:false
     });
 
     this.props.history.push(redirectTo);
@@ -144,6 +133,7 @@ class App extends Component {
     if(this.state.isLoading) {
       return <LoadingIndicator />
     }
+    const {isAuthenticated, isAdmin} =this.state
     return (
         <Layout className="app-container" id="app-container">
             {(this.state.isAuthenticated) ?
@@ -155,44 +145,39 @@ class App extends Component {
             <div className="container">
           
               <Switch>  
-              {/* <AuthProvider>     */}
-              <Route exact path="/" 
-                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-              <Route exact path='/pagrindinis'
-                  render={(props) => <HomePage isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
-                </Route>
-                <Route path='/dokumentai' component={DocumentList}/>
-                {/* <Route path="/naujas-dokumentas" component={Form}/> */}
+              <Route exact path="/" render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
+
+               {/* <Route path='/pagrindinis' render={(props) => <HomePage isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
+                </Route>         */}
+                <PrivateRoute path='/pagrindinis'  component={HomePage} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />
                 <Route path="/naujas-dokumentas" render={(props) => <Form currentUser={this.state.currentUser} {...props} />}/>
                 <Route path="/dokumentas/:number" render={(props) => <SingleDocument currentUser={this.state.currentUser} {...props} />}/> 
                 <Route path="/gautas/dokumentas/:number" render={(props) => <SingleReceivedDocument currentUser={this.state.currentUser} {...props} />}/> 
                 <Route path="/redaguoti/dokumentas/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>
                 <Route path="/mano-dokumentai" render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
-                <Route path="/naujas-tipas" component={TypeForm}/>
-                <Route path='/visi-tipai' component={TypeListContainer}/>
+                <AdminRoute path="/naujas-tipas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeForm}/>
+                <AdminRoute path='/visi-tipai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeListContainer}/>
                 <Route path="/tipas/:title" render={(props) => <SingleType {...props} />}/>                 
                 <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
                 <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
-                <Route path='/gauti/vartotojas/:email/' render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/>
+                <Route exact path="/gauti/vartotojas/:email/" render={props => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props}/>} />
                 <Route path='/siusti/vartotojas/:email/' render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
-                <Route path='/visi-dokumentai' component={DocumentListContainer}/>
-                <Route path="/naujas-vartotojas" component={Registration}/>
-                <Route path="/nauja-grupe" component={UserGroupFormContainer}/>
-                <Route path='/visos-grupes' component={GroupListContainer}/>
+                <AdminRoute path='/visi-dokumentai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={DocumentListContainer}/>
+                <AdminRoute path="/naujas-vartotojas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={Registration}/>
+                <AdminRoute path="/nauja-grupe" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserGroupFormContainer}/>
+                <AdminRoute path='/visos-grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupListContainer}/>
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
                 <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
-                <Route path="/vartotojai" component={UserListContainer}/>
-                {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
+                <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
                 <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
-                {/* <Route path="/vartotojas/gauti" render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/> */}
                 <Route path="*" component={Nowhere}/>  
-                {/* </AuthProvider> */}
               </Switch>
               </div>
           </Content>
           {/* <Footer/> */}
         </Layout>
     );
+   
   }
 }
 

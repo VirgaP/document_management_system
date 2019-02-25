@@ -13,7 +13,10 @@ export class UserDocument extends Component {
        
         this.state = {
          
-          document: props.current
+          document: props.current,
+          submitted: false,
+          confirmed:false,
+          rejected:false,
         };
         console.log("dokas", this.state.document)
       }
@@ -47,7 +50,6 @@ export class UserDocument extends Component {
             <Link to={`/dokumentas/${document.number}`}> Peržiūrėti </Link>
         </Button>
         </td>
-       
         {document.userDocuments.map(el=>(String (el.submitted)) === 'true'? 
         <td>
         <Button type="danger disabled">Trinti</Button>

@@ -5,22 +5,27 @@ import {
   } from "react-router-dom";
   
   
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
+const AdminRoute = ({ component: Component, isAuthenticated, isAdmin, ...rest }) => (
     <Route
       {...rest}
       render={props =>
-        isAuthenticated ? (
+        isAuthenticated && isAdmin ? (
           <Component {...rest} {...props} />
         ) : (
+            
           <Redirect
             to={{
               pathname: '/',
               state: { from: props.location }
+            // state: {
+            //     message: "my message"
+            // }
             }}
           />
+          
         )
       }
     />
 );
   
-export default PrivateRoute
+export default AdminRoute

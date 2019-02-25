@@ -69,10 +69,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .httpBasic()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/",
-                        "/login",
-                        "/groups",
+//                        "/login",
+//                        "/groups",
                         "/register",
                         "/favicon.ico",
                         "/**/*.png",
@@ -83,15 +85,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-//                .antMatchers("/api/auth/**")
+
+                .antMatchers("/api/auth/login")
+//                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .permitAll()
+                .antMatchers("/api/auth/newUser").hasAuthority("ROLE_ADMIN")
 //                .permitAll()
+
+//                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .antMatchers("/console/**").permitAll()
                 .antMatchers("/swagger-ui.html#/").permitAll()
                 .antMatchers("/api/**")
                 .permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**")
+                .antMatchers(HttpMethod.GET, "/api/documents/**", "/api/users/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
