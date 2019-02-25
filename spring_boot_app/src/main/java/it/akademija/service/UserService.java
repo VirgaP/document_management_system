@@ -4,14 +4,18 @@ import it.akademija.dto.UserDTO;
 import it.akademija.entity.Group;
 import it.akademija.entity.User;
 import it.akademija.exceptions.ResourceNotFoundException;
+import it.akademija.payload.RequestGroup;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.UserRepository;
+
+import org.codehaus.groovy.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -77,7 +81,6 @@ public class UserService {
     public void createUser(RequestUser requestUser) {
         Group group = groupRepository.findByname(requestUser.getGroupName());
         User user = new User(
-                new Long(0),
                 requestUser.getName(),
                 requestUser.getSurname(),
                 requestUser.getEmail(),
@@ -86,6 +89,38 @@ public class UserService {
         user.addGroup(group);
         userRepository.save(user);
         group.addUser(user);
+    }
+
+    @Transactional
+    public void editUser(RequestUser request, String originalEmail){
+        User user = userRepository.findByEmail(originalEmail);
+
+        if (user == null) {
+            throw new IllegalArgumentException("User with email " + originalEmail + " does not exist!");
+        }
+
+        String name = request.getName();
+        String surname = request.getSurname();
+        Boolean admin = request.getAdmin();
+        String password = request.getPassword();
+
+
+        if (!StringUtils.isEmpty(name)) {
+            user.setName(name);
+        }
+        if (!StringUtils.isEmpty(surname)) {
+            user.setSurname(surname);
+        }
+        if (admin != null) {
+            user.setAdmin(admin);
+        }
+        if (!StringUtils.isEmpty(password)) {
+            user.setPassword(password);
+        }
+
+
+        userRepository.save(user);
+
     }
 
     @Transactional

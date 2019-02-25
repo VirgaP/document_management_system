@@ -47,10 +47,17 @@ public class GroupService {
 
     @Transactional
     public void createGroup(RequestGroup request) {
+        String groupName = request.getName();
+
+        if (groupRepository.existsByName(groupName)) {
+            throw new IllegalArgumentException("Group already exists");
+        }
+
         Group group = new Group(
                 new Long(0),
-                request.getName()
+                groupName
         );
+
         groupRepository.save(group);
     }
 

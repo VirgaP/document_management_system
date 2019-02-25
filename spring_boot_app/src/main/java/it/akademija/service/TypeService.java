@@ -75,12 +75,19 @@ public class TypeService {
 
     @Transactional
     public void createType(IncomingRequestBody request) {
+        String typeTitle = request.getTitle();
+
+        if (typeRepository.existsByTitle(typeTitle)) {
+            throw new IllegalArgumentException("Type already exists");
+        }
+
         Type type = new Type(
                 new Long(0),
-                request.getTitle()
+                typeTitle
         );
         typeRepository.save(type);
     }
+
 
     @Transactional
     public void editType(IncomingRequestBody request, String title){

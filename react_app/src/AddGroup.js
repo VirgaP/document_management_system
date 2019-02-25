@@ -85,7 +85,7 @@ export class AddGroup extends Component {
             <form onSubmit={this.handleSubmit}>
             <div >
             <label className="control-label">Pasirinkite vartotojo grupę</label>
-                <select value={this.state.name} key={this.state.name} onChange={this.handleSelectChange} 
+                <select value={this.state.name} onChange={this.handleSelectChange} 
                 className="form-control" id="ntype" required>
                   <option value="">...</option>
                     {options}

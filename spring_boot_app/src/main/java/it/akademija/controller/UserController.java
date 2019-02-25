@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.UserDTO;
+import it.akademija.payload.RequestGroup;
 import it.akademija.payload.RequestUser;
 import it.akademija.payload.UserIdentityAvailability;
 import it.akademija.repository.UserRepository;
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/user/me")
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     public UserDTO getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         UserDTO user = new UserDTO(
                 currentUser.getAdmin(),
@@ -108,6 +109,16 @@ public class UserController {
             @PathVariable final String groupName
     ){
         userService.removeGroupFromUser(email, groupName);
+    }
+
+    @RequestMapping(path = "/{email}/edit", method = RequestMethod.PUT)
+    @ApiOperation(value = "Get and update user", notes = "Returns user by email and updates user info")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(
+            @ApiParam(value = "User data", required = true)
+            @RequestBody RequestUser request,
+            @PathVariable final String email){
+        userService.editUser(request, email);
     }
 
 }

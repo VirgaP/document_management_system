@@ -13,6 +13,9 @@ export const API_BASE_URL = 'http://localhost:8099'
 export const NAME_MIN_LENGTH = 2;
 export const NAME_MAX_LENGTH = 40;
 
+export const TITLE_MIN_LENGTH = 2;
+export const TITLE_MAX_LENGTH = 40;
+
 export const SURNAME_MIN_LENGTH = 3;
 export const SURNAME_MAX_LENGTH = 40;
 

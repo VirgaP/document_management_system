@@ -51,7 +51,7 @@ export class EditGroup extends Component {
        
         axios.put(`http://localhost:8099/api/group/${this.state.groupName}/edit`, {
             // name : this.refs.name.value,
-            name: this.state.group.name
+            name: this.state.group.name,
         })
         .then(function(response) {
             console.log(response);

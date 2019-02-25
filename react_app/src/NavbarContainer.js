@@ -61,6 +61,7 @@ import UserDocumentListContainer from './UserDocumentListContainer';
 import { AuthProvider } from './context/AuthContext';
 import SingleReceivedDocument from './SingleReceivedDocument';
 import ReceivedUserDocuments from './ReceivedUserDocuments';
+import EditUser from './EditUser'
 // import ReceivedUserDocuments from './ReceivedUserDocuments'
 
 const { Content } = Layout;
@@ -179,6 +180,7 @@ class App extends Component {
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
                 <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
                 <Route path="/vartotojai" component={UserListContainer}/>
+                <Route path="/redaguoti/vartotojas/:email" component={EditUser} render={(props) => <EditUser {...props} /> }/> 
                 {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
                 <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
                 {/* <Route path="/vartotojas/gauti" render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/> */}

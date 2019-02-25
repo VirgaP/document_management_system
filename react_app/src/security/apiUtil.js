@@ -46,6 +46,20 @@ export function checkUsernameAvailability(username) {
     });
 }
 
+export function checkGroupNameAvailability(groupName) {
+    return request ({
+            url: API_BASE_URL + "/group/checkGroupNameAvailability?groupName=" + groupName,
+            method: 'GET'
+    } );
+}
+
+export function checkTypeAvailability(type){
+    return request ({
+            url: API_BASE_URL + "/type/checkTypeAvailability?type=" + type,
+            method: 'GET'
+    });
+}
+
 export function checkEmailAvailability(email) {
     return request({
         url: API_BASE_URL + "/api/users/user/checkEmailAvailability?email=" + email,

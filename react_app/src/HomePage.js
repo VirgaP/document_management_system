@@ -43,13 +43,6 @@ export class HomePage extends Component {
       }
       
   render() {
-    // const {
-    //     currentUser: { 
-    //       email 
-    //     }
-    //   } = this.props;
-
-    //   console.log("Email", email)
     return (
         <UserContext.Provider 
         // value={this.props.currentUser.email}

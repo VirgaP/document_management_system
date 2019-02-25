@@ -1,8 +1,11 @@
 import React, {Component} from 'react';   
 import SingleInput from './components/singleInput';
 import axios from 'axios';
-import {notification } from 'antd';
 import 'antd/dist/antd.css';
+import { TITLE_MIN_LENGTH, TITLE_MAX_LENGTH } from './index';
+ import { Form, Input, Button, notification } from 'antd';
+
+ const FormItem = Form.Item;
 
 class UserGroupFormContainer extends Component {  
   constructor(props) {
@@ -13,15 +16,22 @@ class UserGroupFormContainer extends Component {
       };
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleClearForm = this.handleClearForm.bind(this);
-    this.handleGroupNameChange = this.handleGroupNameChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
    
   }
-  
+  handleInputChange(event, validationFun) {
+    const target = event.target;
+    const inputName = target.name;        
+    const inputValue = target.value;
 
-  handleGroupNameChange(e) {  
-    this.setState({ name: e.target.value });
-  }
-  
+    this.setState({
+        [inputName] : {
+            value: inputValue,
+            ...validationFun(inputValue)
+        }
+    });
+}
+
   handleFormSubmit(e) {  
     e.preventDefault();
   
@@ -36,7 +46,7 @@ class UserGroupFormContainer extends Component {
     this.handleClearForm(e);
 
     axios.post('http://localhost:8099/api/group/new', {
-      name: this.state.name,
+      name: this.state.name.value,
         })
         .then(response => {
           console.log(response);
@@ -56,38 +66,58 @@ class UserGroupFormContainer extends Component {
       });
   }
 
+
   handleClearForm(e) {
     e.preventDefault();
     this.setState({
     name: '',
   });
   }
-
-
   render() {
     return (
       <div className="container user_form">
-       <form className="container  type_form" onSubmit={this.handleFormSubmit}>
         <h5>Sukurti vartotojų grupę </h5>
-        <SingleInput 
-        inputType={'text'}
-        title={'Grupės pavadinimas'}
-        name={'name'}
-        controlFunc={this.handleGroupNameChange}
-        content={this.state.name}
-        placeholder={'Grupės pavadinimas'}
-        /> 
-      
+        <Form onSubmit={this.handleFormSubmit}>
+        <FormItem 
+                      validateStatus={this.state.name.validateStatus}
+                          help={this.state.name.errorMsg}>
+                          <Input 
+                                size="large"
+                                name="name"
+                                placeholder="Grupės pavadinimas"
+                                value={this.state.name.value} 
+                                onChange={(event) => this.handleInputChange(event, this.validateTitle)} />    
+                        </FormItem>
+      <FormItem>
         <input
           type="submit"
           className="btn btn-primary float-right"
           value="Išsaugoti"/>
+          </FormItem>
         <button
           className="btn btn-link float-left"
           onClick={this.handleClearForm}>Išvalyti formą</button>
-      </form>
+          </Form>
       </div>
     );
+  }
+  validateTitle = (name) => {
+    if(name.length < TITLE_MIN_LENGTH) {
+        return {
+            validateStatus: 'error',
+            errorMsg: `Grupės pavadinimas per trumpas (mažiausia leidžiama ${TITLE_MIN_LENGTH} simboliai.)`
+        }
+    } else if (name.length > TITLE_MAX_LENGTH) {
+        return {
+            validationStatus: 'error',
+            errorMsg: `Grupės pavadinimas per ilgas (daugiausia leidžiama ${TITLE_MAX_LENGTH} simboliai.)`
+        }
+    } else {
+        return {
+            validateStatus: 'success',
+            errorMsg: null,
+          };            
     }
+  }
 }
 export default UserGroupFormContainer;

@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.GroupDTO;
+import it.akademija.entity.Group;
 import it.akademija.payload.RequestGroup;
 import it.akademija.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Api(value="group")
@@ -58,7 +60,6 @@ public class GroupController {
     {
         groupService.deleteGroup(name);
     }
-
 
     @RequestMapping(path = "/{name}/edit", method = RequestMethod.PUT)
     @ApiOperation(value = "Get and update group", notes = "Returns group by name and updates group information")

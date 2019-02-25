@@ -1,8 +1,5 @@
-package it.akademija;
+package it.akademija.security;
 
-import it.akademija.security.JwtAuthenticationEntryPoint;
-import it.akademija.security.JwtAuthenticationFilter;
-import it.akademija.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import it.akademija.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -53,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10);
     }
 
     @Override
@@ -69,7 +68,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .httpBasic()
+                .and()
                 .authorizeRequests()
+                // SWAGGER
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
+                        "/swagger-ui", "/webjars/**", "/swagger-resources/configuration/ui", "/swagge‌​r-ui.html", "/swagger-ui.html#/")
+                .permitAll()
+                // H2 CONSOLE
+                .antMatchers("/console/**").permitAll()
+                // UNSECURED
                 .antMatchers("/",
                         "/login",
                         "/groups",
@@ -83,10 +91,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-//                .antMatchers("/api/auth/**")
-//                .permitAll()
-                .antMatchers("/console/**").permitAll()
-                .antMatchers("/swagger-ui.html#/").permitAll()
+                // AUTHENTICATION
+                .antMatchers("/api/auth/login")
+                // ADMIN
+                .permitAll()
+                .antMatchers("/api/auth/newUser")
+                .hasAuthority("ROLE_ADMIN")
+                .antMatchers("/api/files/**", "/api/documents/**")
+                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .antMatchers("/api/**")
                 .permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
