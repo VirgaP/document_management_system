@@ -39,7 +39,7 @@ export class UserListContainer extends Component {
             <th scope="col">Pavardė</th>
             <th scope="col">El. paštas</th>
             <th scope="col">Vartotojų grupė</th>
-            <th></th>
+            <th scope="col"></th>
           </tr>
         </thead>
       
