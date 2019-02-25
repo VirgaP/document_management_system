@@ -15,11 +15,11 @@ const AdminRoute = ({ component: Component, isAuthenticated, isAdmin, ...rest })
             
           <Redirect
             to={{
-              pathname: '/',
-              state: { from: props.location }
-            // state: {
-            //     message: "my message"
-            // }
+              pathname: '/pagrindinis',
+            //   state: { from: props.location }
+            state: {
+                message: alert("my message")
+            }
             }}
           />
           

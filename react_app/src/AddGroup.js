@@ -31,8 +31,7 @@ export class AddGroup extends Component {
     
     handleSelectChange(e) {  
         this.setState({ name: e.target.value });
-      }
-
+    }
 
     handleSubmit(e) {
         e.preventDefault();
