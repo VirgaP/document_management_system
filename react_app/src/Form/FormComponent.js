@@ -25,7 +25,6 @@ class Form extends Component {
         typeTitle: '',
         title: '',
         description: '',
-        // email:'virga@email.com',
         email: props.currentUser.email,
         date: date,
         uniqueNumber:'',
@@ -82,20 +81,6 @@ class Form extends Component {
         .catch(function (error) {
             console.log(error);
           }); 
-
-        // axios.get(`http://localhost:8099/api/users/${this.state.email}`)
-        //   .then(result => {
-        //   const user = result.data
-        //   this.setState({user});
-        //   var userGroups = result.data.userGroups.map(group=>group.name);
-
-        //   this.setState({userGroups})
-        //   console.log("USERIS", user)
-        //   console.log('Grupes', userGroups)
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   });
            
     }
     handleDocumentTitleChange(e) {  
@@ -168,7 +153,7 @@ class Form extends Component {
         } else {
             notification.error({
                 message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
-                description: error.message || 'Atsiprašome įvyko klaida, bandykite dar kartą!'
+                description: 'Atsiprašome įvyko klaida, bandykite dar kartą!'
             });                                            
         }
     });
@@ -215,9 +200,9 @@ fileUpload(file){
       )
       return (
        
-        <div className="container">
-          <h2>Sukurti naują dokumentą</h2>
-          <form onSubmit={this.handleSubmit}>
+        <div className="container new-document">
+          <h4>Sukurti naują dokumentą</h4>
+          <form id="new-document" onSubmit={this.handleSubmit}>
           <SingleInput 
             inputType={'text'}
             title={'Dokumento pavadinimas'}

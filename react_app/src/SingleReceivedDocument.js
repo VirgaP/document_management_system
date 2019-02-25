@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, notification } from 'antd';
+import { Button, notification, Icon } from 'antd';
+import {Link} from 'react-router-dom'
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
 
@@ -97,7 +98,7 @@ export class SingleReceivedDocument extends Component {
             message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
             description: 'Dokumentas atmestas!'
         }); 
-        this.props.history.push(`/vartotojas/${email}`)   
+        this.props.history.push('/pagrindinis')   
          }
       })
       .catch(error => {
@@ -128,7 +129,10 @@ export class SingleReceivedDocument extends Component {
             <div className="col-lg-6 col-md-6">
                 <Button type="danger"  block onClick={() => this.handleReject(this.state.document.number)}>Atmesti dokumentą</Button> 
             </div>
-        </div>
+        </div><br></br>
+        {/* <span id="back-to-list">
+        <Link to={`/gauti/vartotojas/${this.props.currentUser.email}`}><Icon type="left-circle-o" /> Grįžti į gautų dokumentų sąrašą</Link> 
+        </span>    */}
     </div>
     )
   }

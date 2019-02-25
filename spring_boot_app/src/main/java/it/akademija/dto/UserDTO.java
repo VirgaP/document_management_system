@@ -1,7 +1,9 @@
 package it.akademija.dto;
 
+
 import it.akademija.entity.Group;
 import it.akademija.entity.UserDocument;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,6 +23,10 @@ public class UserDTO {
     private Set<Group> userGroups = new HashSet<Group>();
 
     private List<UserDocument> userDocuments = new ArrayList<>();
+
+    private String userGroupName;
+
+    private String userDocumentTitle;
 
     public UserDTO() {
     }
@@ -53,6 +59,15 @@ public class UserDTO {
         this.email = email;
         this.name = name;
         this.surname = surname;
+    }
+
+    public UserDTO(String name, String surname, String email, boolean admin, String name1, String title) {
+        this.admin = admin;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.userGroupName = name1;
+        this.userDocumentTitle = title;
     }
 
     public String getName() {
@@ -102,5 +117,33 @@ public class UserDTO {
 
     public void setUserDocuments(List<UserDocument> userDocuments) {
         this.userDocuments = userDocuments;
+    }
+
+    @Override
+    public String toString() {
+
+            return new ToStringBuilder(this)
+                    .append("name", this.name)
+                    .append("surname", this.surname)
+                    .append("email", this.email)
+                    .append("admin", this.admin)
+                    .toString();
+
+    }
+
+    public String getUserGroupName() {
+        return userGroupName;
+    }
+
+    public void setUserGroupName(String userGroupName) {
+        this.userGroupName = userGroupName;
+    }
+
+    public String getUserDocumentTitle() {
+        return userDocumentTitle;
+    }
+
+    public void setUserDocumentTitle(String userDocumentTitle) {
+        this.userDocumentTitle = userDocumentTitle;
     }
 }

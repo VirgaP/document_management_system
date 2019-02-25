@@ -9,12 +9,25 @@ export class TypeListContainer extends Component {
     super(props)
   
     this.state = {
-      types: this.props.types,
+      types: [],
     }
 
     console.log("props Types", this.props)
   this.deleteType = this.deleteType.bind(this);
 }
+
+componentDidMount = () => {
+  axios.get('http://localhost:8099/api/types')
+  .then(result => {
+    const types = result.data
+  this.setState({types});
+  console.log("Tipai", types)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 
   deleteType(title) {
    
@@ -35,7 +48,7 @@ export class TypeListContainer extends Component {
     
     return (
 
-    <div className="container">
+    <div className="container item-list">
     <h4>Dokumento tipai</h4>
     <table className="table table-striped">
         <thead>

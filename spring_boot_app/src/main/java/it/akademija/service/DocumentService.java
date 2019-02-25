@@ -83,15 +83,12 @@ public class DocumentService {
 
         List<DBFile> files = document.getDbFiles();
 
-        System.out.println("failas" + requestDocument.getFileName());
         file.setDocument(document);
         document.addDbFile(file);
         dbFileRepository.save(file);
 
-        System.out.println("listas pries " +  files);
         ListIterator<DBFile> listIterator = files.listIterator();
         listIterator.add(file);
-        System.out.println("listas po " + files) ;
 
 
         document.setDbFiles(files);

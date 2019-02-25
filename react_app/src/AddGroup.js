@@ -31,8 +31,7 @@ export class AddGroup extends Component {
     
     handleSelectChange(e) {  
         this.setState({ name: e.target.value });
-      }
-
+    }
 
     handleSubmit(e) {
         e.preventDefault();
@@ -81,7 +80,7 @@ export class AddGroup extends Component {
     return (
       <div className="col-lg-6 col-md-6 add-group">
 
-        <h5>Pridėti vartotojo grupę</h5>
+        <h6>Pridėti vartotojo grupę</h6>
             <form onSubmit={this.handleSubmit}>
             <div >
             <label className="control-label">Pasirinkite vartotojo grupę</label>

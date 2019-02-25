@@ -80,6 +80,12 @@ export function getCurrentUser() {
     
 }
 
+export function getReceivedDocuments (email) {
+    return request ({
+        url: API_BASE_URL + "/api/documents/?email=" + email + "/received",
+        method: 'GET'
+    })
+}
 // export function getUserProfile(username) {
 //     return request({
 //         url: API_BASE_URL + "/users/" + username,

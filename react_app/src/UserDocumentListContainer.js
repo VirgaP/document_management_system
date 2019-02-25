@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import DocumentListContainer from './DocumentListContainer';
+import LoadingIndicator from './layout/LoadingIndicator';
 import UserDocument from './UserDocument';
 
 
@@ -15,28 +16,40 @@ export class UserDocumentListContainer extends Component {
       email: this.props.match.params.email,
       error:'',
       userDocuments: [],
+      filter:'',
+      isLoading: false,
+      confirmed:''
     }
-    console.log("PROPS", this.props)
-
   this.fetchData = this.fetchData.bind(this);
   this.deleteItem = this.deleteItem.bind(this);
-  console.log("Userio dokai", this.state.documents)
+  this.changeView = this.changeView.bind(this);
 }
 
+setconfirmed(value) {
+  this.setState({ confirmed: value });
+}
   fetchData() {
+    this.setState({
+      isLoading: true
+    });
       axios.get(`http://localhost:8099/api/documents/${this.state.email}/documents`)
           .then(response => {
+            console.log(response)
               this.setState({
-                  documents: response.data
+                  documents: response.data,
+                  isLoading: false,
               }); 
           })
           .catch(error => {
               this.setState({
-                  error: 'Error while fetching data.'
+                  error: 'Error while fetching data.',
+                  isLoading: false
+
               });
           });
       }
-    componentWillMount() {
+
+  componentWillMount() {
       this.fetchData();
   }
   
@@ -48,10 +61,23 @@ export class UserDocumentListContainer extends Component {
           }
       })
     }
+
+    changeView(e) {
+      console.log(e)
+      this.setState({
+        filter: e.target.value,
+    });
+    Object.keys(this.state.documents).map(el=>el.userDocuments)
+      .filter(key => this.state.documents.userDocuments[key].this.state.filter == true)
+      
+  }
+
+  
       
   render() {
-  
+   
     const { documents, error } = this.state;
+
     console.log("dokumentai", documents)
         if (error) {
             return (
@@ -63,23 +89,41 @@ export class UserDocumentListContainer extends Component {
     
     var rows = [];
   
+
+    // {Object.keys(this.state.dataGoal)
+    //   .filter(key => key.main == true)
+    //   .map( (key, index) => {
+    //     return <div key={key}>
+    //              <h1>{this.state.dataGoal[key].name}</h1>
+    //              <p>{this.state.dataGoal[key].main}</p>
+    //            </div>
+    //   })}
+
     documents.map((document) => (                                        
           rows.push(<UserDocument current={document} key={document.number} 
-            deleteItem={this.deleteItem} />)                    
+            deleteItem={this.deleteItem} getConfirmedStatus={ color => this.setConfirmed(color)} />)                    
             ))
+
+    
     return (
+      
     <div className="container user_document_list">
+    <button btn btn-default onClick={this.changeView} value='confirmed'>Patvirtinti</button>
     <h4>Vartotojo dokumentai</h4>
+    {this.state.isLoading ? <LoadingIndicator/> :
     <table className="table table-striped">
         <thead>
-          {/* <tr>
-            <th>Pavadinimas</th><th>Aprašymas</th><th>Tipas</th><th>Sukūrimo data</th>
-          </tr> */}
+         {/* add tabs  */}
         </thead>
-        <tbody>{rows}</tbody>
+        {documents.length === 0 ? 
+            <tbody>Jūs dar nesukūrėte dokumentų</tbody>:
+            <tbody>{rows}</tbody>}
     </table>
-    
-    </div> )
+    }
+    </div> 
+   
+        
+    )
   }
 }
 

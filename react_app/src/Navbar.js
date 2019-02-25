@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import './App.css';
 import { Layout, Menu, Dropdown, Icon } from 'antd';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import AdminSubMenu from './layout/AdminSubMenu';
 
 
 
@@ -39,6 +40,7 @@ class Navbar extends Component {
         <Menu.Item key="logout">
           <Icon type="user" />Atsijungti
         </Menu.Item>
+        {this.props.currentUser.admin === true ? <AdminSubMenu/> : ''}
       </Menu>
     );
   }

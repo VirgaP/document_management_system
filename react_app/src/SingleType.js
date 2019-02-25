@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
-import {notification } from 'antd';
+import {notification, Icon } from 'antd';
 
 
 export class SingleType extends Component {
@@ -187,9 +187,9 @@ export class SingleType extends Component {
                        (<li key={element.group.name}>{element.group.name} - 
                        {element.receive.toString() === 'true' ? 'Gavėjai' : 'negali gauti' } - 
                        {element.send.toString() === 'true' ? 'Siuntėjai' : 'negali siųsti' }
-                       &nbsp;<button className="btn-default" 
-                  onClick={this.handleRemove.bind(this, element.group.name)}
-                  >x</button>
+                       &nbsp;<Icon type="close-circle" 
+                  onClick={this.handleRemove.bind(this, element.group.name)}/>
+                
                       </li>))}</ul>}
                     </div>
               </div>

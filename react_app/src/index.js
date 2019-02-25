@@ -6,6 +6,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import App from './NavbarContainer'
 import { BrowserRouter as Router } from 'react-router-dom';
 
+window.getComputedStyle(document.body)
 
 export const ACCESS_TOKEN = 'accessToken';
 export const API_BASE_URL = 'http://localhost:8099'
@@ -27,6 +28,7 @@ export const PASSWORD_MAX_LENGTH = 20;
 ReactDOM.render(
     <Router>
         <App />
+        
     </Router>, 
     document.getElementById('root')
 );

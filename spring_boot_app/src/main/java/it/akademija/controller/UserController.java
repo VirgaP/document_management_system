@@ -4,19 +4,32 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.UserDTO;
+<<<<<<< HEAD
 import it.akademija.payload.RequestGroup;
+=======
+import it.akademija.entity.User;
+>>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
 import it.akademija.payload.RequestUser;
 import it.akademija.payload.UserIdentityAvailability;
 import it.akademija.repository.UserRepository;
 import it.akademija.security.CurrentUser;
 import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
+import it.akademija.util.WriteDataToCSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Api(value="user")
@@ -45,7 +58,11 @@ public class UserController {
     }
 
     @GetMapping("/user/me")
+<<<<<<< HEAD
 //    @PreAuthorize("hasRole('USER')")
+=======
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+>>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
     public UserDTO getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         UserDTO user = new UserDTO(
                 currentUser.getAdmin(),
@@ -111,6 +128,7 @@ public class UserController {
         userService.removeGroupFromUser(email, groupName);
     }
 
+<<<<<<< HEAD
     @RequestMapping(path = "/{email}/edit", method = RequestMethod.PUT)
     @ApiOperation(value = "Get and update user", notes = "Returns user by email and updates user info")
     @ResponseStatus(HttpStatus.OK)
@@ -119,6 +137,40 @@ public class UserController {
             @RequestBody RequestUser request,
             @PathVariable final String email){
         userService.editUser(request, email);
+=======
+
+    @GetMapping("/download/csv")
+    public void downloadCSV(HttpServletResponse response) throws IOException{
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=user.csv");
+
+        List<User> users = (List<User>) userRepository.findAll();
+        WriteDataToCSV.writeUsersToCSV(response.getWriter(), users);
+    }
+
+
+    @GetMapping("/{email}/download/documentsCsv")
+    public void downloadUserDocumentsCSV(HttpServletResponse response, @PathVariable final String email) throws IOException{
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=vartotojas.csv");
+
+        User user = userRepository.findByEmail(email);
+        String.valueOf(user);
+
+        WriteDataToCSV.writeUserDocumentsToCSV(response.getWriter(), user);
+    }
+
+
+    @GetMapping("/{email}/download/userCsv")
+    public void downloadUserCSV(HttpServletResponse response, @PathVariable final String email) throws IOException{
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=vartotojas.csv");
+
+        User user = userRepository.findByEmail(email);
+        String.valueOf(user);
+
+        WriteDataToCSV.writeUserByEmailToCSV(response.getWriter(), user);
+>>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
     }
 
 }

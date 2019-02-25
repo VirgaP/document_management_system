@@ -5,7 +5,8 @@ import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import AddGroup from './AddGroup';
-import {notification } from 'antd';
+import {Link} from 'react-router-dom'
+import {notification, Icon } from 'antd';
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
 
@@ -113,7 +114,7 @@ export class SingleDocument extends Component {
        
       }
 
-      SubmitDocument(number) {
+    SubmitDocument(number) {
         var email = this.state.user.map(el=>el.email)
         email = email.toString();
         
@@ -127,8 +128,8 @@ export class SingleDocument extends Component {
             message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
             description: 'Dokumentas pateiktas!'
         }); 
-        this.props.history.push(`/vartotojas/${email}`)   
-         }
+        this.props.history.push('/pagrindinis')   
+        }
       })
       .catch(error => {
         if(error.status >= 400 && error.status == 500) {
@@ -137,7 +138,6 @@ export class SingleDocument extends Component {
                 description: 'Atsiprašome įvyko klaida, bandykite dar kartą!'
             });  
           }})
-  
     }
 
       onChange(e) {
@@ -203,8 +203,11 @@ export class SingleDocument extends Component {
                 {  this.state.userDocument.map(el=>(String (el.submitted)) === 'true') ?  <span></span> : //dokumenta pateikti gali tik jo sukurejas
                     <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
                 }
-                <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
-
+                <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button>
+                <br></br> 
+                  <span id="back-to-list">
+                  <Link to={`/siusti/vartotojas/${current}`}><Icon type="left-circle-o" /> Grįžti į dokumentų sąrašą</Link> 
+                  </span>   
                 </div>
       );
     }

@@ -88,6 +88,7 @@ class TypeFormContainer extends Component {
 
 
   render() {
+<<<<<<< HEAD
       return (
         <div className="container user_form">
           <h5>Sukurti dokumento tipą </h5>
@@ -114,6 +115,30 @@ class TypeFormContainer extends Component {
             </Form>
         </div>
       );
+=======
+    return (
+      <div className="container new-form">
+      <form className="container" id="type_form" onSubmit={this.handleFormSubmit}>
+        <h5>Sukurti dokumento tipą </h5>
+        <SingleInput 
+        inputType={'text'}
+        title={'Dokumento tipas'}
+        name={'title'}
+        controlFunc={this.handleTypeTitleChange}
+        content={this.state.title}
+        placeholder={'Dokumento tipo pavadinimas'}
+        /> 
+        <input
+          type="submit"
+          className="btn btn-primary float-right"
+          value="Saugoti"/>
+        <button
+          className="btn btn-link float-left"
+          onClick={this.handleClearForm}>Išvalyti įvestus duomenis</button>
+      </form>
+      </div>
+    );
+>>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
     }
     
     validateTitle = (name) => {

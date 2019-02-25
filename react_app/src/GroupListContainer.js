@@ -2,17 +2,31 @@ import Group from './Group';
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import UserGroupFormContainer from './UserGroupFormContainer';
 
 export class GroupListContainer extends Component {
   constructor(props) {
     super(props)
   
     this.state = {
-      groups: this.props.groups,
+      groups: []
     }
 
       console.log("props Types", this.props)
     this.deleteGroup = this.deleteGroup.bind(this);
+    }
+
+    componentDidMount = () => {
+
+      axios.get('http://localhost:8099/api/group')
+      .then(result => {
+        const groups = result.data
+      this.setState({groups});
+      console.log("Grupes", groups)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
 
     deleteGroup(name) {
@@ -26,7 +40,6 @@ export class GroupListContainer extends Component {
     }
      
   render() {
-    console.log(this.props.groups)
 
     var rows = [];
 
@@ -34,7 +47,8 @@ export class GroupListContainer extends Component {
       rows.push(<Group group={group} key={group.name} deleteGroup={this.deleteGroup}/>)  
     ));
     return (
-    <div className="container">
+    <div className="container item-list">
+    <h5>Vartotojų grupės</h5>
     <table className="table table-striped">
         <thead>
           <tr>

@@ -75,6 +75,7 @@ public class User {
         this.userGroups = userGroups;
     }
 
+
     public User() {
     }
 
@@ -185,4 +186,5 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 }

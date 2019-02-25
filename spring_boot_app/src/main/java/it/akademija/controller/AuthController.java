@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+<<<<<<< HEAD
 import it.akademija.entity.Group;
 import it.akademija.entity.Role;
 import it.akademija.entity.RoleName;
@@ -32,6 +33,12 @@ import it.akademija.repository.GroupRepository;
 import it.akademija.repository.RoleRepository;
 import it.akademija.repository.UserRepository;
 import it.akademija.security.JwtTokenProvider;
+=======
+import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.Collections;
+>>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
 
 @RestController
 @RequestMapping("/api/auth")
@@ -94,9 +101,30 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+<<<<<<< HEAD
         Role userRole = roleRepository.findByName(requestUser.getAdmin() ? RoleName.ROLE_ADMIN : RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
         user.setRoles(Collections.singleton(userRole));
+=======
+//                Role userRole = roleRepository.findByName(
+//                        requestUser.getAdmin() == true ? RoleName.ROLE_ADMIN : RoleName.ROLE_USER
+//                ).orElseThrow(() -> new AppException("User Role not set."));
+
+        Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new AppException("User Role not set."));
+
+        Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                .orElseThrow(() -> new AppException("User Role not set."));
+
+        if(requestUser.getAdmin() == true){
+            user.setRoles(Collections.singleton(userRole2));
+        } else {
+            user.setRoles(Collections.singleton(userRole1));
+        }
+
+//        user.setRoles(Collections.singleton(userRole));
+
+>>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
 
         User result = userRepository.save(user);
 
