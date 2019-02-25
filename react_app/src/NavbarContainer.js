@@ -39,12 +39,12 @@ import UserContext from './UserContext';
 import UserDocumentListContainer from './UserDocumentListContainer';
 import { AuthProvider } from './context/AuthContext';
 import SingleReceivedDocument from './SingleReceivedDocument';
-import ReceivedUserDocuments from './ReceivedUserDocuments';
-import EditUser from './EditUser'
+import ReceivedUserDocuments, { DocumentContext } from './ReceivedUserDocuments';
 import GroupListContainer from './GroupListContainer';
 import TypeListContainer from './TypeListContainer';
 import DocumentProvider from './ReceivedUserDocuments'
 import AdminRoute from './security/AdminRoute';
+import EditUser from './EditUser';
 
 const { Content } = Layout;
 
@@ -172,9 +172,10 @@ class App extends Component {
                 <Route path="/vartotojai" component={UserListContainer}/>
                 <Route path="/redaguoti/vartotojas/:email" component={EditUser} render={(props) => <EditUser {...props} /> }/> 
                 {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
-                {/* <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/> */}
+                <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
                 {/* <Route path="/vartotojas/gauti" render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/> */}
                 <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
+                {/* <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/> */}
                 <PrivateRoute path="/vartotojas/:email" component={SingleUser} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <Route path="*" component={Nowhere}/>  
               </Switch>

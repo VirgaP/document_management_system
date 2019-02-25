@@ -35,17 +35,21 @@ export class Type extends Component {
         <tr>
         <td>{this.props.type.title}</td>
         <td>
+        <Link to={`/tipas/${this.props.type.title}`} >
         <Button type="default">
-            <Link to={`/tipas/${this.props.type.title}`} > Peržiūrėti </Link>
+            Peržiūrėti 
         </Button>
+        </Link>
         </td>
         <td>
         <Button type="danger" onClick={() => this.DeleteItem(this.props.type.title)}> Trinti </Button>
         </td>
         <td>
+        <Link to={`/redaguoti/tipas/${this.props.type.title}`}>
         <Button type="default">
-            <Link to={`/redaguoti/tipas/${this.props.type.title}`}> Redaguoti </Link>
+             Redaguoti 
         </Button>
+        </Link>
         </td>
       </tr>);
     

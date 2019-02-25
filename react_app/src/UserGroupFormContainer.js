@@ -6,7 +6,8 @@ import { TITLE_MIN_LENGTH, TITLE_MAX_LENGTH } from './index';
  import { Form, Input, Button, notification } from 'antd';
 
 
-
+import UserDocumentListContainer from './UserDocumentListContainer';
+import GroupListContainer from './GroupListContainer';
 const FormItem = Form.Item;
 
 class UserGroupFormContainer extends Component {  
@@ -79,7 +80,7 @@ class UserGroupFormContainer extends Component {
     return (
       
       <div className="container new-form">
-       <form className="container" id="type_form" onSubmit={this.handleFormSubmit}>
+       <form className="container" id="type_form" onSubmit={this.handleFormSubmit}/>
         <h5>Sukurti vartotojų grupę </h5>
         <Form onSubmit={this.handleFormSubmit}>
         <FormItem 
@@ -102,7 +103,6 @@ class UserGroupFormContainer extends Component {
           className="btn btn-link float-left"
           onClick={this.handleClearForm}>Išvalyti formą</button>
           </Form>
-          </form>
       </div>
     
     );

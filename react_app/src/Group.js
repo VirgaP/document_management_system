@@ -33,17 +33,21 @@ export class Group extends Component {
         <tr>
         <td>{this.props.group.name}</td>
         <td>
+        <Link to={`/grupe/${this.props.group.name}`}> 
         <Button type="default">
-            <Link to={`/grupe/${this.props.group.name}`}> Peržiūrėti </Link>        
+            Peržiūrėti      
         </Button>
+        </Link>  
         </td>
         <td>
         <Button type="danger" onClick={() => this.DeleteItem(this.props.group.name)}> Trinti </Button>
         </td>
         <td>
+        <Link to={`/redaguoti/grupe/${this.props.group.name}`}>
         <Button type="default">
-            <Link to={`/redaguoti/grupe/${this.props.group.name}`}> Redaguoti </Link>
+             Redaguoti 
         </Button>
+        </Link>
         </td>
        
       </tr>);
