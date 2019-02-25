@@ -5,6 +5,19 @@ import java.util.Collections;
 
 import javax.validation.Valid;
 
+import it.akademija.entity.Group;
+import it.akademija.entity.Role;
+import it.akademija.entity.RoleName;
+import it.akademija.entity.User;
+import it.akademija.exceptions.AppException;
+import it.akademija.payload.ApiResponse;
+import it.akademija.payload.JwtAuthenticationResponse;
+import it.akademija.payload.LoginRequest;
+import it.akademija.payload.RequestUser;
+import it.akademija.repository.GroupRepository;
+import it.akademija.repository.RoleRepository;
+import it.akademija.repository.UserRepository;
+import it.akademija.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

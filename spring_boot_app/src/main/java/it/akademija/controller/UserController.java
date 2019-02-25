@@ -127,8 +127,9 @@ public class UserController {
     public void updateUser(
             @ApiParam(value = "User data", required = true)
             @RequestBody RequestUser request,
-            @PathVariable final String email){
+            @PathVariable final String email) {
         userService.editUser(request, email);
+    }
 
     @GetMapping("/download/csv")
     public void downloadCSV(HttpServletResponse response) throws IOException{
