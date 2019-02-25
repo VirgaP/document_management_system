@@ -82,25 +82,6 @@ export class HomePage extends Component {
         }
       
   render() {
-<<<<<<< HEAD
-    return (
-        <UserContext.Provider 
-        // value={this.props.currentUser.email}
-        >
-            <React.Fragment>  
-        <div className="container-fluid profile_page">
-        <div className="row ">
-        {String(this.state.user.admin) === 'true' ?
-        <div className="card">
-            <div className="card-body">Content</div> 
-            <div className="card-footer"> 
-            <Button size="large" type="primary" >
-                <Link to={'/adminpage'}>Administratoriaus paskyra</Link>
-            </Button>
-            </div>
-        </div>
-            : <span></span>
-=======
     
     return ( 
       <div className="container homepage">
@@ -119,7 +100,6 @@ export class HomePage extends Component {
             state: { 
               documentsReceived: this.state.documentsReceived,
               count: this.state.count
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
             }
           }}>Gauti</Link>&nbsp;&nbsp;&nbsp;  
             <a href="#" className="head-example" />

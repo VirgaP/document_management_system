@@ -2,15 +2,12 @@ import React, {Component} from 'react';
 import SingleInput from './components/singleInput';
 import axios from 'axios';
 import 'antd/dist/antd.css';
-<<<<<<< HEAD
 import { TITLE_MIN_LENGTH, TITLE_MAX_LENGTH } from './index';
  import { Form, Input, Button, notification } from 'antd';
 
- const FormItem = Form.Item;
-=======
-import UserDocumentListContainer from './UserDocumentListContainer';
-import GroupListContainer from './GroupListContainer';
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
+
+
+const FormItem = Form.Item;
 
 class UserGroupFormContainer extends Component {  
   constructor(props) {
@@ -80,13 +77,9 @@ class UserGroupFormContainer extends Component {
   }
   render() {
     return (
-<<<<<<< HEAD
-      <div className="container user_form">
-=======
       
       <div className="container new-form">
        <form className="container" id="type_form" onSubmit={this.handleFormSubmit}>
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
         <h5>Sukurti vartotojų grupę </h5>
         <Form onSubmit={this.handleFormSubmit}>
         <FormItem 
@@ -109,6 +102,7 @@ class UserGroupFormContainer extends Component {
           className="btn btn-link float-left"
           onClick={this.handleClearForm}>Išvalyti formą</button>
           </Form>
+          </form>
       </div>
     
     );
