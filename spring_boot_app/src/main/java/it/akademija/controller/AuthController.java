@@ -19,29 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-<<<<<<< HEAD
-import it.akademija.entity.Group;
-import it.akademija.entity.Role;
-import it.akademija.entity.RoleName;
-import it.akademija.entity.User;
-import it.akademija.exceptions.AppException;
-import it.akademija.payload.ApiResponse;
-import it.akademija.payload.JwtAuthenticationResponse;
-import it.akademija.payload.LoginRequest;
-import it.akademija.payload.RequestUser;
-import it.akademija.repository.GroupRepository;
-import it.akademija.repository.RoleRepository;
-import it.akademija.repository.UserRepository;
-import it.akademija.security.JwtTokenProvider;
-=======
-import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
 
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -101,11 +82,6 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-<<<<<<< HEAD
-        Role userRole = roleRepository.findByName(requestUser.getAdmin() ? RoleName.ROLE_ADMIN : RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
-        user.setRoles(Collections.singleton(userRole));
-=======
 //                Role userRole = roleRepository.findByName(
 //                        requestUser.getAdmin() == true ? RoleName.ROLE_ADMIN : RoleName.ROLE_USER
 //                ).orElseThrow(() -> new AppException("User Role not set."));
@@ -124,7 +100,6 @@ public class AuthController {
 
 //        user.setRoles(Collections.singleton(userRole));
 
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
 
         User result = userRepository.save(user);
 

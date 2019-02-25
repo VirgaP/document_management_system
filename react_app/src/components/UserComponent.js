@@ -15,7 +15,7 @@ const userComponent = (props) => {
         <td>
         <Link to={`/vartotojas/${props.email}`}>
         <Button type="primary">
-         Peržiūrėti 
+            Peržiūrėti 
         </Button>
         </Link>
         </td>

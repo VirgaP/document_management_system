@@ -44,9 +44,11 @@ export class Institution extends Component {
         <td>{(document.type !=null) ? document.type.title : 'tipas nepriskirtas'}</td>
         <td>{document.createdDate}</td>
         <td>
+        <Link to={`/dokumentas/${document.number}`}>
         <Button type="primary">
-            <Link to={`/dokumentas/${document.number}`}> Peržiūrėti </Link>
+             Peržiūrėti
         </Button>
+        </Link>
         </td>
       </tr>
       

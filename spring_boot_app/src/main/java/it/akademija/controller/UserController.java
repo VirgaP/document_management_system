@@ -4,11 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.UserDTO;
-<<<<<<< HEAD
 import it.akademija.payload.RequestGroup;
-=======
 import it.akademija.entity.User;
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
 import it.akademija.payload.RequestUser;
 import it.akademija.payload.UserIdentityAvailability;
 import it.akademija.repository.UserRepository;
@@ -58,11 +55,7 @@ public class UserController {
     }
 
     @GetMapping("/user/me")
-<<<<<<< HEAD
-//    @PreAuthorize("hasRole('USER')")
-=======
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
     public UserDTO getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         UserDTO user = new UserDTO(
                 currentUser.getAdmin(),
@@ -128,7 +121,6 @@ public class UserController {
         userService.removeGroupFromUser(email, groupName);
     }
 
-<<<<<<< HEAD
     @RequestMapping(path = "/{email}/edit", method = RequestMethod.PUT)
     @ApiOperation(value = "Get and update user", notes = "Returns user by email and updates user info")
     @ResponseStatus(HttpStatus.OK)
@@ -137,7 +129,6 @@ public class UserController {
             @RequestBody RequestUser request,
             @PathVariable final String email){
         userService.editUser(request, email);
-=======
 
     @GetMapping("/download/csv")
     public void downloadCSV(HttpServletResponse response) throws IOException{
@@ -170,7 +161,6 @@ public class UserController {
         String.valueOf(user);
 
         WriteDataToCSV.writeUserByEmailToCSV(response.getWriter(), user);
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae
     }
 
 }

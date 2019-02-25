@@ -91,16 +91,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-<<<<<<< HEAD:spring_boot_app/src/main/java/it/akademija/security/SecurityConfig.java
-                // AUTHENTICATION
-                .antMatchers("/api/auth/login")
-                // ADMIN
-                .permitAll()
-                .antMatchers("/api/auth/newUser")
-                .hasAuthority("ROLE_ADMIN")
-                .antMatchers("/api/files/**", "/api/documents/**")
-                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-=======
 
                 .antMatchers("/api/auth/login")
 //                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
@@ -111,7 +101,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .antMatchers("/console/**").permitAll()
                 .antMatchers("/swagger-ui.html#/").permitAll()
->>>>>>> 88bd95fa98b790ceef353a0d6c7bbc7ec56e26ae:spring_boot_app/src/main/java/it/akademija/SecurityConfig.java
                 .antMatchers("/api/**")
                 .permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")

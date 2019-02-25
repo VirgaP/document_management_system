@@ -22,9 +22,11 @@ export class ReceivedDocument extends Component {
         <tr key={document.number}>
          <UserDocumentComponent document={document}/>
         <td>
+        <Link to={`/gautas/dokumentas/${document.number}`}>
         <Button type="primary">
-            <Link to={`/gautas/dokumentas/${document.number}`}> Peržiūrėti </Link>
+             Peržiūrėti
         </Button>
+        </Link>
         </td>
       </tr>
       
