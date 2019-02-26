@@ -38,7 +38,7 @@ class Navbar extends Component {
           </Link>
         </Menu.Item>
         <Menu.Item key="logout">
-          <Icon type="user" />Atsijungti
+        <Icon type="logout" /> Atsijungti
         </Menu.Item>
         {this.props.currentUser.admin === true ? <AdminSubMenu/> : ''}
       </Menu>

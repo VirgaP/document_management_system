@@ -159,6 +159,58 @@ public class DocumentService {
     }
 
     @Transactional
+    public List<DocumentDTO> getAllUserSubmittedDocuments(String email){
+        List<DocumentDTO> documents = documentRepository.findAllUserSubmittedDocumentsl(email).stream()
+                .map(document -> new DocumentDTO(
+                        document.getTitle(),
+                        document.getUniqueNumber(),
+                        document.getDescription(),
+                        document.getCreatedDate(),
+                        document.getType(),
+                        document.getUserDocuments(),
+                        document.getDbFiles()
+                ))
+                .collect(Collectors.toList());
+
+        return documents;
+    }
+
+    @Transactional
+    public List<DocumentDTO> getAllUserConfirmedDocuments(String email){
+        List<DocumentDTO> documents = documentRepository.findAllUserConfirmedDocumentsl(email).stream()
+                .map(document -> new DocumentDTO(
+                        document.getTitle(),
+                        document.getUniqueNumber(),
+                        document.getDescription(),
+                        document.getCreatedDate(),
+                        document.getType(),
+                        document.getUserDocuments(),
+                        document.getDbFiles()
+                ))
+                .collect(Collectors.toList());
+
+        return documents;
+    }
+
+
+    @Transactional
+    public List<DocumentDTO> getAllUserRejectedDocuments(String email){
+        List<DocumentDTO> documents = documentRepository.findAllUserRejectedDocumentsl(email).stream()
+                .map(document -> new DocumentDTO(
+                        document.getTitle(),
+                        document.getUniqueNumber(),
+                        document.getDescription(),
+                        document.getCreatedDate(),
+                        document.getType(),
+                        document.getUserDocuments(),
+                        document.getDbFiles()
+                ))
+                .collect(Collectors.toList());
+
+        return documents;
+    }
+
+    @Transactional
     public List<DocumentDTO> getAllUserReceivedDocuments(String email){
         List<DocumentDTO> documents = documentRepository.findReceivedUserDocuments(email).stream()
                 .map(document -> new DocumentDTO(

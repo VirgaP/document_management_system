@@ -180,6 +180,7 @@ export class SingleDocument extends Component {
       : ( <span>Pasirinkite dokumentą...</span> );
 
       return (
+        <div className="container" id="document">
            <div className="container single-document">
            <SingleDocumentComponent document={this.state.document} userDocument={this.state.userDocument} user={this.state.user}/>
            <FileDownloadContainer userFiles={this.state.userFiles}/>
@@ -208,6 +209,7 @@ export class SingleDocument extends Component {
                   <span id="back-to-list">
                   <Link to={`/siusti/vartotojas/${current}`}><Icon type="left-circle-o" /> Grįžti į dokumentų sąrašą</Link> 
                   </span>   
+                </div>
                 </div>
       );
     }

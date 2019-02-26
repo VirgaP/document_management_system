@@ -8,10 +8,76 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* #app-container{
-  max-width: 100%;
-  max-height: 100%;
-} */
+ant-layout-content {
+  margin-left: 5%;
+}
+
+/* define a fixed width for the entire menu */
+.navigation {
+  width: 10%;
+  height: 100%;
+  z-index: 999;
+  position:absolute;
+  background-color: white;
+  /* position: relative; */
+}
+
+/* reset our lists to remove bullet points and padding */
+.mainmenu, .submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 5%;
+}
+
+.mainmenu a {
+  display: block;
+  background-color:white;
+  text-decoration: none;
+  padding: 10px;
+  color: #000;
+}
+
+/* add hover behaviour */
+.mainmenu a:hover {
+    background-color: white;
+}
+
+
+/* when hovering over a .mainmenu item,
+  display the submenu inside it.
+  we're changing the submenu's max-height from 0 to 200px;
+*/
+
+.mainmenu li:hover .submenu {
+  display: block;
+  max-height: 200px;
+  margin-left: 10%;
+}
+
+/*
+  we now overwrite the background-color for .submenu links only.
+  CSS reads down the page, so code at the bottom will overwrite the code at the top.
+*/
+
+.submenu a {
+  background-color: white;
+}
+
+/* hover behaviour for links inside .submenu */
+.submenu a:hover {
+  background-color: white;
+}
+
+/* this is the initial state of all submenus.
+  we set it to max-height: 0, and hide the overflowed content.
+*/
+.submenu {
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: all 0.5s ease-out;
+}
+
 .homepage {
   margin: auto;
   padding-top: 3%;
@@ -24,6 +90,7 @@ body {
   padding-top: 3%;
   text-align: justify;
   padding-bottom: 3%;
+  margin-left: 5%;
 }
 
 #hp1, #hp2, #hp3, #hp4 {
@@ -38,8 +105,12 @@ body {
   margin:'auto';
   padding-top: 3%;
   margin-bottom: 3%;
-  width: 80%;
+  
   padding-bottom:3%;
+  color:black;
+}
+#document {
+  width: 70%;
 }
 .document-description{
  background-color: white;
@@ -150,13 +221,16 @@ body {
   background-color: white;
   padding-left:2%;
  }
+ #user {
+  width: 80%;
+}
 .single-user{
   margin:'auto';
   padding-top: 3%;
-  margin-bottom:'10%';
-  width: '80%';
+  margin-bottom:5%;
   padding-bottom:3%;
 }
+
 .user_document_list{
   overflow-x:auto;
   background-color: white;
@@ -261,9 +335,105 @@ code {
   color: white;
 }
 
+#notfound {
+  position: relative;
+  height: 100vh;
+}
+
+#notfound .notfound {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.notfound {
+  max-width: 920px;
+  width: 100%;
+  line-height: 1.4;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.notfound .notfound-404 {
+  position: absolute;
+  height: 100px;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  z-index: -1;
+}
+
+.notfound .notfound-404 h1 {
+  font-family: 'Maven Pro', sans-serif;
+  color: #ececec;
+  font-weight: 900;
+  font-size: 276px;
+  margin: 0px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.notfound h2 {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 46px;
+  color: #000;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 0px;
+}
+
+.notfound p {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 16px;
+  color: #000;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin-top: 15px;
+}
+
+.notfound a {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: #189cf0;
+  display: inline-block;
+  padding: 16px 38px;
+  border: 2px solid transparent;
+  border-radius: 40px;
+  color: #fff;
+  font-weight: 400;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+}
+
+.notfound a:hover {
+  background-color: #fff;
+  border-color: #189cf0;
+  color: #189cf0;
+}
+
 @media (min-width: 992px) {
   body {
     padding-top: 56px;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .notfound .notfound-404 h1 {
+    font-size: 162px;
+  }
+  .notfound h2 {
+    font-size: 26px;
   }
 }
 

@@ -45,6 +45,7 @@ import TypeListContainer from './TypeListContainer';
 import DocumentProvider from './ReceivedUserDocuments'
 import AdminRoute from './security/AdminRoute';
 import EditUser from './EditUser';
+import UserVerticalMenu from './layout/UserVerticalMenu';
 
 const { Content } = Layout;
 
@@ -138,13 +139,18 @@ class App extends Component {
     return (
         <Layout className="app-container" id="app-container">
             {(this.state.isAuthenticated) ?
-        <Navbar isAuthenticated={this.state.isAuthenticated} 
+          <Navbar isAuthenticated={this.state.isAuthenticated} 
             currentUser={this.state.currentUser} 
             onLogout={this.handleLogout} /> :
             <span></span>}   
-          <Content className="app-content">
-            <div className="container">
-          
+            {(this.state.isAuthenticated) ?
+            <UserVerticalMenu isAuthenticated={this.state.isAuthenticated} 
+            currentUser={this.state.currentUser} 
+            onLogout={this.handleLogout} /> :
+            <span></span>}   
+              <Content className="app-content">
+                <div className="container">
+              
               <Switch>  
               <Route exact path="/" render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
 
@@ -169,7 +175,7 @@ class App extends Component {
                 <AdminRoute path='/visos-grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupListContainer}/>
                 <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
                 <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
-                <Route path="/vartotojai" component={UserListContainer}/>
+                <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
                 <Route path="/redaguoti/vartotojas/:email" component={EditUser} render={(props) => <EditUser {...props} /> }/> 
                 {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
                 <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>

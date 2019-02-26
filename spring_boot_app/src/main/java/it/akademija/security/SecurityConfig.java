@@ -71,15 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .authorizeRequests()
-                // SWAGGER
-                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security",
-                        "/swagger-ui", "/webjars/**", "/swagger-resources/configuration/ui", "/swagge‌​r-ui.html", "/swagger-ui.html#/")
-                .permitAll()
-                // H2 CONSOLE
-                .antMatchers("/console/**").permitAll()
-                // UNSECURED
                 .antMatchers("/",
-//                        "/login",
+                        "/login",
 //                        "/groups",
                         "/register",
                         "/favicon.ico",

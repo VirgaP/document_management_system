@@ -36,6 +36,7 @@ import java.net.URI;
 import java.util.Collections;
 
 @RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -94,10 +95,6 @@ public class AuthController {
         group.addUser(user);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-//                Role userRole = roleRepository.findByName(
-//                        requestUser.getAdmin() == true ? RoleName.ROLE_ADMIN : RoleName.ROLE_USER
-//                ).orElseThrow(() -> new AppException("User Role not set."));
 
         Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));

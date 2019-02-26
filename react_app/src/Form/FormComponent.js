@@ -175,7 +175,7 @@ onChange(e) {
    }
 }
 fileUpload(file){
-  const url = 'http://localhost:8099/api/files/uploadFile';
+  const url = 'http://localhost:8099/api/file/uploadFile';
   const formData = new FormData();
   formData.append('file',file)
   formData.append('fileName', this.state.date + this.state.file.name)

@@ -145,7 +145,7 @@ export class SingleUser extends Component {
         }
     render() {
       return (
-        
+        <div className="container" id="user">
         <div className="container single-user">
               <SingleUserComponent user={this.state.user}/>
                 {/* <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button> */}
@@ -185,6 +185,7 @@ export class SingleUser extends Component {
                  <Button type="danger" onClick={this.DeleteUser.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   
                  </div>
+          </div>
           </div>
               
       );
