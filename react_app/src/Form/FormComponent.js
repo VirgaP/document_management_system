@@ -119,13 +119,12 @@ class Form extends Component {
   this.fileUpload(this.state.file).then((response)=>{
     console.log(response.data)
   })
-  this.handleClearForm(e);
-  // console.log("FILENAME", this.state.file.name);
-   
+  this.handleClearForm(e);   
   // const fileName = this.state.date + '-' + this.state.file.name; 
   // console.log("FILENAME PLUS DATE", this.state.fileName);
 
   axios.post('http://localhost:8099/api/documents/new', {
+   
     title: this.state.title,
     description: this.state.description,
     typeTitle: this.state.typeTitle,

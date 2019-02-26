@@ -16,7 +16,7 @@ export class FileDownloadContainer extends Component {
 
     handleDownlaod = (index, filename) => {
     
-      axios(`http://localhost:8099/api/files/downloadFile/${index}`, {
+      axios(`http://localhost:8099/api/file/download/${filename}`, {
         method: 'GET',
         responseType: 'blob' //Force to receive data in a Blob Format
     })

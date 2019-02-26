@@ -26,7 +26,10 @@ public class Document {
 
     private List<UserDocument> userDocuments = new ArrayList<>();
 
-    private List<DBFile> dbFiles = new ArrayList<DBFile>();
+//    private List<DBFile> dbFiles = new ArrayList<DBFile>();
+
+    private List<File> dbFiles = new ArrayList<>();
+
 
     @Column(name = "CREATED_DATE")
     @Temporal(TemporalType.DATE)
@@ -144,20 +147,27 @@ public class Document {
 //        file.setDocument(this);
 //    }
 
-    public void addDbFile(DBFile f) {
+    public void addDbFile(File f) {
         this.dbFiles.add(f);
         if(f.getDocument() != this)
             f.setDocument(this);
     }
+//
+//    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    @JsonIgnore
+//    public List<DBFile> getDbFiles() {
+//        return dbFiles;
+//    }
 
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @JsonIgnore
-    public List<DBFile> getDbFiles() {
+    public List<File> getDbFiles() {
         return dbFiles;
     }
 
-    public void setDbFiles(List<DBFile> dbFiles) {
+    public void setDbFiles(List<File> dbFiles) {
         this.dbFiles = dbFiles;
     }
 

@@ -20,7 +20,21 @@ export class UserVerticalMenu extends Component {
 
     }
 
-    componentDidMount = () => { 
+    // static getDerivedStateFromProps(nextProps, prevState){
+    //     if(nextProps.count!==prevState.count){
+    //       return { count: nextProps.count};
+    //    }
+    //    else return {count :1};
+    //  }
+
+    async updateCount(){
+        await this.setState({ count: this.state.count });
+        console.log(this.state.count);
+    }
+    componentWillReceiveProps(){
+        this.updateCount()
+    }
+    componentWillMount = () => { 
           
         axios.get(`http://localhost:8099/api/users/${this.state.email}`)
          .then(result => {

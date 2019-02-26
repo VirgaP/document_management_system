@@ -1,5 +1,6 @@
 package it.akademija.service;
 
+import it.akademija.FileStorageProperties;
 import it.akademija.dto.DocumentDTO;
 import it.akademija.entity.*;
 import it.akademija.payload.RequestDocument;
@@ -8,15 +9,14 @@ import it.akademija.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +38,15 @@ public class DocumentService {
     @Autowired
     private DBFileRepository dbFileRepository;
 
+    @Autowired
+    private FileRepository fileRepository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @Autowired
+    private FileStorageProperties fileStorageProperties;
+
     @Transactional
     public List<Document> getAll(){
         return documentRepository.findAll().stream().collect(Collectors.toList());
@@ -47,7 +56,7 @@ public class DocumentService {
     public void createDocument(RequestDocument requestDocument){
         Type type = typeRepository.findByTitle(requestDocument.getTypeTitle());
         User user = userRepository.findByEmail(requestDocument.getEmail());
-        DBFile file = dbFileRepository.findByFileName(requestDocument.getFileName());
+        File file = fileRepository.findByFileName(requestDocument.getFileName());
 
         UserDocument userDocument= new UserDocument();
         Document document = new Document(
@@ -59,18 +68,15 @@ public class DocumentService {
         );
         document.setType(type);
 
-        System.out.println("dbfailas" + file.getFileName());
         document.addDbFile(file);
 
         documentRepository.save(document);
 
-        file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
+//        file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
 
         userDocument.setUser(user);//ok
 
         userDocument.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));//jei sutampa pavadinimas jpa nesupranta pagal kuri ieskoti, pakiesi i findbyunuique numbet
-//        document.addUser(userDocument);
-//        user.addUserDocument(userDocument);
 
         userDocumentRepository.save(userDocument);
 
@@ -79,21 +85,18 @@ public class DocumentService {
     @Transactional
     public void additionalFile(String uniqueNumber,RequestDocument requestDocument){
         Document document = documentRepository.findByuniqueNumber(uniqueNumber);
-        DBFile file = dbFileRepository.findByFileName(requestDocument.getFileName());
-
-        List<DBFile> files = document.getDbFiles();
+        File file = fileRepository.findByFileName(requestDocument.getFileName());
+        List<File> files = document.getDbFiles();
 
         file.setDocument(document);
         document.addDbFile(file);
-        dbFileRepository.save(file);
+        fileRepository.save(file);
 
-        ListIterator<DBFile> listIterator = files.listIterator();
+        ListIterator<File> listIterator = files.listIterator();
         listIterator.add(file);
-
 
         document.setDbFiles(files);
         documentRepository.save(document);
-
     }
 
 
@@ -244,11 +247,22 @@ public class DocumentService {
         Document document = documentRepository.findByuniqueNumber(uniqueNumber);
         document.setType(null);
 
-        List<DBFile> dbFiles = document.getDbFiles();
+        List<File> dbFiles = document.getDbFiles();
 
-        for (Iterator<DBFile> iterator = dbFiles.iterator(); iterator.hasNext(); ) {
-            DBFile value = iterator.next();
-                iterator.remove();
+
+        for (Iterator<File> iterator = dbFiles.iterator(); iterator.hasNext(); ) {
+
+            File value = iterator.next();
+
+            String fileName = value.getFileName();
+            Resource resource = fileStorageService.loadFileAsResource(fileName);
+
+            try {
+                resource.getFile().delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            iterator.remove();
             }
 
         documentRepository.delete(document);

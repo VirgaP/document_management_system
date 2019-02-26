@@ -1,6 +1,7 @@
 package it.akademija.dto;
 
 import it.akademija.entity.DBFile;
+import it.akademija.entity.File;
 import it.akademija.entity.Type;
 import it.akademija.entity.UserDocument;
 
@@ -22,12 +23,14 @@ public class DocumentDTO {
 
     private List<UserDocument> userDocuments = new ArrayList<>();
 
-    private List<DBFile> dbFiles = new ArrayList<DBFile>();
+//    private List<DBFile> dbFiles = new ArrayList<DBFile>();
+
+    private List<File> dbFiles = new ArrayList<>();
 
     public DocumentDTO() {
     }
 
-    public DocumentDTO(String title, String number, String description, Date createdDate, Type type, List<UserDocument> userDocuments, List<DBFile> dbFiles) {
+    public DocumentDTO(String title, String number, String description, Date createdDate, Type type, List<UserDocument> userDocuments, List<File> dbFiles) {
         this.title = title;
         this.number = number;
         this.description = description;
@@ -95,11 +98,11 @@ public class DocumentDTO {
         this.userDocuments = userDocuments;
     }
 
-    public List<DBFile> getDbFiles() {
+    public List<File> getDbFiles() {
         return dbFiles;
     }
 
-    public void setDbFiles(List<DBFile> dbFiles) {
+    public void setDbFiles(List<File> dbFiles) {
         this.dbFiles = dbFiles;
     }
 }

@@ -1,6 +1,8 @@
 package it.akademija.controller;
 
+import it.akademija.entity.File;
 import it.akademija.payload.UploadFileResponse;
+import it.akademija.repository.FileRepository;
 import it.akademija.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +30,25 @@ public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private FileRepository fileRepository;
+
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
+
+       File dbFile = new File(
+               new String(),
+               file.getOriginalFilename()
+       );
+
+       fileRepository.save(dbFile);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
+
 
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
@@ -49,11 +62,11 @@ public class FileController {
                 .collect(Collectors.toList());
     }
 
-//    @GetMapping("/downloadFile/{fileName:.+}")
-    @GetMapping("/download/{fileId}")
-
+//    @GetMapping("/download/{fileId}")
+    @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
+//        String fileName = fileRepository.findByFileName(fileId).getFileName();
         Resource resource = fileStorageService.loadFileAsResource(fileName);
 
         // Try to determine file's content type
@@ -74,4 +87,5 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+
 }
