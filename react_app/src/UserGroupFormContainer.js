@@ -78,8 +78,7 @@ class UserGroupFormContainer extends Component {
   }
   render() {
     return (
-      
-      <div className="container new-form">
+      <div className="container new-form" id="list_container">
        <form className="container" id="type_form" onSubmit={this.handleFormSubmit}/>
         <h5>Sukurti vartotojų grupę </h5>
         <Form onSubmit={this.handleFormSubmit}>

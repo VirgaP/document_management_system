@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button, Icon, Badge } from 'antd';
 import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom'
+import ZipDownload from './ZipDownload';
 
 export class HomePage extends Component {
     constructor(props) {
@@ -13,7 +14,8 @@ export class HomePage extends Component {
           user:{},
           currentUser: ' ',
           documentsReceived:[],
-          count:0
+          count:0,
+          documents:[]
         }; 
         
         const user = props.currentUser;
@@ -22,6 +24,19 @@ export class HomePage extends Component {
     }
    
       componentDidMount = () => { 
+        axios.get('http://localhost:8099/api/documents/test?page=0&size=3&sort=uniqueNumber&direction=DESC')
+            .then(response => {
+                this.setState({
+                    documents: response.data
+                });
+                console.log("Documents by page ", this.state.documents)
+            })
+            .catch(error => {
+                this.setState({
+                    error: 'Error while fetching data.'
+                });
+            });
+        
           
          axios.get(`http://localhost:8099/api/users/${this.state.email}`)
           .then(result => {
@@ -108,7 +123,8 @@ export class HomePage extends Component {
           
           {/* <span className="badge badge-pill badge-primary">{this.state.count}</span> */}
           </div>
-          </div>  
+          </div> 
+          <ZipDownload email={this.state.email} />
           <button className="btn btn-default" onClick={this.handleDownlaod.bind(this)}>Gauti csv</button> 
         </div>       
       </div>   

@@ -49,7 +49,8 @@ export class SingleGroup extends Component {
      console.log("params url: ", this.props.match.params.groupName)
      console.log('GRUPE', this.state.group)
       return (
-           <div className="container" style={style}>
+        <div className="container" id="list_container">
+           <div className="container single-user" >
            <div className="card h-100">
               <div className="card-body">
                     <h4 className="card-title">
@@ -66,17 +67,8 @@ export class SingleGroup extends Component {
               </div>
             </div>
           </div> 
+          </div>
       );
 }
 }
 export default SingleGroup;
-const style = {
-    margin:'auto',
-    marginTop:'20px',
-    marginBottom:'20px',
-    width: '70%'
-  }
-  const username = {
-    border:'solid 1 px grey',
-    backgroundColor: 'yellow',
-}

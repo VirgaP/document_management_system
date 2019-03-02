@@ -153,35 +153,29 @@ class App extends Component {
               
               <Switch>  
               <Route exact path="/" render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-
                {/* <Route path='/pagrindinis' render={(props) => <HomePage isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>         */}
                 <PrivateRoute path='/pagrindinis'  component={HomePage} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />
-                <Route path="/naujas-dokumentas" render={(props) => <Form currentUser={this.state.currentUser} {...props} />}/>
-                <Route path="/dokumentas/:number" render={(props) => <SingleDocument currentUser={this.state.currentUser} {...props} />}/> 
-                <Route path="/gautas/dokumentas/:number" render={(props) => <SingleReceivedDocument currentUser={this.state.currentUser} {...props} />}/> 
-                <Route path="/redaguoti/dokumentas/:number" component={EditDocument} render={(props) => <EditDocument {...props} /> }/>
-                <Route path="/mano-dokumentai" render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
+                <PrivateRoute path="/naujas-dokumentas" component={Form} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/>
+                <PrivateRoute path="/dokumentas/:number" component={SingleDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 
+                <PrivateRoute path="/gautas/dokumentas/:number" component={SingleReceivedDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 
+                <PrivateRoute path="/redaguoti/dokumentas/:number" component={EditDocument} isAuthenticated={isAuthenticated} />
+                <PrivateRoute path="/mano-dokumentai" component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <AdminRoute path="/naujas-tipas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeForm}/>
                 <AdminRoute path='/visi-tipai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeListContainer}/>
-                <Route path="/tipas/:title" render={(props) => <SingleType {...props} />}/>                 
-                <Route path="/redaguoti/tipas/:title" component={EditType} render={(props) => <EditType {...props} /> }/>   
-                <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
-                <Route exact path="/gauti/vartotojas/:email/" render={props => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props}/>} />
-                <Route path='/siusti/vartotojas/:email/' render={(props) => <UserDocumentListContainer currentUser={this.state.currentUser} {...props} />}/>
+                <AdminRoute path="/tipas/:title" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={SingleType}/>}/>                 
+                <AdminRoute path="/redaguoti/tipas/:title" component={EditType} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> }/>   
+                <PrivateRoute exact path="/gauti/vartotojas/:email/" component={ReceivedUserDocuments} isAuthenticated={isAuthenticated}  currentUser={this.state.currentUser} />
+                <PrivateRoute path='/siusti/vartotojas/:email/' component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <AdminRoute path='/visi-dokumentai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={DocumentListContainer}/>
                 <AdminRoute path="/naujas-vartotojas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={Registration}/>
                 <AdminRoute path="/nauja-grupe" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserGroupFormContainer}/>
                 <AdminRoute path='/visos-grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupListContainer}/>
-                <Route path="/grupe/:name" render={(props) => <SingleGroup {...props} />}/> 
-                <Route path="/redaguoti/grupe/:name" component={EditGroup} render={(props) => <EditGroup {...props} /> }/> 
+                <AdminRoute path="/grupe/:name" isAdmin={isAdmin} isAuthenticated={isAuthenticated}  component={SingleGroup}/> 
+                <AdminRoute path="/redaguoti/grupe/:name" component={EditGroup} isAdmin={isAdmin} isAuthenticated={isAuthenticated} /> 
                 <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
-                <Route path="/redaguoti/vartotojas/:email" component={EditUser} render={(props) => <EditUser {...props} /> }/> 
-                {/* <PrivateRoute authenticated={this.state.isAuthenticated} path="/vartotojas/:email" handleLogout={this.handleLogout}> render={(props) => <SingleUser {...props} />}></PrivateRoute> */}
-                <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/>
-                {/* <Route path="/vartotojas/gauti" render={(props) => <ReceivedUserDocuments currentUser={this.state.currentUser} {...props} />}/> */}
+                <AdminRoute path="/redaguoti/vartotojas/:email" component={EditUser} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> 
                 <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
-                {/* <Route path="/vartotojas/:email" render={(props) => <SingleUser currentUser={this.state.currentUser} {...props} />}/> */}
                 <PrivateRoute path="/vartotojas/:email" component={SingleUser} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <Route path="*" component={Nowhere}/>  
               </Switch>

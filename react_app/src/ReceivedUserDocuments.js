@@ -42,7 +42,6 @@ class ReceivedUserDocuments extends React.Component {
                 </div>
             );
         }
-     
         var rows = [];
   
         documentsReceived.map((document) => (                                        
@@ -52,7 +51,7 @@ class ReceivedUserDocuments extends React.Component {
        const {count} = this.state
        console.log(count)
         return (
-      
+      <div className="container" id="list_container">
         <div className="container user_document_list">
         <h3>Gauti dokumentai</h3>
         <table className="table table-striped">
@@ -65,6 +64,7 @@ class ReceivedUserDocuments extends React.Component {
         </table>
         
         </div> 
+      </div>  
         )
       }
   }

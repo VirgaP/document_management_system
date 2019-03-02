@@ -106,7 +106,7 @@ setconfirmed(value) {
 
     
     return (
-      
+    <div className="container" id="list_container">
     <div className="container user_document_list">
     <button btn btn-default onClick={this.changeView} value='confirmed'>Patvirtinti</button>
     <h4>Vartotojo dokumentai</h4>
@@ -121,8 +121,7 @@ setconfirmed(value) {
     </table>
     }
     </div> 
-   
-        
+    </div> 
     )
   }
 }

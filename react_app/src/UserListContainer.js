@@ -30,6 +30,7 @@ export class UserListContainer extends Component {
   }
     return (
       <div>
+      <div className="container" id="list_container">
         <div className="container item-list">
         <h4>Registruoti vartotojai</h4>
         <table className="table">
@@ -47,6 +48,7 @@ export class UserListContainer extends Component {
     
         </table>
         </div>
+      </div>
       </div>
     )
   }

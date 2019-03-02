@@ -47,6 +47,7 @@ export class GroupListContainer extends Component {
       rows.push(<Group group={group} key={group.name} deleteGroup={this.deleteGroup}/>)  
     ));
     return (
+  <div className="container" id="list_container">
     <div className="container item-list">
     <h5>Vartotojų grupės</h5>
     <table className="table table-striped">
@@ -58,6 +59,7 @@ export class GroupListContainer extends Component {
         <tbody>{rows}</tbody>
     </table>
     </div>  
+  </div>
       );
   }
 }

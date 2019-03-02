@@ -36,7 +36,7 @@ public class FileUtil {
     public BinaryOutputWrapper prepDownloadAsZIP(List<String> filenames) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/zip"));
-        String outputFilename = "output.zip";
+        String outputFilename = "documents.zip";
         headers.setContentDispositionFormData(outputFilename, outputFilename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 

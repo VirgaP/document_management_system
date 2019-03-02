@@ -47,7 +47,7 @@ componentDidMount = () => {
     ));
     
     return (
-
+  <div className="container" id="list_container">
     <div className="container item-list">
     <h4>Dokumento tipai</h4>
     <table className="table table-striped">
@@ -58,8 +58,8 @@ componentDidMount = () => {
         </thead>
         <tbody>{rows}</tbody>
     </table>
-    
-    </div>  
+    </div> 
+    </div> 
       );
 
   }

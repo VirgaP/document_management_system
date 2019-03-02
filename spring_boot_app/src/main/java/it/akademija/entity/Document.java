@@ -6,10 +6,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
-public class Document {
+public class Document implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -185,6 +186,13 @@ public class Document {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Document [uniqueNumber=").append(uniqueNumber).append("]");
+        return builder.toString();
     }
 
 }

@@ -1,0 +1,10 @@
+Pavadinimas,Sukurimo data,tipas,uniklaus numeris,patvirtintas,atmestas,pateiktas
+Virgos dokumentas6,2019-02-12,Saskaita,2019-2-12-22-10-virga@email.com,false,false,true
+Dokumenats6,2019-02-12,Saskaita,2019-2-12-22-30-virga@email.com,false,false,true
+Ataskaita,2019-02-12,Saskaita,2019-2-12-23-29-virga@email.com,false,false,true
+Virgos dokumentas9,2019-02-13,Saskaita,2019-2-13-9-41-virga@email.com,false,false,true
+Virgos dokumentas111,2019-02-13,Vaztarastis,2019-2-13-11-37-virga@email.com,false,false,true
+mano vaztarastis,2019-02-19,Vaztarastis,2019-2-19-19-16-virga@email.com,false,false,true
+Virgos prasymas2,2019-02-19,Prasymas,2019-2-19-19-33-virga@email.com,true,false,false
+Mano prasymas,2019-02-19,Prasymas,2019-2-19-18-45-virga@email.com,true,false,false
+Virgos prasymas,2019-02-18,Prasymas,2019-2-18-22-22-virga@email.com,false,true,false

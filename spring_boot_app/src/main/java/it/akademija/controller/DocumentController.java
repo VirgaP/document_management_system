@@ -3,14 +3,20 @@ package it.akademija.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.DocumentDTO;
+import it.akademija.entity.Document;
+import it.akademija.events.PaginatedResultsRetrievedEvent;
+import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.RequestDocument;
 import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.util.UriComponentsBuilder;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -19,12 +25,60 @@ public class DocumentController {
 
     private final DocumentService documentService;
     private final UserService userService;
+    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public DocumentController(DocumentService documentService, UserService userService) {
+    public DocumentController(DocumentService documentService, UserService userService, ApplicationEventPublisher eventPublisher) {
         this.documentService = documentService;
         this.userService = userService;
+        this.eventPublisher = eventPublisher;
     }
+
+    @GetMapping(params = { "page", "size" })
+    public List<Document> findPaginatedDocuments(@RequestParam("page") int page,
+                                   @RequestParam("size") int size, UriComponentsBuilder uriBuilder,
+                                   HttpServletResponse response) {
+        Page<Document> resultPage = documentService.listPages(page, size);
+        if (page > resultPage.getTotalPages()) {
+            throw new ResourceNotFoundException();
+        }
+        eventPublisher.publishEvent(new PaginatedResultsRetrievedEvent<Document>(
+                Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
+
+        return resultPage.getContent();
+    }
+
+    @GetMapping(path="/{page}/{size}", params = { "page", "size" })
+    public List<Document> findPaginated(@PathVariable("page") int page,
+                                        @PathVariable("size") int size, UriComponentsBuilder uriBuilder,
+                                        HttpServletResponse response) {
+        Page<Document> resultPage = documentService.listPages(page, size);
+        if (page > resultPage.getTotalPages()) {
+            throw new ResourceNotFoundException();
+        }
+        eventPublisher.publishEvent(new PaginatedResultsRetrievedEvent<Document>(
+                Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
+
+        return resultPage.getContent();
+    }
+
+
+    @GetMapping("/test")
+    public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {
+        return documentService.listByPage(pageable);
+    }
+
+    @GetMapping("/count")
+    public Long documentCount() {
+        return documentService.returnCount();
+    }
+
+//    @RequestMapping(value = "/pages", method = RequestMethod.GET)
+//    public List<DocumentDTO> getDocumentsByPage(@RequestParam(value = "page", defaultValue = "0") int page,
+//                                   @RequestParam(value = "limit", defaultValue = "10") int limit) {
+//
+//        return documentService.getDocumentsPage(page, limit);
+//    }
 
     @RequestMapping(path="/new", method = RequestMethod.POST)
     @ApiOperation(value = "Create document", notes = "Creates document with received data from the form")
@@ -57,9 +111,10 @@ public class DocumentController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get all documents", notes = "Returns list of all documents in database")
-    List<DocumentDTO> getAlldocuments() {
-        return documentService.getDocuments();
+    List<DocumentDTO> getAllDocuments() {
+        return documentService.getAll();
     }
+
 
     @RequestMapping(path = "/{uniqueNumber}", method = RequestMethod.GET)
     @ApiOperation(value = "Get one document", notes = "Returns one document by number")

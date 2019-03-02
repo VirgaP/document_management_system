@@ -43,6 +43,8 @@ export class Institution extends Component {
         <td>{document.description}</td>
         <td>{(document.type !=null) ? document.type.title : 'tipas nepriskirtas'}</td>
         <td>{document.createdDate}</td>
+        <td>{document.userDocuments.map(el=>(String (el.confirmed)=== 'true')? 'Patvirtintas' : ' Nepatvirtintas')}</td>
+        <td>{document.userDocuments.map(el=>el.user.name + ' ' + el.user.surname)}</td>
         <td>
         <Link to={`/dokumentas/${document.number}`}>
         <Button type="primary">

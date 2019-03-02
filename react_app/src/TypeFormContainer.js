@@ -89,6 +89,7 @@ class TypeFormContainer extends Component {
 
   render() {
       return (
+      <div className="container" id="list_container">
         <div className="container user_form">
           <h5>Sukurti dokumento tipą </h5>
           <Form onSubmit={this.handleFormSubmit}>
@@ -112,6 +113,7 @@ class TypeFormContainer extends Component {
             className="btn btn-link float-left"
             onClick={this.handleClearForm}>Išvalyti formą</button>
             </Form>
+        </div>
         </div>
       );
     }

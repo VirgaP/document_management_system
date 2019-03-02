@@ -38,6 +38,7 @@ spring_boot_app/src/main/resources/public/
 # Maven
 ################################################################################
 log/
+uploads
 target/
 pom.xml.tag
 pom.xml.releaseBackup

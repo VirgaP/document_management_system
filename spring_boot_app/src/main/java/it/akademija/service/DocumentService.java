@@ -3,15 +3,21 @@ package it.akademija.service;
 import it.akademija.FileStorageProperties;
 import it.akademija.dto.DocumentDTO;
 import it.akademija.entity.*;
+import it.akademija.payload.ApiResponse;
 import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.io.IOException;
@@ -26,6 +32,10 @@ public class DocumentService {
 
     @Autowired
     private DocumentRepository documentRepository;
+
+    @Autowired
+    private PagedDocumentRepository pagedDocumentRepository;
+
     @Autowired
     private TypeRepository typeRepository;
 
@@ -47,9 +57,147 @@ public class DocumentService {
     @Autowired
     private FileStorageProperties fileStorageProperties;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @Transactional
-    public List<Document> getAll(){
-        return documentRepository.findAll().stream().collect(Collectors.toList());
+    public List<DocumentDTO> getDocumentsPage(int page, int limit) {
+        List<DocumentDTO> returnValue = new ArrayList<>();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<Document> documents = pagedDocumentRepository.findAll(pageableRequest);
+        List<Document> documentEntities = documents.getContent();
+        for (Document documentEntity : documentEntities) {
+            DocumentDTO documentDTO = new DocumentDTO(
+                    documentEntity.getTitle(),
+                    documentEntity.getUniqueNumber(),
+                    documentEntity.getDescription(),
+                    documentEntity.getCreatedDate(),
+                    documentEntity.getType(),
+                    documentEntity.getUserDocuments(),
+                    documentEntity.getDbFiles()
+            );
+            BeanUtils.copyProperties(documentEntity, documentDTO);
+            returnValue.add(documentDTO);
+        }
+        return returnValue;
+    }
+
+
+
+//    public Page<Document> listByPage(Pageable pageable) {
+//        return pagedDocumentRepository.findAll(pageable);
+//    }
+
+    @Transactional
+    public Page<DocumentDTO> listByPage(Pageable pageable) {
+
+       final Page<DocumentDTO> page = new PageImpl<>(
+                pagedDocumentRepository.findAll(pageable).stream()
+                        .map(document -> new DocumentDTO(
+                                document.getTitle(),
+                                document.getUniqueNumber(),
+                                document.getDescription(),
+                                document.getCreatedDate(),
+                                document.getType(),
+                                document.getUserDocuments(),
+                                document.getDbFiles()
+                        ))
+                        .collect(Collectors.toList())
+        );
+        return page;
+
+    }
+
+    @Transactional
+    public Long returnCount(){
+        Long count = pagedDocumentRepository.findCount();
+        System.out.println("count " + count);
+        return count;
+    }
+
+    public Page<Document> listPages(int page, int size) {
+        return pagedDocumentRepository.findAll(new Pageable() {
+            @Override
+            public int getPageNumber() {
+                return 0;
+            }
+
+            @Override
+            public int getPageSize() {
+                return 0;
+            }
+
+            @Override
+            public long getOffset() {
+                return 0;
+            }
+
+            @Override
+            public Sort getSort() {
+                return null;
+            }
+
+            @Override
+            public Pageable next() {
+                return null;
+            }
+
+            @Override
+            public Pageable previousOrFirst() {
+                return null;
+            }
+
+            @Override
+            public Pageable first() {
+                return null;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+        });
+    }
+
+//    public ResponseEntity<?> getDocumentsPage(int page, int size) {
+//
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<Document> documentsPage = pagedDocumentRepository.findAll(pageable);
+//
+//        if (documentsPage.getContent().isEmpty()) {
+//            return new ResponseEntity<>(new ApiResponse(false, "Unable to retrieve any document"), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        final List<DocumentDTO> documentDTOS = documentsPage.getContent()
+//                .stream()
+//                .map(document -> new DocumentDTO(
+//                        document.getTitle(),
+//                        document.getUniqueNumber(),
+//                        document.getDescription(),
+//                        document.getCreatedDate(),
+//                        document.getType(),
+//                        document.getUserDocuments(),
+//                        document.getDbFiles()
+//                ))
+//                .collect(Collectors.toList());
+//
+//        return new ResponseEntity<>(new DocumentDTO(users, usersPage), HttpStatus.OK);
+//    }
+
+    @Transactional
+    public List<DocumentDTO> getAll(){
+        return documentRepository.findAll().stream()
+                .map(document -> new DocumentDTO(
+                        document.getTitle(),
+                        document.getUniqueNumber(),
+                        document.getDescription(),
+                        document.getCreatedDate(),
+                        document.getType(),
+                        document.getUserDocuments(),
+                        document.getDbFiles()
+                ))
+                .collect(Collectors.toList());
+
     }
 
     @Transactional
@@ -68,7 +216,9 @@ public class DocumentService {
         );
         document.setType(type);
 
-        document.addDbFile(file);
+//        document.addDbFile(file);
+        document.getDbFiles().add(file);
+        file.setDocument(document);
 
         documentRepository.save(document);
 
@@ -98,34 +248,6 @@ public class DocumentService {
         document.setDbFiles(files);
         documentRepository.save(document);
     }
-
-
-    @Transactional
-    public List<DocumentDTO> getDocuments(){
-        List<DocumentDTO> documentDTOS = documentRepository.findAll().stream()
-                .map(document -> new DocumentDTO(
-                        document.getTitle(),
-                        document.getUniqueNumber(),
-                        document.getDescription(),
-                        document.getCreatedDate(),
-                        document.getType()))
-                .collect(Collectors.toList());
-
-        return documentDTOS;
-    }
-
-//    @Transactional
-//    public List<DocumentDTO> getDocumentByType() {
-//
-//        List<DocumentDTO>  documentDTOS = documentRepository.findAll(Sort.by("category"))
-//                .stream()
-//                .map(insitution -> new RequestInstitution(
-//                        insitution.getTitle(), insitution.getCity(), insitution.getImage(), insitution.getCategory(),
-//                       insitution.getType(), insitution.getSubtype()))
-//                .collect(Collectors.toList());
-//        return  requestInstitutions;
-//    }
-
 
     @Transactional
     public DocumentDTO getDocumentByTitle(String uniqueNumber){
