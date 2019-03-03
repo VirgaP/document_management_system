@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import DocumentListPagination from './DocumentListPagination';
 import AntPagination from './AntPagination';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Input, Button } from 'antd';
 import {Link } from "react-router-dom";
 
 import AntDocumentTable from './AntDocumentTable';
@@ -20,17 +20,15 @@ export class DocumentListContainer extends Component {
         data: [],
         pagination: {},
         loading: false,
-        currentPage: 0 | '',
-        total:''
+        page:'',
+        filterDropdownVisible: false,
+        searchText: '',
     }
-
-    // this.fetchData = this.fetchData.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
-    // this.previousPage = this.previousPage.bind(this);
-    // this.nextPage = this.nextPage.bind(this);
-    console.log(this.state.documents)
     }
-
+    onInputChange = (e) => {
+        this.setState({ searchText: e.target.value });
+      }
 
     // fetchData() {
     //     const {currentPage} = this.state;
@@ -57,16 +55,29 @@ export class DocumentListContainer extends Component {
     componentDidMount() {
         // this.fetchData();
         this.fetch();
+    }
 
-        axios.get('http://localhost:8099/api/documents/count')
-        .then(result => {
-            console.log("RESULT",result)
-        const total = result.data
-        this.setState({total: total});
-        console.log("total", total)
-        })
-        .catch(function (error) {
-          console.log(error);
+    onSearch = () => {
+        const { searchText } = this.state;
+        const reg = new RegExp(searchText, 'gi');
+        this.setState({
+          filterDropdownVisible: false,
+          data: this.state.data.map((record) => {
+            const match = record.type.title.match(reg);
+            if (!match) {
+              return null;
+            }
+            return {
+              ...record,
+              name: (
+                <span>
+                  {record.type.title.split(reg).map((text, i) => (
+                    i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
+                  ))}
+                </span>
+              ),
+            };
+          }).filter(record => !!record),
         });
       }
 
@@ -75,27 +86,29 @@ export class DocumentListContainer extends Component {
         pager.current = pagination.current;
         this.setState({
           pagination: pager,
+          page: this.state.page,          
         });
         this.fetch({
-          size: pagination.pageSize,
-          page: pagination.current,
-          sortField: sorter.field,
-          sortOrder: sorter.order,
+         results: pagination.pageSize,
+         page: pagination.current,
+         sort: sorter.field,
+         sortOrder: sorter.order,
           ...filters,
         });
+        console.log("filter ", filters)
+
       }
     
       fetch = (params = {}) => {
-          const {currentPage}=this.state
+          const {page}=this.state
         console.log('params:', params);
         this.setState({ loading: true });
+        console.log('current:', this.state.pagination.current -1);
         reqwest({
           url: 'http://localhost:8099/api/documents/test',
           method: 'get',
           data: {
-            // page: 0,
             size: 10,
-            page: currentPage,
             ...params,
           },
           type: 'json',
@@ -103,16 +116,13 @@ export class DocumentListContainer extends Component {
         console.log("data resp ", data)
           const pagination = { ...this.state.pagination };
           // Read total count from server
-        //   pagination.total = 77;
-          pagination.total = this.state.total;
+          pagination.total = data.totalElements;
           this.setState({
             loading: false,
             data: data.content,
-            // size: data.size,
-            currentPage: data.number +1,
+            page: data.number,
             pagination,
           });
-          console.log("data ", this.state.data)
         });
       }
     
@@ -130,6 +140,7 @@ export class DocumentListContainer extends Component {
     const columns = [{
         title: 'Pavadinimas',
         dataIndex: 'title',
+        // sorter: true,
         render: title => title,
         width: '20%',
       },{
@@ -140,27 +151,47 @@ export class DocumentListContainer extends Component {
       },{
         title: 'Tipas',
         dataIndex: 'type',
-        sorter: true,
         render: type => type.title,
+        // filters: [
+        //     // { text: String(type => type.title), value: String(type => type.title)},
+        //     { text: 'Pranesimas', value: 'Pranesimas' },
+        //   ],
+        // onFilter: (value, record) => record.type.title.includes(value),
+        filterDropdown: (
+            <div className="custom-filter-dropdown">
+              <Input
+                placeholder="Įveskite dokumento tipo pavadinimą"
+                value={this.state.searchText}
+                onChange={this.onInputChange}
+                onPressEnter={this.onSearch}
+              />
+              <Button type="primary" onClick={this.onSearch}>Ieškoti</Button>
+            </div>
+          ),
+          filterDropdownVisible: this.state.filterDropdownVisible,
+          onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }),
         width: '20%',
       }, {
         title: 'Data',
         dataIndex: 'createdDate',
+        sorter: true,
         render: createdDate => createdDate,
         width: '20%',
-      },{
+      },
+      {
         title: 'Vartotojas',
         dataIndex: 'userDocuments',
         render: userDocuments => userDocuments.map(el=>el.user.name + ' ' + el.user.surname),
         width: '20%',
-      }
+      },
     //   {
     //     title: 'Būsena',
     //     dataIndex: 'userDocuments',
-    //     // filters: [
-    //     //     {  render: userDocuments => userDocuments.map(el=>(String (el.submitted)=== 'true')), value: 'pateiktas' },
-    //     //     {  render: userDocuments => userDocuments.map(el=>(String (el.confirmed)=== 'true')), value: 'patvirtintas' },
-    //     //   ],
+
+    //     filters: [
+    //         {  text: 'atmestas', value: userDocuments => userDocuments.map(el=>(String (el.rejected)=== 'true')) },
+    //         {  text: 'patvirtintas', value: userDocuments => userDocuments.map(el=>(String (el.confirmed)=== 'true')) },
+    //       ],
     //     // render: userDocuments => userDocuments.map(el=>(String (el.confirmed)=== 'true')? 'Patvirtintas' : 'Sukurtas'),
     //     render: userDocuments => (
     //         <span>
@@ -180,10 +211,10 @@ export class DocumentListContainer extends Component {
     //           })}
     //         </span>
     //       ),
-    //     width: '20%',
+    //     width: '10%',
     //   }
     ];
-     const {pagination}=this.state
+     const {pagination, data, page}=this.state
     return (
     <div className="container" id="list_container">
     <div className="container user_document_list">
@@ -192,11 +223,8 @@ export class DocumentListContainer extends Component {
         columns={columns}
         rowKey={record => record.number}
         dataSource={this.state.data}
-        // dataSource={[...this.state.data.from({ length: (current - 1) * pageSize }), ...this.state.data]}
         pagination={this.state.pagination}
-        // pagination= { {pageSizeOptions: ['10', '20'], showSizeChanger: true}}
-        // pagination={{ pageSize: pagination.pageSize, total: pagination.total, current:pagination.current }}
-        // pagination={{ pageSize: 10 }} 
+        // pagination= {{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20']}}
         loading={this.state.loading}
         onChange={this.handleTableChange}
         scroll={{ y: 360 }}

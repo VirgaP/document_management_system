@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.print.Doc;
 import javax.transaction.Transactional;
 
 import java.io.IOException;
@@ -83,30 +84,51 @@ public class DocumentService {
     }
 
 
-
-//    public Page<Document> listByPage(Pageable pageable) {
-//        return pagedDocumentRepository.findAll(pageable);
-//    }
-
     @Transactional
     public Page<DocumentDTO> listByPage(Pageable pageable) {
-
-       final Page<DocumentDTO> page = new PageImpl<>(
-                pagedDocumentRepository.findAll(pageable).stream()
-                        .map(document -> new DocumentDTO(
-                                document.getTitle(),
-                                document.getUniqueNumber(),
-                                document.getDescription(),
-                                document.getCreatedDate(),
-                                document.getType(),
-                                document.getUserDocuments(),
-                                document.getDbFiles()
-                        ))
-                        .collect(Collectors.toList())
-        );
-        return page;
-
+        Page<Document> documentPage = pagedDocumentRepository.findAll(pageable);
+       final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+//        return pagedDocumentRepository.findAll(pageable);
+        return documentDtoPage;
     }
+
+    private DocumentDTO convertToDocumentDto(final Document document) {
+        final DocumentDTO documentDTO = new DocumentDTO(
+                document.getTitle(),
+                document.getUniqueNumber(),
+                document.getDescription(),
+                document.getCreatedDate(),
+                document.getType(),
+                document.getUserDocuments(),
+                document.getDbFiles()
+        );
+
+        //get values from contact entity and set them in contactDto
+        //e.g. contactDto.setContactId(contact.getContactId());
+        return documentDTO;
+    }
+
+
+
+//    @Transactional
+//    public Page<DocumentDTO> listByPage(Pageable pageable) {
+//
+//       final Page<DocumentDTO> page = new PageImpl<>(
+//                pagedDocumentRepository.findAll(pageable).stream()
+//                        .map(document -> new DocumentDTO(
+//                                document.getTitle(),
+//                                document.getUniqueNumber(),
+//                                document.getDescription(),
+//                                document.getCreatedDate(),
+//                                document.getType(),
+//                                document.getUserDocuments(),
+//                                document.getDbFiles()
+//                        ))
+//                        .collect(Collectors.toList())
+//        );
+//        return page;
+//
+//    }
 
     @Transactional
     public Long returnCount(){
