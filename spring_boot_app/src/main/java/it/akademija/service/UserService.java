@@ -101,6 +101,11 @@ public class UserService {
     public UserDTO getUser(String email){
         logger.info("Finding one user");
         User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User by email " + email + " does not exist");
+        }
+
         UserDTO userDTO = new UserDTO(
                 user.getName(),
                 user.getSurname(),

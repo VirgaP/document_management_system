@@ -40,14 +40,12 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public final UserService userService;
+    public final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-
-    @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(path="/new", method = RequestMethod.POST)

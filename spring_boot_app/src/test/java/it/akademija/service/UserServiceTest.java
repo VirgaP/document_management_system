@@ -51,9 +51,9 @@ public class UserServiceTest {
         passwordEncoder = new BCryptPasswordEncoder(10);
 
         existingUsers = new ArrayList<>(Arrays.asList(
-                TestingUtils.createRandomUser(),
-                TestingUtils.createRandomUser(),
-                TestingUtils.createRandomUser()));
+                TestingUtils.randomUser(),
+                TestingUtils.randomUser(),
+                TestingUtils.randomUser()));
         Mockito.when(userRepository.findAll()).thenReturn(existingUsers);
     }
 

@@ -11,6 +11,7 @@ import it.akademija.payload.RequestGroup;
 import it.akademija.service.GroupService;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -89,25 +90,17 @@ public class GroupControllerTest {
         groups.add(groupDTO);
         groups.add(groupDTO1);
 
-        Mockito.when(service.getGroups().listIterator().hasNext());
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("api/group")).andExpect(status().is(200));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Mockito.when(service.getGroups()).thenReturn(groups);
+        mockMvc.perform(MockMvcRequestBuilders.get("api/group")).andExpect(status().is(200));
     }
 
     @Test
-    public void testGetGroup() {
+    public void testGetGroup() throws Exception {
         GroupDTO group = new GroupDTO();
         group.setName(RequestGroup.class.getName());
         Mockito.when(service.getGroupByName(Mockito.anyString())).thenReturn(group);
-        try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/group/{name}")).andExpect(status().is(200))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -142,38 +135,26 @@ public class GroupControllerTest {
     }
 
     @Test
-    public void testDeleteGroup() {
+    public void testDeleteGroup() throws Exception {
         GroupDTO groupDTO = new GroupDTO();
         groupDTO.setName("example");
         Mockito.when(service.getGroupByName(Mockito.anyString())).thenReturn(groupDTO);
         Mockito.doNothing().when(service).deleteGroup(Mockito.anyString());
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.delete("/api/group/{name}")).andExpect(status().is(200));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/group/{name}")).andExpect(status().is(200));
     }
 
     @Test
-    public void testUpdateGroup() {
+    public void testUpdateGroup() throws Exception {
         GroupDTO group = new GroupDTO();
         group.setName("example");
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = null;
-        try {
-            jsonString = mapper.writeValueAsString(group);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        jsonString = mapper.writeValueAsString(group);
         Mockito.when(service.getGroupByName(Mockito.anyString())).thenReturn(group);
         Mockito.doNothing().when(service).editGroup(Mockito.any(RequestGroup.class), Mockito.anyString());
-        try {
-            mockMvc.perform(
-                    MockMvcRequestBuilders.put("/api/group/{example}/edit").content(jsonString).contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().is(200));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/group/{example}/edit").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(200));
     }
 
 //    @Test

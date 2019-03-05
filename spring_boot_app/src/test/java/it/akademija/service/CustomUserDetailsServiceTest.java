@@ -52,7 +52,7 @@ public class CustomUserDetailsServiceTest {
 
     @Test
     public void shouldSucceedIfUserWasFound() {
-        User existingUser = TestingUtils.createRandomUser();
+        User existingUser = TestingUtils.randomUser();
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(existingUser));
 
         UserDetails userPrincipal = customUserDetailsService.loadUserById(existingUser.getId());
