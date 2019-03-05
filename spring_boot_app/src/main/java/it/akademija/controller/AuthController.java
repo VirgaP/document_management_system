@@ -116,7 +116,6 @@ public class AuthController {
             user.setRoles(Collections.singleton(userRole1));
         }
 
-
 //        user.setRoles(Collections.singleton(userRole));
 
         logger.info("User "+ user+ "saved to User Repository");
