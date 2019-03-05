@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class GroupService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Group.class);
+    private static final Logger logger = LoggerFactory.getLogger(Group.class);
 
     @Autowired
     private GroupRepository groupRepository;

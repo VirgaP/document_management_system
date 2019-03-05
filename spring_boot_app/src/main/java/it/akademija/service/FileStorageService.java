@@ -1,8 +1,11 @@
 package it.akademija.service;
 
 import it.akademija.FileStorageProperties;
+import it.akademija.controller.AuthController;
 import it.akademija.exceptions.FileStorageException;
 import it.akademija.exceptions.MyFileNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {
+    public static Logger logger = LoggerFactory.getLogger(FileStorageService.class);
 
     private final Path fileStorageLocation;
 

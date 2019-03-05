@@ -1,9 +1,12 @@
 package it.akademija.service;
 
+import it.akademija.controller.AuthController;
 import it.akademija.entity.DBFile;
 import it.akademija.exceptions.FileStorageException;
 import it.akademija.exceptions.MyFileNotFoundException;
 import it.akademija.repository.DBFileRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,6 +22,7 @@ import java.util.zip.ZipOutputStream;
 
 @Service
 public class DBFileStorageService {
+    public static Logger logger = LoggerFactory.getLogger(DBFileStorageService.class);
 
     @Autowired
     private DBFileRepository dbFileRepository;

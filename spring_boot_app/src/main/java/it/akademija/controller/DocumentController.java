@@ -9,6 +9,8 @@ import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.RequestDocument;
 import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/documents")
 public class DocumentController {
+    private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 
     private final DocumentService documentService;
     private final UserService userService;
@@ -42,9 +45,10 @@ public class DocumentController {
         if (page > resultPage.getTotalPages()) {
             throw new ResourceNotFoundException();
         }
+
         eventPublisher.publishEvent(new PaginatedResultsRetrievedEvent<Document>(
                 Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
-
+        logger.info("findPaginatedDocuments");
         return resultPage.getContent();
     }
 
@@ -56,8 +60,10 @@ public class DocumentController {
         if (page > resultPage.getTotalPages()) {
             throw new ResourceNotFoundException();
         }
+        logger.info("ResourceNotFoundException");
         eventPublisher.publishEvent(new PaginatedResultsRetrievedEvent<Document>(
                 Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
+        //logger.info("findPaginated");
 
         return resultPage.getContent();
     }
@@ -65,11 +71,15 @@ public class DocumentController {
 
     @GetMapping("/test")
     public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {
+        logger.info("returning documentService.lisByPage");
+
         return documentService.listByPage(pageable);
     }
 
     @GetMapping("/count")
     public Long documentCount() {
+        //logger.info("returns documentCount");
+
         return documentService.returnCount();
     }
 
@@ -91,12 +101,14 @@ public class DocumentController {
     @RequestMapping(path="/{email}/documents", method = RequestMethod.GET)
     @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
     List<DocumentDTO> getAllUserDocuments( @PathVariable final String email) {
+        //logger.info("returns all users documents filtered using email");
         return documentService.getAllUserDocuments(email);
     }
 
     @RequestMapping(path="/{email}/received", method = RequestMethod.GET)
     @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
     List<DocumentDTO> getAllUserReceivedDocuments( @PathVariable final String email) {
+        //logger.info("Returns all received documents filtered using email");
         return documentService.getAllUserReceivedDocuments(email);
     }
 
@@ -112,6 +124,7 @@ public class DocumentController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get all documents", notes = "Returns list of all documents in database")
     List<DocumentDTO> getAllDocuments() {
+        //logger.info("Returns list of all documents in database");
         return documentService.getAll();
     }
 
@@ -120,6 +133,7 @@ public class DocumentController {
     @ApiOperation(value = "Get one document", notes = "Returns one document by number")
     public DocumentDTO getDocument(
             @PathVariable final String uniqueNumber) {
+        //logger.info ("The document No: " + uniqueNumber+ " has been returned");
         return documentService.getDocumentByTitle(uniqueNumber);
     }
 
@@ -131,6 +145,7 @@ public class DocumentController {
             @RequestBody RequestDocument request,
             @PathVariable final String uniqueNumber){
         documentService.updateDocument(request, uniqueNumber);
+        //logger.info("The document No: " + uniqueNumber + "has been updated");
     }
 
     @RequestMapping(path = "/{uniqueNumber}", method = RequestMethod.DELETE)
@@ -138,6 +153,7 @@ public class DocumentController {
     @ApiOperation(value = "Delete document", notes = "Deletes document by number")
     void deleteDocument(@PathVariable final String uniqueNumber) {
         documentService.deleteDocument(uniqueNumber);
+        //logger.info("The document No: " +  uniqueNumber+ "has been deleted");
 
     }
 
@@ -149,6 +165,7 @@ public class DocumentController {
             @PathVariable final String uniqueNumber,
             @PathVariable final String email)
     {
+        logger.info("The document No: "+ uniqueNumber+ "has been submitted");
         documentService.submitDocument(uniqueNumber, email);
     }
 
@@ -160,6 +177,7 @@ public class DocumentController {
             @PathVariable final String uniqueNumber,
             @PathVariable final String email)
     {
+        logger.info("The document No: "+ uniqueNumber+ "has been confirmed");
         documentService.confirmDocument(uniqueNumber, email);
     }
 
@@ -171,6 +189,7 @@ public class DocumentController {
             @PathVariable final String uniqueNumber,
             @PathVariable final String email)
     {
+        logger.info("The document No: "+ uniqueNumber+ "has been rejected");
         documentService.rejectDocument(uniqueNumber, email);
     }
 

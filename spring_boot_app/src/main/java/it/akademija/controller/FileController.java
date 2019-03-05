@@ -63,6 +63,7 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
+        logger.info("File "+ fileName+ " has been aploaded");
 
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
@@ -70,6 +71,7 @@ public class FileController {
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+        //logger.info("These files: "+ files???????);
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
@@ -95,6 +97,7 @@ public class FileController {
         if(contentType == null) {
             contentType = "application/octet-stream";
         }
+
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
@@ -129,6 +132,7 @@ public class FileController {
             }
             zippedOut.finish();
         } catch (Exception e) {
+            logger.info("ZipOutputStream exception");
             // Exception handling goes here
         }
     }
@@ -145,6 +149,7 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
             //Do something when exception is thrown
+            logger.info("IOException is catched");
         }
         return new ResponseEntity<>(output.getData(), output.getHeaders(), HttpStatus.OK);
     }

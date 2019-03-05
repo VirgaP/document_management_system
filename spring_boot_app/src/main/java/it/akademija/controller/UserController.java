@@ -13,6 +13,8 @@ import it.akademija.security.CurrentUser;
 import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
 import it.akademija.util.WriteDataToCSV;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 @Api(value="user")
 @RequestMapping(value = "/api/users")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public final UserService userService;
 
@@ -51,6 +54,7 @@ public class UserController {
             @ApiParam(value="User data", required=true)
             @RequestBody final RequestUser requestUser){
 
+        logger.info("The user xxx created");
         userService.createUser(requestUser);
     }
 
@@ -69,19 +73,21 @@ public class UserController {
     @GetMapping("/user/checkEmailAvailability")
     public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
         Boolean isAvailable = !userRepository.existsByEmail(email);
+        logger.info("Availability of email: "+ email+ " checked");
         return new UserIdentityAvailability(isAvailable);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value="Get all users", notes="Returns list of all users")
     public List<UserDTO> getAllUsers() {
-
+        logger.info("Returns list of all users");
         return userService.getUserWithoutDocuments();
     }
 
     @RequestMapping(path = "/emails", method = RequestMethod.GET)
     @ApiOperation(value="Get all emails", notes="Returns list of all emails")
     public List<UserDTO> getAllUsersEmails() {
+        logger.info("Returns list of all emails");
 
         return userService.getUserEmails();
     }
@@ -90,6 +96,7 @@ public class UserController {
     @ApiOperation(value = "Get one user", notes = "Returns one user by email")
     public UserDTO getDocument(
             @PathVariable final String email) {
+        logger.info("Returns the user, who's email: "+ email);
         return userService.getUser(email);
     }
 

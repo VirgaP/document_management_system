@@ -8,6 +8,8 @@ import it.akademija.entity.Type;
 import it.akademija.entity.TypeGroup;
 import it.akademija.payload.IncomingRequestBody;
 import it.akademija.service.TypeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
 @Api(value="type")
 @RequestMapping(value = "/api/types")
 public class TypeController {
+    private static final Logger logger = LoggerFactory.getLogger(TypeController.class);
 
 
     private final TypeService typeService;
@@ -30,6 +33,7 @@ public class TypeController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value="Get list of types", notes="Returns list of types")
     public List<TypeDTO> getTypes() {
+        logger.info("Returns the list of types");
 
         return typeService.getTypes();
     }
@@ -37,27 +41,28 @@ public class TypeController {
     @RequestMapping(path = "/typeGroup", method = RequestMethod.GET)
     @ApiOperation(value="Get list of types", notes="Returns list of types mapped to groups")
     public List<TypeGroup> getTypesByGroup() {
-
+        logger.info("Returns list of types mapped to groups");
         return typeService.getGroupTypes();
     }
 
     @RequestMapping(path = "/{email}/userDocumentTypes", method = RequestMethod.GET)
     @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
     public List<Type> getSenderTypesByUser(@PathVariable final String email) {
-
+        logger.info("Returns list of document types mapped to user");
         return typeService.getUserSenderGroupTypes(email);
     }
 
     @RequestMapping(path = "/{email}/userReceivedDocumentTypes", method = RequestMethod.GET)
     @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
     public List<Type> getReceiverTypesByUser(@PathVariable final String email) {
-
+        logger.info("Returns the user's with this email: "+ email+ "documents");
         return typeService.getUserReceiverGroupTypes(email);
     }
 
     @RequestMapping(path = "/{title}", method = RequestMethod.GET)
     @ApiOperation(value="Get type ", notes="Returns type")
     public TypeDTO getType(@PathVariable final String title){
+        logger.info("Returns this type: "+ title);
         return typeService.getTypeByTitle(title);
     }
 
@@ -73,7 +78,7 @@ public class TypeController {
     public void createType(
             @ApiParam(value="Type data", required=true)
             @RequestBody final IncomingRequestBody requestBody){
-
+        logger.info("The type was created");
         typeService.createType(requestBody);
     }
 
@@ -85,6 +90,7 @@ public class TypeController {
             @ApiParam(value="Type data", required=true)
             @PathVariable final String title)
     {
+        logger.info("The type: "+ title+" deleted");
         typeService.deleteType(title);
     }
 
@@ -96,6 +102,7 @@ public class TypeController {
             @ApiParam(value = "Type data", required = true)
             @RequestBody IncomingRequestBody requestBody,
             @PathVariable final String title){
+        //logger.info(" This type: "+ title+ "is updated");
         typeService.editType(requestBody, title);
     }
 
@@ -106,6 +113,7 @@ public class TypeController {
             @ApiParam(value="Type data", required=true)
             @PathVariable final String title,
             @RequestBody final IncomingRequestBody requestBody){
+       // logger.info("Users groups has been added to "+ title+ " document type");
 
         typeService.addUserGroup(title, requestBody);
     }
@@ -117,6 +125,7 @@ public class TypeController {
             @PathVariable final String title,
             @PathVariable final String groupName
     ){
+        logger.info("Users group "+ groupName+ " deleted");
         typeService.removeUserGroup(title, groupName);
     }
 

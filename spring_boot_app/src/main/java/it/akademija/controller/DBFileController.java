@@ -65,6 +65,7 @@ public class DBFileController {
                 .path("/downloadFile/")
                 .path(dbFile.getId())
                 .toUriString();
+        logger.info("This file has been uploaded: " + dbFile.getFileName());
 
         return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
@@ -72,6 +73,7 @@ public class DBFileController {
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+        logger.info("Multiple files have been uploaded");
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
@@ -82,6 +84,7 @@ public class DBFileController {
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
         // Load file from database
         DBFile dbFile = dbFileStorageService.getFile(fileId);
+        logger.info("This file "+ fileId +"has been downloaded");
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(dbFile.getFileType()))
@@ -92,6 +95,7 @@ public class DBFileController {
 
     @RequestMapping(value="/archive/{email}", produces="application/zip")
     public byte[] zipFiles(HttpServletResponse response, @PathVariable String email) throws IOException{
+        //reikalingas logeris ant exception???????
         //setting headers
         response.setContentType("application/zip");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -101,6 +105,7 @@ public class DBFileController {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(byteArrayOutputStream);
         ZipOutputStream zipOutputStream = new ZipOutputStream(bufferedOutputStream);
+
 
         //simple file list, just for tests
         ArrayList<File> files = new ArrayList<>();
@@ -131,6 +136,7 @@ public class DBFileController {
         }
         IOUtils.closeSilently(bufferedOutputStream);
         IOUtils.closeSilently(byteArrayOutputStream);
+        //logger.info("Zip files returned" + byteArrayOutputStream);????????
         return byteArrayOutputStream.toByteArray();
     }
 
