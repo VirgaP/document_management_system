@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.print.Doc;
 import javax.transaction.Transactional;
 
 import java.io.IOException;
@@ -85,29 +86,44 @@ public class DocumentService {
     }
 
 
-
-//    public Page<Document> listByPage(Pageable pageable) {
-//        return pagedDocumentRepository.findAll(pageable);
-//    }
-
     @Transactional
     public Page<DocumentDTO> listByPage(Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findAll(pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
 
-       final Page<DocumentDTO> page = new PageImpl<>(
-                pagedDocumentRepository.findAll(pageable).stream()
-                        .map(document -> new DocumentDTO(
-                                document.getTitle(),
-                                document.getUniqueNumber(),
-                                document.getDescription(),
-                                document.getCreatedDate(),
-                                document.getType(),
-                                document.getUserDocuments(),
-                                document.getDbFiles()
-                        ))
-                        .collect(Collectors.toList())
+    private DocumentDTO convertToDocumentDto(final Document document) {
+        final DocumentDTO documentDTO = new DocumentDTO(
+                document.getTitle(),
+                document.getUniqueNumber(),
+                document.getDescription(),
+                document.getCreatedDate(),
+                document.getType(),
+                document.getUserDocuments(),
+                document.getDbFiles()
         );
-        return page;
+        return documentDTO;
+    }
 
+    @Transactional
+    public int returnAllUserDocumentCount(String email){
+        return documentRepository.getUserDocumentCount(email);
+    }
+
+    @Transactional
+    public int returnSubmittedlUserDocumentCount(String email){
+        return documentRepository.getUserSubmittedDocumentCount(email);
+    }
+
+    @Transactional
+    public int returnConfirmedUserDocumentCount(String email){
+        return documentRepository.getUserConfirmedDocumentCount(email);
+    }
+
+    @Transactional
+    public int returnRejectedUserDocumentCount(String email){
+        return documentRepository.getUserRejectedDocumentCount(email);
     }
 
     @Transactional

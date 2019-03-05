@@ -103,14 +103,9 @@ public class AuthController {
         logger.info("Password has been set");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        //logger.info("User role not set");
-        Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER)
-                  .orElseThrow(() -> new AppException("User Role not set."));
+        Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER);
 
-
-        Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                .orElseThrow(() -> new AppException("User Role not set."));
-        logger.info("Admin role not set");
+        Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN);
 
         if(requestUser.getAdmin() == true){
             logger.info("Admin role was set");

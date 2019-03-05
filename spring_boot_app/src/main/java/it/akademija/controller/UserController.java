@@ -3,6 +3,7 @@ package it.akademija.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import it.akademija.dto.DocumentDTO;
 import it.akademija.dto.UserDTO;
 import it.akademija.payload.RequestGroup;
 import it.akademija.entity.User;
@@ -16,6 +17,8 @@ import it.akademija.util.WriteDataToCSV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -82,6 +85,11 @@ public class UserController {
     public List<UserDTO> getAllUsers() {
         logger.info("Returns list of all users");
         return userService.getUserWithoutDocuments();
+    }
+
+    @GetMapping("/pages")
+    public Page<UserDTO> pathParamUsers(Pageable pageable) {
+        return userService.listUsersByPage(pageable);
     }
 
     @RequestMapping(path = "/emails", method = RequestMethod.GET)

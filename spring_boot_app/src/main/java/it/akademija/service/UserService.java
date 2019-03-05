@@ -1,6 +1,8 @@
 package it.akademija.service;
 
+import it.akademija.dto.DocumentDTO;
 import it.akademija.dto.UserDTO;
+import it.akademija.entity.Document;
 import it.akademija.entity.Group;
 import it.akademija.entity.User;
 import it.akademija.exceptions.ResourceNotFoundException;
@@ -8,12 +10,15 @@ import it.akademija.payload.RequestGroup;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.DocumentRepository;
+import it.akademija.repository.PagedUserRepository;
 import it.akademija.repository.UserRepository;
 
 import org.codehaus.groovy.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,13 +35,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
     private final GroupRepository groupRepository;
+    private final PagedUserRepository pagedUserRepository;
 
 
     @Autowired
-    public UserService(UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository) {
+    public UserService(UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository, PagedUserRepository pagedUserRepository) {
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.groupRepository = groupRepository;
+        this.pagedUserRepository = pagedUserRepository;
     }
 
     @Transactional
@@ -52,6 +59,29 @@ public class UserService {
                         ))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public Page<UserDTO> listUsersByPage(Pageable pageable) {
+        Page<User> userPage = pagedUserRepository.findAll(pageable);
+        final Page<UserDTO> userDtoPage = userPage.map(this::convertToUserDto);
+        return userDtoPage;
+    }
+
+    private UserDTO convertToUserDto(final User user) {
+         final UserDTO userDTO = new UserDTO(
+                user.getName(),
+                user.getSurname(),
+                user.getEmail(),
+                user.getAdmin(),
+                user.getUserGroups(),
+                user.getUserDocuments()
+        );
+
+
+        return userDTO;
+//        System.out.println("submitted "+ userDTO.setSubmittedCount(userRepository.getUserDocumentDetails(user.getEmail())));
+    }
+
 
     @Transactional
     public List<UserDTO> getUserEmails() {

@@ -46,6 +46,7 @@ import DocumentProvider from './ReceivedUserDocuments'
 import AdminRoute from './security/AdminRoute';
 import EditUser from './EditUser';
 import UserVerticalMenu from './layout/UserVerticalMenu';
+import UsersTable from './UsersTable';
 
 const { Content } = Layout;
 
@@ -173,7 +174,8 @@ class App extends Component {
                 <AdminRoute path='/visos-grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupListContainer}/>
                 <AdminRoute path="/grupe/:name" isAdmin={isAdmin} isAuthenticated={isAuthenticated}  component={SingleGroup}/> 
                 <AdminRoute path="/redaguoti/grupe/:name" component={EditGroup} isAdmin={isAdmin} isAuthenticated={isAuthenticated} /> 
-                <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
+                {/* <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/> */}
+                <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UsersTable}/>
                 <AdminRoute path="/redaguoti/vartotojas/:email" component={EditUser} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> 
                 <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
                 <PrivateRoute path="/vartotojas/:email" component={SingleUser} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>

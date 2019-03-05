@@ -83,6 +83,26 @@ public class DocumentController {
         return documentService.returnCount();
     }
 
+    @GetMapping("/{email}/all")
+    public int userAllDocumentCount(@PathVariable final String email) {
+        return documentService.returnAllUserDocumentCount(email);
+    }
+
+    @GetMapping("/{email}/submitted")
+    public int userSubmittedDocumentCount(@PathVariable final String email) {
+        return documentService.returnSubmittedlUserDocumentCount(email);
+    }
+
+    @GetMapping("/{email}/confirmed")
+    public int userConfirmedDocumentCount(@PathVariable final String email) {
+        return documentService.returnConfirmedUserDocumentCount(email);
+    }
+
+    @GetMapping("/{email}/rejected")
+    public int userRejectedDocumentCount(@PathVariable final String email) {
+        return documentService.returnAllUserDocumentCount(email);
+    }
+
 //    @RequestMapping(value = "/pages", method = RequestMethod.GET)
 //    public List<DocumentDTO> getDocumentsByPage(@RequestParam(value = "page", defaultValue = "0") int page,
 //                                   @RequestParam(value = "limit", defaultValue = "10") int limit) {

@@ -5,8 +5,8 @@ import 'antd/dist/antd.css';
 
     
 const userComponent = (props) => { 
+
     return(    
-    
     <tr>
         <td>{props.name}</td>
         <td>{props.surname}</td>
