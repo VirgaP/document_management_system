@@ -14,6 +14,7 @@ import org.codehaus.groovy.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +31,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
     private final GroupRepository groupRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -87,6 +91,7 @@ public class UserService {
                 requestUser.getName(),
                 requestUser.getSurname(),
                 requestUser.getEmail(),
+                passwordEncoder.encode(requestUser.getPassword()),
                 requestUser.getAdmin()
         );
         user.addGroup(group);
@@ -118,7 +123,7 @@ public class UserService {
             user.setAdmin(admin);
         }
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
 

@@ -22,7 +22,7 @@ export class EditGroup extends Component {
       }
       renderRedirect = () => {
         if (this.state.redirect) {
-          return <Redirect to='/' />
+          return <Redirect to='/visos-grupes' />
         }
       }
       handleNameChange = (name) => (event) => {
