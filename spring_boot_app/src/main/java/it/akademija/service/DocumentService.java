@@ -87,8 +87,7 @@ public class DocumentService {
     @Transactional
     public Page<DocumentDTO> listByPage(Pageable pageable) {
         Page<Document> documentPage = pagedDocumentRepository.findAll(pageable);
-       final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
-//        return pagedDocumentRepository.findAll(pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
         return documentDtoPage;
     }
 
@@ -102,33 +101,28 @@ public class DocumentService {
                 document.getUserDocuments(),
                 document.getDbFiles()
         );
-
-        //get values from contact entity and set them in contactDto
-        //e.g. contactDto.setContactId(contact.getContactId());
         return documentDTO;
     }
 
+    @Transactional
+    public int returnAllUserDocumentCount(String email){
+        return documentRepository.getUserDocumentCount(email);
+    }
 
+    @Transactional
+    public int returnSubmittedlUserDocumentCount(String email){
+        return documentRepository.getUserSubmittedDocumentCount(email);
+    }
 
-//    @Transactional
-//    public Page<DocumentDTO> listByPage(Pageable pageable) {
-//
-//       final Page<DocumentDTO> page = new PageImpl<>(
-//                pagedDocumentRepository.findAll(pageable).stream()
-//                        .map(document -> new DocumentDTO(
-//                                document.getTitle(),
-//                                document.getUniqueNumber(),
-//                                document.getDescription(),
-//                                document.getCreatedDate(),
-//                                document.getType(),
-//                                document.getUserDocuments(),
-//                                document.getDbFiles()
-//                        ))
-//                        .collect(Collectors.toList())
-//        );
-//        return page;
-//
-//    }
+    @Transactional
+    public int returnConfirmedUserDocumentCount(String email){
+        return documentRepository.getUserConfirmedDocumentCount(email);
+    }
+
+    @Transactional
+    public int returnRejectedUserDocumentCount(String email){
+        return documentRepository.getUserRejectedDocumentCount(email);
+    }
 
     @Transactional
     public Long returnCount(){

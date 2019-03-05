@@ -24,7 +24,9 @@ export class SingleUser extends Component {
            groups:[],
            userGroups:[],
            groupsArray:[],
-           email:''
+           email:'',
+           allDocumentsCount:'',
+           submittedDocumentsCount:''
         }
         console.log('PROPS', props)
         console.log("id", this.state.id);
@@ -42,10 +44,32 @@ export class SingleUser extends Component {
           console.log("USERIS", user)
           console.log("EMAIL", email)
           console.log('Grupes', userGroups)
+          const allDocumentsCount = result.data.userDocuments.length
+          this.setState({allDocumentsCount});
+          console.log('count all', allDocumentsCount)
+          let submitted = [];
+          result.data.userDocuments.forEach(function(item){
+            if(item.submitted == true){
+              console.log(item)
+              submitted.push(item) }
+            })
+            const submittedDocumentsCount = submitted.length
+            this.setState({submittedDocumentsCount});
+          console.log('count submitted', submittedDocumentsCount)
           })
           .catch(function (error) {
             console.log(error);
           });
+
+          // axios.get(`http://localhost:8099/api/documents/${this.state.id}/all`)
+          // .then(result => {
+          //   const allDocumentsCount = result.data
+          // this.setState({allDocumentsCount});
+          // console.log('count all', allDocumentsCount)
+          // })
+          // .catch(function (error) {
+          //   console.log(error);
+          // });
       }
 
        handleResultChange(value) {

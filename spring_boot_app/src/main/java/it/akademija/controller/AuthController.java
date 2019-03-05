@@ -96,11 +96,9 @@ public class AuthController {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
+        Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER);
 
-        Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN)
-                .orElseThrow(() -> new AppException("User Role not set."));
+        Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN);
 
         if(requestUser.getAdmin() == true){
             user.setRoles(Collections.singleton(userRole2));

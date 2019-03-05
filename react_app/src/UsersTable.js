@@ -10,50 +10,26 @@ import AntDocumentTable from './AntDocumentTable';
 
 import reqwest from 'reqwest';
 
-export class DocumentListContainer extends Component {
+export class UsersTable extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-        id:this.props,
-        documents: [],
         data: [],
         pagination: {},
         loading: false,
         page:'',
         filterDropdownVisible: false,
         searchText: '',
+        submitted: []
     }
-    this.deleteItem = this.deleteItem.bind(this);
+    // this.deleteItem = this.deleteItem.bind(this);
     }
     onInputChange = (e) => {
         this.setState({ searchText: e.target.value });
       }
 
-    // fetchData() {
-    //     const {currentPage} = this.state;
-    //     const pageLimit = 5;
-    //     // axios.get('http://localhost:8099/api/documents')
-    //     axios.get(`http://localhost:8099/api/documents/test?page=${currentPage}&size=${pageLimit}&sort=createdDate,desc`)
-    // .then(response => {
-    //             const { page, size } = this.state;
-    //             this.setState({
-    //                 // documents: response.data.content
-    //                 data: response.data.content
-
-    //                 // documents: response.data,
-    //             });
-    //             console.log("Documents by page ", this.state.documents)
-    //         })
-    //         .catch(error => {
-    //             this.setState({
-    //                 error: 'Error while fetching data.'
-    //             });
-    //         });
-    //     }
-
     componentDidMount() {
-        // this.fetchData();
         this.fetch();
     }
 
@@ -63,7 +39,7 @@ export class DocumentListContainer extends Component {
         this.setState({
           filterDropdownVisible: false,
           data: this.state.data.map((record) => {
-            const match = record.type.title.match(reg);
+            const match = record.email.match(reg);
             if (!match) {
               return null;
             }
@@ -71,7 +47,7 @@ export class DocumentListContainer extends Component {
               ...record,
               name: (
                 <span>
-                  {record.type.title.split(reg).map((text, i) => (
+                  {record.name.split(reg).map((text, i) => (
                     i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
                   ))}
                 </span>
@@ -89,7 +65,7 @@ export class DocumentListContainer extends Component {
           page: this.state.page,   
         });
         
-        const desc = (sorter.order == "descend" ? "desc" : "asc");
+        // const desc = (sorter.order == "descend" ? "desc" : "asc");
         this.fetch({
          results: pagination.pageSize,
          page: pagination.current,
@@ -106,11 +82,11 @@ export class DocumentListContainer extends Component {
         console.log('params:', params);
         this.setState({ loading: true });
         reqwest({
-          url: 'http://localhost:8099/api/documents/test',
+          url: 'http://localhost:8099/api/users/pages',
           method: 'get',
           data: {
             size: 10,
-            sort: 'createdDate,desc',
+            // sort: 'createdDate,desc',
             ...params,
           },
           type: 'json',
@@ -119,6 +95,7 @@ export class DocumentListContainer extends Component {
           const pagination = { ...this.state.pagination };
           // Read total count from server
           pagination.total = data.totalElements;
+          
           this.setState({
             loading: false,
             data: data.content,
@@ -128,36 +105,36 @@ export class DocumentListContainer extends Component {
         });
       }
     
-    deleteItem(number) {
-        this.setState(prevState=>{
-            const newItems = prevState.documents.filter((document)=>document.number!==number);
-            return {
-                documents: newItems
-            }
-        })
-      }
+    // deleteItem(number) {
+    //     this.setState(prevState=>{
+    //         const newItems = prevState.documents.filter((document)=>document.number!==number);
+    //         return {
+    //             documents: newItems
+    //         }
+    //     })
+    //   }
 
   render() {
-
     const columns = [{
-        title: 'Pavadinimas',
-        dataIndex: 'title',
+        title: 'Vardas',
+        dataIndex: 'name',
         // sorter: true,
-        render: title => title,
         width: '20%',
-      },{
-        title: 'Numeris',
-        dataIndex: 'number',
-        render: number =><Link to={`/dokumentas/${number}`}>{number}</Link>,
-        width: '30%',
-      },{
-        title: 'Tipas',
-        dataIndex: 'type',
-        render: type => type.title,
-        filterDropdown: (
+      },
+      {
+        title: 'Pavardė',
+        dataIndex: 'surname',
+        // sorter: true,
+        width: '20%',
+      },
+      {
+        title: 'El.paštas',
+        dataIndex: 'email',
+        render: email =><Link to={`/vartotojas/${email}`}>{email}</Link>,
+             filterDropdown: (
             <div className="custom-filter-dropdown">
               <Input
-                placeholder="Įveskite dokumento tipo pavadinimą"
+                placeholder="Įveskite el.paštą"
                 value={this.state.searchText}
                 onChange={this.onInputChange}
                 onPressEnter={this.onSearch}
@@ -168,21 +145,50 @@ export class DocumentListContainer extends Component {
           filterDropdownVisible: this.state.filterDropdownVisible,
           onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }),
         width: '20%',
-      }, {
-        title: 'Data',
-        dataIndex: 'createdDate',
-        key: 'createdDate',
-        // sorter: true,
-        // defaultSortOrder: 'desc',
-        render: createdDate => createdDate,
-        width: '20%',
-      },
-      {
-        title: 'Vartotojas',
+      }
+      ,{
+        title: 'Viso sukurta',
         dataIndex: 'userDocuments',
-        render: userDocuments => userDocuments.map(el=>el.user.name + ' ' + el.user.surname),
-        width: '20%',
-      },
+        render: userDocuments => userDocuments.length,
+        width: '10%',
+      }, 
+      {
+        title: 'Pateikti',
+        dataIndex: 'userDocuments',
+        // render: userDocuments=> userDocuments.forEach(function(item){
+        //   let submitted =[];
+        //   if(item.submitted == true){
+        //     submitted.push(item) 
+        //     console.log("DATA", submitted.length)
+        //     return submitted.length
+        //   } 
+        // }),
+        render: userDocuments => userDocuments.map(item => {
+          let submitted =[];
+          if(item.submitted == true){
+            submitted.push(item) 
+            console.log("DATA", submitted.length)
+            // return submitted.length
+          } 
+          return submitted.length
+        }),
+        width: '10%',
+      }, 
+    //   {
+    //     title: 'Data',
+    //     dataIndex: 'createdDate',
+    //     key: 'createdDate',
+    //     // sorter: true,
+    //     // defaultSortOrder: 'desc',
+    //     render: createdDate => createdDate,
+    //     width: '20%',
+    //   },
+    //   {
+    //     title: 'Vartotojas',
+    //     dataIndex: 'userDocuments',
+    //     render: userDocuments => userDocuments.map(el=>el.user.name + ' ' + el.user.surname),
+    //     width: '20%',
+    //   },
     //   {
     //     title: 'Busena',
     //     dataIndex: 'tags',
@@ -200,7 +206,7 @@ export class DocumentListContainer extends Component {
   
     <Table
         columns={columns}
-        rowKey={record => record.number}
+        rowKey={record => record.email}
         dataSource={this.state.data}
         pagination={this.state.pagination}
         // pagination= {{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20']}}
@@ -216,4 +222,4 @@ export class DocumentListContainer extends Component {
 }
 
 
-export default DocumentListContainer
+export default UsersTable
