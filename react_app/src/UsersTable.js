@@ -21,7 +21,8 @@ export class UsersTable extends Component {
         page:'',
         filterDropdownVisible: false,
         searchText: '',
-        submitted: []
+        submitted: [],
+        filteredInfo:{}
     }
     // this.deleteItem = this.deleteItem.bind(this);
     }
@@ -63,6 +64,7 @@ export class UsersTable extends Component {
         this.setState({
           pagination: pager,
           page: this.state.page,   
+          filteredInfo: filters,
         });
         
         // const desc = (sorter.order == "descend" ? "desc" : "asc");
@@ -104,6 +106,10 @@ export class UsersTable extends Component {
           });
         });
       }
+
+      clearFilters = () => {
+        this.setState({ filteredInfo: null });
+      }
     
     // deleteItem(number) {
     //     this.setState(prevState=>{
@@ -115,6 +121,10 @@ export class UsersTable extends Component {
     //   }
 
   render() {
+
+    let { filteredInfo } = this.state;
+    filteredInfo = filteredInfo || {};
+
     const columns = [{
         title: 'Vardas',
         dataIndex: 'name',
@@ -203,7 +213,12 @@ export class UsersTable extends Component {
     return (
     <div className="container" id="list_container">
     <div className="container user_document_list">
-  
+        <div className="table-operations">
+          <Button onClick={this.setAgeSort}>Sort age</Button>
+          <Button onClick={this.clearFilters}>Clear filters</Button>
+          <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+        </div>
+ 
     <Table
         columns={columns}
         rowKey={record => record.email}
