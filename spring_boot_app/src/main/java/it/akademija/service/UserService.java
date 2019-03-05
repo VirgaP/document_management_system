@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
@@ -52,7 +52,7 @@ public class UserService {
 
     @Transactional
     public List<UserDTO> getUserWithoutDocuments() {
-        LOG.info("Finding all users");
+        logger.info("Finding all users");
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserDTO(
@@ -99,7 +99,7 @@ public class UserService {
 
     @Transactional
     public UserDTO getUser(String email){
-        LOG.info("Finding one user");
+        logger.info("Finding one user");
         User user = userRepository.findByEmail(email);
         UserDTO userDTO = new UserDTO(
                 user.getName(),
@@ -109,7 +109,7 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
-        LOG.info("Found {} user", user.getEmail());
+        logger.info("Found {} user", user.getEmail());
         return userDTO;
     }
 
@@ -179,14 +179,17 @@ public class UserService {
 
     @Transactional
     public void removeGroupFromUser(String email, String groupName){
+        logger.info("Trying to remove user with email "+ email + "from group with name "+groupName);
         User user = userRepository.findByEmail(email);
         Group group = groupRepository.findByname(groupName);
 
         Set<Group> userGroups = user.getUserGroups();
 
         if (!userGroups.contains(group)) {
+            logger.error("Group with name "+ groupName + " is not found in the database");
             throw new ResourceNotFoundException("the group is not found");
         } else {
+            logger.info("User with email "+ email+ " was removed from group "+ groupName);
             user.removeGroup(group);
         }
     }

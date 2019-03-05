@@ -1,6 +1,7 @@
 package it.akademija.service;
 
 import it.akademija.FileStorageProperties;
+import it.akademija.controller.AuthController;
 import it.akademija.dto.DocumentDTO;
 import it.akademija.entity.*;
 import it.akademija.payload.ApiResponse;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class DocumentService {
+    public static Logger logger = LoggerFactory.getLogger(DocumentService.class);
 
     private static final Logger LOG = LoggerFactory.getLogger(DocumentService.class);
 

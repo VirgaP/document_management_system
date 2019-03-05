@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import DocumentListPagination from './DocumentListPagination';
 import AntPagination from './AntPagination';
-import { Table, Tag, Input, Button } from 'antd';
+import { Table, Tag, Input, Button , Icon} from 'antd';
 import {Link } from "react-router-dom";
 
 import AntDocumentTable from './AntDocumentTable';
@@ -108,7 +108,7 @@ export class UsersTable extends Component {
       }
 
       clearFilters = () => {
-        this.setState({ filteredInfo: null });
+        this.setState({ filteredInfo: null, searchText: null });
       }
     
     // deleteItem(number) {
@@ -122,8 +122,9 @@ export class UsersTable extends Component {
 
   render() {
 
-    let { filteredInfo } = this.state;
+    let { filteredInfo, searchText } = this.state;
     filteredInfo = filteredInfo || {};
+    searchText = searchText || {};
 
     const columns = [{
         title: 'Vardas',
@@ -159,12 +160,20 @@ export class UsersTable extends Component {
       ,{
         title: 'Viso sukurta',
         dataIndex: 'userDocuments',
+        key: 'all',
         render: userDocuments => userDocuments.length,
+        filters: [
+          { text: '< 10', value: userDocuments => userDocuments.length < 10 },
+          { text: '> 10', value: userDocuments => userDocuments.length > 10 },
+        ],
+        filteredValue: filteredInfo.all || null,
+        // onFilter: (value, record) => record.userDocuments.includes(value),
         width: '10%',
       }, 
       {
         title: 'Pateikti',
         dataIndex: 'userDocuments',
+        key: 'submitted',
         // render: userDocuments=> userDocuments.forEach(function(item){
         //   let submitted =[];
         //   if(item.submitted == true){
@@ -184,15 +193,13 @@ export class UsersTable extends Component {
         }),
         width: '10%',
       }, 
-    //   {
-    //     title: 'Data',
-    //     dataIndex: 'createdDate',
-    //     key: 'createdDate',
-    //     // sorter: true,
-    //     // defaultSortOrder: 'desc',
-    //     render: createdDate => createdDate,
-    //     width: '20%',
-    //   },
+      {
+        title: '',
+        dataIndex: 'email',
+        key: 'edit',
+        render: email => <Link to={`/redaguoti/vartotojas/${email}`}><Icon type="edit" /></Link>,
+        width: '5%',
+      },
     //   {
     //     title: 'Vartotojas',
     //     dataIndex: 'userDocuments',
@@ -214,8 +221,6 @@ export class UsersTable extends Component {
     <div className="container" id="list_container">
     <div className="container user_document_list">
         <div className="table-operations">
-          <Button onClick={this.setAgeSort}>Sort age</Button>
-          <Button onClick={this.clearFilters}>Clear filters</Button>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
         </div>
  

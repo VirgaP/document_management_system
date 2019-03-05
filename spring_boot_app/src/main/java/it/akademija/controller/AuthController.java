@@ -18,6 +18,8 @@ import it.akademija.repository.GroupRepository;
 import it.akademija.repository.RoleRepository;
 import it.akademija.repository.UserRepository;
 import it.akademija.security.JwtTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +37,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Collections;
 
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -70,12 +75,14 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
+        logger.info("Token "+ jwt + " has been generated for login request");
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
     @PostMapping("/newUser")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RequestUser requestUser) {
         if(userRepository.existsByEmail(requestUser.getEmail())) {
+            logger.info("Checking the Users Repository for email validation");
             return new ResponseEntity(new ApiResponse(false, "User email is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
@@ -93,7 +100,7 @@ public class AuthController {
 
         user.addGroup(group);
         group.addUser(user);
-
+        logger.info("Password has been set");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER);
@@ -101,20 +108,24 @@ public class AuthController {
         Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN);
 
         if(requestUser.getAdmin() == true){
+            logger.info("Admin role was set");
             user.setRoles(Collections.singleton(userRole2));
+
         } else {
+            logger.info("User's role was set");
             user.setRoles(Collections.singleton(userRole1));
         }
 
 //        user.setRoles(Collections.singleton(userRole));
 
-
+        logger.info("User "+ user+ "saved to User Repository");
         User result = userRepository.save(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{email}")
                 .buildAndExpand(result.getEmail()).toUri();
 
+        logger.info("The successful registration of user");
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
 }

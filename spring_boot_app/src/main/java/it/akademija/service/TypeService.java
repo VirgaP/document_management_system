@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class TypeService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TypeService.class);
+    private static final Logger logger= LoggerFactory.getLogger(TypeService.class);
 
     @Autowired
     private TypeRepository typeRepository;
