@@ -3,14 +3,21 @@ package it.akademija.dto;
 
 import it.akademija.entity.Group;
 import it.akademija.entity.UserDocument;
+import it.akademija.repository.DocumentRepository;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.SqlResultSetMapping;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class UserDTO {
+
+    private DocumentRepository documentRepository;
 
     private String name;
 
@@ -28,6 +35,14 @@ public class UserDTO {
 
     private String userDocumentTitle;
 
+    private int allCount;
+
+    private int submittedCount;
+
+    private int confirmedCount;
+
+    private int rejectedCount;
+
     public UserDTO() {
     }
 
@@ -42,7 +57,7 @@ public class UserDTO {
         this.email = email;
     }
 
-    public UserDTO(String name, String surname, String email, boolean admin, Set<Group> userGroups, List<UserDocument> userDocuments) {
+    public UserDTO(String name, String surname, String email, boolean admin, Set<Group> userGroups, List<UserDocument> userDocuments ) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -145,5 +160,39 @@ public class UserDTO {
 
     public void setUserDocumentTitle(String userDocumentTitle) {
         this.userDocumentTitle = userDocumentTitle;
+    }
+
+    public int getAllCount() {
+        return allCount;
+    }
+
+    public void setAllCount(int allCount) {
+        this.allCount = allCount;
+    }
+
+    public int getSubmittedCount() {
+        return submittedCount;
+    }
+
+    public void setSubmittedCount(int submittedCount) {
+
+//        this.submittedCount = submittedCount;
+        this.submittedCount = documentRepository.getUserSubmittedDocumentCount(this.email);
+    }
+
+    public int getConfirmedCount() {
+        return confirmedCount;
+    }
+
+    public void setConfirmedCount(int confirmedCount) {
+        this.confirmedCount = confirmedCount;
+    }
+
+    public int getRejectedCount() {
+        return rejectedCount;
+    }
+
+    public void setRejectedCount(int rejectedCount) {
+        this.rejectedCount = rejectedCount;
     }
 }

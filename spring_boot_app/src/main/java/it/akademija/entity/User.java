@@ -5,27 +5,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import it.akademija.dto.UserDTO;
 import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
+
+@SqlResultSetMapping(name = "userDocumentDetails", classes = {
+        @ConstructorResult(targetClass = UserDTO.class,
+                columns = {
+                        @ColumnResult(name = "submittedCount"),
+//                        @ColumnResult(name = "confirmedCount"),
+//                        @ColumnResult(name = "rejectedCount")
+                })
+})
+@NamedNativeQuery(name="User.getUserDocumentDetails", query="SELECT count (*) FROM user u LEFT JOIN user_document ud ON u.id = ud.user_id WHERE u.email=:email and ud.submitted = true", resultSetMapping="userDocumentDetails")
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {
@@ -56,7 +56,6 @@ public class User {
     private String password;
 
     private boolean admin = false;
-
 
     private Set<Role> roles = new HashSet<>();
 

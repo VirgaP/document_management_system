@@ -2,12 +2,16 @@ package it.akademija;
 
 
 import org.springframework.context.annotation.*;
+import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 
 
 @Configuration
-//@ImportResource({"classpath*:application-context.xml"})
-
 public class AppConfig {
+
+    @Bean
+    public PageableHandlerMethodArgumentResolverCustomizer customize(){
+        return p->p.setOneIndexedParameters(true);
+    }
 
 //    @Bean
 //    @Scope("prototype")

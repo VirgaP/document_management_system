@@ -88,8 +88,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/login")
 //                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .permitAll()
-                .antMatchers("/api/auth/newUser").hasAuthority("ROLE_ADMIN")
-//                .permitAll()
+                .antMatchers("/api/auth/newUser")
+//                .hasAuthority("ROLE_ADMIN")
+                .permitAll()
 
 //                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .antMatchers("/console/**").permitAll()
