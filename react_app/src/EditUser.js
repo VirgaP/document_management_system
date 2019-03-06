@@ -110,7 +110,7 @@ export class EditUser extends Component {
         </div>
         <div className="form-group has-error form-group has-success">
           <label className="control-label" for="inputError1">Vartotojo slaptažodis</label>
-          <input type="password" onChange={this.handlePasswordChange('password')} value={this.state.user.password} className="form-control" id="inputError1" />
+          <input type="password" onChange={this.handlePasswordChange('password')} value={this.state.user.password} placeholder="Naujas slaptažodis" className="form-control" id="inputError1" />
         </div>
         <div className="form-group has-error form-group has-success">
           <label className="control-label" for="inputError1">Administratorius</label>
