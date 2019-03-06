@@ -100,7 +100,7 @@ public class UserController {
 
     @RequestMapping(path = "/{email}", method = RequestMethod.GET)
     @ApiOperation(value = "Get one user", notes = "Returns one user by email")
-    public UserDTO getDocument(
+    public UserDTO getUser(
             @PathVariable final String email) {
         logger.info("Returns the user, who's email: "+ email);
         return userService.getUser(email);

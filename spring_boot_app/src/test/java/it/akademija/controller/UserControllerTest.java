@@ -12,11 +12,15 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import it.akademija.dto.UserDTO;
+import it.akademija.entity.Group;
 import it.akademija.entity.User;
 import it.akademija.exceptions.ResourceNotFoundException;
+import it.akademija.payload.RequestUser;
 import it.akademija.payload.UserIdentityAvailability;
 import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.GroupRepository;
@@ -28,6 +32,9 @@ import it.akademija.util.TestingUtils;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserControllerTest {
+
+    private static final String TEST_GROUP_ONE = "testGroupOne";
+    private static final String TEST_GROUP_TWO = "testGroupTwo";
 
     @Autowired
     private UserRepository userRepository;
@@ -46,11 +53,17 @@ public class UserControllerTest {
 
     private UserService userService;
     private UserController userController;
+    private PasswordEncoder passwordEncoder;
 
     @Before
     public void setUp() {
-        userService = new UserService(userRepository, documentRepository, groupRepository, pagedUserRepository);
+        passwordEncoder = new BCryptPasswordEncoder(10);
+        userService = new UserService(userRepository, documentRepository, groupRepository, pagedUserRepository, passwordEncoder);
         userController = new UserController(userService, userRepository);
+
+        // add preexisting user groups
+        groupRepository.save(new Group(1L, TEST_GROUP_ONE));
+        groupRepository.save(new Group(2L, TEST_GROUP_TWO));
     }
 
     @Test
@@ -98,7 +111,7 @@ public class UserControllerTest {
     public void shouldReturnExistingUser() {
         User existingUser = userRepository.save(TestingUtils.randomUser());
 
-        UserDTO userDTO = userController.getDocument(existingUser.getEmail());
+        UserDTO userDTO = userController.getUser(existingUser.getEmail());
 
         Assert.assertTrue(TestingUtils.usersMatch(existingUser, userDTO));
     }
@@ -108,8 +121,110 @@ public class UserControllerTest {
         String nonExistingEmail = TestingUtils.randomEmail();
 
         expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("User with email " + nonExistingEmail + " does not exist!");
 
-        userController.getDocument(TestingUtils.randomEmail());
+        userController.getUser(nonExistingEmail);
+    }
+
+    @Test
+    public void shouldDeleteExistingUser() {
+        User existingUser = userRepository.save(TestingUtils.randomUser());
+
+        userController.deleteUser(existingUser.getEmail());
+
+        existingUser = userRepository.findByEmail(existingUser.getEmail());
+        Assert.assertNull(existingUser);
+    }
+
+    @Test
+    public void shouldFailToDeleteNonExistentUser() {
+        String nonExistingEmail = TestingUtils.randomEmail();
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("User with email " + nonExistingEmail + " does not exist!");
+
+        userController.deleteUser(nonExistingEmail);
+    }
+
+    @Test
+    public void shouldAddExistingGroupToExistingUser() {
+        User existingUser = userRepository.save(TestingUtils.randomUser());
+
+        userController.addUserGroup(existingUser.getEmail(), TEST_GROUP_ONE);
+
+        User loadedUser = userRepository.findByEmail(existingUser.getEmail());
+        boolean containsGroup = loadedUser.getUserGroups().stream()
+                .anyMatch(group -> group.getName().equals(TEST_GROUP_ONE));
+
+        Assert.assertTrue(containsGroup);
+    }
+
+    @Test
+    public void shouldFailToAddNonExistingGroupToExistingUser() {
+        User existingUser = userRepository.save(TestingUtils.randomUser());
+        String nonExistingGroup = "nonExistingGroup";
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("Group with name " + nonExistingGroup + " does not exist!");
+
+        userController.addUserGroup(existingUser.getEmail(), nonExistingGroup);
+    }
+
+    @Test
+    public void shouldFailToAddExistingGroupToNonExistingUser() {
+        String nonExistingEmail = TestingUtils.randomEmail();
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("User with email " + nonExistingEmail + " does not exist!");
+
+        userController.addUserGroup(nonExistingEmail, TEST_GROUP_ONE);
+
+    }
+
+    @Test
+    public void shouldSuccessfullyEditUser() {
+        User existingUser = userRepository.save(TestingUtils.randomUser());
+        String email = existingUser.getEmail();
+
+        RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
+        userController.updateUser(requestUser, email);
+
+        User loadedUser = userRepository.findByEmail(email);
+
+        Assert.assertTrue(TestingUtils.usersMatch(loadedUser, requestUser, email));
+    }
+
+    @Test
+    public void shouldFailToEdiNonExistingUser() {
+        String email = TestingUtils.randomEmail();
+        RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("User with email " + email + " does not exist!");
+
+        userController.updateUser(requestUser, email);
+    }
+
+    @Test
+    public void shouldUpdateOnlyPassedFields() {
+        User existingUser = userRepository.save(TestingUtils.randomUser());
+        String email = existingUser.getEmail();
+
+        RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
+        // fields not updated
+        requestUser.setAdmin(null);
+        requestUser.setName(null);
+
+        userController.updateUser(requestUser, email);
+
+        User loadedUser = userRepository.findByEmail(email);
+
+        // fields not updated
+        Assert.assertEquals(email, loadedUser.getEmail());
+        Assert.assertEquals(existingUser.getAdmin(), loadedUser.getAdmin());
+        Assert.assertEquals(existingUser.getName(), loadedUser.getName());
+        // check updated fields
+        Assert.assertTrue(TestingUtils.usersMatch(loadedUser, requestUser, email));
     }
 
     private List<User> createUsers(int numberOfUsers) {
