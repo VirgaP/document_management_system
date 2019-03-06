@@ -19,12 +19,12 @@ export class UsersTable extends Component {
         loading: false,
         page:'',
         filterDropdownVisible: false,
-        searchText: {},
+        searchText: '',
         submitted: [],
-        filteredInfo:{}
+        filteredInfo: null
+      }
     }
-    // this.deleteItem = this.deleteItem.bind(this);
-    }
+
     onInputChange = (e) => {
         this.setState({ searchText: e.target.value });
       }
@@ -58,6 +58,7 @@ export class UsersTable extends Component {
       }
 
     handleTableChange = (pagination, filters, sorter, value) => {
+      console.log("VALUE", value)
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
@@ -107,15 +108,6 @@ export class UsersTable extends Component {
       clearFilters = () => {
         this.setState({ filteredInfo: null, searchText: null });
       }
-    
-    // deleteItem(number) {
-    //     this.setState(prevState=>{
-    //         const newItems = prevState.documents.filter((document)=>document.number!==number);
-    //         return {
-    //             documents: newItems
-    //         }
-    //     })
-    //   }
 
   render() {
 
@@ -150,7 +142,7 @@ export class UsersTable extends Component {
               <Button type="primary" onClick={this.onSearch}>Ieškoti</Button>
             </div>
           ),
-          filterDropdownVisible: this.state.filterDropdownVisible,
+          filterDropdownVisible: this.state.filterDropdownVisible || null,
           onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }),
         width: '20%',
       }
@@ -160,11 +152,11 @@ export class UsersTable extends Component {
         key: 'all',
         render: userDocuments => userDocuments.length,
         filters: [
-          { text: '> 10', value: userDocuments => userDocuments.length },
-          // { text: '> 10', value: userDocuments => userDocuments.length },
+          { text: '> 10', value: 10 },
+          // { text: '< 10', value: 10 },
         ],
         filteredValue: filteredInfo.all || null,
-        onFilter: (value, record) => record.userDocuments.value > 10,
+        onFilter: (value, record) => record.userDocuments.length > value,
         width: '10%',
       }, 
       {
@@ -201,29 +193,14 @@ export class UsersTable extends Component {
         key: 'edit',
         render: email => <Link to={`/redaguoti/vartotojas/${email}`}><Icon type="edit" /></Link>,
         width: '5%',
-      },
-    //   {
-    //     title: 'Vartotojas',
-    //     dataIndex: 'userDocuments',
-    //     render: userDocuments => userDocuments.map(el=>el.user.name + ' ' + el.user.surname),
-    //     width: '20%',
-    //   },
-    //   {
-    //     title: 'Busena',
-    //     dataIndex: 'tags',
-    //     render={tags => (
-    //         <span>
-    //           {tags.map(tag => <Tag color="blue" key={tag}>{tag}</Tag>)}
-    //         </span>
-    //       )}
-    //   }
+      }
     ];
      const {pagination, data, page}=this.state
     return (
     <div className="container" id="list_container">
     <div className="container user_document_list">
         <div className="table-operations">
-          <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+          <Button onClick={this.clearFilters}>Išvalyti filtravimą</Button>
         </div>
  
     <Table

@@ -25,9 +25,7 @@ public class Document implements Serializable {
 
     private Date createdDate;
 
-    private List<UserDocument> userDocuments = new ArrayList<>();
-
-//    private List<DBFile> dbFiles = new ArrayList<DBFile>();
+    private List<UserDocument> userDocuments = new ArrayList<UserDocument>();
 
     private List<File> dbFiles = new ArrayList<>();
 
@@ -143,23 +141,6 @@ public class Document implements Serializable {
         this.userDocuments.add(user);
     }
 
-//    public void addDbFile(DBFile file) {
-//        this.dbFiles.add(file);
-//        file.setDocument(this);
-//    }
-
-    public void addDbFile(File f) {
-        this.dbFiles.add(f);
-        if(f.getDocument() != this)
-            f.setDocument(this);
-    }
-//
-//    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
-//    @JsonIgnore
-//    public List<DBFile> getDbFiles() {
-//        return dbFiles;
-//    }
 
     @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -170,6 +151,13 @@ public class Document implements Serializable {
 
     public void setDbFiles(List<File> dbFiles) {
         this.dbFiles = dbFiles;
+    }
+
+
+    public void addDbFile(File f) {
+        this.dbFiles.add(f);
+        if(f.getDocument() != this)
+            f.setDocument(this);
     }
 
     @Override

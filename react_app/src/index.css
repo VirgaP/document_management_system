@@ -307,9 +307,27 @@ code {
   margin-bottom: 16px;
 }
 
+.table-operations h3{
+ margin-top:10px;
+ text-align: center;
+}
+
 .table-operations > button {
   margin-right: 8px;
 }
+
+#tags{
+  margin-top: 5px;
+}
+
+#notsub{
+  color:red
+}
+
+#con{
+  color: green
+}
+
 
 .footer{
   /* position: fixed; */

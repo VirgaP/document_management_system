@@ -37,38 +37,6 @@ public class DocumentController {
         this.eventPublisher = eventPublisher;
     }
 
-    @GetMapping(params = { "page", "size" })
-    public List<Document> findPaginatedDocuments(@RequestParam("page") int page,
-                                   @RequestParam("size") int size, UriComponentsBuilder uriBuilder,
-                                   HttpServletResponse response) {
-        Page<Document> resultPage = documentService.listPages(page, size);
-        if (page > resultPage.getTotalPages()) {
-            throw new ResourceNotFoundException();
-        }
-
-        eventPublisher.publishEvent(new PaginatedResultsRetrievedEvent<Document>(
-                Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
-        logger.info("findPaginatedDocuments");
-        return resultPage.getContent();
-    }
-
-    @GetMapping(path="/{page}/{size}", params = { "page", "size" })
-    public List<Document> findPaginated(@PathVariable("page") int page,
-                                        @PathVariable("size") int size, UriComponentsBuilder uriBuilder,
-                                        HttpServletResponse response) {
-        Page<Document> resultPage = documentService.listPages(page, size);
-        if (page > resultPage.getTotalPages()) {
-            throw new ResourceNotFoundException();
-        }
-        logger.info("ResourceNotFoundException");
-        eventPublisher.publishEvent(new PaginatedResultsRetrievedEvent<Document>(
-                Document.class, uriBuilder, response, page, resultPage.getTotalPages(), size));
-        //logger.info("findPaginated");
-
-        return resultPage.getContent();
-    }
-
-
     @GetMapping("/test")
     public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {
         logger.info("returning documentService.lisByPage");
@@ -84,16 +52,26 @@ public class DocumentController {
     }
 
     @GetMapping("/{email}/all")
-    public int userAllDocumentCount(@PathVariable final String email) {
-        return documentService.returnAllUserDocumentCount(email);
+    public Page<DocumentDTO> userAllDocumentsPaged(@PathVariable final String email, Pageable pageable) {
+        return documentService.pagedAllUserDocuments(email, pageable);
     }
 
     @GetMapping("/{email}/submitted")
+    public Page<DocumentDTO> userSubmittedDocumentsPaged(@PathVariable final String email, Pageable pageable) {
+        return documentService.pagedUserSubmittedDocuments(email, pageable);
+    }
+
+    @GetMapping("/{email}/confirmed")
+    public Page<DocumentDTO> userConfirmedDocumentsPaged(@PathVariable final String email, Pageable pageable) {
+        return documentService.pagedUserConfirmedDocuments(email, pageable);
+    }
+
+    @GetMapping("/{email}/submittedCount")
     public int userSubmittedDocumentCount(@PathVariable final String email) {
         return documentService.returnSubmittedlUserDocumentCount(email);
     }
 
-    @GetMapping("/{email}/confirmed")
+    @GetMapping("/{email}/confirmedCount")
     public int userConfirmedDocumentCount(@PathVariable final String email) {
         return documentService.returnConfirmedUserDocumentCount(email);
     }
@@ -102,13 +80,6 @@ public class DocumentController {
     public int userRejectedDocumentCount(@PathVariable final String email) {
         return documentService.returnAllUserDocumentCount(email);
     }
-
-//    @RequestMapping(value = "/pages", method = RequestMethod.GET)
-//    public List<DocumentDTO> getDocumentsByPage(@RequestParam(value = "page", defaultValue = "0") int page,
-//                                   @RequestParam(value = "limit", defaultValue = "10") int limit) {
-//
-//        return documentService.getDocumentsPage(page, limit);
-//    }
 
     @RequestMapping(path="/new", method = RequestMethod.POST)
     @ApiOperation(value = "Create document", notes = "Creates document with received data from the form")

@@ -93,6 +93,27 @@ public class DocumentService {
         return documentDtoPage;
     }
 
+    @Transactional
+    public Page<DocumentDTO> pagedAllUserDocuments(String email, Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserDocumentsPage(email, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> pagedUserSubmittedDocuments(String email, Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserSubmittedDocumentsPage(email, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> pagedUserConfirmedDocuments(String email, Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserConfirmedDocumentsPage(email, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
     private DocumentDTO convertToDocumentDto(final Document document) {
         final DocumentDTO documentDTO = new DocumentDTO(
                 document.getTitle(),
@@ -133,74 +154,6 @@ public class DocumentService {
         return count;
     }
 
-    public Page<Document> listPages(int page, int size) {
-        return pagedDocumentRepository.findAll(new Pageable() {
-            @Override
-            public int getPageNumber() {
-                return 0;
-            }
-
-            @Override
-            public int getPageSize() {
-                return 0;
-            }
-
-            @Override
-            public long getOffset() {
-                return 0;
-            }
-
-            @Override
-            public Sort getSort() {
-                return null;
-            }
-
-            @Override
-            public Pageable next() {
-                return null;
-            }
-
-            @Override
-            public Pageable previousOrFirst() {
-                return null;
-            }
-
-            @Override
-            public Pageable first() {
-                return null;
-            }
-
-            @Override
-            public boolean hasPrevious() {
-                return false;
-            }
-        });
-    }
-
-//    public ResponseEntity<?> getDocumentsPage(int page, int size) {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<Document> documentsPage = pagedDocumentRepository.findAll(pageable);
-//
-//        if (documentsPage.getContent().isEmpty()) {
-//            return new ResponseEntity<>(new ApiResponse(false, "Unable to retrieve any document"), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        final List<DocumentDTO> documentDTOS = documentsPage.getContent()
-//                .stream()
-//                .map(document -> new DocumentDTO(
-//                        document.getTitle(),
-//                        document.getUniqueNumber(),
-//                        document.getDescription(),
-//                        document.getCreatedDate(),
-//                        document.getType(),
-//                        document.getUserDocuments(),
-//                        document.getDbFiles()
-//                ))
-//                .collect(Collectors.toList());
-//
-//        return new ResponseEntity<>(new DocumentDTO(users, usersPage), HttpStatus.OK);
-//    }
 
     @Transactional
     public List<DocumentDTO> getAll(){
@@ -233,12 +186,15 @@ public class DocumentService {
                 new Date()
         );
         document.setType(type);
+        logger.info(document.getTitle() + "type set");
 
 //        document.addDbFile(file);
         document.getDbFiles().add(file);
-        file.setDocument(document);
+        logger.info(document.getDbFiles().add(file) + "file added");
+//        file.setDocument(document);
 
         documentRepository.save(document);
+        logger.info(document.getTitle() + "has been saved");
 
 //        file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
 
@@ -304,23 +260,6 @@ public class DocumentService {
     @Transactional
     public List<DocumentDTO> getAllUserSubmittedDocuments(String email){
         List<DocumentDTO> documents = documentRepository.findAllUserSubmittedDocumentsl(email).stream()
-                .map(document -> new DocumentDTO(
-                        document.getTitle(),
-                        document.getUniqueNumber(),
-                        document.getDescription(),
-                        document.getCreatedDate(),
-                        document.getType(),
-                        document.getUserDocuments(),
-                        document.getDbFiles()
-                ))
-                .collect(Collectors.toList());
-
-        return documents;
-    }
-
-    @Transactional
-    public List<DocumentDTO> getAllUserConfirmedDocuments(String email){
-        List<DocumentDTO> documents = documentRepository.findAllUserConfirmedDocumentsl(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
                         document.getUniqueNumber(),

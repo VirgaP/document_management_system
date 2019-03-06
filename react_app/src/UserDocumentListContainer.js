@@ -22,7 +22,6 @@ export class UserDocumentListContainer extends Component {
     }
   this.fetchData = this.fetchData.bind(this);
   this.deleteItem = this.deleteItem.bind(this);
-  this.changeView = this.changeView.bind(this);
 }
 
 setconfirmed(value) {
@@ -61,18 +60,6 @@ setconfirmed(value) {
           }
       })
     }
-
-    changeView(e) {
-      console.log(e)
-      this.setState({
-        filter: e.target.value,
-    });
-    Object.keys(this.state.documents).map(el=>el.userDocuments)
-      .filter(key => this.state.documents.userDocuments[key].this.state.filter == true)
-      
-  }
-
-  
       
   render() {
    
@@ -89,15 +76,6 @@ setconfirmed(value) {
     
     var rows = [];
   
-
-    // {Object.keys(this.state.dataGoal)
-    //   .filter(key => key.main == true)
-    //   .map( (key, index) => {
-    //     return <div key={key}>
-    //              <h1>{this.state.dataGoal[key].name}</h1>
-    //              <p>{this.state.dataGoal[key].main}</p>
-    //            </div>
-    //   })}
 
     documents.map((document) => (                                        
           rows.push(<UserDocument current={document} key={document.number} 

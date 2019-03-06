@@ -70,18 +70,18 @@ export class UserVerticalMenu extends Component {
   render() {
     return (
       <div>
-       <nav class="navigation">
-  <ul class="mainmenu">
+       <nav className="navigation">
+  <ul className="mainmenu">
     <li><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon style={{ fontSize: '26px', color: '#08c' }} theme="outlined" type="idcard" /> </Link></li>
     <li><a href="">Dokumentai</a>
-      <ul class="submenu">
-        <li><a href="">Visi</a></li>
+      <ul className="submenu">
+        <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Visi</Link></li>
         <li><a href="">Pateikti</a></li>
         <li><a href="">Patvirtinti</a></li>
         <li><a href="">Atmesti</a></li>
       </ul>
     </li>
-    <li><a href="">Kurti dokumenta</a></li>
+    <li><Link to={'/naujas-dokumentas'}>Kurti dokumentą</Link></li>
     <li><Badge count={this.state.count} showZero>
           <Link to={{
             pathname: `/gauti/vartotojas/${this.props.currentUser.email}`,

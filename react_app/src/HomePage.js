@@ -24,18 +24,18 @@ export class HomePage extends Component {
     }
    
       componentDidMount = () => { 
-        axios.get('http://localhost:8099/api/documents/test?page=0&size=3&sort=uniqueNumber&direction=DESC')
-            .then(response => {
-                this.setState({
-                    documents: response.data
-                });
-                console.log("Documents by page ", this.state.documents)
-            })
-            .catch(error => {
-                this.setState({
-                    error: 'Error while fetching data.'
-                });
-            });
+        // axios.get('http://localhost:8099/api/documents/test?page=0&size=3&sort=uniqueNumber&direction=DESC')
+        //     .then(response => {
+        //         this.setState({
+        //             documents: response.data
+        //         });
+        //         console.log("Documents by page ", this.state.documents)
+        //     })
+        //     .catch(error => {
+        //         this.setState({
+        //             error: 'Error while fetching data.'
+        //         });
+        //     });
         
           
          axios.get(`http://localhost:8099/api/users/${this.state.email}`)

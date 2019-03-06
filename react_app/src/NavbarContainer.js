@@ -47,6 +47,7 @@ import AdminRoute from './security/AdminRoute';
 import EditUser from './EditUser';
 import UserVerticalMenu from './layout/UserVerticalMenu';
 import UsersTable from './UsersTable';
+import UserDocumentTable from './UserDocumentTable';
 
 const { Content } = Layout;
 
@@ -162,6 +163,9 @@ class App extends Component {
                 <PrivateRoute path="/gautas/dokumentas/:number" component={SingleReceivedDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 
                 <PrivateRoute path="/redaguoti/dokumentas/:number" component={EditDocument} isAuthenticated={isAuthenticated} />
                 <PrivateRoute path="/mano-dokumentai" component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
+                
+                <PrivateRoute path="/:email/dokumentai" component={UserDocumentTable} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
+               
                 <AdminRoute path="/naujas-tipas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeForm}/>
                 <AdminRoute path='/visi-tipai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeListContainer}/>
                 <AdminRoute path="/tipas/:title" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={SingleType}/>}/>                 
