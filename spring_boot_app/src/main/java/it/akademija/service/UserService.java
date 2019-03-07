@@ -18,6 +18,7 @@ import org.codehaus.groovy.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class UserService {
     private final DocumentRepository documentRepository;
     private final GroupRepository groupRepository;
     private final PagedUserRepository pagedUserRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -120,6 +124,7 @@ public class UserService {
                 requestUser.getName(),
                 requestUser.getSurname(),
                 requestUser.getEmail(),
+                passwordEncoder.encode(requestUser.getPassword()),
                 requestUser.getAdmin()
         );
         user.addGroup(group);
@@ -151,7 +156,7 @@ public class UserService {
             user.setAdmin(admin);
         }
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
         log.info("Saving user's email");

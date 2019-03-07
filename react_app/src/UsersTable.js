@@ -3,10 +3,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import DocumentListPagination from './DocumentListPagination';
 import AntPagination from './AntPagination';
-import { Table, Tag, Input, Button } from 'antd';
+import { Table, Tag, Input, Button , Icon} from 'antd';
 import {Link } from "react-router-dom";
 
-import AntDocumentTable from './AntDocumentTable';
 
 import reqwest from 'reqwest';
 
@@ -20,7 +19,7 @@ export class UsersTable extends Component {
         loading: false,
         page:'',
         filterDropdownVisible: false,
-        searchText: '',
+        searchText: {},
         submitted: [],
         filteredInfo:{}
     }
@@ -58,21 +57,19 @@ export class UsersTable extends Component {
         });
       }
 
-    handleTableChange = (pagination, filters, sorter) => {
+    handleTableChange = (pagination, filters, sorter, value) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
           pagination: pager,
           page: this.state.page,   
           filteredInfo: filters,
+          searchText: value
         });
         
-        // const desc = (sorter.order == "descend" ? "desc" : "asc");
         this.fetch({
          results: pagination.pageSize,
          page: pagination.current,
-        //  sort: sorter.field + decodeURIComponent("%2c")+desc,
-        //  sortOrder: decodeURIComponent("%2c")+desc,
           ...filters,
         });
         console.log("filter ", filters)
@@ -108,7 +105,7 @@ export class UsersTable extends Component {
       }
 
       clearFilters = () => {
-        this.setState({ filteredInfo: null });
+        this.setState({ filteredInfo: null, searchText: null });
       }
     
     // deleteItem(number) {
@@ -122,8 +119,9 @@ export class UsersTable extends Component {
 
   render() {
 
-    let { filteredInfo } = this.state;
+    let { filteredInfo, searchText } = this.state;
     filteredInfo = filteredInfo || {};
+    searchText = searchText || {};
 
     const columns = [{
         title: 'Vardas',
@@ -159,40 +157,51 @@ export class UsersTable extends Component {
       ,{
         title: 'Viso sukurta',
         dataIndex: 'userDocuments',
+        key: 'all',
         render: userDocuments => userDocuments.length,
+        filters: [
+          { text: '> 10', value: userDocuments => userDocuments.length },
+          // { text: '> 10', value: userDocuments => userDocuments.length },
+        ],
+        filteredValue: filteredInfo.all || null,
+        onFilter: (value, record) => record.userDocuments.value > 10,
         width: '10%',
       }, 
       {
         title: 'Pateikti',
         dataIndex: 'userDocuments',
-        // render: userDocuments=> userDocuments.forEach(function(item){
-        //   let submitted =[];
-        //   if(item.submitted == true){
-        //     submitted.push(item) 
-        //     console.log("DATA", submitted.length)
-        //     return submitted.length
-        //   } 
-        // }),
+        key: 'submitted',
         render: userDocuments => userDocuments.map(item => {
           let submitted =[];
           if(item.submitted == true){
             submitted.push(item) 
             console.log("DATA", submitted.length)
-            // return submitted.length
           } 
           return submitted.length
         }),
         width: '10%',
       }, 
-    //   {
-    //     title: 'Data',
-    //     dataIndex: 'createdDate',
-    //     key: 'createdDate',
-    //     // sorter: true,
-    //     // defaultSortOrder: 'desc',
-    //     render: createdDate => createdDate,
-    //     width: '20%',
-    //   },
+      {
+        title: 'Patvirtinti',
+        dataIndex: 'userDocuments',
+        key: 'confirmed',
+        render: userDocuments => userDocuments.map(item => {
+          let confirmed =[];
+          if(item.confirmed == true){
+            confirmed.push(item) 
+            console.log("DATA", confirmed.length)
+          } 
+          return confirmed.length
+        }),
+        width: '10%',
+      },
+      {
+        title: '',
+        dataIndex: 'email',
+        key: 'edit',
+        render: email => <Link to={`/redaguoti/vartotojas/${email}`}><Icon type="edit" /></Link>,
+        width: '5%',
+      },
     //   {
     //     title: 'Vartotojas',
     //     dataIndex: 'userDocuments',
@@ -214,8 +223,6 @@ export class UsersTable extends Component {
     <div className="container" id="list_container">
     <div className="container user_document_list">
         <div className="table-operations">
-          <Button onClick={this.setAgeSort}>Sort age</Button>
-          <Button onClick={this.clearFilters}>Clear filters</Button>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
         </div>
  

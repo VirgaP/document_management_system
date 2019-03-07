@@ -5,9 +5,6 @@ import DocumentListPagination from './DocumentListPagination';
 import AntPagination from './AntPagination';
 import { Table, Tag, Input, Button } from 'antd';
 import {Link } from "react-router-dom";
-
-import AntDocumentTable from './AntDocumentTable';
-
 import reqwest from 'reqwest';
 
 export class DocumentListContainer extends Component {
@@ -180,7 +177,8 @@ export class DocumentListContainer extends Component {
       {
         title: 'Vartotojas',
         dataIndex: 'userDocuments',
-        render: userDocuments => userDocuments.map(el=>el.user.name + ' ' + el.user.surname),
+        key: 'user',
+        render: userDocuments => userDocuments.map(el=><Link to={`/vartotojas/${el.user.email}`}>{el.user.name + ' ' + el.user.surname}</Link> ),
         width: '20%',
       },
     //   {

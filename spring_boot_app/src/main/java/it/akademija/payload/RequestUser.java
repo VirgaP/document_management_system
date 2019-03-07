@@ -31,7 +31,7 @@ public final class RequestUser {
     @Size(min = 6, max = 20)
     private String password;
 
-    private boolean admin;
+    private Boolean admin;
 
     private List<UserDocument> userDocuments;
 
@@ -97,11 +97,11 @@ public final class RequestUser {
         this.password = password;
     }
 
-    public boolean getAdmin() {
+    public Boolean getAdmin() {
         return admin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(Boolean admin) {
         this.admin = admin;
     }
 
