@@ -5,6 +5,7 @@ import it.akademija.entity.DBFile;
 import it.akademija.exceptions.FileStorageException;
 import it.akademija.exceptions.MyFileNotFoundException;
 import it.akademija.repository.DBFileRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@Slf4j
 @Service
 public class DBFileStorageService {
-    public static Logger logger = LoggerFactory.getLogger(DBFileStorageService.class);
 
     @Autowired
     private DBFileRepository dbFileRepository;
@@ -34,6 +35,7 @@ public class DBFileStorageService {
         try {
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
+                log.info("File: "+ fileName+ " filename validation");
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
@@ -41,6 +43,7 @@ public class DBFileStorageService {
 
             return dbFileRepository.save(dbFile);
         } catch (IOException ex) {
+            log.info("File:" + fileName+ " storage validation");
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
@@ -56,7 +59,7 @@ public class DBFileStorageService {
     }
 
     public List<String> getUserFileNames(String email) {
-
+        log.info("Returns user's {} files' names", email);
        List<DBFile> dbFiles = dbFileRepository.findAllUserFiles(email);
        List<String> filenames = new ArrayList<>();
 

@@ -8,6 +8,7 @@ import it.akademija.entity.DBFile;
 import it.akademija.exceptions.MyFileNotFoundException;
 import it.akademija.payload.UploadFileResponse;
 import it.akademija.service.DBFileStorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.h2.util.IOUtils;
@@ -45,11 +46,11 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/files")
 @CrossOrigin(value = {"*"}, exposedHeaders = {"Content-Disposition"})
 public class DBFileController {
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private DBFileStorageService dbFileStorageService;
@@ -65,7 +66,7 @@ public class DBFileController {
                 .path("/downloadFile/")
                 .path(dbFile.getId())
                 .toUriString();
-        logger.info("This file has been uploaded: " + dbFile.getFileName());
+        log.info("This file has been uploaded: " + dbFile.getFileName());
 
         return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
@@ -73,7 +74,7 @@ public class DBFileController {
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        logger.info("Multiple files have been uploaded");
+        log.info("Multiple files have been uploaded");
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
@@ -84,7 +85,7 @@ public class DBFileController {
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
         // Load file from database
         DBFile dbFile = dbFileStorageService.getFile(fileId);
-        logger.info("This file "+ fileId +"has been downloaded");
+        log.info("This file "+ fileId +"has been downloaded");
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(dbFile.getFileType()))

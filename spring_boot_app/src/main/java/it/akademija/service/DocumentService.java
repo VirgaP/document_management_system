@@ -8,6 +8,7 @@ import it.akademija.payload.ApiResponse;
 import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -27,11 +28,9 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class DocumentService {
-    public static Logger logger = LoggerFactory.getLogger(DocumentService.class);
-
-    private static final Logger LOG = LoggerFactory.getLogger(DocumentService.class);
 
     @Autowired
     private DocumentRepository documentRepository;
@@ -220,6 +219,7 @@ public class DocumentService {
 
     @Transactional
     public void createDocument(RequestDocument requestDocument){
+        log.info("Creates document");
         Type type = typeRepository.findByTitle(requestDocument.getTypeTitle());
         User user = userRepository.findByEmail(requestDocument.getEmail());
         File file = fileRepository.findByFileName(requestDocument.getFileName());
@@ -252,6 +252,7 @@ public class DocumentService {
 
     @Transactional
     public void additionalFile(String uniqueNumber,RequestDocument requestDocument){
+        log.info("Adding additional file {}", uniqueNumber);
         Document document = documentRepository.findByuniqueNumber(uniqueNumber);
         File file = fileRepository.findByFileName(requestDocument.getFileName());
         List<File> files = document.getDbFiles();
@@ -281,11 +282,13 @@ public class DocumentService {
                 document.getDbFiles()
         );
         System.out.println("failai " + document.getDbFiles());
+        log.info("Return document: "+ uniqueNumber);
         return documentDTO;
     }
 
     @Transactional
     public List<DocumentDTO> getAllUserDocuments(String email){
+        log.info("Returns all user's {} documents", email);
         List<DocumentDTO> documents = documentRepository.findAllUserDocumentsl(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
@@ -303,6 +306,7 @@ public class DocumentService {
 
     @Transactional
     public List<DocumentDTO> getAllUserSubmittedDocuments(String email){
+        log.info("Returns user's {} submitted documents", email);
         List<DocumentDTO> documents = documentRepository.findAllUserSubmittedDocumentsl(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
@@ -320,6 +324,7 @@ public class DocumentService {
 
     @Transactional
     public List<DocumentDTO> getAllUserConfirmedDocuments(String email){
+        log.info("Returns user's {} confirmed documents", email);
         List<DocumentDTO> documents = documentRepository.findAllUserConfirmedDocumentsl(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
@@ -338,6 +343,7 @@ public class DocumentService {
 
     @Transactional
     public List<DocumentDTO> getAllUserRejectedDocuments(String email){
+        log.info("Returns user's {} rejected documents", email);
         List<DocumentDTO> documents = documentRepository.findAllUserRejectedDocumentsl(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
@@ -355,6 +361,7 @@ public class DocumentService {
 
     @Transactional
     public List<DocumentDTO> getAllUserReceivedDocuments(String email){
+        log.info(" Returns all user's {} received documents", email);
         List<DocumentDTO> documents = documentRepository.findReceivedUserDocuments(email).stream()
                 .map(document -> new DocumentDTO(
                         document.getTitle(),
@@ -372,6 +379,7 @@ public class DocumentService {
 
     @Transactional
     public void updateDocument(RequestDocument requestDocument, String uniqueNumber){
+        log.info("Updates document {}", uniqueNumber);
         Document document = documentRepository.findByuniqueNumber(uniqueNumber);
         Type type = typeRepository.findByTitle(requestDocument.getTypeTitle());
 
@@ -384,6 +392,7 @@ public class DocumentService {
 
     @Transactional
     public void deleteDocument(String uniqueNumber){
+        log.info("Deletes document {}", uniqueNumber);
         Document document = documentRepository.findByuniqueNumber(uniqueNumber);
         document.setType(null);
 
@@ -410,6 +419,7 @@ public class DocumentService {
 
     @Transactional
     public void submitDocument(String number, String email){
+        log.info("Submits user's {} document", email, number);
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
 
@@ -425,6 +435,7 @@ public class DocumentService {
 
     @Transactional
     public void confirmDocument(String number, String email){
+        log.info("Confirms user's {} document {}", email, number);
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
 
@@ -441,6 +452,7 @@ public class DocumentService {
 
     @Transactional
     public void rejectDocument(String number, String email){
+        log.info("Rejects user's {} documents {}", email, number);
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
 
@@ -458,6 +470,7 @@ public class DocumentService {
 
     @Transactional
     public void removeUser(String title, RequestUser request){
+        log.info("Removes user documents"+ title);
         Document document = documentRepository.findByTitle(title);
         User user = userRepository.findByEmail(request.getEmail());
 

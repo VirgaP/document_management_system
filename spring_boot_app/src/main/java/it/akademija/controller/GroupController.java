@@ -7,8 +7,7 @@ import it.akademija.dto.GroupDTO;
 import it.akademija.entity.Group;
 import it.akademija.payload.RequestGroup;
 import it.akademija.service.GroupService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @Api(value="group")
 @RequestMapping(value = "/api/group")
 public class GroupController {
-    private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
 
     private final GroupService groupService;
 
@@ -32,14 +31,14 @@ public class GroupController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value="Get list of groups", notes="Returns list of groups created")
     public List<GroupDTO> getGroups() {
-        logger.info("List of group");
+        log.info("List of group");
         return groupService.getGroups();
     }
 
     @RequestMapping(path = "/{name}", method = RequestMethod.GET)
     @ApiOperation(value="Get group ", notes="Returns group by name")
     public GroupDTO getGroup(@PathVariable final String name){
-        logger.info("This group: "+ name+" has been returned");
+        log.info("This group: "+ name+" has been returned");
         return groupService.getGroupByName(name);
     }
 
@@ -49,7 +48,7 @@ public class GroupController {
     public void createGroup(
             @ApiParam(value="Group data", required=true)
             @RequestBody final RequestGroup requestBody){
-        logger.info("The group created");
+        log.info("The group created");
 
         groupService.createGroup(requestBody);
     }
@@ -62,7 +61,7 @@ public class GroupController {
             @ApiParam(value="Group data", required=true)
             @PathVariable final String name)
     {
-       // logger.info("The group: "+ name+" has been deleted");
+       log.info("The group: "+ name+" has been deleted");
         groupService.deleteGroup(name);
     }
 
@@ -73,7 +72,7 @@ public class GroupController {
             @ApiParam(value = "Group data", required = true)
             @RequestBody RequestGroup request,
             @PathVariable final String name){
-       logger.info("The group: "+ name+ "has been updated");
+       log.info("The group: "+ name+ "has been updated");
         groupService.editGroup(request, name);
     }
 

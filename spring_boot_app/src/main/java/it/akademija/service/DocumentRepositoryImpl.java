@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import it.akademija.controller.AuthController;
 import it.akademija.entity.Document;
 import it.akademija.repository.CustomDocumentRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,9 @@ import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 public class DocumentRepositoryImpl implements CustomDocumentRepo {
-    public static Logger logger = LoggerFactory.getLogger(DocumentRepositoryImpl.class);
+
 
     @Autowired
     private EntityManager em;
@@ -33,6 +35,7 @@ public class DocumentRepositoryImpl implements CustomDocumentRepo {
         final List<Object[]> resultList = nativeQuery.getResultList();
         List<Document> documentList = Lists.newArrayList();
         resultList.forEach(object -> documentList.add(document));
+        log.info("Returns list of documents");
         return documentList;
     }
 }

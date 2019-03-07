@@ -13,6 +13,7 @@ import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.PagedUserRepository;
 import it.akademija.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.groovy.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +28,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
@@ -48,7 +49,7 @@ public class UserService {
 
     @Transactional
     public List<UserDTO> getUserWithoutDocuments() {
-        logger.info("Finding all users");
+        log.info("Finding all users");
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserDTO(
@@ -64,6 +65,7 @@ public class UserService {
     public Page<UserDTO> listUsersByPage(Pageable pageable) {
         Page<User> userPage = pagedUserRepository.findAll(pageable);
         final Page<UserDTO> userDtoPage = userPage.map(this::convertToUserDto);
+        log.info("Returns userDtoPage");
         return userDtoPage;
     }
 
@@ -77,7 +79,7 @@ public class UserService {
                 user.getUserDocuments()
         );
 
-
+        log.info("Returns user "+ user);
         return userDTO;
 //        System.out.println("submitted "+ userDTO.setSubmittedCount(userRepository.getUserDocumentDetails(user.getEmail())));
     }
@@ -85,6 +87,7 @@ public class UserService {
 
     @Transactional
     public List<UserDTO> getUserEmails() {
+        log.info("Returns user's emails");
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserDTO(
@@ -95,7 +98,7 @@ public class UserService {
 
     @Transactional
     public UserDTO getUser(String email){
-        logger.info("Finding one user");
+        log.info("Finding one user");
         User user = userRepository.findByEmail(email);
         UserDTO userDTO = new UserDTO(
                 user.getName(),
@@ -105,7 +108,7 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
-        logger.info("Found {} user", user.getEmail());
+        log.info("Found {} user", user.getEmail());
         return userDTO;
     }
 
@@ -151,7 +154,7 @@ public class UserService {
             user.setPassword(password);
         }
 
-
+        log.info("Saving user's email");
         userRepository.save(user);
 
     }
@@ -159,6 +162,7 @@ public class UserService {
     @Transactional
     public void deleteUser(String email){
         User user = userRepository.findByEmail(email);
+        log.info("Deletes user with "+ email);
         userRepository.delete(user);
     }
 
@@ -169,22 +173,23 @@ public class UserService {
         Group group = groupRepository.findByname(groupName);
         user.addGroup(group);
         userRepository.save(user);
+        log.info("Adding the user "+ user);
         group.addUser(user);
     }
 
     @Transactional
     public void removeGroupFromUser(String email, String groupName){
-        logger.info("Trying to remove user with email "+ email + "from group with name "+groupName);
+        log.info("Trying to remove user with email "+ email + "from group with name "+groupName);
         User user = userRepository.findByEmail(email);
         Group group = groupRepository.findByname(groupName);
 
         Set<Group> userGroups = user.getUserGroups();
 
         if (!userGroups.contains(group)) {
-            logger.error("Group with name "+ groupName + " is not found in the database");
+            log.error("Group with name "+ groupName + " is not found in the database");
             throw new ResourceNotFoundException("the group is not found");
         } else {
-            logger.info("User with email "+ email+ " was removed from group "+ groupName);
+            log.info("User with email "+ email+ " was removed from group "+ groupName);
             user.removeGroup(group);
         }
     }

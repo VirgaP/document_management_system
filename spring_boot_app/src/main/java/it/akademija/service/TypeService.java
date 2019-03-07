@@ -7,9 +7,11 @@ import it.akademija.payload.IncomingRequestBody;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.TypeGroupRepository;
 import it.akademija.repository.TypeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,10 +20,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TypeService {
-
-    private static final Logger logger= LoggerFactory.getLogger(TypeService.class);
 
     @Autowired
     private TypeRepository typeRepository;
@@ -34,6 +35,7 @@ public class TypeService {
 
     @Transactional
     public List<TypeDTO> getTypes() {
+        log.info("Returns types");
         return typeRepository.findAll()
                 .stream()
                 .map(type -> new TypeDTO(
@@ -43,16 +45,19 @@ public class TypeService {
 
     @Transactional
     public List<TypeGroup> getGroupTypes() {
+        log.info("Return group types");
         return typeGroupRepository.findAll().stream().collect(Collectors.toList());
     }
 
     @Transactional
     public List<Type> getUserSenderGroupTypes(String email) {
+        log.info("Returns user's group types");
         return typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
     }
 
     @Transactional
     public List<Type> getUserReceiverGroupTypes(String email) {
+        log.info("Returns user's, whose email: "+ email);
         return typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
     }
 
@@ -60,6 +65,7 @@ public class TypeService {
     public TypeDTO getTypeByTitle(String title){
         Type type = typeRepository.findByTitle(title);
         TypeDTO typeDTO = new TypeDTO(type.getTitle());
+        log.info("Returns type " +title);
         return typeDTO;
     }
 
@@ -70,6 +76,7 @@ public class TypeService {
                 type.getTitle(),
                 type.getTypeGroups()
         );
+        log.info("Return type groups "+ title);
         return typeDTO;
     }
 
@@ -78,6 +85,7 @@ public class TypeService {
         String typeTitle = request.getTitle();
 
         if (typeRepository.existsByTitle(typeTitle)) {
+            log.info("IllegalArgumentException: type already exists");
             throw new IllegalArgumentException("Type already exists");
         }
 
@@ -85,6 +93,7 @@ public class TypeService {
                 new Long(0),
                 typeTitle
         );
+        log.info("Type {} saved", typeTitle);
         typeRepository.save(type);
     }
 
@@ -97,6 +106,7 @@ public class TypeService {
 
     @Transactional
     public void deleteType(String title){
+        log.info("Deletes type "+ title);
         Type type = typeRepository.findByTitle(title);
 
         typeRepository.delete(type);
@@ -104,6 +114,7 @@ public class TypeService {
 
     @Transactional
     public void addUserGroup(String title, IncomingRequestBody request) {
+        log.info("Adding user group");
         Type type = typeRepository.findByTitle(title);
         Group group = groupRepository.findByname(request.getGroupName());
 
@@ -119,6 +130,7 @@ public class TypeService {
 
     @Transactional
     public void removeUserGroup(String title, String groupName){
+        log.info("Removes user's group "+ groupName);
         Type type = typeRepository.findByTitle(title);
         Group group = groupRepository.findByname(groupName);
 
@@ -130,5 +142,6 @@ public class TypeService {
 
         type.getTypeGroups().remove(typeGroup);
         group.getTypeGroups().remove(typeGroup);
+
     }
 }
