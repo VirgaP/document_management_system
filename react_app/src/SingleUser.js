@@ -60,16 +60,6 @@ export class SingleUser extends Component {
           .catch(function (error) {
             console.log(error);
           });
-
-          // axios.get(`http://localhost:8099/api/documents/${this.state.id}/all`)
-          // .then(result => {
-          //   const allDocumentsCount = result.data
-          // this.setState({allDocumentsCount});
-          // console.log('count all', allDocumentsCount)
-          // })
-          // .catch(function (error) {
-          //   console.log(error);
-          // });
       }
 
        handleResultChange(value) {

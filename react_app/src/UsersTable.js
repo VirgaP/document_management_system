@@ -119,13 +119,13 @@ export class UsersTable extends Component {
         title: 'Vardas',
         dataIndex: 'name',
         // sorter: true,
-        width: '20%',
+        width: '15%',
       },
       {
         title: 'Pavardė',
         dataIndex: 'surname',
         // sorter: true,
-        width: '20%',
+        width: '15%',
       },
       {
         title: 'El.paštas',
@@ -144,7 +144,7 @@ export class UsersTable extends Component {
           ),
           filterDropdownVisible: this.state.filterDropdownVisible || null,
           onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }),
-        width: '20%',
+        width: '15%',
       }
       ,{
         title: 'Viso sukurta',
@@ -188,12 +188,26 @@ export class UsersTable extends Component {
         width: '10%',
       },
       {
+            title: 'Grupės',
+            dataIndex: 'userGroups',
+            key: 'groups',
+            render: userGroups => (
+              <span>
+                {userGroups.map(tag => {
+                  return <Tag color='geekblue' key={tag.name}>{tag.name.toUpperCase()}</Tag>;
+                })}
+              </span>
+            ),
+            width: '25%',
+          },
+      {
         title: '',
         dataIndex: 'email',
         key: 'edit',
         render: email => <Link to={`/redaguoti/vartotojas/${email}`}><Icon type="edit" /></Link>,
         width: '5%',
       }
+
     ];
      const {pagination, data, page}=this.state
     return (

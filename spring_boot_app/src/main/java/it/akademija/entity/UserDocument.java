@@ -25,6 +25,9 @@ public class UserDocument {
     @Column(name="rejected")
     private boolean rejected = false;
 
+    @Column(name="message", nullable = true)
+    private String message;
+
     public UserDocument() {
     }
 
@@ -86,6 +89,14 @@ public class UserDocument {
 
     public void setRejected(boolean rejected) {
         this.rejected = rejected;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     //

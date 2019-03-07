@@ -48,6 +48,7 @@ import EditUser from './EditUser';
 import UserVerticalMenu from './layout/UserVerticalMenu';
 import UsersTable from './UsersTable';
 import UserDocumentTable from './UserDocumentTable';
+import ReceivedDocumentsTable from './ReceivedDocumentsTable';
 
 const { Content } = Layout;
 
@@ -164,13 +165,17 @@ class App extends Component {
                 <PrivateRoute path="/redaguoti/dokumentas/:number" component={EditDocument} isAuthenticated={isAuthenticated} />
                 <PrivateRoute path="/mano-dokumentai" component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 
+                <PrivateRoute path="/gauti/dokumentai" component={ReceivedDocumentsTable} isAuthenticated={isAuthenticated}  currentUser={this.state.currentUser} />
+              
                 <PrivateRoute path="/:email/dokumentai" component={UserDocumentTable} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                
                 <AdminRoute path="/naujas-tipas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeForm}/>
                 <AdminRoute path='/visi-tipai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeListContainer}/>
                 <AdminRoute path="/tipas/:title" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={SingleType}/>}/>                 
                 <AdminRoute path="/redaguoti/tipas/:title" component={EditType} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> }/>   
-                <PrivateRoute exact path="/gauti/vartotojas/:email/" component={ReceivedUserDocuments} isAuthenticated={isAuthenticated}  currentUser={this.state.currentUser} />
+               
+                {/* <PrivateRoute path="/gauti/vartotojas/:email/" component={ReceivedUserDocuments} isAuthenticated={isAuthenticated}  currentUser={this.state.currentUser} /> */}
+               
                 <PrivateRoute path='/siusti/vartotojas/:email/' component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <AdminRoute path='/visi-dokumentai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={DocumentListContainer}/>
                 <AdminRoute path="/naujas-vartotojas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={Registration}/>

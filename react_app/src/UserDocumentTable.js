@@ -23,8 +23,8 @@ export class UserDocumentTable extends Component {
         filterDropdownVisible: false,
         searchText: '',
         filteredInfo: null,
-        heading: "Visi sukurti dokumentai" || '',
-        url: `http://localhost:8099/api/documents/${this.props.match.params.email}/all`
+        header: 'Nepateikti dokumentai',
+        url: `http://localhost:8099/api/documents/${this.props.match.params.email}/notSubmitted`
         }
         // const baseUrl = `http://localhost:8099/api/documents/${this.props.match.params.email}`; 
     }
@@ -38,8 +38,6 @@ export class UserDocumentTable extends Component {
 
    
     componentDidUpdate(prevProps, prevState) {
-        console.log("prevState", prevState.url)
-
         if (prevState.url!== this.state.url) {
             this.fetch();
         }
@@ -97,7 +95,6 @@ export class UserDocumentTable extends Component {
         console.log('params:', params);
         this.setState({ loading: true });
         reqwest({
-        //   url: `http://localhost:8099/api/documents/${this.state.email}/all`,
           url: this.state.url,  
           method: 'get',
           data: {
@@ -146,10 +143,11 @@ export class UserDocumentTable extends Component {
 
     handleFilter=(value , event)=>{
         this.setState({
-            url: value
+            url: value, 
+            header: ''
         })
     }
-    
+  
   render() {
 
     let { filteredInfo, searchText } = this.state;
@@ -194,34 +192,22 @@ export class UserDocumentTable extends Component {
         render: createdDate => createdDate,
         width: '20%',
       },
-    //   {
-    //     title: 'Būsena',
-    //     dataIndex: 'userDocuments',
-    //     key: 'status',
-    //     render: userDocuments => userDocuments.map(item => {
-    //         var sub = item.submitted === true ? 'pateiktas' : <span id="notsub">nepateiktas</span>
-    //         let con = item.confirmed === true ? <span id="con">patvirtintas</span> : <span id="notcon">nepatvirtintas</span>
-    //         let tags = [sub, con]
-    //         return <span key={item.document.id} id="tags">{tags.map(tag =>
-    //         <Tag color="blue" key={tag}>{tag}</Tag>)}
-    //         </span>
-    //     }),
-    //     width: '15%',
-    //   },
       {
         title: '',
-        dataIndex: 'number',
-        key: 'edit',
-        render: number => <Link to={`/redaguoti/dokumentas/${number}`}><Icon type="edit" /></Link>,
-        width: '5%',
+        dataIndex: 'userDocuments',
+        key: 'status',
+        render: userDocuments => userDocuments.map(item => 
+            item.rejected && <Tag color="volcano" key={item.document.uniqueNumber}>Atmestas</Tag>),
+        width: '15%',
       },
       {
         title: '',
-        dataIndex: 'number',
-        key: 'delete',
-        render: number => <Icon type ="delete" onClick={() => this.deleteDocument(number)}/>,
+        dataIndex: 'userDocuments',
+        key: 'edit',
+        render: userDocuments => userDocuments.map(item=>item.submitted === false ? <Link to={`/redaguoti/dokumentas/${item.document.uniqueNumber}`}>
+        <Icon type="edit" /></Link> : <Icon type="edit" disable/>),
         width: '5%',
-      }
+      },
     ];
      const {pagination, page, data}=this.state
      const Option = Select.Option;
@@ -230,19 +216,23 @@ export class UserDocumentTable extends Component {
     <div className="container" id="list_container">
     <div className="container user_document_list">
     <div className="table-operations">
-        <Select style={{ width: 190 }} placeholder = "Pasirinkite dokumento būseną" onSelect={(value, event) => this.handleFilter(value, event)}>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted`}>pateikti</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed`}>patvirtinti</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/all`}>visi</Option>
+    <h4>{this.state.header}</h4>
+        <Select style={{ width: 240}} placeholder = "Pasirinkite dokumento būseną" onSelect={(value, event) => this.handleFilter(value, event)}>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/notSubmitted`}>NEPATEIKTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted`}>PATEIKTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed`}>PATVIRTINTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/rejected`}>ATMESTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/all`}>VISI SUKURTI</Option>
         </Select>
-        <h3>{this.state.heading}</h3>
     </div>
     <Table
+        className="user-documents-table"
         columns={columns}
         rowKey={record => record.number}
         dataSource={this.state.data}
         pagination={this.state.pagination}
         loading={this.state.loading}
+        // expandedRowRender={record => <p style={{ margin: 0 }}>{record.userDocuments.map(item=>item.message) }</p>}
         onChange={this.handleTableChange}
         scroll={{ y: 360 }}
       />

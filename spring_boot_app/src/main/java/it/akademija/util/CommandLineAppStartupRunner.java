@@ -23,7 +23,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String...args) throws Exception {
-
+//
 //        if(!roleRepository.existsById(1L) && !roleRepository.existsById(2L)) {
 //            Role role1 = new Role();
 //            role1.setName(RoleName.ROLE_ADMIN);

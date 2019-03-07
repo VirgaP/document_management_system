@@ -230,17 +230,19 @@ isFormInvalid() {
          </label>
        </div>
        </FormItem> 
-       <FormItem>
-        <input
+       <div className="row">
+       <FormItem>    
+         <input
           type="submit"
           className="btn btn-primary float-right"
           value="Saugoti"/>
           </FormItem>
           <FormItem>
-        <button
+         <button
           className="btn btn-link float-left"
           onClick={this.handleClearForm}>Išvalyti įvestus duomenis</button>
           </FormItem>
+          </div>
       </Form>
     </div>
     );

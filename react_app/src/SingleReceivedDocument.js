@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, notification, Icon } from 'antd';
+import { Button, notification, Icon, Modal } from 'antd';
 import {Link} from 'react-router-dom'
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
+import FormInModal from './FormInModal';
 
 export class SingleReceivedDocument extends Component {
     constructor(props) {
@@ -18,6 +19,8 @@ export class SingleReceivedDocument extends Component {
          userFiles:[],
          file:null,
          fileName: '',  
+         visible: false,
+         message: ''
       }
       this.handleConfirm = this.handleConfirm.bind(this)
       this.handleReject = this.handleReject.bind(this)
@@ -72,7 +75,8 @@ export class SingleReceivedDocument extends Component {
             message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
             description: 'Dokumentas patvirtintas!'
         }); 
-        this.props.history.push(`/vartotojas/${email}`)   
+        // this.props.history.push(`/vartotojas/${email}`)   
+        this.props.history.push('/pagrindinis')   
          }
       })
       .catch(error => {
@@ -87,8 +91,11 @@ export class SingleReceivedDocument extends Component {
     handleReject(number) {
         var email = this.state.user.map(el=>el.email)
         email = email.toString();
-        
-        axios.put(`http://localhost:8099/api/documents/${number}/${email}/reject`)
+        console.log("message ", this.state.message)
+
+        axios.put(`http://localhost:8099/api/documents/${number}/${email}/reject`, {
+          message: this.state.message
+        })
         .then(response => {
           console.log("Response", response);
           const responseStatus = response.status
@@ -111,8 +118,39 @@ export class SingleReceivedDocument extends Component {
   
     }
 
+    showModal = () => {
+      this.setState({ visible: true });
+    }
+  
+    handleCancel = () => {
+      this.setState({ visible: false });
+    }
+  
+    handleCreate = () => {
+      const form = this.formRef.props.form;
+      form.validateFields((err, values) => {
+        if (err) {
+          return;
+        }
+        console.log('Received values of form: ', values);
+        form.resetFields();
+        this.setState({ visible: false});
+      });
+    }
+  
+    saveFormRef = (formRef) => {
+      this.formRef = formRef;
+    }
+  
+    handleMessageChange = event => {
+      this.setState({
+        message: event.target.value,
+      });
+      console.log("MESSAGE ", this.state.message)
+    };
     
   render() {
+    const {message} = this.state
     return (
         <div className="container single-document">
         <SingleDocumentComponent document={this.state.document} userDocument={this.state.userDocument} user={this.state.user}/>
@@ -126,13 +164,18 @@ export class SingleReceivedDocument extends Component {
             <div className="col-lg-6 col-md-6">
                 <Button type="primary"  block onClick={() => this.handleConfirm(this.state.document.number)}>Patvirtinti dokumentą</Button> 
             </div>
-            <div className="col-lg-6 col-md-6">
-                <Button type="danger"  block onClick={() => this.handleReject(this.state.document.number)}>Atmesti dokumentą</Button> 
+             <div className="col-lg-6 col-md-6">
+                <Button type="danger"  block onClick={this.showModal}>Atmesti dokumentą</Button> 
+                <FormInModal
+                  wrappedComponentRef={this.saveFormRef}
+                  visible={this.state.visible}
+                  onCancel={this.handleCancel}
+                  message = {message}
+                  onMessageChange={this.handleMessageChange}                  
+                  onCreate={()=>{ this.handleCreate(); this.handleReject(this.state.document.number) }}
+                />
             </div>
-        </div><br></br>
-        {/* <span id="back-to-list">
-        <Link to={`/gauti/vartotojas/${this.props.currentUser.email}`}><Icon type="left-circle-o" /> Grįžti į gautų dokumentų sąrašą</Link> 
-        </span>    */}
+        </div>
     </div>
     )
   }

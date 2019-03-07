@@ -19,6 +19,8 @@ public class DocumentDTO {
 
     private Date createdDate;
 
+    private Date submittedDate;
+
     private String number;
 
     private List<UserDocument> userDocuments = new ArrayList<>();
@@ -30,22 +32,24 @@ public class DocumentDTO {
     public DocumentDTO() {
     }
 
-    public DocumentDTO(String title, String number, String description, Date createdDate, Type type, List<UserDocument> userDocuments, List<File> dbFiles) {
+    public DocumentDTO(String title, String number, String description, Date createdDate, Date submittedDate, Type type, List<UserDocument> userDocuments, List<File> dbFiles) {
         this.title = title;
         this.number = number;
         this.description = description;
         this.createdDate = createdDate;
+        this.submittedDate = submittedDate;
         this.type = type;
         this.userDocuments = userDocuments;
         this.dbFiles = dbFiles;
     }
 
 
-    public DocumentDTO(String title, String number, String description, Date createdDate, Type type) {
+    public DocumentDTO(String title, String number, String description, Date createdDate, Date submittedDate, Type type) {
         this.title = title;
         this.number = number;
         this.description = description;
         this.createdDate = createdDate;
+        this.submittedDate = submittedDate;
         this.type = type;
     }
 
@@ -88,6 +92,14 @@ public class DocumentDTO {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Date getSubmittedDate() {
+        return submittedDate;
+    }
+
+    public void setSubmittedDate(Date submittedDate) {
+        this.submittedDate = submittedDate;
     }
 
     public List<UserDocument> getUserDocuments() {

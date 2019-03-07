@@ -3,10 +3,9 @@ package it.akademija.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.DocumentDTO;
-import it.akademija.entity.Document;
-import it.akademija.events.PaginatedResultsRetrievedEvent;
-import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.RequestDocument;
+import it.akademija.payload.RequestMessage;
+import it.akademija.repository.DocumentRepository;
 import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
 import org.slf4j.Logger;
@@ -17,8 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
-import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
 
 @RestController
@@ -29,12 +27,14 @@ public class DocumentController {
     private final DocumentService documentService;
     private final UserService userService;
     private ApplicationEventPublisher eventPublisher;
+    private final DocumentRepository documentRepository;
 
     @Autowired
-    public DocumentController(DocumentService documentService, UserService userService, ApplicationEventPublisher eventPublisher) {
+    public DocumentController(DocumentService documentService, UserService userService, ApplicationEventPublisher eventPublisher, DocumentRepository documentRepository) {
         this.documentService = documentService;
         this.userService = userService;
         this.eventPublisher = eventPublisher;
+        this.documentRepository = documentRepository;
     }
 
     @GetMapping("/test")
@@ -66,6 +66,26 @@ public class DocumentController {
         return documentService.pagedUserConfirmedDocuments(email, pageable);
     }
 
+    @GetMapping("/{email}/notSubmitted")
+    public Page<DocumentDTO> userNotSubmittedDocumentsPaged(@PathVariable final String email, Pageable pageable) {
+        return documentService.pagedUserNotSubmittedDocuments(email, pageable);
+    }
+
+    @GetMapping("/{email}/rejected")
+    public Page<DocumentDTO> userRejectedDocumentsPaged(@PathVariable final String email, Pageable pageable) {
+        return documentService.pagedUserRejectedDocuments(email, pageable);
+    }
+
+    @GetMapping("/{email}/received")
+    public Page<DocumentDTO> userReceivedDocumentsPaged(@PathVariable final String email, Pageable pageable) {
+        return documentService.pagedUserReceivedDocuments(email, pageable);
+    }
+
+    @GetMapping("/documentsSpecCount/{title}")
+    public int getDocumentByTypeStatusCount(@PathVariable final String title){
+        return documentRepository.findCountByDocumentTitleAndStatus(title);
+    }
+
     @GetMapping("/{email}/submittedCount")
     public int userSubmittedDocumentCount(@PathVariable final String email) {
         return documentService.returnSubmittedlUserDocumentCount(email);
@@ -76,7 +96,7 @@ public class DocumentController {
         return documentService.returnConfirmedUserDocumentCount(email);
     }
 
-    @GetMapping("/{email}/rejected")
+    @GetMapping("/{email}/rejectedCount")
     public int userRejectedDocumentCount(@PathVariable final String email) {
         return documentService.returnAllUserDocumentCount(email);
     }
@@ -96,7 +116,7 @@ public class DocumentController {
         return documentService.getAllUserDocuments(email);
     }
 
-    @RequestMapping(path="/{email}/received", method = RequestMethod.GET)
+    @RequestMapping(path="/{email}/received/documents", method = RequestMethod.GET)
     @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
     List<DocumentDTO> getAllUserReceivedDocuments( @PathVariable final String email) {
         //logger.info("Returns all received documents filtered using email");
@@ -161,7 +181,7 @@ public class DocumentController {
     }
 
     @RequestMapping(path = "/{uniqueNumber}/{email}/confirm", method = RequestMethod.PUT)
-    @ApiOperation(value = "Submit document", notes = "Submit document, change status")
+    @ApiOperation(value = "Confirm document", notes = "Confirm document, change status")
     @ResponseStatus(HttpStatus.OK)
     void confirmDocument(
             @ApiParam(value = "Document data", required = true)
@@ -173,15 +193,16 @@ public class DocumentController {
     }
 
     @RequestMapping(path = "/{uniqueNumber}/{email}/reject", method = RequestMethod.PUT)
-    @ApiOperation(value = "Submit document", notes = "Submit document, change status")
+    @ApiOperation(value = "Reject document", notes = "Reject document, change status")
     @ResponseStatus(HttpStatus.OK)
     void rejectDocument(
             @ApiParam(value = "Document data", required = true)
             @PathVariable final String uniqueNumber,
-            @PathVariable final String email)
+            @PathVariable final String email,
+            @RequestBody RequestMessage request)
     {
         logger.info("The document No: "+ uniqueNumber+ "has been rejected");
-        documentService.rejectDocument(uniqueNumber, email);
+        documentService.rejectDocument(uniqueNumber, email, request);
     }
 
 }

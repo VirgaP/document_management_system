@@ -75,14 +75,15 @@ export class UserVerticalMenu extends Component {
     <li><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon style={{ fontSize: '26px', color: '#08c' }} theme="outlined" type="idcard" /> </Link></li>
     <li><a href="">Dokumentai</a>
       <ul className="submenu">
-        <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Visi</Link></li>
-        <li><a href="">Pateikti</a></li>
-        <li><a href="">Patvirtinti</a></li>
-        <li><a href="">Atmesti</a></li>
+        <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Sukurti</Link></li>
+        <li>
+          <Link to={'/gauti/dokumentai'}>Gauti</Link>
+          {/* <Badge count={this.state.count} showZero /> */}
+          </li>
       </ul>
     </li>
     <li><Link to={'/naujas-dokumentas'}>Kurti dokumentą</Link></li>
-    <li><Badge count={this.state.count} showZero>
+    {/* <li><Badge count={this.state.count} showZero>
           <Link to={{
             pathname: `/gauti/vartotojas/${this.props.currentUser.email}`,
             state: { 
@@ -91,8 +92,7 @@ export class UserVerticalMenu extends Component {
             }
           }}>Gauti</Link>&nbsp; 
             <a href="#" className="head-example" />
-          </Badge></li>
-
+          </Badge></li> */}
   </ul>
 </nav> 
       </div>

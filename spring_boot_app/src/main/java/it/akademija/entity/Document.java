@@ -25,6 +25,8 @@ public class Document implements Serializable {
 
     private Date createdDate;
 
+    private Date submittedDate;
+
     private List<UserDocument> userDocuments = new ArrayList<UserDocument>();
 
     private List<File> dbFiles = new ArrayList<>();
@@ -40,16 +42,27 @@ public class Document implements Serializable {
         this.createdDate = createdDate;
     }
 
+    @Column(name = "SUBMITTED_DATE", nullable = true)
+    @Temporal(TemporalType.DATE)
+    public Date getSubmittedDate() {
+        return submittedDate;
+    }
+
+    public void setSubmittedDate(Date submittedDate) {
+        this.submittedDate = submittedDate;
+    }
+
     public Document() {
     }
 
-    public Document(Long id, String uniqueNumber, String title, String description, Type type, Date createdDate) {
+    public Document(Long id, String uniqueNumber, String title, String description, Type type, Date createdDate, Date submittedDate) {
         this.id = id;
         this.uniqueNumber = uniqueNumber;
         this.title = title;
         this.description = description;
         this.type = type;
         this.createdDate = createdDate;
+        this.submittedDate = submittedDate;
     }
 
     public Document(Long id, String title, String description, Type type, Date createdDate, List<UserDocument> userDocuments) {

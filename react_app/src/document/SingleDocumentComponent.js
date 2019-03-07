@@ -4,7 +4,13 @@ import React from 'react';
 const SingleDocumentComponent = (props) => (
     <div className="document-description container">
     <h4>{props.document.title}</h4>
+    <div className="row reject-message">
+    {props.userDocument.map(el=>el.rejected &&
+    <p>{el.message}</p>
+    )}
+    </div>
     <div className="row"><pre>Sukūrimo data: </pre><p>{props.document.createdDate}</p></div>
+    {props.document.submittedDate &&<div className="row"><pre>Pateikimo data: </pre><p>{props.document.submittedDate}</p></div>}    
     <div className="row"><pre>Unikalus dokumento nr.: </pre><p>{props.document.number}</p></div>
     <div className="row"><pre>Dokumento tipas: </pre><p>{(props.document.type !=null) ? props.document.type.title : 'tipas nepriskirtas'}</p></div>
     <div className="row"><pre>Dokumento aprašymas: </pre><p>{props.document.description}</p></div>

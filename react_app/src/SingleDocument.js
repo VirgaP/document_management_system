@@ -6,7 +6,7 @@ import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import AddGroup from './AddGroup';
 import {Link} from 'react-router-dom'
-import {notification, Icon } from 'antd';
+import {notification, Icon, Popconfirm } from 'antd';
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
 
@@ -139,6 +139,23 @@ export class SingleDocument extends Component {
             });  
           }})
     }
+    deleteDocument(number){
+      axios.delete(`http://localhost:8099/api/documents/${number}`)
+      .then(result => {
+      const responseStatus = result.status
+      console.log(result)
+      if(responseStatus >= 200 && responseStatus < 300){ 
+          notification.success({
+            message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
+            description: 'Dokumentas ištrintas sėkmingai!'
+          }); 
+          this.props.history.push('/pagrindinis')    
+         }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
       onChange(e) {
         this.setState({file:e.target.files[0]})
@@ -169,6 +186,14 @@ export class SingleDocument extends Component {
         return  axios.post(url, formData,config)
       }
 
+      confirm(number) {
+        this.deleteDocument(number);
+      }
+
+      cancel(){
+        return null;
+      }
+
     render() {
       const {fileName} = this.state
       const user = this.state.user.map(el=>el.email);
@@ -189,26 +214,30 @@ export class SingleDocument extends Component {
               {this.state.userDocument.map(el=>(String (el.submitted)) !== 'true'  ? 
             <div>
               <h5>Pateikti papildomus dokumentus</h5>
-             <form classsName="form-row" onSubmit={this.handleSubmit}>
+             <form className="form-row" onSubmit={this.handleSubmit}>
                 <div className="custom-file col-lg-10 col-md-10" id="customFile" lang="es">
                 <input type="file" className="custom-file-input" name="selectedFile" id="exampleInputFile" aria-describedby="fileHelp" onChange={this.onChange} required/>
                 <label className="custom-file-label" htmlFor="file">{selected}</label>
                 </div>
                 <button className="btn btn-primary col-lg-2 col-md-2" type="submit">Pridėti failą</button>
-              </form>
+              </form><br></br>
+              <div className="row no-gutters">
+                       <div className="col-lg-6 col-md-6">
+                      <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                      <Popconfirm placement="top" title={"Trinti dokumentą?"} onConfirm={()=>this.confirm(this.state.document.number)} onCancel={this.cancel} okText="Taip" cancelText="Ne">
+                      <Button type="danger" block 
+                      // onClick={this.confirm}
+                      // onClick={() => this.deleteDocument(this.state.document.number)}
+                      >Trinti dokumentą</Button> 
+                      </Popconfirm>
+                      </div>
+                    </div>
               </div> : <span></span> 
-                    )} <br></br>
-
+                    )} 
                 </div>
                 {/* user !== current */}
-                {  this.state.userDocument.map(el=>(String (el.submitted)) === 'true') ?  <span></span> : //dokumenta pateikti gali tik jo sukurejas
-                    <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
-                }
-                <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button>
-                <br></br> 
-                  <span id="back-to-list">
-                  <Link to={`/siusti/vartotojas/${current}`}><Icon type="left-circle-o" /> Grįžti į dokumentų sąrašą</Link> 
-                  </span>   
                 </div>
                 </div>
       );

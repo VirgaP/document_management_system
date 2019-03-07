@@ -83,6 +83,9 @@ body {
 #list_container{
   width: 90%;
 }
+.homepage-link-list{
+margin-top: 5%;
+}
 
 .homepage {
   margin: auto;
@@ -91,6 +94,8 @@ body {
   width: 80%;
   padding-bottom:3%;
   height: 100%;
+  text-align: center;
+
 }
 .homepage p{
   padding-top: 3%;
@@ -279,6 +284,10 @@ body {
   margin-bottom: 10%;
   padding: 10px;
 }
+.user_form h4{
+  text-align: center;
+  margin-bottom: 3%;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -327,7 +336,23 @@ code {
 #con{
   color: green
 }
+.user-documents-table th{
+  background-color: lightblue !important;
+}
 
+.received-documents-table th{
+  background-color: lightgreen !important;
+}
+
+.reject-message{
+  margin-bottom: 10px;
+  
+}
+.reject-message p {
+  font-size: 12px;
+  padding: 10px;
+  border: solid red 2px;
+}
 
 .footer{
   /* position: fixed; */
@@ -370,6 +395,7 @@ code {
 #signup-form{
   margin: auto;
   width: 60%;
+  max-height: 60%;
 }
 
 .signup-form-button {
@@ -466,6 +492,35 @@ code {
   background-color: #fff;
   border-color: #189cf0;
   color: #189cf0;
+}
+
+#accordion{
+  width: 600px;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  text-align: center;
+  display: inline-block;
+}
+#accordion h2{
+  font-size: 12pt;
+  margin: 0px;
+  padding: 10px;
+  background: lightblue;
+  border-bottom: 1px solid #fff;
+}
+#accordion li div.content{
+  display: none;
+  padding: 10px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+}
+#accordion p{
+  background-color: white;
+  margin: 0 !important; 
+}
+#accordion li:hover div.content{
+  display: inherit;
 }
 
 @media (min-width: 992px) {

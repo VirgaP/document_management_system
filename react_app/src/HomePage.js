@@ -4,6 +4,7 @@ import { Button, Icon, Badge } from 'antd';
 import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom'
 import ZipDownload from './ZipDownload';
+import InstructionsAdmin from './layout/InstructionsAdmin';
 
 export class HomePage extends Component {
     constructor(props) {
@@ -48,26 +49,18 @@ export class HomePage extends Component {
             console.log(error);
           });
 
-        axios.get(`http://localhost:8099/api/documents/${this.state.email}/received`)
-        .then(result => {
+      //   axios.get('http://localhost:8099/api/documents/documentsSpecCount/prasymas')
+      //   .then(result => {
        
-        const documentsReceived = result.data;
-         this.setState({ 
-            documentsReceived,
-            isLoading: false,
-         })
-         this.setState({count:documentsReceived.length})
-         const count = documentsReceived.length
-         this.setState({
-           count:count
-         })
-        })
-        .catch(error => {
-          this.setState({
-              error: 'Error while fetching data.',
-              isLoading: false
-          });
-        });
+      //  console.log(result)
+         
+      //   })
+      //   .catch(error => {
+      //     this.setState({
+      //         error: 'Error while fetching data.',
+      //         isLoading: false
+      //     });
+      //   });
       }
 
       handleDownlaod = (index, filename) => {
@@ -100,12 +93,11 @@ export class HomePage extends Component {
     
     return ( 
       <div className="container homepage">
-      
-        <p>Packed out reflective so dear proud fanciful grasshopper sheep more when a wombat jeepers ouch thanks into as ritually after shrank according exquisitely hedgehog redid thanks wove that impious due one much and below. <br></br> Desolately hamster much bawdy superb where adequate this yet misheard more.
-        Cockily bird whimpered less hey in flew this some truculently notwithstanding a mature lizard stuck dog monumentally ambiguous left that iguana outbid much toward genially improper.
-        </p>
+      <div><h4>Sveiki, prisijungę prie Abrakadabra dokumentų valdymo sistemos.</h4></div>
+
+      {this.state.user.admin && <InstructionsAdmin/>}
         <div className="container homepage-link-list">
-          <div className="row">
+          {/* <div className="row">
           <div className="col-lg-3 col-md-3" id="hp1"><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon type="idcard" /> Vartotojo paskyra</Link></div>
           <div className="col-lg-3 col-md-3" id="hp2"> <Link to={'/naujas-dokumentas'}><Icon type="file-add" /> Kurti naują dokumentą</Link></div>
           <div className="col-lg-3 col-md-3" id="hp3"><Link to={`/siusti/vartotojas/${this.props.currentUser.email}`}><Icon type="folder" /> Sukurti dokumentai</Link></div>
@@ -122,10 +114,12 @@ export class HomePage extends Component {
           </Badge>
           
           {/* <span className="badge badge-pill badge-primary">{this.state.count}</span> */}
-          </div>
-          </div> 
+          {/* </div>
+          </div>  */} 
+          <div className="row">
           <ZipDownload email={this.state.email} />
           <button className="btn btn-default" onClick={this.handleDownlaod.bind(this)}>Gauti csv</button> 
+          </div>
         </div>       
       </div>   
     )

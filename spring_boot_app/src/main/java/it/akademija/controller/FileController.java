@@ -1,12 +1,10 @@
 package it.akademija.controller;
 
-import it.akademija.BinaryOutputWrapper;
-import it.akademija.FileUtil;
+import it.akademija.util.BinaryOutputWrapper;
+import it.akademija.util.FileUtil;
 import it.akademija.entity.File;
 import it.akademija.payload.UploadFileResponse;
-import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.FileRepository;
-import it.akademija.service.DocumentService;
 import it.akademija.service.FileStorageService;
 import org.hibernate.engine.jdbc.StreamUtils;
 import org.slf4j.Logger;

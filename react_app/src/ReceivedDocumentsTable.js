@@ -1,16 +1,17 @@
-import React, { Component } from 'react';import React, { Component } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { Table, Tag, Input, Button, Icon, notification } from 'antd';
 import {Link } from "react-router-dom";
 import reqwest from 'reqwest';
 
-export class UserRejectedDocumentsTable extends Component {
+export class ReceivedDocumentsTable extends Component {
     constructor(props) {
         super(props);
     
         this.state = {
             id:this.props,
-            email: this.props.match.params.email,
+            // email: this.props.match.params.email,
+            email:this.props.currentUser.email,
             documents: [],
             data: [],
             pagination: {},
@@ -67,7 +68,7 @@ export class UserRejectedDocumentsTable extends Component {
             this.fetch({
              results: pagination.pageSize,
              page: pagination.current,
-             sort: "created_Date" + decodeURIComponent("%2c")+desc,
+             sort: "submitted_Date" + decodeURIComponent("%2c")+desc,
              sortOrder: decodeURIComponent("%2c")+desc,
               ...filters,
             });
@@ -80,11 +81,11 @@ export class UserRejectedDocumentsTable extends Component {
             console.log('params:', params);
             this.setState({ loading: true });
             reqwest({
-              url: `http://localhost:8099/api/documents/${this.state.email}/all`,
+              url: `http://localhost:8099/api/documents/${this.state.email}/received`,
               method: 'get',
               data: {
                 size: 10,
-                sort: 'created_Date,desc',
+                sort: 'submitted_Date,desc',
                 ...params,
               },
               type: 'json',
@@ -141,7 +142,7 @@ export class UserRejectedDocumentsTable extends Component {
           },{
             title: 'Numeris',
             dataIndex: 'number',
-            render: number =><Link to={`/dokumentas/${number}`}>{number}</Link>,
+            render: number =><Link to={`/gautas/dokumentas/${number}`}>{number}</Link>,
             width: '20%',
           },{
             title: 'Tipas',
@@ -163,39 +164,27 @@ export class UserRejectedDocumentsTable extends Component {
             width: '20%',
           }, {
             title: 'Data',
-            dataIndex: 'createdDate',
+            dataIndex: 'submittedDate',
             key: 'created_Date',
             sorter: true,
             defaultSortOrder: 'desc',
-            render: createdDate => createdDate,
+            render: submittedDate => submittedDate,
             width: '20%',
           },
-          {
-            title: '',
-            dataIndex: 'number',
-            key: 'edit',
-            render: number => <Link to={`/redaguoti/dokumentas/${number}`}><Icon type="edit" /></Link>,
-            width: '5%',
-          },
-          {
-            title: '',
-            dataIndex: 'number',
-            key: 'delete',
-            render: number => <Icon type ="delete" onClick={() => this.deleteDocument(number)}/>,
-              
-            width: '5%',
-          }
+          
         ];
          const {pagination, page, data}=this.state
         return (
         <div className="container" id="list_container">
         <div className="container user_document_list">
-      
+        <div className="table-operations">
+          <h4>Gauti dokumentai</h4>
+        </div>  
         <Table
+            className="received-documents-table"
             columns={columns}
             rowKey={record => record.number}
             dataSource={this.state.data}
-            expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
             pagination={this.state.pagination}
             // pagination= {{ defaultPageSize: 10, showSizeChanger: true, pageSizeOptions: ['10', '20']}}
             loading={this.state.loading}
@@ -209,4 +198,4 @@ export class UserRejectedDocumentsTable extends Component {
       }
 }
 
-export default UserRejectedDocumentsTable
+export default ReceivedDocumentsTable

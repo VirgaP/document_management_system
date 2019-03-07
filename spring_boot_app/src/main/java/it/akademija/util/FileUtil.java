@@ -1,4 +1,4 @@
-package it.akademija;
+package it.akademija.util;
 
 import org.h2.util.IOUtils;
 import org.springframework.http.HttpHeaders;

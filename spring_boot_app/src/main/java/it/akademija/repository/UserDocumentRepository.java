@@ -12,10 +12,9 @@ public interface UserDocumentRepository extends JpaRepository<UserDocument, User
    @Query(value="select * FROM user_document ud join user u ON (ud.user_id = u.id) WHERE u.email=:email", nativeQuery = true)
    List<UserDocument> findByUserEmail(@Param("email") String email);
 
+   @Query(value="select * FROM user_document ud join user u ON (ud.user_id = u.id) WHERE u.email=:email AND d.unique_Number =:number", nativeQuery = true)
+   UserDocument findByUserEmailAndDocumentNumber(@Param("email") String email, @Param("number") String number ) ;
+
+
 }
 
-// retrun number of created documents by user
-//   SELECT COUNT (DOCUMENT_ID)
-//   FROM USER_DOCUMENT JOIN USER ON USER_DOCUMENT.USER_ID = USER.ID
-//        WHERE USER.EMAIL ='virga@email.com';
-//AND USER_DOCUMENT.SUBMITTED = true ; //number of submitted documents

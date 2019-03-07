@@ -98,8 +98,9 @@ export class EditUser extends Component {
   render() {
         return (
         <div className="container">
-        <h2>Redaguoti vartotoją</h2>
-        <form onSubmit={this.handleSubmit}>
+        <div className="user_form">
+        <h4>Redaguoti vartotoją</h4>
+        <form id="new-document" onSubmit={this.handleSubmit}>
         <div className="form-group has-error form-group has-success">
           <label className="control-label" for="inputError1">Vartotojo vardas</label>
           <input type="text" onChange={this.handleNameChange('name')} value={this.state.user.name} className="form-control" id="inputError1" />
@@ -123,7 +124,8 @@ export class EditUser extends Component {
         </div>
          {this.renderRedirect()}
           <button className="btn btn-primary" type="submit">Išsaugoti</button>
-        </form>          
+        </form>
+        </div>          
       </div>
     )
   }

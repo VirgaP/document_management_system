@@ -6,6 +6,7 @@ import it.akademija.dto.DocumentDTO;
 import it.akademija.entity.*;
 import it.akademija.payload.ApiResponse;
 import it.akademija.payload.RequestDocument;
+import it.akademija.payload.RequestMessage;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.*;
 import org.slf4j.Logger;
@@ -75,6 +76,7 @@ public class DocumentService {
                     documentEntity.getUniqueNumber(),
                     documentEntity.getDescription(),
                     documentEntity.getCreatedDate(),
+                    documentEntity.getSubmittedDate(),
                     documentEntity.getType(),
                     documentEntity.getUserDocuments(),
                     documentEntity.getDbFiles()
@@ -114,12 +116,34 @@ public class DocumentService {
         return documentDtoPage;
     }
 
+    @Transactional
+    public Page<DocumentDTO> pagedUserNotSubmittedDocuments(String email, Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserNotSubmittedDocumentsPage(email, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> pagedUserRejectedDocuments(String email, Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserRejectedDocumentsPage(email, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> pagedUserReceivedDocuments(String email, Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findReceivedUserDocumentsPage(email, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
     private DocumentDTO convertToDocumentDto(final Document document) {
         final DocumentDTO documentDTO = new DocumentDTO(
                 document.getTitle(),
                 document.getUniqueNumber(),
                 document.getDescription(),
                 document.getCreatedDate(),
+                document.getSubmittedDate(),
                 document.getType(),
                 document.getUserDocuments(),
                 document.getDbFiles()
@@ -163,6 +187,7 @@ public class DocumentService {
                         document.getUniqueNumber(),
                         document.getDescription(),
                         document.getCreatedDate(),
+                        document.getSubmittedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -232,6 +257,7 @@ public class DocumentService {
                 document.getUniqueNumber(),
                 document.getDescription(),
                 document.getCreatedDate(),
+                document.getSubmittedDate(),
                 document.getType(),
                 document.getUserDocuments(),
                 document.getDbFiles()
@@ -248,6 +274,7 @@ public class DocumentService {
                         document.getUniqueNumber(),
                         document.getDescription(),
                         document.getCreatedDate(),
+                        document.getSubmittedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -265,6 +292,7 @@ public class DocumentService {
                         document.getUniqueNumber(),
                         document.getDescription(),
                         document.getCreatedDate(),
+                        document.getSubmittedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -283,6 +311,7 @@ public class DocumentService {
                         document.getUniqueNumber(),
                         document.getDescription(),
                         document.getCreatedDate(),
+                        document.getSubmittedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -300,6 +329,7 @@ public class DocumentService {
                         document.getUniqueNumber(),
                         document.getDescription(),
                         document.getCreatedDate(),
+                        document.getSubmittedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -351,7 +381,9 @@ public class DocumentService {
     public void submitDocument(String number, String email){
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
+//        UserDocument userDocument = userDocumentRepository.findByUserEmailAndDocumentNumber(email, number);
 
+        document.setSubmittedDate(new Date());
         UserDocument userDocument = new UserDocument();
         userDocument.setUser(user);
         userDocument.setDocument(document);
@@ -379,7 +411,7 @@ public class DocumentService {
     }
 
     @Transactional
-    public void rejectDocument(String number, String email){
+    public void rejectDocument(String number, String email, RequestMessage request){
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
 
@@ -389,7 +421,7 @@ public class DocumentService {
         userDocument.setDocument(document);
 
         userDocument.setRejected(true);
-
+        userDocument.setMessage(request.getMessage());
 
         userDocumentRepository.save(userDocument);
 
