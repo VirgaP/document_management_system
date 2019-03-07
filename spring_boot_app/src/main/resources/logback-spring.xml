@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ 
+    <property name="LOGGER" value="./log4j/log" />
+    <property name="PACKAGE" value="it.akademija" />
+ 
+    <appender name="Console"
+        class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d %p %C{1.} [%t] %m%n
+            </Pattern>
+        </layout>
+    </appender>
+
+ //User
+    <appender name="USER"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGER}/userLogger.log</file>
+        <encoder
+            class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{"yyyy-MM-dd HH:mm:ss"} %p %C{1.} [%t] --- %m%n</Pattern>
+        </encoder>
+ 
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOGGER}/archived/userLogger-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    //Group file
+    <appender name="GROUPFILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGER}/usersGroupLogger.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{"yyyy-MM-dd HH:mm:ss"} %p %C{1.} [%t] --- %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOGGER}/archived/usersGroupLogger-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    //Type file
+    <appender name="TYPEFILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGER}/documentTypeLogger.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{"yyyy-MM-dd HH:mm:ss"} %p %C{1.} [%t] --- %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOGGER}/archived/documentTypeLogger-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    //Document file
+    <appender name="DOCUMENTFILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGER}/documentLogger.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{"yyyy-MM-dd HH:mm:ss"} %p %C{1.} [%t] --- %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOGGER}/archived/documentLogger-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    //File
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGER}/fileLogger.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{"yyyy-MM-dd HH:mm:ss"} %p %C{1.} [%t] --- %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOGGER}/archived/fileLogger-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{"yyyy-MM-dd HH:mm:ss"} %p %C{1.} [%t] --- %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="${PACKAGE}.service.UserService" level="info" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.service.CustomUserDetailService" level="info" additivity="false">
+        <appender-ref ref="USER" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
+    <logger name="${PACKAGE}.service.GroupService" level="info" additivity="false">
+        <appender-ref ref="GROUPFILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="${PACKAGE}.service.TypeService" level="info" additivity="false">
+        <appender-ref ref="TYPEFILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.service.DBFileStorageService" level="info" additivity="false">
+        <appender-ref ref="TYPEFILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.service.DocumentRepositoryImpl" level="info" additivity="false">
+        <appender-ref ref="TYPEFILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
+    <logger name="${PACKAGE}.service.DocumentService" level="info" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="${PACKAGE}.controller.AuthController" level="info" additivity="false">
+        <appender-ref ref="USER" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.controller.DBFileController" level="info" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.controller.DocumentController" level="info" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.controller.FileController" level="info" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.controller.GroupController" level="info" additivity="false">
+        <appender-ref ref="GROUPFILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="${PACKAGE}.controller.TypeController" level="info" additivity="false">
+        <appender-ref ref="TYPEFILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="${PACKAGE}.controller.UserController" level="info" additivity="false">
+        <appender-ref ref="USER" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+</configuration>

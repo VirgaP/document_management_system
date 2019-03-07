@@ -22,7 +22,7 @@ export class EditType extends Component {
       }
       renderRedirect = () => {
         if (this.state.redirect) {
-          return <Redirect to='/pagrindinis' />
+          return <Redirect to='/visi-tipai' />
         }
       }
       handleTitleChange = (title) => (event) => {

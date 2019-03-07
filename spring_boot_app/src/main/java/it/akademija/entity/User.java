@@ -87,12 +87,12 @@ public class User {
     }
 
 
-    public User(String name, String surname, String email, boolean admin) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.admin = admin;
-    }
+//    public User(String name, String surname, String email, boolean admin) {
+//        this.name = name;
+//        this.surname = surname;
+//        this.email = email;
+//        this.admin = admin;
+//    }
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",

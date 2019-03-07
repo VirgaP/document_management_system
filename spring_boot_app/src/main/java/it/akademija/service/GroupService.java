@@ -6,6 +6,7 @@ import it.akademija.payload.RequestGroup;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,11 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Slf4j
 @Service
 public class GroupService {
 
-    private static final Logger logger = LoggerFactory.getLogger(Group.class);
 
     @Autowired
     private GroupRepository groupRepository;
@@ -28,6 +30,7 @@ public class GroupService {
 
     @Transactional
     public List<GroupDTO> getGroups() {
+        log.info("Returns groups");
         return groupRepository.findAll()
                 .stream()
                 .map(type -> new GroupDTO(
@@ -42,6 +45,7 @@ public class GroupService {
                 group.getName(),
                 group.getGroupUsers()
         );
+        log.info("Returns group "+name);
         return groupDTO;
     }
 
@@ -57,18 +61,20 @@ public class GroupService {
                 new Long(0),
                 groupName
         );
-
+        log.info("Creates group "+ groupName);
         groupRepository.save(group);
     }
 
     @Transactional
     public void deleteGroup(String name){
+        log.info("Deletes group "+name);
         Group group = groupRepository.findByname(name);
         groupRepository.delete(group);
     }
 
     @Transactional
     public void editGroup(RequestGroup request, String name){
+        log.info("Edits group "+ name);
         Group group = groupRepository.findByname(name);
 
         group.setName(request.getName());
@@ -77,6 +83,7 @@ public class GroupService {
 
     @Transactional
     public void addUserToGroup(String name, RequestUser request){
+        log.info("Adds user to group "+ name);
         Group group = groupRepository.findByname(name);
 
         User user = userRepository.findByEmail(request.getEmail());
@@ -87,6 +94,7 @@ public class GroupService {
 
     @Transactional
     public void removeUserFromGroup(String name, RequestUser request){
+        log.info("Removes user from group {}",name);
         Group group = groupRepository.findByname(name);
 
         User user = userRepository.findByEmail(request.getEmail());

@@ -6,9 +6,8 @@ import it.akademija.entity.File;
 import it.akademija.payload.UploadFileResponse;
 import it.akademija.repository.FileRepository;
 import it.akademija.service.FileStorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.engine.jdbc.StreamUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -29,11 +28,12 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/file")
 public class FileController {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -61,7 +61,7 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        logger.info("File "+ fileName+ " has been aploaded");
+        log.info("File "+ fileName+ " has been aploaded");
 
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
@@ -69,7 +69,7 @@ public class FileController {
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        //logger.info("These files: "+ files???????);
+        //log.info("These files: "+ files???????);
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
@@ -88,7 +88,7 @@ public class FileController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            logger.info("Could not determine file type.");
+            log.info("Could not determine file type.");
         }
 
         // Fallback to the default content type if type could not be determined
@@ -130,7 +130,7 @@ public class FileController {
             }
             zippedOut.finish();
         } catch (Exception e) {
-            logger.info("ZipOutputStream exception");
+            log.info("ZipOutputStream exception");
             // Exception handling goes here
         }
     }
@@ -147,7 +147,7 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
             //Do something when exception is thrown
-            logger.info("IOException is catched");
+            log.info("IOException is catched");
         }
         return new ResponseEntity<>(output.getData(), output.getHeaders(), HttpStatus.OK);
     }
