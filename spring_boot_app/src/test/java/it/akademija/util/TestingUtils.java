@@ -16,6 +16,7 @@ import it.akademija.dto.UserDTO;
 import it.akademija.entity.Document;
 import it.akademija.entity.User;
 import it.akademija.payload.RequestUser;
+import it.akademija.security.UserPrincipal;
 
 /**
  * Common utils to be used in unit/integration tests
@@ -40,6 +41,10 @@ public class TestingUtils {
         return user;
     }
 
+    public static UserPrincipal randomUserPrincipal() {
+        return UserPrincipal.create(randomUser());
+    }
+
     public static String randomEmail() {
         return RandomStringUtils.randomAlphabetic(4) + "@" + RandomStringUtils.randomAlphabetic(4) + ".com";
     }
@@ -59,6 +64,13 @@ public class TestingUtils {
     }
 
     public static boolean usersMatch(User user, UserDTO userDTO) {
+        return user.getEmail().equals(userDTO.getEmail()) &&
+                user.getName().equals(userDTO.getName()) &&
+                user.getSurname().equals(userDTO.getSurname()) &&
+                user.getAdmin() == userDTO.getAdmin();
+    }
+
+    public static boolean usersMatch(UserPrincipal user, UserDTO userDTO) {
         return user.getEmail().equals(userDTO.getEmail()) &&
                 user.getName().equals(userDTO.getName()) &&
                 user.getSurname().equals(userDTO.getSurname()) &&
@@ -87,6 +99,21 @@ public class TestingUtils {
 
                     return usersMatch(match, userDTO);
                 });
+    }
+
+    public static boolean usersMatchInOrder(List<User> users, List<UserDTO> dtos) {
+        if (users.size() != dtos.size()) {
+            return false;
+        }
+
+        boolean match = true;
+        for (int i=0; i < users.size(); i++) {
+            if (!usersMatch(users.get(i), dtos.get(i))) {
+                match = false;
+            }
+        }
+
+        return match;
     }
 
 }

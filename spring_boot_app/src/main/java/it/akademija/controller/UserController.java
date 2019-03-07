@@ -62,6 +62,10 @@ public class UserController {
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public UserDTO getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+        if (currentUser == null) {
+            throw new IllegalArgumentException("No current user apparent");
+        }
+
         UserDTO user = new UserDTO(
                 currentUser.getAdmin(),
                 currentUser.getEmail(),
@@ -127,7 +131,7 @@ public class UserController {
     @RequestMapping(path = "/{email}/{groupName}/remove", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value="Remove group", notes="Remove group form users groups list")
-    public void removeTypeFromDocument(
+    public void removeGroupFromUser(
             @PathVariable final String email,
             @PathVariable final String groupName
     ){

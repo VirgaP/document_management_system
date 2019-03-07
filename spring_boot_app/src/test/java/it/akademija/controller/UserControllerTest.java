@@ -1,6 +1,7 @@
 package it.akademija.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,6 +30,7 @@ import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.PagedUserRepository;
 import it.akademija.repository.UserRepository;
+import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
 import it.akademija.util.TestingUtils;
 
@@ -98,7 +103,7 @@ public class UserControllerTest {
     public void shouldReturnAllUserEmails() {
         List<User> existingUsers = createUsers(10);
 
-        List<String> foundEmails = userController.getAllUsers().stream()
+        List<String> foundEmails = userController.getAllUsersEmails().stream()
                 .map(dto -> dto.getEmail())
                 .collect(Collectors.toList());
         Assert.assertTrue(foundEmails.size() == 10);
@@ -225,6 +230,46 @@ public class UserControllerTest {
         Assert.assertEquals(existingUser.getName(), loadedUser.getName());
         // check updated fields
         Assert.assertTrue(TestingUtils.usersMatch(loadedUser, requestUser, email));
+    }
+
+    @Test
+    public void shouldReturnPagedUsers() {
+        createUsers(20);
+
+        List<User> existingUsers = userRepository.findAll();
+        existingUsers.sort(Comparator.comparing(User::getName));
+
+        Page<UserDTO> pageOne = userController.pathParamUsers(PageRequest.of(0, 10, Sort.Direction.ASC, "name"));
+        Page<UserDTO> pageTwo = userController.pathParamUsers(PageRequest.of(1, 10, Sort.Direction.ASC, "name"));
+        Page<UserDTO> pageThree = userController.pathParamUsers(PageRequest.of(2, 10));
+
+        // there should only be two pages worth of users
+        Assert.assertTrue(pageOne.getTotalPages() == 2);
+        Assert.assertEquals(pageOne.getTotalPages(), pageTwo.getTotalPages(), pageThree.getTotalPages());
+        Assert.assertFalse(pageThree.hasContent());
+
+        List<UserDTO> combinesPagedUsers = new ArrayList<>();
+        combinesPagedUsers.addAll(pageOne.getContent());
+        combinesPagedUsers.addAll(pageTwo.getContent());
+
+        // make sure correct users are returned in the expected order
+        Assert.assertTrue(TestingUtils.usersMatchInOrder(existingUsers, combinesPagedUsers));
+    }
+
+    @Test
+    public void shouldReturnDtoOfCurrentUser() {
+        UserPrincipal currentUser = TestingUtils.randomUserPrincipal();
+        UserDTO currentUserDTO = userController.getCurrentUser(currentUser);
+
+        Assert.assertTrue(TestingUtils.usersMatch(currentUser, currentUserDTO));
+    }
+
+    @Test
+    public void shouldFailIfNoCurrentUserApparent() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("No current user apparent");
+
+        UserDTO currentUserDTO = userController.getCurrentUser(null);
     }
 
     private List<User> createUsers(int numberOfUsers) {
