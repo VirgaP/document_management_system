@@ -34,6 +34,11 @@ import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
 import it.akademija.util.TestingUtils;
 
+
+/**
+ * Integration tests for {@link UserController}
+ */
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserControllerTest {
