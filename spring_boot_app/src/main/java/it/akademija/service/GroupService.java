@@ -22,11 +22,14 @@ import java.util.stream.Collectors;
 public class GroupService {
 
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public GroupService(GroupRepository groupRepository, UserRepository userRepository) {
+        this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     public List<GroupDTO> getGroups() {

@@ -1,33 +1,30 @@
 package it.akademija.service;
 
-import it.akademija.dto.DocumentDTO;
-import it.akademija.dto.UserDTO;
-import it.akademija.entity.Document;
-import it.akademija.entity.Group;
-import it.akademija.entity.User;
-import it.akademija.exceptions.ResourceNotFoundException;
-import it.akademija.payload.RequestGroup;
-import it.akademija.payload.RequestUser;
-import it.akademija.repository.GroupRepository;
-import it.akademija.repository.DocumentRepository;
-import it.akademija.repository.PagedUserRepository;
-import it.akademija.repository.UserRepository;
-
-import lombok.extern.slf4j.Slf4j;
-import org.codehaus.groovy.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import it.akademija.dto.UserDTO;
+import it.akademija.entity.Group;
+import it.akademija.entity.User;
+import it.akademija.exceptions.ResourceNotFoundException;
+import it.akademija.payload.RequestUser;
+import it.akademija.repository.DocumentRepository;
+import it.akademija.repository.GroupRepository;
+import it.akademija.repository.PagedUserRepository;
+import it.akademija.repository.UserRepository;
 
 @Slf4j
 @Service
@@ -38,17 +35,16 @@ public class UserService {
     private final DocumentRepository documentRepository;
     private final GroupRepository groupRepository;
     private final PagedUserRepository pagedUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-
-    @Autowired
-    public UserService(UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository, PagedUserRepository pagedUserRepository) {
+    public UserService(UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository,
+            PagedUserRepository pagedUserRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.groupRepository = groupRepository;
         this.pagedUserRepository = pagedUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -103,7 +99,8 @@ public class UserService {
     @Transactional
     public UserDTO getUser(String email){
         log.info("Finding one user");
-        User user = userRepository.findByEmail(email);
+        User user = getExistingUser(email);
+
         UserDTO userDTO = new UserDTO(
                 user.getName(),
                 user.getSurname(),
@@ -119,7 +116,7 @@ public class UserService {
 
     @Transactional
     public void createUser(RequestUser requestUser) {
-        Group group = groupRepository.findByname(requestUser.getGroupName());
+        Group group = getExistingGrop(requestUser.getGroupName());
         User user = new User(
                 requestUser.getName(),
                 requestUser.getSurname(),
@@ -134,11 +131,7 @@ public class UserService {
 
     @Transactional
     public void editUser(RequestUser request, String originalEmail){
-        User user = userRepository.findByEmail(originalEmail);
-
-        if (user == null) {
-            throw new IllegalArgumentException("User with email " + originalEmail + " does not exist!");
-        }
+        User user = getExistingUser(originalEmail);
 
         String name = request.getName();
         String surname = request.getSurname();
@@ -156,7 +149,7 @@ public class UserService {
             user.setAdmin(admin);
         }
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(password));
         }
 
         log.info("Saving user's email");
@@ -166,16 +159,18 @@ public class UserService {
 
     @Transactional
     public void deleteUser(String email){
-        User user = userRepository.findByEmail(email);
+        User user = getExistingUser(email);
         log.info("Deletes user with "+ email);
+
         userRepository.delete(user);
     }
 
 
     @Transactional
     public void addGroupToUser(String email, String groupName){
-        User user = userRepository.findByEmail(email);
-        Group group = groupRepository.findByname(groupName);
+        User user = getExistingUser(email);
+
+        Group group = getExistingGrop(groupName);
         user.addGroup(group);
         userRepository.save(user);
         log.info("Adding the user "+ user);
@@ -183,10 +178,14 @@ public class UserService {
     }
 
     @Transactional
-    public void removeGroupFromUser(String email, String groupName){
+    public void removeGroupFromUser(String email, String groupName) {
+        if (email == null || groupName == null) {
+            throw new IllegalArgumentException("Input of email of group name cannot be null.");
+        }
+
         log.info("Trying to remove user with email "+ email + "from group with name "+groupName);
-        User user = userRepository.findByEmail(email);
-        Group group = groupRepository.findByname(groupName);
+        User user = getExistingUser(email);
+        Group group = getExistingGrop(groupName);
 
         Set<Group> userGroups = user.getUserGroups();
 
@@ -198,4 +197,21 @@ public class UserService {
             user.removeGroup(group);
         }
     }
+
+    private User getExistingUser(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new ResourceNotFoundException("User with email " + email + " does not exist!");
+        }
+        return user;
+    }
+
+    private Group getExistingGrop(String groupName) {
+        Group group = groupRepository.findByname(groupName);
+        if (group == null) {
+            throw new ResourceNotFoundException("Group with name " + groupName + " does not exist!");
+        }
+        return group;
+    }
+
 }

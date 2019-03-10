@@ -18,7 +18,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
-@EnableSwagger2
 @SpringBootApplication
 @EnableConfigurationProperties({
         FileStorageProperties.class
@@ -41,20 +40,6 @@ public class App extends SpringBootServletInitializer {
         return builder.sources(App.class);
     }
 
-    @Bean
-    public Docket swaggerDocket() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("it.akademija"))
-                .build();
-    }
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("IT Akademija Document management system REST API Documentation")
-                .version("0.0.1-SNAPSHOT")
-                .build();
-    }
     @PostConstruct
     void init() {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+2"));
