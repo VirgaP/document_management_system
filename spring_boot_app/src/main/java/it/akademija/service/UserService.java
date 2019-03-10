@@ -173,7 +173,11 @@ public class UserService {
     }
 
     @Transactional
-    public void removeGroupFromUser(String email, String groupName){
+    public void removeGroupFromUser(String email, String groupName) {
+        if (email == null || groupName == null) {
+            throw new IllegalArgumentException("Input of email of group name cannot be null.");
+        }
+
         logger.info("Trying to remove user with email "+ email + "from group with name "+groupName);
         User user = getExistingUser(email);
         Group group = getExistingGrop(groupName);

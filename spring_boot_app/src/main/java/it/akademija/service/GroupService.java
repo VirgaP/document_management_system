@@ -20,11 +20,14 @@ public class GroupService {
 
     private static final Logger logger = LoggerFactory.getLogger(Group.class);
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public GroupService(GroupRepository groupRepository, UserRepository userRepository) {
+        this.groupRepository = groupRepository;
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     public List<GroupDTO> getGroups() {

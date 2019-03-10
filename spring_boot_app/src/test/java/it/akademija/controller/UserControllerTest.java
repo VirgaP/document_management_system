@@ -1,16 +1,26 @@
 package it.akademija.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
@@ -34,11 +44,9 @@ import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
 import it.akademija.util.TestingUtils;
 
-
 /**
  * Integration tests for {@link UserController}
  */
-
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserControllerTest {
@@ -78,8 +86,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldFailIfEmailAlreadyTaken() {
-        User user = TestingUtils.randomUser();
-        userRepository.save(user);
+        User user = createUser();
 
         UserIdentityAvailability result = userController.checkEmailAvailability(user.getEmail());
         Assert.assertFalse(result.getAvailable());
@@ -119,7 +126,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldReturnExistingUser() {
-        User existingUser = userRepository.save(TestingUtils.randomUser());
+        User existingUser = createUser();
 
         UserDTO userDTO = userController.getUser(existingUser.getEmail());
 
@@ -138,7 +145,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldDeleteExistingUser() {
-        User existingUser = userRepository.save(TestingUtils.randomUser());
+        User existingUser = createUser();
 
         userController.deleteUser(existingUser.getEmail());
 
@@ -158,7 +165,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldAddExistingGroupToExistingUser() {
-        User existingUser = userRepository.save(TestingUtils.randomUser());
+        User existingUser = createUser();
 
         userController.addUserGroup(existingUser.getEmail(), TEST_GROUP_ONE);
 
@@ -170,8 +177,66 @@ public class UserControllerTest {
     }
 
     @Test
+    public void shouldRemoveExistingGroupFromExistingUser() {
+        User user = createUserWithTestGroups();
+
+        userController.removeGroupFromUser(user.getEmail(), TEST_GROUP_ONE);
+
+        Set<Group> userGroups = userRepository.findByEmail(user.getEmail()).getUserGroups();
+        Assert.assertThat(userGroups, Matchers.hasSize(1));
+        Assert.assertThat(userGroups, Matchers.contains(groupRepository.findByname(TEST_GROUP_TWO)));
+    }
+
+    @Test
+    public void shouldFailToRemoveGroupWithNullEmail() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Input of email of group name cannot be null.");
+
+        userController.removeGroupFromUser(null, TEST_GROUP_ONE);
+    }
+
+    @Test
+    public void shouldFailToRemoveGroupWithNullGroupName() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Input of email of group name cannot be null.");
+
+        userController.removeGroupFromUser(TestingUtils.randomEmail(), null);
+    }
+
+    @Test
+    public void shouldFailToRemoveExistingGroupFromNonExistingUser() {
+        String email = TestingUtils.randomEmail();
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("User with email " + email + " does not exist!");
+
+        userController.removeGroupFromUser(email, TEST_GROUP_ONE);
+    }
+
+    @Test
+    public void shouldFailToRemoveNonExistingGroupFromExistingUser() {
+        User user = createUserWithTestGroups();
+        String groupName = RandomStringUtils.randomAlphabetic(5);
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("Group with name " + groupName + " does not exist!");
+
+        userController.removeGroupFromUser(user.getEmail(), groupName);
+    }
+
+    @Test
+    public void shouldFailToRemoveExistingGroupFromExistingUserWithNoGroupsAssigned() {
+        User user = createUser();
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("the group is not found");
+
+        userController.removeGroupFromUser(user.getEmail(), TEST_GROUP_ONE);
+    }
+
+    @Test
     public void shouldFailToAddNonExistingGroupToExistingUser() {
-        User existingUser = userRepository.save(TestingUtils.randomUser());
+        User existingUser = createUser();
         String nonExistingGroup = "nonExistingGroup";
 
         expectedException.expect(ResourceNotFoundException.class);
@@ -193,7 +258,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldSuccessfullyEditUser() {
-        User existingUser = userRepository.save(TestingUtils.randomUser());
+        User existingUser = createUser();
         String email = existingUser.getEmail();
 
         RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
@@ -217,7 +282,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldUpdateOnlyPassedFields() {
-        User existingUser = userRepository.save(TestingUtils.randomUser());
+        User existingUser = createUser();
         String email = existingUser.getEmail();
 
         RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
@@ -277,12 +342,97 @@ public class UserControllerTest {
         UserDTO currentUserDTO = userController.getCurrentUser(null);
     }
 
+    @Test
+    public void shouldDownloadCsvWithAllUsers() throws IOException {
+        List<User> existingUsers = createUsers(10);
+
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+        Mockito.when(response.getWriter()).thenReturn(writer);
+
+        userController.downloadCSV(response);
+        writer.flush();
+
+        String csvString = stringWriter.toString();
+        assert existingUsers.stream()
+                .allMatch(user -> csvString.contains(user.getName() + "," + user.getSurname() + "," + user.getEmail()));
+    }
+
+    @Test
+    public void shouldDownloadEmptyCsvIfNoUsersPresent() throws IOException {
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+        Mockito.when(response.getWriter()).thenReturn(writer);
+
+        userController.downloadCSV(response);
+        writer.flush();
+
+        Assert.assertEquals("Name,Surname,Email\r\n", stringWriter.toString());
+    }
+
+    @Test
+    public void shouldDownloadCsvOfSingleUserData() throws IOException {
+        User user = createUserWithTestGroups();
+
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+        Mockito.when(response.getWriter()).thenReturn(writer);
+
+        userController.downloadUserCSV(response, user.getEmail());
+        writer.flush();
+
+        String csvString = stringWriter.toString();
+        Assert.assertTrue(csvString.contains(user.getName() + "\r\n" + user.getSurname() + "\r\n" + user.getEmail() + "\r\n"));
+        Assert.assertTrue(csvString.contains(TEST_GROUP_ONE + "\r\n"));
+        Assert.assertTrue(csvString.contains(TEST_GROUP_TWO + "\r\n"));
+    }
+
+    @Test
+    public void shouldFailToDownloadCsvOfNonExistingUser() throws IOException {
+        String email = TestingUtils.randomEmail();
+
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+
+        expectedException.expect(ResourceNotFoundException.class);
+        expectedException.expectMessage("User with email " + email + " does not exist!");
+
+        userController.downloadUserCSV(response, email);
+    }
+
+    @Test
+    public void shouldFailToDownloadUserCsvIfNoEmailProvided() throws IOException {
+        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Passed email cannot be empty!");
+
+        userController.downloadUserCSV(response, "");
+    }
+
     private List<User> createUsers(int numberOfUsers) {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < numberOfUsers; i++) {
             users.add(userRepository.save(TestingUtils.randomUser()));
         }
         return users;
+    }
+
+    private User createUser() {
+        return userRepository.save(TestingUtils.randomUser());
+    }
+
+    private User createUserWithTestGroups() {
+        User user = TestingUtils.randomUser();
+        user.addGroup(groupRepository.findByname(TEST_GROUP_ONE));
+        user.addGroup(groupRepository.findByname(TEST_GROUP_TWO));
+        return userRepository.save(user);
     }
 
 }

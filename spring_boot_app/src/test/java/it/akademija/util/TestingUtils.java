@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import it.akademija.dto.UserDTO;
 import it.akademija.entity.Document;
+import it.akademija.entity.Group;
 import it.akademija.entity.User;
 import it.akademija.payload.RequestUser;
 import it.akademija.security.UserPrincipal;
@@ -23,9 +24,17 @@ import it.akademija.security.UserPrincipal;
  */
 public class TestingUtils {
 
+    private static Random random = new Random();
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
     private TestingUtils() {}
+
+    public static Group randomGroup() {
+        Group group = new Group();
+        group.setName(RandomStringUtils.randomAlphabetic(5, 10));
+        group.setId(random.nextLong());
+        return group;
+    }
 
     /**
      * @return {@link User} with generated random name, surname, email, password and admin boolean
@@ -35,8 +44,8 @@ public class TestingUtils {
         String surname = RandomStringUtils.randomAlphabetic(10);
         String email = randomEmail();
         String password = RandomStringUtils.randomAlphanumeric(8);
-        User user = new User(name, surname, email, password, new Random().nextBoolean());
-        user.setId(new Random().nextLong());
+        User user = new User(name, surname, email, password, random.nextBoolean());
+        user.setId(random.nextLong());
 
         return user;
     }
