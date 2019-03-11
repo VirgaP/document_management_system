@@ -93,6 +93,15 @@ html,body{margin:0 !important}
   height: 90vh;
   overflow: auto;
 }
+
+#single_item_container{
+  margin-left: 12%;
+  width: 50%;
+  margin-top: 3.5%;
+  height: 85vh;
+  overflow: auto;
+}
+
 .homepage-link-list{
 margin-top: 5%;
 }
@@ -133,6 +142,8 @@ margin-top: 5%;
 }
 #document {
   position: static;
+  height: 95vh;
+  overflow: auto;
 }
 
 #document-card{
@@ -327,6 +338,9 @@ ul#attachements li{
 .user_form input{
   margin: 0 0 20px 0;
 }
+#group-name{
+  font-size: 16px;
+}
 .new-form{
   padding-top: 3%;
   margin-top: 3%;
@@ -345,6 +359,14 @@ ul#attachements li{
 .user_form h4{
   text-align: center;
   margin-bottom: 3%;
+}
+
+.add-group-type{
+  margin-top: 10%;
+  line-height: 2.8;
+}
+#group-type{
+  width: 360px;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
@@ -370,6 +392,7 @@ code {
 .highlight {
   color: #f50;
 }
+
 .table-operations {
   margin-bottom: 16px;
 }
@@ -445,8 +468,11 @@ code {
   /* padding-top: 3%; */
   margin-top: 3%;
   margin-bottom:3%;
+  /* width: 80%;
+  overflow-x:auto; */
   width: 80%;
-  overflow-x:auto;
+  height: 85vh;
+  overflow: auto;
   /* padding-bottom:3%; */
 }
 .signup-container h4{

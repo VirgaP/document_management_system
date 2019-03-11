@@ -141,7 +141,7 @@ handleFormSubmit(e) {
     <table className="table table-striped">
         <thead>
           <tr>
-            <th>Pavadinimas</th><th></th><th></th><th></th>
+            <th>Pavadinimas</th><th>Pridėti grupę</th><th></th><th></th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>

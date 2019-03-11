@@ -262,7 +262,6 @@ public class DocumentService {
                 document.getUserDocuments(),
                 document.getDbFiles()
         );
-        System.out.println("failai " + document.getDbFiles());
         return documentDTO;
     }
 
@@ -342,11 +341,11 @@ public class DocumentService {
     @Transactional
     public void updateDocument(RequestDocument requestDocument, String uniqueNumber){
         Document document = documentRepository.findByuniqueNumber(uniqueNumber);
-        Type type = typeRepository.findByTitle(requestDocument.getTypeTitle());
+//        Type type = typeRepository.findByTitle(requestDocument.getTypeTitle());
 
                 document.setTitle(requestDocument.getTitle());
                 document.setDescription(requestDocument.getDescription());
-                document.setType(type);
+//                document.setType(type);
 
                 documentRepository.save(document);
     }
@@ -421,6 +420,7 @@ public class DocumentService {
         userDocument.setDocument(document);
 
         userDocument.setRejected(true);
+        userDocument.setSubmitted(true);
         userDocument.setMessage(request.getMessage());
 
         userDocumentRepository.save(userDocument);

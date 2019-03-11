@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
-import {notification, Icon } from 'antd';
+import {notification, Icon, Checkbox, Menu, Dropdown, Select } from 'antd';
+import { checkServerIdentity } from 'tls';
+
+const Option = Select.Option;
 
 
 export class SingleType extends Component {
@@ -17,8 +20,10 @@ export class SingleType extends Component {
            groups:[],
            groupName:'',
            typeGroups: [],
-           send: '',
-           receive: '',
+           send: false,
+           receive: false,
+           checked:false,
+           checked1:false
         }
         this.handleChangeSend = this.handleChangeSend.bind(this);
         this.handleChangeReceive = this.handleChangeReceive.bind(this);
@@ -51,7 +56,6 @@ export class SingleType extends Component {
             .then(result => {
             const typeGroups = result.data.typeGroups
             this.setState({typeGroups})
-            console.log('typeGroups', typeGroups)
             })
             .catch(function (error) {
               console.log(error);
@@ -59,19 +63,30 @@ export class SingleType extends Component {
       }
 
     handleSelectChange(e) {  
-        this.setState({ groupName: e.target.value });
+      console.log("event", e)
+
+        this.setState({ groupName: e });
+        // this.setState({ groupName: e.target.value });
+        console.log("groupName", this.state.groupName)
       }
 
     handleChangeSend(event){
-      console.log('select send', event.target.value)
-        this.setState({ send : event.target.value });
-    
+      const senders = (event.target.value == "siuntejai" ? true : false)
+      this.toggleSendChecked()
+      // console.log('select send', event.target.value)
+        this.setState({ 
+          send : senders,
+        });
     }
 
     handleChangeReceive(event){
-      console.log('select receive', event.target.value)
-            this.setState({ receive : event.target.value });
-
+      const receivers = (event.target.value == "gavejai" ? true : false)
+      console.log('select receive', receivers)
+      this.toggleReceiveChecked()
+            // this.setState({ receive : event.target.value });
+            this.setState({ 
+              receive : receivers,
+             });
     }
 
     handleResultChange(value, receive, send) {
@@ -85,7 +100,6 @@ export class SingleType extends Component {
       }
       var newArray = this.state.typeGroups.slice();       
       newArray.push(newGroup);   
-      console.log("NEW ARRAY", newArray)
       this.setState({typeGroups:[...newArray]})
     }
     
@@ -93,16 +107,18 @@ export class SingleType extends Component {
             e.preventDefault();
             this.setState({
             groupName: '',
-            send: '',
-            receive: ''
+            send: false,
+            receive: false,
+            checked: false,
+            checked1: false,
           });
     }
 
     handleRemove(index) {
       let typeGroups = this.state.typeGroups
-       let groupIdx = this.state.typeGroups.findIndex((group) => group.name === index); //find array elem index by name/index
+      let groupIdx = this.state.typeGroups.findIndex((group) => group.name === index); //find array elem index by name/index
       console.log("Index", groupIdx)
-        const newList = this.state.typeGroups.splice(groupIdx, 1); //delets element and returns removed element
+      const newList = this.state.typeGroups.splice(groupIdx, 1); //delets element and returns removed element
        this.setState({ typeGroups: [...typeGroups] }); 
 
        axios.delete(`http://localhost:8099/api/types/${this.state.title}/${index}/remove`)
@@ -168,95 +184,78 @@ export class SingleType extends Component {
             this.handleClearForm(e);
             this.handleResultChange(this.state.groupName, this.state.receive, this.state.send)
       }
+      
+     handleFocus = () => {
+        this.setState({ groups: this.state.groups });
+    };
+
+    toggleSendChecked = () => {
+      this.setState({ checked: !this.state.checked});
+    }
+
+    toggleReceiveChecked =()=>{
+      this.setState({ checked1: !this.state.checked1 });
+    }
 
     render() {
+
       const options = this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)
       return (
   
-           <div className="container" style={style}>
-           <div className="card h-100">
-              <div className="card-body">
-                    <h4 className="card-title">
-                    </h4>
-                    <h5>Pavadinimas: {this.state.type.title}</h5>
+           <div className="container" id="single_item_container">
+           <Card title={this.state.type.title} bordered={false} id="group-type">
                     <div>
-                      <h5>Šio tipo dokumentas priskirtas grupėms: </h5> 
+                      <h6>Šio tipo dokumentas priskirtas grupėms: </h6> 
                     {(this.state.typeGroups.length == 0) ? <span>Dokumentas grupei nepriskirtas</span> : 
                     <ul>{this.state.typeGroups.map((element) => 
                        
-                       (<li key={element.group.name}>{element.group.name} - 
-                       {element.receive.toString() === 'true' ? 'Gavėjai' : 'negali gauti' } - 
-                       {element.send.toString() === 'true' ? 'Siuntėjai' : 'negali siųsti' }
+                       (<li id="group-name" key={element.group.name}>{element.group.name} &nbsp;
+                       {element.receive.toString() === 'true' ? 'Gavėjai' : '' } &nbsp;
+                       {element.send.toString() === 'true' ? 'Siuntėjai' : '' }
                        &nbsp;<Icon type="close-circle" 
                   onClick={this.handleRemove.bind(this, element.group.name)}/>
-                
                       </li>))}</ul>}
-                    </div>
-              </div>
-            
-            <div className="card-footer">
-            <h5>Priskirti vartototjų grupę</h5>
+                    </div> 
+           
+            <div className="container add-group-type" id="">
+            <h6>Priskirti vartotojų grupę</h6>
             <form onSubmit={this.handleSubmit}>
-            <div>
-                <label className="control-label">Pasirinkite vartototjų grupę</label>
+              <Select
+                  showSearch
+                  style={{ width: 285 }}
+                  placeholder="Pasirinkite vartotojų grupę"
+                  optionFilterProp="children"
+                  onChange={this.handleSelectChange} 
+                  onFocus={this.handleFocus}
+                  // onBlur={handleBlur}
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  required>
+                
+                  {this.state.groups.map((group) => (
+                  <Select.Option key={group.name} value={group.name}>{group.name}</Select.Option>
+                ))}
+              </Select>
+
+            {/* <div>
+                <label className="control-label">Pasirinkite vartotojų grupę</label>
                 <select value={this.state.groupName} onChange={this.handleSelectChange} 
                 className="form-control" id="ntype" required>
                   <option value="">...</option>
                     {options}
                 </select>
-            </div>
-          
-            <div>
-                <label className="control-label">Pasirinkite vartototjų grupės dokumentų gavimo tipą</label>
-                <select onChange={this.handleChangeReceive} 
-                className="form-control" id="ntype" required>
-                  <option value="">...</option>
-                  <option value="true">Gali gauti</option>
-                  <option value="false">Negali gauti</option>
-                </select>
-            </div>
-            <div>
-                <label className="control-label">Pasirinkite vartototjų grupės dokumentų siuntimo tipą</label>
-                <select onChange={this.handleChangeSend} 
-                className="form-control" id="ntype" required>
-                  <option value="">...</option>
-                  <option value="true">Gali siųsti</option>
-                  <option value="false">Negali siųsti</option>
-                </select>
-            </div>
-            
-            {/* <label className="form-label capitalize">
-            <input
-                type="checkbox"
-                checked={this.state.send}
-                onChange={this.handleChangeSend}
-              /> Siuntėjai
-            </label>
-            <label className="form-label capitalize">
-            <input
-                type="checkbox"
-                checked={this.state.receive}
-                onChange={this.handleChangeReceive}
-              /> Gavėjai
-            </label> */}
-              <button className="btn btn-primary" type="submit">Saugoti</button>           
+            </div> */}
+            <span>
+            <Checkbox checked={this.state.checked1} id="gavejai"  onChange={this.handleChangeReceive} value="gavejai" required>Gavėjai</Checkbox>
+            <Checkbox checked={this.state.checked} id="siuntejai" onChange={this.handleChangeSend} value="siuntejai" required>Siuntėjai</Checkbox>
+            </span>  
+            <button className="btn btn-outline-info btn-sm btn-block" type="submit">Saugoti</button>         
             </form>
-              </div>
-              </div>
+            </div>
+            </Card>
             </div>
 
       );
 }
 }
 
-const style = {
-    margin:'auto',
-    marginTop:'20px',
-    marginBottom:'20px',
-    width: '70%'
-  }
-  const username = {
-    border:'solid 1 px grey',
-    backgroundColor: 'yellow',
-}
 export default SingleType

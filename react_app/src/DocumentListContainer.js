@@ -25,28 +25,6 @@ export class DocumentListContainer extends Component {
         this.setState({ searchText: e.target.value });
       }
 
-    // fetchData() {
-    //     const {currentPage} = this.state;
-    //     const pageLimit = 5;
-    //     // axios.get('http://localhost:8099/api/documents')
-    //     axios.get(`http://localhost:8099/api/documents/test?page=${currentPage}&size=${pageLimit}&sort=createdDate,desc`)
-    // .then(response => {
-    //             const { page, size } = this.state;
-    //             this.setState({
-    //                 // documents: response.data.content
-    //                 data: response.data.content
-
-    //                 // documents: response.data,
-    //             });
-    //             console.log("Documents by page ", this.state.documents)
-    //         })
-    //         .catch(error => {
-    //             this.setState({
-    //                 error: 'Error while fetching data.'
-    //             });
-    //         });
-    //     }
-
     componentDidMount() {
         // this.fetchData();
         this.fetch();
@@ -179,15 +157,7 @@ export class DocumentListContainer extends Component {
         render: userDocuments => userDocuments.map(el=><Link to={`/vartotojas/${el.user.email}`}>{el.user.name + ' ' + el.user.surname}</Link> ),
         width: '20%',
       },
-    //   {
-    //     title: 'Busena',
-    //     dataIndex: 'tags',
-    //     render={tags => (
-    //         <span>
-    //           {tags.map(tag => <Tag color="blue" key={tag}>{tag}</Tag>)}
-    //         </span>
-    //       )}
-    //   }
+    
     ];
      const {pagination, data, page}=this.state
     return (

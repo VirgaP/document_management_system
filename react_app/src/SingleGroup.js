@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
+import {Link } from "react-router-dom";
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 
@@ -49,26 +50,15 @@ export class SingleGroup extends Component {
      console.log("params url: ", this.props.match.params.groupName)
      console.log('GRUPE', this.state.group)
       return (
-        <div className="container" id="list_container">
-           <div className="container single-user" >
-           <div className="card h-100">
-              <div className="card-body">
-                    <h4 className="card-title">
-                    </h4>
-                    <h5>Pavadinimas: {this.state.group.name}</h5>
-                   
-                    <div>
-                      <h5>Grupės vartotojai: </h5> 
-                    {(!this.state.groupUsers.length) ? <span>Grupei vartotojai neprisikirti</span> : <ul>{this.state.groupUsers.map((user) => (<li key={user.email}>{user.name} {user.surname}</li>))}</ul>}
-                    </div>
+        <div className="container" id="single_item_container">
+         <Card title={this.state.group.name} bordered={false}>
+         <div>
+              <h6>Grupės vartotojai: </h6> 
+              {(!this.state.groupUsers.length) ? <span>Grupei vartotojai neprisikirti</span> : <ul>{this.state.groupUsers.map((user) => (<li key={user.email}><Link to={`/vartotojas/${user.email}`}>{user.name} {user.surname}</Link></li>))}</ul>}
               </div>
-              <div className="card-footer">
-              <p>galim prideti dokumentu tipus priskirtu grupei</p>
-              </div>
-            </div>
-          </div> 
-          </div>
+        </Card>
+        </div>
       );
-}
+  }
 }
 export default SingleGroup;

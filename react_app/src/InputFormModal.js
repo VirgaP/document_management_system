@@ -28,7 +28,7 @@ class InputFormModal extends Component {
                 {getFieldDecorator('message', {
                   rules: [{ required: true, message: 'Prašome įvesti pavadinimą' }],
                 })(
-                  <Input setFieldsValue={input} onChange={onInputChange}/>
+                  <Input setfieldsvalue={input} onChange={onInputChange}/>
                 )}
               </Form.Item>
              
