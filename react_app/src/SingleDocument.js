@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Row } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
 import UserProvider from './UserProvider';
 import UserContext from './UserContext';
 import AddGroup from './AddGroup';
 import {Link} from 'react-router-dom'
-import {notification, Icon, Popconfirm } from 'antd';
+import {notification, Icon, Popconfirm, Col } from 'antd';
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
 
@@ -206,10 +206,13 @@ export class SingleDocument extends Component {
 
       return (
         <div className="container" id="document">
-           <div className="container single-document">
-           <SingleDocumentComponent document={this.state.document} userDocument={this.state.userDocument} user={this.state.user}/>
+           <SingleDocumentComponent document={this.state.document} userDocument={this.state.userDocument} user={this.state.user}/>  
+           <Row> 
+             <Col span={12}>
            <FileDownloadContainer userFiles={this.state.userFiles}/>
-              
+           </Col>
+           <Col span={12}>
+           <div className="single-document-form"> 
             <div className="file-upload">
               {this.state.userDocument.map(el=>(String (el.submitted)) !== 'true'  ? 
             <div>
@@ -221,25 +224,22 @@ export class SingleDocument extends Component {
                 </div>
                 <button className="btn btn-primary col-lg-2 col-md-2" type="submit">Pridėti failą</button>
               </form><br></br>
-              <div className="row no-gutters">
-                       <div className="col-lg-6 col-md-6">
-                      <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
-                      </div>
-                      <div className="col-lg-6 col-md-6">
-                      <Popconfirm placement="top" title={"Trinti dokumentą?"} onConfirm={()=>this.confirm(this.state.document.number)} onCancel={this.cancel} okText="Taip" cancelText="Ne">
-                      <Button type="danger" block 
-                      // onClick={this.confirm}
+                      <Button type="primary" id="btn-submit" onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
+                      <Popconfirm placement="top" title={"Ar tikrai norite ištrinti dokumentą?"} onConfirm={()=>this.confirm(this.state.document.number)} onCancel={this.cancel} okText="Taip" cancelText="Ne">
+                      <Button type="danger" id="btn-delete" 
                       // onClick={() => this.deleteDocument(this.state.document.number)}
                       >Trinti dokumentą</Button> 
                       </Popconfirm>
                       </div>
+               : <span></span> 
+                    )}
                     </div>
-              </div> : <span></span> 
-                    )} 
                 </div>
+                </Col>
+                </Row>
+                
                 {/* user !== current */}
-                </div>
-                </div>
+                </div>  
       );
     }
 }

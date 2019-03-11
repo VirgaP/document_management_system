@@ -21,6 +21,7 @@ const FormInModal = Form.create({ name: 'form_in_modal' })(
           visible={visible}
           title="Dokumento atmetimo priežastis"
           okText="Siųsti atsakymą"
+          cancelText="Atšaukti"
           onCancel={onCancel}
           onOk={onCreate}
         >
@@ -29,7 +30,7 @@ const FormInModal = Form.create({ name: 'form_in_modal' })(
               {getFieldDecorator('message', {
                 rules: [{ required: true, message: 'Prašome įvesti žinutės tekstą' }],
               })(
-                <Input type="textarea" setFieldsValue={message} onChange={onMessageChange}/>
+                <Input.TextArea autosize setFieldsValue={message} onChange={onMessageChange}/>
               )}
             </Form.Item>
            

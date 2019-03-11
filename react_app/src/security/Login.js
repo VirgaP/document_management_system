@@ -12,7 +12,7 @@ class Login extends Component {
         const AntWrappedLoginForm = Form.create()(LoginForm)
         return (
             <div className="login-container">
-                <h3 className="page-title"> Abrkadabra - Dokumentų valdymo sistema - Prisijungimas</h3>
+                <h3 className="page-title">Prisijungimas</h3>
                 <div className="login-content">
                     <AntWrappedLoginForm onLogin={this.props.onLogin} />
                 </div>

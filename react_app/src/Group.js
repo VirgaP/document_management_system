@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Link } from "react-router-dom";
-import { Button, notification } from 'antd';
+import { Button, notification, Icon } from 'antd';
 import axios from 'axios';
 
 
@@ -40,13 +40,11 @@ export class Group extends Component {
         </Link>  
         </td>
         <td>
-        <Button type="danger" onClick={() => this.DeleteItem(this.props.group.name)}> Trinti </Button>
+        <Icon onClick={() => this.DeleteItem(this.props.group.name)} style={{ fontSize: '20px', color:'red' }} type="delete" />
         </td>
         <td>
         <Link to={`/redaguoti/grupe/${this.props.group.name}`}>
-        <Button type="default">
-             Redaguoti 
-        </Button>
+          <Icon type="edit" style={{ fontSize: '20px'}}/>
         </Link>
         </td>
        

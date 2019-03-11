@@ -8,6 +8,7 @@ import it.akademija.payload.RequestMessage;
 import it.akademija.repository.DocumentRepository;
 import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/documents")
 public class DocumentController {

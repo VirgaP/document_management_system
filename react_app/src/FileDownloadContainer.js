@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {Row, Col} from 'antd';
 
 export class FileDownloadContainer extends Component {
     constructor(props) {
@@ -85,14 +86,13 @@ export class FileDownloadContainer extends Component {
     
   render() {
     return (
-      
-        <div className="document-files">
-            <div className="attachements">
+     
+        <div className="document-files">        
+
                 <h5>Pateikti dokumentai </h5> 
                 {(this.props.userFiles.length === 0) ? <span>Pateiktų dokumentų nėra</span> : 
-                <ul>{this.props.userFiles.map((file) => (<li key={file.id}>{file.fileName}&nbsp;&nbsp; 
+                <ul id="attachements">{this.props.userFiles.map((file) => (<li key={file.id}>{file.fileName}&nbsp;&nbsp; 
                 <button onClick={this.handleDownlaod.bind(this, file.id, file.fileName )}>Atsisiųsti</button></li>))}</ul>}
-            </div>
         </div>
     )
   }

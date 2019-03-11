@@ -63,8 +63,9 @@ export class EditGroup extends Component {
       }
   render() {
     return (
-        <div className="container">
-        <h2>Redaguoti vartotojų grupę</h2>
+      <div className="container new-form"> 
+      <div className="container" id="type_form">
+        <h5>Redaguoti vartotojų grupę</h5>
         <form onSubmit={this.handleSubmit}>
         <div className="form-group has-error form-group has-success">
           <label className="control-label" for="inputError1">Grupės pavadinimas</label>
@@ -73,6 +74,7 @@ export class EditGroup extends Component {
         {this.renderRedirect()}
           <button className="btn btn-primary" type="submit">Išsaugoti</button>
         </form>          
+      </div>
       </div>
     )
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, notification, Icon, Modal } from 'antd';
+import { Button, notification, Icon, Modal, Row, Col } from 'antd';
 import {Link} from 'react-router-dom'
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
@@ -146,26 +146,25 @@ export class SingleReceivedDocument extends Component {
       this.setState({
         message: event.target.value,
       });
-      console.log("MESSAGE ", this.state.message)
     };
     
   render() {
     const {message} = this.state
     return (
-        <div className="container single-document">
+        // <div className="container single-document">
+        <div className="container" id="document">
         <SingleDocumentComponent document={this.state.document} userDocument={this.state.userDocument} user={this.state.user}/>
-        <FileDownloadContainer userFiles={this.state.userFiles}/>
+        <Row> 
+            <Col span={12}>
+            <FileDownloadContainer userFiles={this.state.userFiles}/>
+            </Col>
+        </Row>
              {/* user !== current */}
              {/* {  this.state.userDocument.map(el=>(String (el.submitted)) === 'true') ?  <span></span> : //dokumenta pateikti gali tik jo sukurejas
                  <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
              } */}
-
-        <div className="row no-gutters">    
-            <div className="col-lg-6 col-md-6">
-                <Button type="primary"  block onClick={() => this.handleConfirm(this.state.document.number)}>Patvirtinti dokumentą</Button> 
-            </div>
-             <div className="col-lg-6 col-md-6">
-                <Button type="danger"  block onClick={this.showModal}>Atmesti dokumentą</Button> 
+                <Button id="btn-confirm" type="primary" onClick={() => this.handleConfirm(this.state.document.number)}>Patvirtinti dokumentą</Button> 
+                <Button id="btn-reject" type="danger" onClick={this.showModal}>Atmesti dokumentą</Button> 
                 <FormInModal
                   wrappedComponentRef={this.saveFormRef}
                   visible={this.state.visible}
@@ -174,9 +173,7 @@ export class SingleReceivedDocument extends Component {
                   onMessageChange={this.handleMessageChange}                  
                   onCreate={()=>{ this.handleCreate(); this.handleReject(this.state.document.number) }}
                 />
-            </div>
-        </div>
-    </div>
+      </div>
     )
   }
 }

@@ -78,30 +78,30 @@ class UserGroupFormContainer extends Component {
   }
   render() {
     return (
-      <div className="container new-form" id="list_container">
-       <form className="container" id="type_form" onSubmit={this.handleFormSubmit}/>
+      <div className="container new-form"> 
+       <div className="container" id="type_form">
         <h5>Sukurti vartotojų grupę </h5>
         <Form onSubmit={this.handleFormSubmit}>
         <FormItem 
-                      validateStatus={this.state.name.validateStatus}
-                          help={this.state.name.errorMsg}>
-                          <Input 
-                                size="large"
-                                name="name"
-                                placeholder="Grupės pavadinimas"
-                                value={this.state.name.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validateTitle)} />    
-                        </FormItem>
-      <FormItem>
+            validateStatus={this.state.name.validateStatus}
+            help={this.state.name.errorMsg}>
+              <Input 
+                  title="Grupės pavadinimas"
+                  size="medium"
+                  name="name"
+                  placeholder="Grupės pavadinimas"
+                  value={this.state.name.value} 
+                  onChange={(event) => this.handleInputChange(event, this.validateTitle)} />    
+        </FormItem>
         <input
           type="submit"
           className="btn btn-primary float-right"
-          value="Išsaugoti"/>
-          </FormItem>
+          value="Išsaugoti"/>       
         <button
           className="btn btn-link float-left"
-          onClick={this.handleClearForm}>Išvalyti formą</button>
+          onClick={this.handleClearForm}>Išvalyti įvestus duomenis</button>
           </Form>
+      </div>
       </div>
     
     );

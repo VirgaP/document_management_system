@@ -49,6 +49,7 @@ import UserVerticalMenu from './layout/UserVerticalMenu';
 import UsersTable from './UsersTable';
 import UserDocumentTable from './UserDocumentTable';
 import ReceivedDocumentsTable from './ReceivedDocumentsTable';
+import GroupsPage from './layout/GroupsPage';
 
 const { Content } = Layout;
 
@@ -181,6 +182,7 @@ class App extends Component {
                 <AdminRoute path="/naujas-vartotojas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={Registration}/>
                 <AdminRoute path="/nauja-grupe" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserGroupFormContainer}/>
                 <AdminRoute path='/visos-grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupListContainer}/>
+                <AdminRoute path='/grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupsPage}/>
                 <AdminRoute path="/grupe/:name" isAdmin={isAdmin} isAuthenticated={isAuthenticated}  component={SingleGroup}/> 
                 <AdminRoute path="/redaguoti/grupe/:name" component={EditGroup} isAdmin={isAdmin} isAuthenticated={isAuthenticated} /> 
                 {/* <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/> */}

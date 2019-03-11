@@ -9,6 +9,7 @@ import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestMessage;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,11 +29,10 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class DocumentService {
-    public static Logger logger = LoggerFactory.getLogger(DocumentService.class);
 
-    private static final Logger LOG = LoggerFactory.getLogger(DocumentService.class);
 
     @Autowired
     private DocumentRepository documentRepository;
@@ -211,15 +211,15 @@ public class DocumentService {
                 new Date()
         );
         document.setType(type);
-        logger.info(document.getTitle() + "type set");
+        log.info(document.getTitle() + "type set");
 
 //        document.addDbFile(file);
         document.getDbFiles().add(file);
-        logger.info(document.getDbFiles().add(file) + "file added");
+        log.info(document.getDbFiles().add(file) + "file added");
 //        file.setDocument(document);
 
         documentRepository.save(document);
-        logger.info(document.getTitle() + "has been saved");
+        log.info(document.getTitle() + "has been saved");
 
 //        file.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));
 

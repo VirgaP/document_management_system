@@ -100,8 +100,9 @@ export class EditDocument extends Component {
     // const options = this.state.documentTypes.map(type =>
     //   <option key={type} value={type}>{type}</option>)
         return (   
-          <div className="container">
-            <h2>Redaguoti dokumentą</h2>
+          <div className="container new-form"> 
+          <div className="container" id="type_form">
+            <h5>Redaguoti dokumentą</h5>
             <form onSubmit={this.handleSubmit}>
             <div className="form-group has-error form-group has-success">
               <label className="control-label" for="inputError1">Pavadinimas</label>
@@ -112,19 +113,12 @@ export class EditDocument extends Component {
               <input type="text" ref="description"  onChange={this.handleChangeFor('description')} value={this.state.document.description} className="form-control" id="inputError1" required/>
             </div>
             <div>
-            {/* <div>
-                <label className="control-label">Pasirinkite dokumento tipą</label>
-                <select value={this.state.typeTitle} onChange={this.handleSelectChange} 
-                className="form-control" id="ntype" required>
-                 <option value="">...</option>
-              {options}
-                </select>
-            </div> */}
             </div>
-                
+            
             {this.renderRedirect()}
               <button className="btn btn-primary" type="submit">Išsaugoti</button>
             </form>          
+          </div>
           </div>
         ) 
   }

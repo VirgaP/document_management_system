@@ -4,9 +4,6 @@ import { Layout, Menu, Dropdown, Icon } from 'antd';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import AdminSubMenu from './layout/AdminSubMenu';
 
-
-
-
 class Navbar extends Component {
   constructor(props) {
     super(props);   
@@ -27,20 +24,20 @@ class Navbar extends Component {
 
   render() {
     return (
-      <Menu
+      <Menu id="top-navigation"
         onClick={this.handleClick}
         selectedKeys={[this.state.current]}
         mode="horizontal"
       >
         <Menu.Item key="/pagrindinis">
           <Link to="/pagrindinis">
-                <Icon type="home" className="nav-icon" /> brkdbr
+                <Icon type="home" className="nav-icon" /> Pagrindinis
           </Link>
         </Menu.Item>
         <Menu.Item key="logout">
         <Icon type="logout" /> Atsijungti
         </Menu.Item>
-        {this.props.currentUser.admin === true ? <AdminSubMenu/> : ''}
+        {/* {this.props.currentUser.admin === true ? <AdminSubMenu/> : ''} */}
       </Menu>
     );
   }

@@ -161,57 +161,56 @@ isFormInvalid() {
       <Form id="signup-form" onSubmit={this.handleFormSubmit}>
      
         <FormItem 
-                      validateStatus={this.state.name.validateStatus}
-                          help={this.state.name.errorMsg}>
-                          <Input 
-                                size="large"
-                                name="name"
-                                placeholder="Vartotojo vardas"
-                                value={this.state.name.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validateName)} />    
-                        </FormItem>
-                  <FormItem 
-                            validateStatus={this.state.surname.validateStatus}
-                            help={this.state.surname.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="surname"
-                                autoComplete="off"
-                                placeholder="Vartotojo pavardė"
-                                value={this.state.surname.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validateSurname)} />    
-                        </FormItem>
-                        
-                        <FormItem 
-                            hasFeedback
-                            validateStatus={this.state.email.validateStatus}
-                            help={this.state.email.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="email" 
-                                type="email" 
-                                autoComplete="off"
-                                placeholder="Vartotojo el. paštas"
-                                value={this.state.email.value} 
-                                onMouseLeave={(event)=>this.checkEmail(event)}
-                                onBlur={this.validateEmailAvailability}
-                                onChange={(event) => this.handleInputChange(event, this.validateEmail)} />    
-                        </FormItem>
-                        <FormItem 
-                            validateStatus={this.state.password.validateStatus}
-                            help={this.state.password.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="password" 
-                                type="password"
-                                autoComplete="off"
-                                placeholder="Vartotojo slaptažodis nuo 6 iki 20 simbolių" 
-                                value={this.state.password.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    
-                        </FormItem>
-          <FormItem>
+                validateStatus={this.state.name.validateStatus}
+                help={this.state.name.errorMsg}>
+                <Input 
+                    size="large"
+                    name="name"
+                    placeholder="Vartotojo vardas"
+                    value={this.state.name.value} 
+                    onChange={(event) => this.handleInputChange(event, this.validateName)} />    
+        </FormItem>
+        <FormItem 
+                validateStatus={this.state.surname.validateStatus}
+                help={this.state.surname.errorMsg}>
+                <Input 
+                    size="large"
+                    name="surname"
+                    autoComplete="off"
+                    placeholder="Vartotojo pavardė"
+                    value={this.state.surname.value} 
+                    onChange={(event) => this.handleInputChange(event, this.validateSurname)} />    
+        </FormItem>
+        <FormItem 
+                hasFeedback
+                validateStatus={this.state.email.validateStatus}
+                help={this.state.email.errorMsg}>
+                <Input 
+                    size="large"
+                    name="email" 
+                    type="email" 
+                    autoComplete="off"
+                    placeholder="Vartotojo el. paštas"
+                    value={this.state.email.value} 
+                    onMouseLeave={(event)=>this.checkEmail(event)}
+                    onBlur={this.validateEmailAvailability}
+                    onChange={(event) => this.handleInputChange(event, this.validateEmail)} />    
+            </FormItem>
+            <FormItem 
+                validateStatus={this.state.password.validateStatus}
+                help={this.state.password.errorMsg}>
+                    <Input 
+                        size="large"
+                        name="password" 
+                        type="password"
+                        autoComplete="off"
+                        placeholder="Vartotojo slaptažodis nuo 6 iki 20 simbolių" 
+                        value={this.state.password.value} 
+                        onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    
+            </FormItem>
+            <FormItem>
           <div>
-            <label className="control-label">Pasirinkite pagrindinę vartotojo grupę</label>
+            <label className="control-label">Pasirinkite vartotojo grupę</label>
                 <select value={this.state.groupName} onChange={this.handleSelectChange} 
                 className="form-control" id="ntype" required>
                   <option value="">...</option>
@@ -226,23 +225,18 @@ isFormInvalid() {
                 type="checkbox"
                 checked={this.state.admin}
                 onChange={this.handleChangeAdmin}
-              />Admin 
+              />Administratorius 
          </label>
        </div>
        </FormItem> 
-       <div className="row">
-       <FormItem>    
          <input
           type="submit"
           className="btn btn-primary float-right"
           value="Saugoti"/>
-          </FormItem>
-          <FormItem>
          <button
           className="btn btn-link float-left"
-          onClick={this.handleClearForm}>Išvalyti įvestus duomenis</button>
-          </FormItem>
-          </div>
+          onClick={this.handleClearForm}>Išvalyti įvestus duomenis</button> 
+        
       </Form>
     </div>
     );

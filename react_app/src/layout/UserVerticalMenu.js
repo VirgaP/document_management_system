@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import { Button, Icon, Badge } from 'antd';
 import axios from 'axios';
+import AdminSubMenu from './AdminSubMenu';
 
 
 export class UserVerticalMenu extends Component {
@@ -71,31 +72,43 @@ export class UserVerticalMenu extends Component {
     return (
       <div>
        <nav className="navigation">
-  <ul className="mainmenu">
-    <li><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon style={{ fontSize: '26px', color: '#08c' }} theme="outlined" type="idcard" /> </Link></li>
-    <li><a href="">Dokumentai</a>
-      <ul className="submenu">
-        <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Sukurti</Link></li>
-        <li>
-          <Link to={'/gauti/dokumentai'}>Gauti</Link>
-          {/* <Badge count={this.state.count} showZero /> */}
+        <ul className="mainmenu">
+          <li><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon style={{ fontSize: '26px', color: '#08c' }} theme="outlined" type="idcard" /> </Link></li>
+          <li><a href="#">Dokumentai</a>
+            <ul className="submenu">
+              <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Sukurti</Link></li>
+              <li>
+                <Link to={'/gauti/dokumentai'}>Gauti</Link>
+                {/* <Badge count={this.state.count} showZero /> */}
+                </li>
+            </ul>
           </li>
-      </ul>
-    </li>
-    <li><Link to={'/naujas-dokumentas'}>Kurti dokumentą</Link></li>
-    {/* <li><Badge count={this.state.count} showZero>
-          <Link to={{
-            pathname: `/gauti/vartotojas/${this.props.currentUser.email}`,
-            state: { 
-              documentsReceived: this.state.documentsReceived,
-              count: this.state.count
-            }
-          }}>Gauti</Link>&nbsp; 
-            <a href="#" className="head-example" />
-          </Badge></li> */}
-  </ul>
-</nav> 
-      </div>
+          <li><Link to={'/naujas-dokumentas'}>Kurti dokumentą</Link></li>  
+          {this.props.currentUser.admin && 
+          <li><a href="#">Vartotojai</a>
+          <ul className="submenu">
+            <li><Link to='/naujas-vartotojas'>Kurti vartotoją</Link></li>
+            <li><Link to='/vartotojai'>Visi vartotojai</Link></li>
+          </ul>
+          </li>}
+          {this.props.currentUser.admin && 
+          <li><Link to={'/grupes'}>Grupės</Link>
+          <ul className="submenu">
+            <li><Link to={'/nauja-grupe'}>Kurti grupę</Link></li>
+            <li><Link to={'/visos-grupes'}>Vartotojų grupės</Link></li>
+          </ul>
+          </li>}
+           {this.props.currentUser.admin && 
+          <li><a href="#">Tipai</a>
+          <ul className="submenu">
+            <li><Link to={'/naujas-tipas'}>Kurti tipą</Link></li>
+            <li><Link to={'/visi-tipai'}>Dokumentų tipai</Link></li>
+          </ul>
+          </li>}
+          {this.props.currentUser.admin && <li><Link to={'/visi-dokumentai'}>Vartotojų dokumentai</Link></li>}
+        </ul>
+      </nav> 
+      </div> 
     )
   }
 }

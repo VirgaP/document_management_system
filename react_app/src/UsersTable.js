@@ -1,8 +1,6 @@
 import Institution from './Institution';  
 import React, { Component } from 'react';
 import axios from 'axios';
-import DocumentListPagination from './DocumentListPagination';
-import AntPagination from './AntPagination';
 import { Table, Tag, Input, Button , Icon} from 'antd';
 import {Link } from "react-router-dom";
 

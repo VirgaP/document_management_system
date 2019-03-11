@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { Button, notification } from 'antd';
+import { Button, notification, Icon } from 'antd';
 import axios from 'axios';
 
 export class Type extends Component {
@@ -42,13 +42,11 @@ export class Type extends Component {
         </Link>
         </td>
         <td>
-        <Button type="danger" onClick={() => this.DeleteItem(this.props.type.title)}> Trinti </Button>
+        <Icon type="delete" style={{ fontSize: '20px', color:'red' }}  onClick={() => this.DeleteItem(this.props.type.title)} />
         </td>
         <td>
         <Link to={`/redaguoti/tipas/${this.props.type.title}`}>
-        <Button type="default">
-             Redaguoti 
-        </Button>
+        <Icon type="edit" style={{ fontSize: '20px'}}/>
         </Link>
         </td>
       </tr>);

@@ -1,8 +1,6 @@
 import Institution from './Institution';  
 import React, { Component } from 'react';
 import axios from 'axios';
-import DocumentListPagination from './DocumentListPagination';
-import AntPagination from './AntPagination';
 import { Table, Tag, Input, Button, Icon, notification, Form, Select, Option, Menu } from 'antd';
 import {Link } from "react-router-dom";
 import reqwest from 'reqwest';
@@ -197,7 +195,9 @@ export class UserDocumentTable extends Component {
         dataIndex: 'userDocuments',
         key: 'status',
         render: userDocuments => userDocuments.map(item => 
-            item.rejected && <Tag color="volcano" key={item.document.uniqueNumber}>Atmestas</Tag>),
+            item.rejected && <Tag color="volcano" key={item.document.uniqueNumber}>Atmestas</Tag> ||
+            item.confirmed && <Tag color="green" key={item.document.uniqueNumber}>Patvirtintas</Tag>
+            ),
         width: '15%',
       },
       {
