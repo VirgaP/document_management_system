@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.DocumentDTO;
 import it.akademija.dto.UserDTO;
+import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.RequestGroup;
 import it.akademija.entity.User;
 import it.akademija.payload.RequestUser;
@@ -15,6 +16,8 @@ import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
 import it.akademija.util.WriteDataToCSV;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.tomcat.util.http.fileupload.MultipartStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,14 +45,12 @@ import java.util.stream.Collectors;
 public class UserController {
 
     public final UserService userService;
+    public final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-
-    @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(path="/new", method = RequestMethod.POST)
@@ -65,6 +67,10 @@ public class UserController {
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public UserDTO getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+        if (currentUser == null) {
+            throw new IllegalArgumentException("No current user apparent");
+        }
+
         UserDTO user = new UserDTO(
                 currentUser.getAdmin(),
                 currentUser.getEmail(),
@@ -103,7 +109,7 @@ public class UserController {
 
     @RequestMapping(path = "/{email}", method = RequestMethod.GET)
     @ApiOperation(value = "Get one user", notes = "Returns one user by email")
-    public UserDTO getDocument(
+    public UserDTO getUser(
             @PathVariable final String email) {
         log.info("Returns the user, who's email: "+ email);
         return userService.getUser(email);
@@ -130,7 +136,7 @@ public class UserController {
     @RequestMapping(path = "/{email}/{groupName}/remove", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value="Remove group", notes="Remove group form users groups list")
-    public void removeTypeFromDocument(
+    public void removeGroupFromUser(
             @PathVariable final String email,
             @PathVariable final String groupName
     ){
@@ -171,10 +177,18 @@ public class UserController {
 
     @GetMapping("/{email}/download/userCsv")
     public void downloadUserCSV(HttpServletResponse response, @PathVariable final String email) throws IOException{
+        if (StringUtils.isEmpty(email)) {
+            throw new IllegalArgumentException("Passed email cannot be empty!");
+        }
+
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; file=vartotojas.csv");
 
         User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new ResourceNotFoundException("User with email " + email + " does not exist!");
+        }
+
         String.valueOf(user);
 
         WriteDataToCSV.writeUserByEmailToCSV(response.getWriter(), user);

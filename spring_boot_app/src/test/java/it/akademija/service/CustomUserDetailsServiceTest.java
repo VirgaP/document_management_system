@@ -39,7 +39,7 @@ public class CustomUserDetailsServiceTest {
     }
 
     @Test
-    public void shouldFailIfUserWasNotFound() {
+    public void shouldFailToFindByIdIfNoUserExists() {
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
         Long randomId = new Random().nextLong();
@@ -51,11 +51,36 @@ public class CustomUserDetailsServiceTest {
     }
 
     @Test
-    public void shouldSucceedIfUserWasFound() {
-        User existingUser = TestingUtils.createRandomUser();
-        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(existingUser));
+    public void shouldFailToFindByEmailIfNoUserExists() {
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(null);
 
-        UserDetails userPrincipal = customUserDetailsService.loadUserById(existingUser.getId());
+        String randomEmail = TestingUtils.randomEmail();
+
+        expectedException.expect(UsernameNotFoundException.class);
+        expectedException.expectMessage("User not found with email : " + randomEmail);
+
+        customUserDetailsService.loadUserByUsername(randomEmail);
+    }
+
+    @Test
+    public void shouldSucceedIfUserWasFoundById() {
+        User existingUser = TestingUtils.randomUser();
+        Long existingUserId = existingUser.getId();
+        Mockito.when(userRepository.findById(existingUserId)).thenReturn(Optional.of(existingUser));
+
+        UserDetails userPrincipal = customUserDetailsService.loadUserById(existingUserId);
+
+        Assert.assertEquals(existingUser.getEmail(), userPrincipal.getUsername());
+        Assert.assertEquals(existingUser.getPassword(), userPrincipal.getPassword());
+    }
+
+    @Test
+    public void shouldSucceedIfUserWasFoundByEmail() {
+        User existingUser = TestingUtils.randomUser();
+        String existingEmail = existingUser.getEmail();
+        Mockito.when(userRepository.findByEmail(existingEmail)).thenReturn(existingUser);
+
+        UserDetails userPrincipal = customUserDetailsService.loadUserByUsername(existingEmail);
 
         Assert.assertEquals(existingUser.getEmail(), userPrincipal.getUsername());
         Assert.assertEquals(existingUser.getPassword(), userPrincipal.getPassword());
