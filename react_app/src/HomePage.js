@@ -5,6 +5,8 @@ import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom'
 import ZipDownload from './ZipDownload';
 import InstructionsAdmin from './layout/InstructionsAdmin';
+import UserDocumentTable from './UserDocumentTable';
+import UserDocumentCountDisplay from './user/UserDocumentCountDisplay';
 
 export class HomePage extends Component {
     constructor(props) {
@@ -16,6 +18,10 @@ export class HomePage extends Component {
           currentUser: ' ',
           documentsReceived:[],
           count:0,
+          allCount: 0,
+          submittedCount: 0,
+          confirmedCount: 0,
+          rejectedCount:0,
           documents:[]
         }; 
         
@@ -25,18 +31,26 @@ export class HomePage extends Component {
     }
    
       componentDidMount = () => { 
-        // axios.get('http://localhost:8099/api/documents/test?page=0&size=3&sort=uniqueNumber&direction=DESC')
-        //     .then(response => {
-        //         this.setState({
-        //             documents: response.data
-        //         });
-        //         console.log("Documents by page ", this.state.documents)
-        //     })
-        //     .catch(error => {
-        //         this.setState({
-        //             error: 'Error while fetching data.'
-        //         });
-        //     });
+        axios.get(`http://localhost:8099/api/users/${this.state.email}/test/info`)
+            .then(response => {
+
+                this.setState({
+                    allCount: response.data[0],
+                    submittedCount: response.data[1],
+                    confirmedCount: response.data[2],
+                    rejectedCount: response.data[3]
+                });
+                console.log("all count ", this.state.allCount)
+                console.log("subimmted ", this.state.submittedCount)
+                console.log("confirmed ", this.state.confirmedCount)
+                console.log("rejected ", this.state.rejectedCount)
+              
+            })
+            .catch(error => {
+                this.setState({
+                    error: 'Error while fetching data.'
+                });
+            });
         
           
          axios.get(`http://localhost:8099/api/users/${this.state.email}`)
@@ -93,8 +107,9 @@ export class HomePage extends Component {
     
     return ( 
       <div className="container homepage">
-      <div><h4>Sveiki, prisijungę prie Abrakadabra dokumentų valdymo sistemos.</h4></div>
-
+      <div><h4>Sveiki, {this.state.user.name + ' ' + this.state.user.surname}, prisijungę prie Abrakadabra dokumentų valdymo sistemos.</h4></div>
+      <UserDocumentCountDisplay allCount={this.state.allCount} submittedCount={this.state.submittedCount} 
+      confirmedCount={this.state.confirmedCount} rejectedCount={this.state.rejectedCount}/>      
       {this.state.user.admin && <InstructionsAdmin/>}
         <div className="container homepage-link-list">
           {/* <div className="row">

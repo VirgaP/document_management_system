@@ -171,7 +171,7 @@
         <appender-ref ref="STDOUT" />
     </logger>
     <logger name="${PACKAGE}.controller.DocumentController" level="info" additivity="false">
-        <appender-ref ref="FILE" />
+        <appender-ref ref="DOCUMENTFILE" />
         <appender-ref ref="STDOUT" />
     </logger>
     <logger name="${PACKAGE}.controller.FileController" level="info" additivity="false">

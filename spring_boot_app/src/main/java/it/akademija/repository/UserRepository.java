@@ -25,5 +25,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int getUserDocumentDetails(@Param("email") String email);
 
 
-
 }

@@ -53,6 +53,11 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    @GetMapping("/{email}/test/info")
+    public int [] userSubmittedDocumentCount(@PathVariable final String email) {
+
+        return userService.getUserDocumentCount(email);
+    }
     @RequestMapping(path="/new", method = RequestMethod.POST)
     @ApiOperation(value="Create user", notes = "Creates new user")
     @ResponseStatus(HttpStatus.CREATED)

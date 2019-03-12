@@ -26,6 +26,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
                 })
 })
 @NamedNativeQuery(name="User.getUserDocumentDetails", query="SELECT count (*) FROM user u LEFT JOIN user_document ud ON u.id = ud.user_id WHERE u.email=:email and ud.submitted = true", resultSetMapping="userDocumentDetails")
+
+//@SqlResultSetMappings( { @SqlResultSetMapping(name = "UserDocumentCount", entities = {
+//        @EntityResult(entityClass = User.class), @EntityResult(entityClass = Document.class) })
+//
+//})
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {

@@ -608,6 +608,24 @@ code {
 }
 #accordion li:hover div.content{
   display: inherit;
+  
+}
+
+#document-count-table{
+  width: 60%;
+  margin-left: 15%;
+}
+
+#document-count-table td{
+  font-size: 25px;
+}
+#document-count-table thead{
+  background-color: lightskyblue;
+}
+
+.user-document-count-display{
+  width: 50%;
+  margin:auto;
 }
 
 @media (min-width: 992px) {

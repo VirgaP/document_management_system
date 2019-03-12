@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -72,11 +72,12 @@ public class UserControllerTest {
     private UserService userService;
     private UserController userController;
     private PasswordEncoder passwordEncoder;
+    private EntityManager em;
 
     @Before
     public void setUp() {
         passwordEncoder = new BCryptPasswordEncoder(10);
-        userService = new UserService(userRepository, documentRepository, groupRepository, pagedUserRepository, passwordEncoder);
+        userService = new UserService(em, userRepository, documentRepository, groupRepository, pagedUserRepository, passwordEncoder);
         userController = new UserController(userService, userRepository);
 
         // add preexisting user groups

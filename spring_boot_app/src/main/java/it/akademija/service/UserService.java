@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,6 +30,7 @@ import it.akademija.repository.UserRepository;
 @Service
 public class UserService {
 
+    private final EntityManager em;
 
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
@@ -38,14 +39,17 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository,
-            PagedUserRepository pagedUserRepository, PasswordEncoder passwordEncoder) {
+    public UserService(EntityManager em, UserRepository userRepository, DocumentRepository documentRepository,
+                       GroupRepository groupRepository, PagedUserRepository pagedUserRepository, PasswordEncoder passwordEncoder) {
+        this.em = em;
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.groupRepository = groupRepository;
         this.pagedUserRepository = pagedUserRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
+
 
     @Transactional
     public List<UserDTO> getUserWithoutDocuments() {
@@ -84,6 +88,18 @@ public class UserService {
 //        System.out.println("submitted "+ userDTO.setSubmittedCount(userRepository.getUserDocumentDetails(user.getEmail())));
     }
 
+    @Transactional
+    public int [] getUserDocumentCount(String email){
+        int [] documentCount =  new int [4];
+
+        documentCount [0] = documentRepository.getUserDocumentCount(email);
+        documentCount [1] = documentRepository.getUserSubmittedDocumentCount(email);
+        documentCount [2] = documentRepository.getUserConfirmedDocumentCount(email);
+        documentCount [3] = documentRepository.getUserRejectedDocumentCount(email);
+
+        return documentCount;
+
+    }
 
     @Transactional
     public List<UserDTO> getUserEmails() {

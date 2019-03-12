@@ -1,5 +1,6 @@
 package it.akademija.repository;
 
+import it.akademija.dto.UserDTO;
 import it.akademija.entity.Document;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,6 +50,9 @@ public interface DocumentRepository extends JpaRepository<Document, Long>, JpaSp
 //    SELECT COUNT(*) FROM DOCUMENT as d JOIN USER_DOCUMENT as ud ON d.id = ud.document_id JOIN TYPE  ON d.TYPE_ID = TYPE.id  WHERE TYPE.id = 37 AND ud.submitted = 'true'   ;
     @Query(value="select count(*) FROM document d join user_document ud ON (d.id = ud.document_id) joint type t ON (d.type_id = t.id) WHERE t.title =:title AND ud.submitted =true", nativeQuery = true)
     int findCountByDocumentTitleAndStatus(@Param("title") String title);
+
+//    @Query("SELECT new it.akademija.dto.UserCountDTO(u.email) FROM User u WHERE u.name = :name")
+//    List<UserDTO> retrieveUsernameAsDTO(@Param("name") String email);
 
 //    @Query(value="select count(*) FROM document d join user_document ud ON (d.id = ud.document_id) joint type t ON (d.type_id = t.id) WHERE t.title =:title AND ud.submitted =:status", nativeQuery = true)
 //    int findCountByDocumentTitleAndStatus(DocumentSpec documentSpec, Pageable pageable);
