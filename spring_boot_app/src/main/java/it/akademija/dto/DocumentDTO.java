@@ -1,13 +1,12 @@
 package it.akademija.dto;
 
-import it.akademija.entity.DBFile;
-import it.akademija.entity.File;
-import it.akademija.entity.Type;
-import it.akademija.entity.UserDocument;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import it.akademija.entity.File;
+import it.akademija.entity.Type;
+import it.akademija.entity.UserDocument;
 
 public class DocumentDTO {
 

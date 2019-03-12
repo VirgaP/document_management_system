@@ -1,25 +1,26 @@
 package it.akademija.service;
 
-import it.akademija.controller.AuthController;
-import it.akademija.entity.DBFile;
-import it.akademija.exceptions.FileStorageException;
-import it.akademija.exceptions.MyFileNotFoundException;
-import it.akademija.repository.DBFileRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import it.akademija.entity.DBFile;
+import it.akademija.exceptions.FileStorageException;
+import it.akademija.exceptions.MyFileNotFoundException;
+import it.akademija.repository.DBFileRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

@@ -1,16 +1,12 @@
 package it.akademija.util;
 
-import it.akademija.entity.Role;
-import it.akademija.entity.RoleName;
-import it.akademija.entity.User;
-import it.akademija.repository.RoleRepository;
-import it.akademija.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import it.akademija.repository.RoleRepository;
+import it.akademija.repository.UserRepository;
 
 @Component
 public class CommandLineAppStartupRunner implements CommandLineRunner {

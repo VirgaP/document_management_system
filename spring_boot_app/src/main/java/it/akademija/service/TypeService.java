@@ -1,24 +1,22 @@
 package it.akademija.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import it.akademija.dto.TypeDTO;
-import it.akademija.entity.*;
-import it.akademija.exceptions.ResourceNotFoundException;
+import it.akademija.entity.Group;
+import it.akademija.entity.Type;
+import it.akademija.entity.TypeGroup;
 import it.akademija.payload.IncomingRequestBody;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.TypeGroupRepository;
 import it.akademija.repository.TypeRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

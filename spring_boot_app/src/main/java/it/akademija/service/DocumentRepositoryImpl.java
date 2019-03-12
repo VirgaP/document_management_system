@@ -1,18 +1,18 @@
 package it.akademija.service;
 
-import com.google.common.collect.Lists;
-import it.akademija.controller.AuthController;
-import it.akademija.entity.Document;
-import it.akademija.repository.CustomDocumentRepo;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.Date;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.collect.Lists;
+
+import it.akademija.entity.Document;
+import it.akademija.repository.CustomDocumentRepo;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DocumentRepositoryImpl implements CustomDocumentRepo {

@@ -1,33 +1,42 @@
 package it.akademija.service;
 
-import it.akademija.FileStorageProperties;
-import it.akademija.controller.AuthController;
-import it.akademija.dto.DocumentDTO;
-import it.akademija.entity.*;
-import it.akademija.payload.ApiResponse;
-import it.akademija.payload.RequestDocument;
-import it.akademija.payload.RequestMessage;
-import it.akademija.payload.RequestUser;
-import it.akademija.repository.*;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.print.Doc;
-import javax.transaction.Transactional;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
+import it.akademija.FileStorageProperties;
+import it.akademija.dto.DocumentDTO;
+import it.akademija.entity.Document;
+import it.akademija.entity.File;
+import it.akademija.entity.Type;
+import it.akademija.entity.User;
+import it.akademija.entity.UserDocument;
+import it.akademija.payload.RequestDocument;
+import it.akademija.payload.RequestMessage;
+import it.akademija.payload.RequestUser;
+import it.akademija.repository.DBFileRepository;
+import it.akademija.repository.DocumentRepository;
+import it.akademija.repository.FileRepository;
+import it.akademija.repository.PagedDocumentRepository;
+import it.akademija.repository.TypeRepository;
+import it.akademija.repository.UserDocumentRepository;
+import it.akademija.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

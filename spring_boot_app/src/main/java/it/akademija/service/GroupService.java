@@ -1,20 +1,21 @@
 package it.akademija.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import it.akademija.dto.GroupDTO;
-import it.akademija.entity.*;
+import it.akademija.entity.Group;
+import it.akademija.entity.User;
 import it.akademija.payload.RequestGroup;
 import it.akademija.payload.RequestUser;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j

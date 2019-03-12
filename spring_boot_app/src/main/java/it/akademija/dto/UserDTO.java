@@ -1,19 +1,15 @@
 package it.akademija.dto;
 
-
-import it.akademija.entity.Group;
-import it.akademija.entity.UserDocument;
-import it.akademija.repository.DocumentRepository;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.SqlResultSetMapping;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import it.akademija.entity.Group;
+import it.akademija.entity.UserDocument;
+import it.akademija.repository.DocumentRepository;
 
 public class UserDTO {
 

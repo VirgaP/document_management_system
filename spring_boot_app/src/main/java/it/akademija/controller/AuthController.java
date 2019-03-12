@@ -5,22 +5,6 @@ import java.util.Collections;
 
 import javax.validation.Valid;
 
-import it.akademija.entity.Group;
-import it.akademija.entity.Role;
-import it.akademija.entity.RoleName;
-import it.akademija.entity.User;
-import it.akademija.exceptions.AppException;
-import it.akademija.payload.ApiResponse;
-import it.akademija.payload.JwtAuthenticationResponse;
-import it.akademija.payload.LoginRequest;
-import it.akademija.payload.RequestUser;
-import it.akademija.repository.GroupRepository;
-import it.akademija.repository.RoleRepository;
-import it.akademija.repository.UserRepository;
-import it.akademija.security.JwtTokenProvider;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.Collections;
+import it.akademija.entity.Group;
+import it.akademija.entity.Role;
+import it.akademija.entity.RoleName;
+import it.akademija.entity.User;
+import it.akademija.payload.ApiResponse;
+import it.akademija.payload.JwtAuthenticationResponse;
+import it.akademija.payload.LoginRequest;
+import it.akademija.payload.RequestUser;
+import it.akademija.repository.GroupRepository;
+import it.akademija.repository.RoleRepository;
+import it.akademija.repository.UserRepository;
+import it.akademija.security.JwtTokenProvider;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
