@@ -24,7 +24,7 @@ const SingleDocumentComponent = (props) => (
      <Row>
         <Col span={12}>
           <p>{props.document.number}</p>
-          <pre>Unikalus dokumento numeris</pre>
+          <pre>Dokumento numeris</pre>
           </Col>
           <Col span={12}>     
           <p>{(props.document.type !=null) ? props.document.type.title : 'Tipas nepriskirtas'}</p>
@@ -48,7 +48,7 @@ const SingleDocumentComponent = (props) => (
      <Row>
         <Col span={12}>
           <p>{props.user.map(el=>el.name + ' ' + el.surname)}</p>
-          <pre>Vartotojas (vardas, pavardė)</pre>
+          <pre>Vartotojo vardas, pavardė</pre>
           </Col>
           <Col span={12}>
           <p>{props.user.map(el=>el.email)}</p>

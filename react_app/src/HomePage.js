@@ -33,7 +33,7 @@ export class HomePage extends Component {
       componentDidMount = () => { 
         axios.get(`http://localhost:8099/api/users/${this.state.email}/test/info`)
             .then(response => {
-
+              console.log("response", response)
                 this.setState({
                     allCount: response.data[0],
                     submittedCount: response.data[1],

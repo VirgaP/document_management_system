@@ -163,8 +163,11 @@ export class SingleReceivedDocument extends Component {
              {/* {  this.state.userDocument.map(el=>(String (el.submitted)) === 'true') ?  <span></span> : //dokumenta pateikti gali tik jo sukurejas
                  <Button type="primary"  block onClick={() => this.SubmitDocument(this.state.document.number)}>Pateikti dokumentą</Button> 
              } */}
-                <Button id="btn-confirm" type="primary" onClick={() => this.handleConfirm(this.state.document.number)}>Patvirtinti dokumentą</Button> 
+              {  this.state.userDocument.map(el=>el.submitted &&
+              <Button id="btn-confirm" type="primary" onClick={() => this.handleConfirm(this.state.document.number)}>Patvirtinti dokumentą</Button> )}
+                 {  this.state.userDocument.map(el=>el.submitted &&
                 <Button id="btn-reject" type="danger" onClick={this.showModal}>Atmesti dokumentą</Button> 
+              )}
                 <FormInModal
                   wrappedComponentRef={this.saveFormRef}
                   visible={this.state.visible}

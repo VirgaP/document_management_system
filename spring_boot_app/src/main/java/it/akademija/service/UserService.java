@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +35,12 @@ public class UserService {
     private final GroupRepository groupRepository;
     private final PagedUserRepository pagedUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EntityManager em;
+
 
     @Autowired
-    public UserService(UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository,
-            PagedUserRepository pagedUserRepository, PasswordEncoder passwordEncoder) {
+    public UserService(EntityManager em, UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository, PagedUserRepository pagedUserRepository, PasswordEncoder passwordEncoder) {
+        this.em = em;
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.groupRepository = groupRepository;
@@ -60,6 +63,23 @@ public class UserService {
     }
 
     @Transactional
+    public int[] getUserDocumentCount(String email){
+       int [] countArray = new int [4];
+
+      int allCount = documentRepository.getUserDocumentCount(email);
+      int submittedCount = documentRepository.getUserSubmittedDocumentCount(email);
+      int confirmedCount = documentRepository.getUserConfirmedDocumentCount(email);
+      int rejectedCount = documentRepository.getUserRejectedDocumentCount(email);
+
+        countArray  [0] = allCount;
+        countArray [1] = submittedCount;
+        countArray [2] = confirmedCount;
+        countArray [3] =rejectedCount;
+
+      return countArray;
+    }
+
+    @Transactional
     public Page<UserDTO> listUsersByPage(Pageable pageable) {
         Page<User> userPage = pagedUserRepository.findAll(pageable);
         final Page<UserDTO> userDtoPage = userPage.map(this::convertToUserDto);
@@ -76,10 +96,8 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
-
         log.info("Returns user "+ user);
         return userDTO;
-//        System.out.println("submitted "+ userDTO.setSubmittedCount(userRepository.getUserDocumentDetails(user.getEmail())));
     }
 
 
