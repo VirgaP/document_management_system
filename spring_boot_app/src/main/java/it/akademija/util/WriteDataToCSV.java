@@ -1,15 +1,16 @@
 package it.akademija.util;
 
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
-import it.akademija.dto.UserDTO;
-import it.akademija.entity.DBFile;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+
 import it.akademija.entity.Group;
 import it.akademija.entity.User;
 import it.akademija.entity.UserDocument;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
 
 public class WriteDataToCSV {

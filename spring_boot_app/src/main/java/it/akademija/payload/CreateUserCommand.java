@@ -1,9 +1,9 @@
 package it.akademija.payload;
 
-import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 public final class CreateUserCommand {
     @NotNull

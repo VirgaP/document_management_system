@@ -1,16 +1,13 @@
 package it.akademija.repository;
 
-import it.akademija.entity.Type;
-import it.akademija.entity.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.util.List;
+import it.akademija.entity.Type;
 
 @Repository
 public interface TypeRepository extends JpaRepository<Type, Long> {

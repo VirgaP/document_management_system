@@ -1,15 +1,12 @@
 package it.akademija.repository;
 
-import it.akademija.entity.Document;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import it.akademija.entity.Document;
 
 
 public interface PagedDocumentRepository extends PagingAndSortingRepository<Document, Long> {

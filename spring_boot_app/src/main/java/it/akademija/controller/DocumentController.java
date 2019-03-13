@@ -1,30 +1,34 @@
 package it.akademija.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.DocumentDTO;
 import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestMessage;
 import it.akademija.repository.DocumentRepository;
-import it.akademija.service.UserService;
 import it.akademija.service.DocumentService;
+import it.akademija.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/documents")
 public class DocumentController {
-    private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 
     private final DocumentService documentService;
     private final UserService userService;
@@ -42,7 +46,7 @@ public class DocumentController {
 
     @GetMapping("/test")
     public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {
-        logger.info("returning documentService.lisByPage");
+        log.info("returning documentService.lisByPage");
 
         return documentService.listByPage(pageable);
     }
@@ -179,7 +183,7 @@ public class DocumentController {
             @PathVariable final String uniqueNumber,
             @PathVariable final String email)
     {
-        logger.info("The document No: "+ uniqueNumber+ "has been submitted");
+        log.info("The document No: "+ uniqueNumber+ "has been submitted");
         documentService.submitDocument(uniqueNumber, email);
     }
 
@@ -191,7 +195,7 @@ public class DocumentController {
             @PathVariable final String uniqueNumber,
             @PathVariable final String email)
     {
-        logger.info("The document No: "+ uniqueNumber+ "has been confirmed");
+        log.info("The document No: "+ uniqueNumber+ "has been confirmed");
         documentService.confirmDocument(uniqueNumber, email);
     }
 
@@ -204,7 +208,7 @@ public class DocumentController {
             @PathVariable final String email,
             @RequestBody RequestMessage request)
     {
-        logger.info("The document No: "+ uniqueNumber+ "has been rejected");
+        log.info("The document No: "+ uniqueNumber+ "has been rejected");
         documentService.rejectDocument(uniqueNumber, email, request);
     }
 
