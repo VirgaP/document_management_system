@@ -160,10 +160,6 @@ public class DocumentService {
         return documentDTO;
     }
 
-    @Transactional
-    public int returnAllUserDocumentCount(String email){
-        return documentRepository.getUserDocumentCount(email);
-    }
 
     @Transactional
     public int returnSubmittedlUserDocumentCount(String email){
