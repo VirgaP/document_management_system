@@ -7,6 +7,8 @@ import ZipDownload from './ZipDownload';
 import InstructionsAdmin from './layout/InstructionsAdmin';
 import UserDocumentTable from './UserDocumentTable';
 import UserDocumentCountDisplay from './user/UserDocumentCountDisplay';
+import UserSearch from './Form/UserSearch';
+
 
 export class HomePage extends Component {
     constructor(props) {
@@ -63,6 +65,8 @@ export class HomePage extends Component {
             console.log(error);
           });
 
+        
+
       //   axios.get('http://localhost:8099/api/documents/documentsSpecCount/prasymas')
       //   .then(result => {
        
@@ -108,6 +112,9 @@ export class HomePage extends Component {
     return ( 
       <div className="container homepage">
       <div><h4>Sveiki, {this.state.user.name + ' ' + this.state.user.surname}, prisijungę prie Abrakadabra dokumentų valdymo sistemos.</h4></div>
+      <br></br>
+      <UserSearch/>
+      <br></br>
       <UserDocumentCountDisplay allCount={this.state.allCount} submittedCount={this.state.submittedCount} 
       confirmedCount={this.state.confirmedCount} rejectedCount={this.state.rejectedCount}/>      
       {this.state.user.admin && <InstructionsAdmin/>}

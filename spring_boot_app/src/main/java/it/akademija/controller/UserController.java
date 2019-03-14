@@ -2,23 +2,21 @@ package it.akademija.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
+import it.akademija.service.UserSpecification;
+import it.akademija.service.UserSpecificationsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,6 +46,32 @@ public class UserController {
     public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/findUsers/{email}")
+    @ResponseBody
+    public List<User> search(@PathVariable final String email) {
+
+        User filter = new User();
+        filter.setEmail(email);
+//        filter.setSurname("Verdi");
+//        filter.setAge(25);
+
+        Specification<User> spec = new UserSpecification(filter);
+
+        List<User> result = userRepository.findAll(spec);
+
+        return result;
+//        UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
+////        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+//        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS); //support non-latin characters
+//        Matcher matcher = pattern.matcher(search + ",");
+//        while (matcher.find()) {
+//            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+//        }
+//
+//        Specification<User> spec = builder.build();
+//        return userRepository.findAll(spec);
     }
 
     @GetMapping("/{email}/test/info")
