@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 
+import it.akademija.service.UserSpecification;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -66,6 +67,7 @@ public class UserControllerTest {
     @Autowired
     private GroupRepository groupRepository;
 
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -73,11 +75,12 @@ public class UserControllerTest {
     private UserController userController;
     private PasswordEncoder passwordEncoder;
     private EntityManager em;
+    private UserSpecification userSpecification;
 
     @Before
     public void setUp() {
         passwordEncoder = new BCryptPasswordEncoder(10);
-        userService = new UserService(em, userRepository, documentRepository, groupRepository, pagedUserRepository, passwordEncoder);
+        userService = new UserService(em, userRepository, documentRepository, groupRepository, pagedUserRepository, passwordEncoder, userSpecification);
         userController = new UserController(userService, userRepository);
 
         // add preexisting user groups

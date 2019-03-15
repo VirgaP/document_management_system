@@ -15,11 +15,10 @@ class Form extends Component {
       var today = new Date(),
           date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()+'-'+today.getHours()+'-'+today.getMinutes();
       this.state = {
+        user: this.props.currentUser,
         documents: [],
         groups: [],
         userGroups:[],
-        userType:[],
-        serTypes:[],
         redirect: false,
         types: [],
         typeTitle: '',
@@ -107,7 +106,7 @@ class Form extends Component {
   handleSubmit(e) {
       e.preventDefault();
 
-  const uniqueNumber = this.state.date + '-' + this.state.email;
+  const uniqueNumber = this.state.date + '-' + this.state.user.name.charAt(0).toUpperCase() + this.state.user.name.charAt(0).toUpperCase();
 
   console.log("Tipas ", this.state.typeTitle);
   console.log('Pavadinimas ', this.state.title);

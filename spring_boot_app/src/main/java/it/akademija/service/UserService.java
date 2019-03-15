@@ -36,17 +36,27 @@ public class UserService {
     private final PagedUserRepository pagedUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final EntityManager em;
+    private final UserSpecification userSpecification;
 
 
     @Autowired
-    public UserService(EntityManager em, UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository, PagedUserRepository pagedUserRepository, PasswordEncoder passwordEncoder) {
+    public UserService(EntityManager em, UserRepository userRepository, DocumentRepository documentRepository, GroupRepository groupRepository, PagedUserRepository pagedUserRepository, PasswordEncoder passwordEncoder, UserSpecification userSpecification) {
         this.em = em;
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.groupRepository = groupRepository;
         this.pagedUserRepository = pagedUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userSpecification = userSpecification;
     }
+
+    public Page<UserDTO> findAllUsersByEmailOrSurname(UserListRequest request, Pageable pageable) {
+        Page<User> userPage = pagedUserRepository.findAll(userSpecification.getFilter(request), pageable);
+        final Page<UserDTO> userDtoPage = userPage.map(this::convertToUserDto);
+
+        return userDtoPage;
+    }
+
 
     @Transactional
     public List<UserDTO> getUserWithoutDocuments() {

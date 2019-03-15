@@ -1,19 +1,20 @@
 package it.akademija.controller;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.google.common.base.Joiner;
+import it.akademija.entity.Document;
+import it.akademija.entity.User;
+import it.akademija.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,9 +22,10 @@ import it.akademija.dto.DocumentDTO;
 import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestMessage;
 import it.akademija.repository.DocumentRepository;
-import it.akademija.service.DocumentService;
-import it.akademija.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -35,6 +37,8 @@ public class DocumentController {
     private ApplicationEventPublisher eventPublisher;
     private final DocumentRepository documentRepository;
 
+
+
     @Autowired
     public DocumentController(DocumentService documentService, UserService userService, ApplicationEventPublisher eventPublisher, DocumentRepository documentRepository) {
         this.documentService = documentService;
@@ -43,6 +47,46 @@ public class DocumentController {
         this.documentRepository = documentRepository;
     }
 
+
+
+    @RequestMapping(method = RequestMethod.GET, value = "/find/specs")
+    @ResponseBody
+    public List<Document> findAllBySpecification(@RequestParam(value = "search") String search) {
+        DocumentSpecificationsBuilder builder = new DocumentSpecificationsBuilder();
+        String operationSetExper = Joiner.on("|")
+                .join(SearchOperation.SIMPLE_OPERATION_SET);
+        Pattern pattern = Pattern.compile("(\\w+?)(" + operationSetExper + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?),");
+        Matcher matcher = pattern.matcher(search + ",");
+        while (matcher.find()) {
+            builder.with(matcher.group(1), matcher.group(2), matcher.group(4), matcher.group(3), matcher.group(5));
+        }
+
+        Specification<Document> spec = builder.build();
+
+        log.info("GET {} {}", ServletUriComponentsBuilder.fromCurrentRequest().build().toUri(), search);
+
+
+        return documentRepository.findAll(spec);
+    }
+
+
+//    @RequestMapping(value="user", method = RequestMethod.GET)
+//    public @ResponseBody item getitem(@RequestParam("data") String itemid)
+
+//    @ResponseBody item getitem(@RequestParam Map<String, String> queryParameters) //alows optional parameters
+
+//    @RequestMapping(method = RequestMethod.GET, value = "/findDocument/{number}")
+//    @ResponseBody
+//    public List<User> searchDocument(@PathVariable final String number) {
+//
+////        Document filter = new Document();
+////        filter.setUniqueNumber(number);
+////        Specification<Document> spec = new DocumentSearchSpecification(filter);
+////
+////        List<User> result = userRepository.findAll(spec);
+////
+//        return null;
+//    }
 
     @GetMapping("/test")
     public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {

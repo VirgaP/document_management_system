@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Input, Table, Tag, Button, Icon, List } from 'antd';
-import {Link} from 'react-router-dom'
-
+import { Input, Table, Tag, Button, Icon, notification } from 'antd';
+import {Link} from 'react-router-dom';
+import reqwest from 'reqwest';
 
 const Search = Input.Search;
 
@@ -11,91 +11,108 @@ export class UserSearch extends Component {
         super(props);
        
         this.state = {
-          result: {}
+          result: {},
+          data: [],
+          pagination: {},
+          page:''
+
         }; 
     }
-
+    fetch = (params = {}) => {
+        const {page}=this.state
+      console.log('params:', params);
+      this.setState({ loading: true });
+      reqwest({
+        url: 'http://localhost:8099/api/users/findByEmailOrSurname',
+        method: 'get',
+        data: {
+          size: 10,
+          search: params,
+          // sort: 'createdDate,desc',
+          ...params,
+        },
+        type: 'json',
+      }).then((data) => {
+      console.log("data resp ", data)
+        const pagination = { ...this.state.pagination };
+        // Read total count from server
+        pagination.total = data.totalElements;
+        
+        this.setState({
+          loading: false,
+          data: data.content,
+          page: data.number,
+          pagination,
+        });
+      });
+    }
     handleSearch(value){
-         console.log("search value ", value)
-         axios.get(`http://localhost:8099/api/users/findUsers/${value}`)
-          .then(result => {
-          console.log("search url", result)
-          this.setState({result: result.data})
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        value.length !== 0 && this.fetch(value)
+        
+        //  console.log("search value ", value)
+        //  axios.get(`http://localhost:8099/api/users/findUsers/${value}`)
+        //   .then(result => {
+        //   console.log("search url", result)
+        //   this.setState({result: result.data})
+        //   if(result.data.length === 0){
+        //     return notification.error({
+        //       message: 'Vartotojas tokiu el.pašto adresu sistemoje nerastas. Bandykite dar kartą.',
+        //   }); 
+        //     }
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
+          
     }
 
   render() {
     const columns = [{
         title: 'Vardas',
-        dataIndex: 'name',
+        dataIndex: 'name' || "no records found",
         width: '15%',
       },
       {
         title: 'Pavardė',
-        dataIndex: 'surname',
-        width: '20%',
+        dataIndex: 'surname' || "no records found",
+        width: '15%',
       },
       {
         title: 'El.paštas',
-        dataIndex: 'email',
+        dataIndex: 'email' || "no records found",
         render: email =><Link to={`/vartotojas/${email}`}>{email}</Link>,
         width: '20%',
       },
-    //   {
-    //     title: 'Viso sukurta',
-    //     dataIndex: 'userDocuments',
-    //     key: 'all',
-    //     render: userDocuments => userDocuments.length,
-    //     width: '10%',
-    //   },
-    //   {
-    //     title: 'Grupės',
-    //     dataIndex: 'userGroups',
-    //     key: 'groups',
-    //     render: userGroups => (
-    //       <span>
-    //         {userGroups.map(tag => {
-    //           return <Tag color='geekblue' key={tag.name}>{tag.name.toUpperCase()}</Tag>;
-    //         })}
-    //       </span>
-    //     ),
-    //     width: '25%',
-    //   },
   {
     title: '',
-    dataIndex: 'email',
+    dataIndex: 'email' || "no records found",
     key: 'edit',
     render: email => <Link to={`/redaguoti/vartotojas/${email}`}><Icon type="edit" /></Link>,
     width: '5%',
   } 
     ];
       
-    const {result} = this.state
+    const {result, data} = this.state
     return (
-      <div className="container">
+      <div className="container" id="user-search-form">
+      <div>
         <Search
-      placeholder="Įveskite vartotojo el.pašto adresą"
+      placeholder="Įveskite vartotojo el.pašto adresą arba pavardę"
       onSearch={value => this.handleSearch(value)}
+    //   style={{ width: 400 }}
       enterButton
     /> 
+    </div>
     <br></br>
-   {result.length > 0 && <Table dataSource={result} columns={columns} /> }
-
-    {/* <List
-    itemLayout="horizontal"
-    dataSource={this.state.result}
-    renderItem={item => (
-      <List.Item>
-        <List.Item.Meta
-          description={item.name + item.surname}
-        />
-      </List.Item>
-    )}
-  /> */}
-  {/* {result.length > 0 && <p>{result.map(item => item.name)}</p>} */}
+        {/* {data.length > 0 &&
+        <Table dataSource={data} columns={columns} rowKey={record => record.email} pagination={this.state.pagination}
+        // pagination={false}
+        /> } */}
+        
+        <Table dataSource={data} columns={columns} rowKey={record => record.email} pagination={this.state.pagination} scroll={{ y: 200 }}
+        locale={{ emptyText: 'Duomenis negauti, prašome įvesti paieškos raktažodį' }}
+        // pagination={false}
+        /> 
       </div>
     )
   }

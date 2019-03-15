@@ -8,6 +8,7 @@ import InstructionsAdmin from './layout/InstructionsAdmin';
 import UserDocumentTable from './UserDocumentTable';
 import UserDocumentCountDisplay from './user/UserDocumentCountDisplay';
 import UserSearch from './Form/UserSearch';
+import reqwest from 'reqwest';
 
 
 export class HomePage extends Component {
@@ -65,20 +66,41 @@ export class HomePage extends Component {
             console.log(error);
           });
 
-        
+          var params = new URLSearchParams();
+          params.append("created_Date", '2019-03-14');
+          params.append("NIQUE_NUMBER", '');
+          // params.append("foo", 11);
+          var created_Date = "2019-04-14"
+          var unique_Number ="uniqueNumber"
+          var request = {
+            params: params
+          };
 
-      //   axios.get('http://localhost:8099/api/documents/documentsSpecCount/prasymas')
-      //   .then(result => {
-       
-      //  console.log(result)
-         
-      //   })
-      //   .catch(error => {
-      //     this.setState({
-      //         error: 'Error while fetching data.',
-      //         isLoading: false
-      //     });
-      //   });
+          // axios.get('http://localhost:8099/api/documents/find/specs/', request)
+        axios.get('http://localhost:8099/api/documents/find/specs/', {
+          params: { 
+            search:  null
+            //  unique_Number: "2019-3-14-23-39-aa"
+          }
+        })
+        .then(result => {
+       console.log("SPECs ", result)
+        })
+        .catch(error => {
+          this.setState({
+              error: 'Error while fetching data.',
+              isLoading: false
+          });
+        });
+
+        // reqwest({
+        //   url: 'http://localhost:8099/api/documents/find/specs/',
+        //   method: 'get',
+        //   data:  { search: '2019-03-14' },
+        //   type: 'json',
+        // }).then((data) => {
+        // console.log("data resp specs ", data)
+        // });
       }
 
       handleDownlaod = (index, filename) => {
@@ -110,14 +132,18 @@ export class HomePage extends Component {
   render() {
     
     return ( 
-      <div className="container homepage">
-      <div><h4>Sveiki, {this.state.user.name + ' ' + this.state.user.surname}, prisijungę prie Abrakadabra dokumentų valdymo sistemos.</h4></div>
-      <br></br>
+      <div className="container homepage" id="hompage-container">
+      {/* <div><h4>Sveiki, {this.state.user.name + ' ' + this.state.user.surname}, prisijungę prie Abrakadabra dokumentų valdymo sistemos.</h4></div> */}
+      <div id="signed-in-user">
+      <span>Sveiki, {this.state.user.name + ' ' + this.state.user.surname}</span>
+      </div>
+      <div className="user-search-container">
+      <h5>Vartotojo paieška</h5>
       <UserSearch/>
-      <br></br>
+      </div>
       <UserDocumentCountDisplay allCount={this.state.allCount} submittedCount={this.state.submittedCount} 
       confirmedCount={this.state.confirmedCount} rejectedCount={this.state.rejectedCount}/>      
-      {this.state.user.admin && <InstructionsAdmin/>}
+      
         <div className="container homepage-link-list">
           {/* <div className="row">
           <div className="col-lg-3 col-md-3" id="hp1"><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon type="idcard" /> Vartotojo paskyra</Link></div>

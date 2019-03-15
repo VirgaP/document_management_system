@@ -10,6 +10,9 @@ export class InstructionsAdmin extends Component {
       }
   render() {
     return (
+      <div className="container" id="instructions-container">
+      <h4>Dokumentų valdymo sistemos instrukcija</h4>
+      <p>Administratoriaus atmintinė</p>
         <Collapse id="accordion" onChange={this.callback}>
         <Panel header="Vartotojai" key="1">
             <p>Administratoriaus ir vartotojo sukūrimas.<br></br>
@@ -29,7 +32,7 @@ export class InstructionsAdmin extends Component {
             Priskirti dokumento tipą grupei -  meniu pasirinkite mygtuką Dokumento tipai -> Dokumentų tipai. Pasireinkite tipą "Peržiūrėti" </p>
         </Panel>
       </Collapse>
-   
+      </div>
     )
   }
 }

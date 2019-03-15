@@ -57,52 +57,61 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .cors()
-                .and()
-                .csrf()
-                .disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .httpBasic()
-                .and()
-                .authorizeRequests()
-                .antMatchers("/",
-                        "/login",
-//                        "/groups",
-                        "/register",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                .permitAll()
-
-                .antMatchers("/api/auth/login")
-//                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                .permitAll()
-                .antMatchers("/api/auth/newUser")
-//                .hasAuthority("ROLE_ADMIN")
-                .permitAll()
-
-//                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                .antMatchers("/console/**").permitAll()
-                .antMatchers("/swagger-ui.html#/").permitAll()
-                .antMatchers("/api/**")
-                .permitAll()
-                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/documents/**", "/api/users/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
+        http.authorizeRequests().antMatchers("/xxx/**").authenticated();
+        http.authorizeRequests().anyRequest().permitAll();
+//        http
+//                .cors()
+//                .and()
+//                .csrf()
+//                .disable()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(unauthorizedHandler)
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .httpBasic()
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/v2/api-docs",
+//                "/configuration/ui",
+//                "/swagger-resources",
+//                "/configuration/security",
+//                "/swagger-ui.html",
+//                "/webjars/**")
+//                .permitAll()
+//                .antMatchers("/",
+//                        "/login",
+////                        "/groups",
+//                        "/register",
+//                        "/favicon.ico",
+//                        "/**/*.png",
+//                        "/**/*.gif",
+//                        "/**/*.svg",
+//                        "/**/*.jpg",
+//                        "/**/*.html",
+//                        "/**/*.css",
+//                        "/**/*.js")
+//                .permitAll()
+//
+//                .antMatchers("/api/auth/login")
+////                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+//                .permitAll()
+//                .antMatchers("/api/auth/newUser")
+////                .hasAuthority("ROLE_ADMIN")
+//                .permitAll()
+//
+////                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+//                .antMatchers("/console/**").permitAll()
+//                .antMatchers("/swagger-ui.html#/").permitAll()
+//                .antMatchers("/api/**")
+//                .permitAll()
+//                .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
+//                .permitAll()
+//                .antMatchers(HttpMethod.GET, "/api/documents/**", "/api/users/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated();
 
         http.headers().frameOptions().disable();// allow access to h2 console
         // Add our custom JWT security filter

@@ -2,17 +2,13 @@ package it.akademija.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
-import it.akademija.service.UserSpecification;
-import it.akademija.service.UserSpecificationsBuilder;
+import it.akademija.service.UserListRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -48,31 +44,26 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findUsers/{email}")
-    @ResponseBody
-    public List<User> search(@PathVariable final String email) {
 
-        User filter = new User();
-        filter.setEmail(email);
-//        filter.setSurname("Verdi");
-//        filter.setAge(25);
-
-        Specification<User> spec = new UserSpecification(filter);
-
-        List<User> result = userRepository.findAll(spec);
-
-        return result;
-//        UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
-////        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-//        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS); //support non-latin characters
-//        Matcher matcher = pattern.matcher(search + ",");
-//        while (matcher.find()) {
-//            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-//        }
-//
-//        Specification<User> spec = builder.build();
-//        return userRepository.findAll(spec);
+    @RequestMapping(
+            value = "/findByEmailOrSurname",
+            method = RequestMethod.GET)
+    public Page<UserDTO> getAllUsersByEmailOrSurname(UserListRequest request, Pageable pageable) {
+        return userService.findAllUsersByEmailOrSurname(request, pageable);
     }
+
+//    @RequestMapping(method = RequestMethod.GET, value = "/findUsers/{email}")
+//    @ResponseBody
+//    public List<User> search(@PathVariable final String email) {
+//
+//        User filter = new User();
+//        filter.setEmail(email);
+//        Specification<User> spec = new UserSpecification(filter);
+//
+//        List<User> result = userRepository.findAll(spec);
+//
+//        return result;
+//    }
 
     @GetMapping("/{email}/test/info")
     public int [] userSubmittedDocumentCount(@PathVariable final String email) {
@@ -86,7 +77,7 @@ public class UserController {
             @ApiParam(value="User data", required=true)
             @RequestBody final RequestUser requestUser){
 
-        log.error("The user xxx created");
+        log.info("The user created with email:" + requestUser.getEmail());
         userService.createUser(requestUser);
     }
 

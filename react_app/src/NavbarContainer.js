@@ -50,6 +50,7 @@ import UsersTable from './UsersTable';
 import UserDocumentTable from './UserDocumentTable';
 import ReceivedDocumentsTable from './ReceivedDocumentsTable';
 import GroupsPage from './layout/GroupsPage';
+import InstructionsAdmin from './layout/InstructionsAdmin';
 
 const { Content } = Layout;
 
@@ -160,6 +161,7 @@ class App extends Component {
                {/* <Route path='/pagrindinis' render={(props) => <HomePage isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>         */}
                 <PrivateRoute path='/pagrindinis'  component={HomePage} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />
+                <PrivateRoute path='/informacija'  component={InstructionsAdmin} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />
                 <PrivateRoute path="/naujas-dokumentas" component={Form} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/>
                 <PrivateRoute path="/dokumentas/:number" component={SingleDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 
                 <PrivateRoute path="/gautas/dokumentas/:number" component={SingleReceivedDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 

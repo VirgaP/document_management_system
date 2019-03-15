@@ -10,17 +10,35 @@
   -moz-osx-font-smoothing: grayscale;
 } */
 
-html,body{margin:0 !important}
+html,body{
+  margin:0 !important;
+  overflow-x:hidden
+}
 
 .ant-layout-content {
   margin-left: 5%;
+  margin-top:5%;
   height:auto;
   background-color: white !important;
+
 }
 .ant-layout{
   background-color: white !important;
 }
+#top-navigation{
+  position: absolute;
+  width: 100%;
+  margin-left: 13%;
+  background-color:rgba(0, 0, 0, 0.05);
+}
+.ant-menu-item{
+  left: 3%;
+}
 
+#icon-info {
+position: relative;
+left: 58%;
+}
 /* define a fixed width for the entire menu */
 .navigation {
   padding-top: 3%;
@@ -53,41 +71,41 @@ html,body{margin:0 !important}
 .mainmenu a:hover {
     background-color: white;
 }
-
-
 /* when hovering over a .mainmenu item,
-  display the submenu inside it.
-  we're changing the submenu's max-height from 0 to 200px;
+  display the submenu inside it. we're changing the submenu's max-height from 0 to 200px;
 */
-
 .mainmenu li:hover .submenu {
   display: block;
   max-height: 200px;
   margin-left: 10%;
 }
-
 /*
   we now overwrite the background-color for .submenu links only.
   CSS reads down the page, so code at the bottom will overwrite the code at the top.
 */
-
 .submenu a {
   background-color: white;
 }
-
 /* hover behaviour for links inside .submenu */
 .submenu a:hover {
   background-color: white;
 }
-
-/* this is the initial state of all submenus.
-  we set it to max-height: 0, and hide the overflowed content.
+/* this is the initial state of all submenus. we set it to max-height: 0, and hide the overflowed content.
 */
 .submenu {
   overflow: hidden;
   max-height: 0;
   -webkit-transition: all 0.5s ease-out;
 }
+
+
+#instructions-container{
+  margin-left: 5%;
+  height: 90vh;
+  overflow: auto;
+  padding-bottom: 5%;
+}
+
 #list_container{
   width: 80%;
   height: 90vh;
@@ -107,20 +125,36 @@ margin-top: 5%;
 }
 
 .homepage {
+  position: static;
   margin: auto;
   padding-top: 3%;
   margin-bottom:10%;
-  width: 80%;
-  padding-bottom:3%;
+  /* width: 80%; */
+  max-width: 100%;
+  /* height: 95vh; */
   height: 100%;
+  /* overflow: auto; */
+  padding-bottom:3%;
   text-align: center;
-
 }
+
+#signed-in-user{
+  position: relative;
+  left: 45%;
+  top: -20px;
+}
+
 .homepage p{
   padding-top: 3%;
   text-align: justify;
   padding-bottom: 3%;
   margin-left: 5%;
+}
+
+
+.user-search-container{
+  margin-left: 10%;
+  /* width: 50%; */
 }
 
 #hp1, #hp2, #hp3, #hp4 {
@@ -611,21 +645,32 @@ code {
   
 }
 
-#document-count-table{
-  width: 60%;
-  margin-left: 15%;
-}
-
-#document-count-table td{
-  font-size: 25px;
-}
-#document-count-table thead{
-  background-color: lightskyblue;
-}
-
 .user-document-count-display{
-  width: 50%;
-  margin:auto;
+  width: 45%;
+  margin-left: 10%;
+  margin-top: 5%;
+}
+
+#document-count-table {
+  /* margin-left: auto; */
+  width: 100%;
+  text-align: left;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+  font-weight: bold;
+}
+
+#document-count-table td:nth-child(even){
+background-color: #d9d9d9;
+color: white;
+
+}
+
+#components-form-demo-advanced-search .ant-advanced-search-form {
+  padding: 24px;
+  background: #fbfbfb;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
 }
 
 @media (min-width: 992px) {

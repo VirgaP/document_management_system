@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Table, Tag, Input, Button , Icon} from 'antd';
 import {Link } from "react-router-dom";
-
-
 import reqwest from 'reqwest';
 
 export class UsersTable extends Component {
@@ -72,7 +70,6 @@ export class UsersTable extends Component {
           ...filters,
         });
         console.log("filter ", filters)
-
       }
     
       fetch = (params = {}) => {
