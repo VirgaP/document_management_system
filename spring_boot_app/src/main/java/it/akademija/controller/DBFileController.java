@@ -128,7 +128,6 @@ public class DBFileController {
         }
         IOUtils.closeSilently(bufferedOutputStream);
         IOUtils.closeSilently(byteArrayOutputStream);
-        //logger.info("Zip files returned" + byteArrayOutputStream);????????
         return byteArrayOutputStream.toByteArray();
     }
 

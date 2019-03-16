@@ -34,7 +34,7 @@ public class GroupService {
 
     @Transactional
     public List<GroupDTO> getGroups() {
-        log.info("Returns groups");
+        //log.info("Returns groups");
         return groupRepository.findAll()
                 .stream()
                 .map(type -> new GroupDTO(
@@ -49,7 +49,7 @@ public class GroupService {
                 group.getName(),
                 group.getGroupUsers()
         );
-        log.info("Returns group "+name);
+        //log.info("Returns group "+name);
         return groupDTO;
     }
 
@@ -65,20 +65,20 @@ public class GroupService {
                 new Long(0),
                 groupName
         );
-        log.info("Creates group "+ groupName);
+        log.info("Group {} is saved", groupName);
         groupRepository.save(group);
     }
 
     @Transactional
     public void deleteGroup(String name){
-        log.info("Deletes group "+name);
+        log.info("Group {} deleted", name);
         Group group = groupRepository.findByname(name);
         groupRepository.delete(group);
     }
 
     @Transactional
     public void editGroup(RequestGroup request, String name){
-        log.info("Edits group "+ name);
+        log.info("Group {} has been edited", name);
         Group group = groupRepository.findByname(name);
 
         group.setName(request.getName());
@@ -87,7 +87,7 @@ public class GroupService {
 
     @Transactional
     public void addUserToGroup(String name, RequestUser request){
-        log.info("Adds user to group "+ name);
+        log.info("User {} has been added to the group {}", request, name);
         Group group = groupRepository.findByname(name);
 
         User user = userRepository.findByEmail(request.getEmail());
@@ -98,7 +98,7 @@ public class GroupService {
 
     @Transactional
     public void removeUserFromGroup(String name, RequestUser request){
-        log.info("Removes user from group {}",name);
+        log.info("User {} has been removed from  the group {}",request, name);
         Group group = groupRepository.findByname(name);
 
         User user = userRepository.findByEmail(request.getEmail());

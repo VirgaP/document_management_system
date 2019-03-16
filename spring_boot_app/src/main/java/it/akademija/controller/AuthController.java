@@ -69,14 +69,12 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        log.info("Token "+ jwt + " has been generated for login request");
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
     @PostMapping("/newUser")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RequestUser requestUser) {
         if(userRepository.existsByEmail(requestUser.getEmail())) {
-            log.info("Checking the Users Repository for email validation");
             return new ResponseEntity(new ApiResponse(false, "User email is already taken!"),
                     HttpStatus.BAD_REQUEST);
         }
@@ -94,7 +92,6 @@ public class AuthController {
 
         user.addGroup(group);
         group.addUser(user);
-        log.info("Password has been set");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER);
@@ -119,7 +116,7 @@ public class AuthController {
                 .fromCurrentContextPath().path("/api/users/{email}")
                 .buildAndExpand(result.getEmail()).toUri();
 
-        log.info("The successful registration of user");
+        log.info("User {} has been created", user);
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
 }

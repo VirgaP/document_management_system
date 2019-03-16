@@ -35,14 +35,14 @@ public class GroupController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value="Get list of groups", notes="Returns list of groups created")
     public List<GroupDTO> getGroups() {
-        log.info("List of group");
+        //log.info("List of group");
         return groupService.getGroups();
     }
 
     @RequestMapping(path = "/{name}", method = RequestMethod.GET)
     @ApiOperation(value="Get group ", notes="Returns group by name")
     public GroupDTO getGroup(@PathVariable final String name){
-        log.info("This group: "+ name+" has been returned");
+        //log.info("This group: "+ name+" has been returned");
         return groupService.getGroupByName(name);
     }
 
@@ -52,7 +52,7 @@ public class GroupController {
     public void createGroup(
             @ApiParam(value="Group data", required=true)
             @RequestBody final RequestGroup requestBody){
-        log.info("The group created");
+        log.info("The group {} created", requestBody);
 
         groupService.createGroup(requestBody);
     }

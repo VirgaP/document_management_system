@@ -60,7 +60,7 @@ public class UserService {
 
     @Transactional
     public List<UserDTO> getUserWithoutDocuments() {
-        log.info("Finding all users");
+        //log.info("Finding all users");
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserDTO(
@@ -93,7 +93,7 @@ public class UserService {
     public Page<UserDTO> listUsersByPage(Pageable pageable) {
         Page<User> userPage = pagedUserRepository.findAll(pageable);
         final Page<UserDTO> userDtoPage = userPage.map(this::convertToUserDto);
-        log.info("Returns userDtoPage");
+        //log.info("Returns userDtoPage");
         return userDtoPage;
     }
 
@@ -113,7 +113,7 @@ public class UserService {
 
     @Transactional
     public List<UserDTO> getUserEmails() {
-        log.info("Returns user's emails");
+        //log.info("Returns user's emails");
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserDTO(
@@ -135,7 +135,7 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
-        log.info("Found {} user", user.getEmail());
+        //log.info("Found {} user", user.getEmail());
         return userDTO;
     }
 
@@ -178,7 +178,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(password));
         }
 
-        log.info("Saving user's email");
+        //log.info("Saving user's email");
         userRepository.save(user);
 
     }
@@ -186,7 +186,7 @@ public class UserService {
     @Transactional
     public void deleteUser(String email){
         User user = getExistingUser(email);
-        log.info("Deletes user with "+ email);
+        log.info("User {} has been deleted", email);
 
         userRepository.delete(user);
     }
@@ -199,7 +199,7 @@ public class UserService {
         Group group = getExistingGrop(groupName);
         user.addGroup(group);
         userRepository.save(user);
-        log.info("Adding the user "+ user);
+        log.info("Adds the user {} to the group {}", user, group);
         group.addUser(user);
     }
 
@@ -209,17 +209,17 @@ public class UserService {
             throw new IllegalArgumentException("Input of email of group name cannot be null.");
         }
 
-        log.info("Trying to remove user with email "+ email + "from group with name "+groupName);
+        //log.info("Trying to remove user with email "+ email + "from group with name "+groupName);
         User user = getExistingUser(email);
         Group group = getExistingGrop(groupName);
 
         Set<Group> userGroups = user.getUserGroups();
 
         if (!userGroups.contains(group)) {
-            log.error("Group with name "+ groupName + " is not found in the database");
+            //log.error("Group with name "+ groupName + " is not found in the database");
             throw new ResourceNotFoundException("the group is not found");
         } else {
-            log.info("User with email "+ email+ " was removed from group "+ groupName);
+            log.info("User {} has been removed from group {}", email, groupName);
             user.removeGroup(group);
         }
     }

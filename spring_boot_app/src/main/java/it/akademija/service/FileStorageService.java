@@ -33,7 +33,7 @@ public class FileStorageService {
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) {
-            log.info("Could not create the directory where the uploaded files will be stored.", ex);
+            //log.info("Could not create the directory where the uploaded files will be stored.", ex);
             throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
         }
     }
@@ -45,7 +45,7 @@ public class FileStorageService {
         try {
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
-                log.info("File's name "+ fileName+ "contains invalid path sequence");
+                //log.info("File's name "+ fileName+ "contains invalid path sequence");
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
@@ -55,7 +55,7 @@ public class FileStorageService {
 
             return fileName;
         } catch (IOException ex) {
-            log.info("The file: "+ fileName+ " could not be stored");
+            //log.info("The file: "+ fileName+ " could not be stored");
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
@@ -67,11 +67,11 @@ public class FileStorageService {
             if(resource.exists()) {
                 return resource;
             } else {
-                log.info("File {} not found", fileName);
+               // log.info("File {} not found", fileName);
                 throw new MyFileNotFoundException("File not found " + fileName);
             }
         } catch (MalformedURLException ex) {
-            log.info("File {} not found", fileName);
+            //log.info("File {} not found", fileName);
             throw new MyFileNotFoundException("File not found " + fileName, ex);
         }
     }

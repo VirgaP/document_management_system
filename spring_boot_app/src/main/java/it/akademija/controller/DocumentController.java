@@ -90,15 +90,11 @@ public class DocumentController {
 
     @GetMapping("/test")
     public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {
-        log.info("returning documentService.lisByPage");
-
         return documentService.listByPage(pageable);
     }
 
     @GetMapping("/count")
     public Long documentCount() {
-        //logger.info("returns documentCount");
-
         return documentService.returnCount();
     }
 
@@ -163,14 +159,14 @@ public class DocumentController {
     @RequestMapping(path="/{email}/documents", method = RequestMethod.GET)
     @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
     List<DocumentDTO> getAllUserDocuments( @PathVariable final String email) {
-        //logger.info("returns all users documents filtered using email");
+        log.info("User documents filtered using email {}", email);
         return documentService.getAllUserDocuments(email);
     }
 
     @RequestMapping(path="/{email}/received/documents", method = RequestMethod.GET)
     @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
     List<DocumentDTO> getAllUserReceivedDocuments( @PathVariable final String email) {
-        //logger.info("Returns all received documents filtered using email");
+        log.info("Returns all received documents filtered using email: {}", email);
         return documentService.getAllUserReceivedDocuments(email);
     }
 
@@ -186,7 +182,7 @@ public class DocumentController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get all documents", notes = "Returns list of all documents in database")
     List<DocumentDTO> getAllDocuments() {
-        //logger.info("Returns list of all documents in database");
+        //log.info("Returns list of all documents in database");
         return documentService.getAll();
     }
 
@@ -195,7 +191,7 @@ public class DocumentController {
     @ApiOperation(value = "Get one document", notes = "Returns one document by number")
     public DocumentDTO getDocument(
             @PathVariable final String uniqueNumber) {
-        //logger.info ("The document No: " + uniqueNumber+ " has been returned");
+        log.info ("The document No: " + uniqueNumber+ " has been returned");
         return documentService.getDocumentByTitle(uniqueNumber);
     }
 
@@ -207,7 +203,7 @@ public class DocumentController {
             @RequestBody RequestDocument request,
             @PathVariable final String uniqueNumber){
         documentService.updateDocument(request, uniqueNumber);
-        //logger.info("The document No: " + uniqueNumber + "has been updated");
+        log.info("The document No: " + uniqueNumber + "has been updated");
     }
 
     @RequestMapping(path = "/{uniqueNumber}", method = RequestMethod.DELETE)
@@ -215,7 +211,7 @@ public class DocumentController {
     @ApiOperation(value = "Delete document", notes = "Deletes document by number")
     void deleteDocument(@PathVariable final String uniqueNumber) {
         documentService.deleteDocument(uniqueNumber);
-        //logger.info("The document No: " +  uniqueNumber+ "has been deleted");
+        log.info("The document No: " +  uniqueNumber+ "has been deleted");
 
     }
 

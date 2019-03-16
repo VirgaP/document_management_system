@@ -35,7 +35,7 @@ public class DocumentRepositoryImpl implements CustomDocumentRepo {
         final List<Object[]> resultList = nativeQuery.getResultList();
         List<Document> documentList = Lists.newArrayList();
         resultList.forEach(object -> documentList.add(document));
-        log.info("Returns list of documents");
+        //log.info("Returns list of documents");
         return documentList;
     }
 }
