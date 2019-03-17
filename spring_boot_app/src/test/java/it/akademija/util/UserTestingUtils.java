@@ -1,7 +1,5 @@
 package it.akademija.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -10,10 +8,8 @@ import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import it.akademija.dto.UserDTO;
-import it.akademija.entity.Document;
 import it.akademija.entity.Group;
 import it.akademija.entity.User;
 import it.akademija.payload.RequestUser;
@@ -22,12 +18,12 @@ import it.akademija.security.UserPrincipal;
 /**
  * Common utils to be used in unit/integration tests
  */
-public class TestingUtils {
+public class UserTestingUtils {
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
-    private TestingUtils() {}
+    private UserTestingUtils() {}
 
     public static Group randomGroup() {
         Group group = new Group();
@@ -52,6 +48,13 @@ public class TestingUtils {
 
     public static UserPrincipal randomUserPrincipal() {
         return UserPrincipal.create(randomUser());
+    }
+
+    public static UserPrincipal randomUserPrincipalFrom(String email, String password) {
+        User user = randomUser();
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        return UserPrincipal.create(user);
     }
 
     public static String randomEmail() {

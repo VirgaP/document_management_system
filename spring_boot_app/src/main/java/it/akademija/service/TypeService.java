@@ -1,6 +1,8 @@
 package it.akademija.service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -12,6 +14,7 @@ import it.akademija.dto.TypeDTO;
 import it.akademija.entity.Group;
 import it.akademija.entity.Type;
 import it.akademija.entity.TypeGroup;
+import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.IncomingRequestBody;
 import it.akademija.repository.GroupRepository;
 import it.akademija.repository.TypeGroupRepository;
@@ -22,14 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TypeService {
 
-    @Autowired
-    private TypeRepository typeRepository;
+    private final TypeRepository typeRepository;
+    private final TypeGroupRepository typeGroupRepository;
+    private final GroupRepository groupRepository;
 
     @Autowired
-    private TypeGroupRepository typeGroupRepository;
-
-    @Autowired
-    private GroupRepository groupRepository;
+    public TypeService(TypeRepository typeRepository, TypeGroupRepository typeGroupRepository, GroupRepository groupRepository) {
+        this.typeRepository = typeRepository;
+        this.typeGroupRepository = typeGroupRepository;
+        this.groupRepository = groupRepository;
+    }
 
     @Transactional
     public List<TypeDTO> getTypes() {
@@ -61,7 +66,7 @@ public class TypeService {
 
     @Transactional
     public TypeDTO getTypeByTitle(String title){
-        Type type = typeRepository.findByTitle(title);
+        Type type = getExistingType(title);
         TypeDTO typeDTO = new TypeDTO(type.getTitle());
         //log.info("Returns type {}", title);
         return typeDTO;
@@ -69,7 +74,7 @@ public class TypeService {
 
     @Transactional
     public TypeDTO getTypeGroups(String title){
-        Type type = typeRepository.findByTitle(title);
+        Type type = getExistingType(title);
         TypeDTO typeDTO = new TypeDTO(
                 type.getTitle(),
                 type.getTypeGroups()
@@ -98,14 +103,18 @@ public class TypeService {
 
     @Transactional
     public void editType(IncomingRequestBody request, String title){
-        Type type = typeRepository.findByTitle(title);
+        Type type = getExistingType(title);
         type.setTitle(request.getTitle());
     }
 
     @Transactional
     public void deleteType(String title){
         log.info("Deletes type {}", title);
-        Type type = typeRepository.findByTitle(title);
+
+        // remove mapping to groups first
+        Type type = getExistingType(title);
+        type.getTypeGroups().forEach(typeGroupRepository::delete);
+        type.setTypeGroups(Collections.emptyList());
 
         typeRepository.delete(type);
     }
@@ -113,24 +122,37 @@ public class TypeService {
     @Transactional
     public void addUserGroup(String title, IncomingRequestBody request) {
         log.info("Adds type {} to the  group {}", title, request);
-        Type type = typeRepository.findByTitle(title);
-        Group group = groupRepository.findByname(request.getGroupName());
+        String groupName = request.getGroupName();
+
+        Type type = getExistingType(title);
+
+        if (type.getTypeGroups().stream().anyMatch(tg -> tg.getGroup().getName().equals(groupName))) {
+            return; // group already mapped to type
+        }
+
+        Group group = getExistingGroup(groupName);
 
         TypeGroup typeGroup = new TypeGroup();
         typeGroup.setGroup(group);
         typeGroup.setType(type);
-
         typeGroup.setReceive(request.isReceive());
         typeGroup.setSend(request.isSend());
 
-        typeGroupRepository.save(typeGroup);
+        typeGroup = typeGroupRepository.save(typeGroup);
+        type.addGroup(typeGroup);
+        group.addType(typeGroup);
     }
 
     @Transactional
     public void removeUserGroup(String title, String groupName){
         log.info("Removes type {} from group {}", title,  groupName);
-        Type type = typeRepository.findByTitle(title);
-        Group group = groupRepository.findByname(groupName);
+
+        Type type = getExistingType(title);
+        Group group = getExistingGroup(groupName);
+
+        if (type.getTypeGroups().stream().noneMatch(tg -> tg.getGroup().getName().equals(groupName))) {
+            return; // nothing to remove
+        }
 
         TypeGroup typeGroup = new TypeGroup();
         typeGroup.setGroup(group);
@@ -138,8 +160,18 @@ public class TypeService {
 
         typeGroupRepository.delete(typeGroup);
 
-        type.getTypeGroups().remove(typeGroup);
-        group.getTypeGroups().remove(typeGroup);
-
+        type.removeGroup(group);
+        group.removeType(type);
     }
+
+    private Type getExistingType(String title) {
+        return Optional.ofNullable(typeRepository.findByTitle(title))
+                .orElseThrow(() -> new ResourceNotFoundException("No such type exists: " + title));
+    }
+
+    private Group getExistingGroup(String groupName) {
+        return Optional.ofNullable(groupRepository.findByname(groupName))
+                .orElseThrow(() -> new ResourceNotFoundException("No such group exists: " + groupName));
+    }
+
 }

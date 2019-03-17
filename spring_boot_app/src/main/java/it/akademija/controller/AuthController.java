@@ -2,6 +2,7 @@ package it.akademija.controller;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,23 +40,23 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
+    private final GroupRepository groupRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtTokenProvider tokenProvider;
-
-    @Autowired
-    private GroupRepository groupRepository;
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, GroupRepository groupRepository) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
+        this.groupRepository = groupRepository;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -79,23 +81,28 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        Group group = groupRepository.findByname(requestUser.getGroupName());
+        Group group = Optional.ofNullable(requestUser.getGroupName())
+                .map(groupRepository::findByname)
+                .orElse(null);
+
+        if (group == null) {
+            return new ResponseEntity(new ApiResponse(false, "No such group exists " + requestUser.getGroupName()),
+                    HttpStatus.BAD_REQUEST);
+        }
 
         // Creating user's account
         User user = new User(
                 requestUser.getName(),
                 requestUser.getSurname(),
                 requestUser.getEmail(),
-                requestUser.getPassword(),
+                passwordEncoder.encode(requestUser.getPassword()),
                 requestUser.getAdmin()
         );
 
         user.addGroup(group);
         group.addUser(user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole1 = roleRepository.findByName(RoleName.ROLE_USER);
-
         Role userRole2 = roleRepository.findByName(RoleName.ROLE_ADMIN);
 
         if(requestUser.getAdmin() == true){
@@ -106,8 +113,6 @@ public class AuthController {
             log.info("User's role was set");
             user.setRoles(Collections.singleton(userRole1));
         }
-
-//        user.setRoles(Collections.singleton(userRole));
 
         log.info("User "+ user+ "saved to User Repository");
         User result = userRepository.save(user);

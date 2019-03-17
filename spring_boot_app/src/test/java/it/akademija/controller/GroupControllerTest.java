@@ -3,8 +3,6 @@ package it.akademija.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -75,24 +73,24 @@ public class GroupControllerTest {
 //        assertTrue(groups.length > 0);
 //    }
 
-    @Test
-    public void testGetGroups() throws Exception {
-        List<GroupDTO> groups =new ArrayList<>();
-        GroupDTO groupDTO = new GroupDTO();
-        groupDTO.setName("example");
-        GroupDTO groupDTO1 = new GroupDTO();
-        groupDTO.setName("example2");
-
-        groups.add(groupDTO);
-        groups.add(groupDTO1);
-
-        Mockito.when(service.getGroups().listIterator().hasNext());
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("api/group")).andExpect(status().is(200));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Test
+//    public void testGetGroups() throws Exception {
+//        List<GroupDTO> groups =new ArrayList<>();
+//        GroupDTO groupDTO = new GroupDTO();
+//        groupDTO.setName("example");
+//        GroupDTO groupDTO1 = new GroupDTO();
+//        groupDTO.setName("example2");
+//
+//        groups.add(groupDTO);
+//        groups.add(groupDTO1);
+//
+//        Mockito.when(service.getGroups().listIterator().hasNext());
+//        try {
+//            mockMvc.perform(MockMvcRequestBuilders.get("api/group")).andExpect(status().is(200));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Test
     public void testGetGroup() {

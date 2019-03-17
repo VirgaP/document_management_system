@@ -123,7 +123,7 @@ public class TypeController {
     @RequestMapping(path = "/{title}/{groupName}/remove", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value="Remove group", notes="Remove group form type groups list")
-    public void removeTypeFromDocument(
+    public void removeUserGroup(
             @PathVariable final String title,
             @PathVariable final String groupName
     ){
