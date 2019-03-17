@@ -4,28 +4,37 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Joiner;
-import it.akademija.entity.Document;
-import it.akademija.entity.User;
-import it.akademija.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.google.common.base.Joiner;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.DocumentDTO;
+import it.akademija.entity.Document;
 import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestMessage;
 import it.akademija.repository.DocumentRepository;
+import it.akademija.service.DocumentService;
+import it.akademija.service.DocumentSpecificationsBuilder;
+import it.akademija.service.SearchOperation;
+import it.akademija.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -37,15 +46,14 @@ public class DocumentController {
     private ApplicationEventPublisher eventPublisher;
     private final DocumentRepository documentRepository;
 
-
-
     @Autowired
     public DocumentController(DocumentService documentService, UserService userService, ApplicationEventPublisher eventPublisher, DocumentRepository documentRepository) {
         this.documentService = documentService;
         this.userService = userService;
         this.eventPublisher = eventPublisher;
+
         this.documentRepository = documentRepository;
-    }
+}
 
 
 
@@ -68,7 +76,6 @@ public class DocumentController {
 
         return documentRepository.findAll(spec);
     }
-
 
 //    @RequestMapping(value="user", method = RequestMethod.GET)
 //    public @ResponseBody item getitem(@RequestParam("data") String itemid)

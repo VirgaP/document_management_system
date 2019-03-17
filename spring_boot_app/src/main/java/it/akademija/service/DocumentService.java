@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -26,6 +27,7 @@ import it.akademija.entity.File;
 import it.akademija.entity.Type;
 import it.akademija.entity.User;
 import it.akademija.entity.UserDocument;
+import it.akademija.exceptions.ResourceNotFoundException;
 import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestMessage;
 import it.akademija.payload.RequestUser;
@@ -43,35 +45,32 @@ import lombok.extern.slf4j.Slf4j;
 public class DocumentService {
 
 
-    @Autowired
-    private DocumentRepository documentRepository;
+    private final DocumentRepository documentRepository;
+    private final PagedDocumentRepository pagedDocumentRepository;
+    private final TypeRepository typeRepository;
+    private final UserRepository userRepository;
+    private final UserDocumentRepository userDocumentRepository;
+    private final DBFileRepository dbFileRepository;
+    private final FileRepository fileRepository;
+    private final FileStorageService fileStorageService;
+    private final FileStorageProperties fileStorageProperties;
+    private final EntityManager entityManager;
 
     @Autowired
-    private PagedDocumentRepository pagedDocumentRepository;
-
-    @Autowired
-    private TypeRepository typeRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserDocumentRepository userDocumentRepository;
-
-    @Autowired
-    private DBFileRepository dbFileRepository;
-
-    @Autowired
-    private FileRepository fileRepository;
-
-    @Autowired
-    private FileStorageService fileStorageService;
-
-    @Autowired
-    private FileStorageProperties fileStorageProperties;
-
-    @Autowired
-    private EntityManager entityManager;
+    public DocumentService(DocumentRepository documentRepository, PagedDocumentRepository pagedDocumentRepository, TypeRepository typeRepository,
+            UserRepository userRepository, UserDocumentRepository userDocumentRepository, DBFileRepository dbFileRepository, FileRepository fileRepository,
+            FileStorageService fileStorageService, FileStorageProperties fileStorageProperties, EntityManager entityManager) {
+        this.documentRepository = documentRepository;
+        this.pagedDocumentRepository = pagedDocumentRepository;
+        this.typeRepository = typeRepository;
+        this.userRepository = userRepository;
+        this.userDocumentRepository = userDocumentRepository;
+        this.dbFileRepository = dbFileRepository;
+        this.fileRepository = fileRepository;
+        this.fileStorageService = fileStorageService;
+        this.fileStorageProperties = fileStorageProperties;
+        this.entityManager = entityManager;
+    }
 
     @Transactional
     public List<DocumentDTO> getDocumentsPage(int page, int limit) {
@@ -259,7 +258,7 @@ public class DocumentService {
 
     @Transactional
     public DocumentDTO getDocumentByTitle(String uniqueNumber){
-        Document document = documentRepository.findByuniqueNumber(uniqueNumber);
+        Document document = getExisting(uniqueNumber);
 
         DocumentDTO documentDTO = new DocumentDTO(
                 document.getTitle(),
@@ -449,6 +448,11 @@ public class DocumentService {
 
         document.getUserDocuments().remove(userDocument);
         user.getUserDocuments().remove(userDocument);
+    }
+
+    private Document getExisting(String number) {
+        return Optional.ofNullable(documentRepository.findByuniqueNumber(number))
+                .orElseThrow(() -> new ResourceNotFoundException("No document exists with unique number " + number));
     }
 
 }
