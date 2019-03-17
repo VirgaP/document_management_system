@@ -54,6 +54,9 @@ public class UserControllerTest {
     private static final String TEST_GROUP_TWO = "testGroupTwo";
 
     @Autowired
+    private EntityManager entityManager;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -71,13 +74,14 @@ public class UserControllerTest {
     private UserService userService;
     private UserController userController;
     private PasswordEncoder passwordEncoder;
-    private EntityManager em;
     private UserSpecification userSpecification;
 
     @Before
     public void setUp() {
+        userSpecification = new UserSpecification();
         passwordEncoder = new BCryptPasswordEncoder(10);
-        userService = new UserService(em, userRepository, documentRepository, groupRepository, pagedUserRepository, passwordEncoder, userSpecification);
+        userService = new UserService(entityManager, userRepository, documentRepository, groupRepository, pagedUserRepository,
+                passwordEncoder, userSpecification);
         userController = new UserController(userService, userRepository);
 
         // add preexisting user groups
