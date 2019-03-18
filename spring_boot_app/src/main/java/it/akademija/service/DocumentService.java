@@ -101,8 +101,18 @@ public class DocumentService {
     }
 
     @Transactional
-    public int returnUserReceivedDocumentCountByTypeGroupDateRange(String email, Date startDate, Date endDate, String title, String name){
-        return documentRepository.findReceivedUserDocumentCountByGroupTypeDateRange(email, startDate, endDate, title, name);
+    public int returnUserSubmittedDocumentCountByTypeGroupDateRange(String email, Date startDate, Date endDate, String title, String name){
+        return documentRepository.findSubmittedUserDocumentCountByGroupTypeDateRange(email, startDate, endDate, title, name);
+    }
+
+    @Transactional
+    public int returnUserConfirmedDocumentCountByTypeGroupDateRange(String email, Date startDate, Date endDate, String title, String name){
+        return documentRepository.findConfirmedUserDocumentCountByGroupTypeDateRange(email, startDate, endDate, title, name);
+    }
+
+    @Transactional
+    public int returnUserRejectedDocumentCountByTypeGroupDateRange(String email, Date startDate, Date endDate, String title, String name){
+        return documentRepository.findRejectedUserDocumentCountByGroupTypeDateRange(email, startDate, endDate, title, name);
     }
 
     @Transactional

@@ -50,11 +50,25 @@ public class DocumentController {
     }
 
 
-    @GetMapping("{email}/{startDate}/{endDate}/{title}/{name}")
-    public int getUserReceivedDocumentCountByTypeGroupDateRange(@PathVariable final String email,
+    @GetMapping("/submitted/{email}/{startDate}/{endDate}/{title}/{name}")
+    public int getUserSubmittedDocumentCountByTypeGroupDateRange(@PathVariable final String email,
                                                                 @PathVariable final Date startDate, @PathVariable final Date endDate,
                                                                 @PathVariable final String title, @PathVariable final String name) {
-        return documentService.returnUserReceivedDocumentCountByTypeGroupDateRange(email, startDate, endDate, title, name);
+        return documentService.returnUserSubmittedDocumentCountByTypeGroupDateRange(email, startDate, endDate, title, name);
+    }
+
+    @GetMapping("/confirmed/{email}/{startDate}/{endDate}/{title}/{name}")
+    public int getUserConfirmedDocumentCountByTypeGroupDateRange(@PathVariable final String email,
+                                                                @PathVariable final Date startDate, @PathVariable final Date endDate,
+                                                                @PathVariable final String title, @PathVariable final String name) {
+        return documentService.returnUserConfirmedDocumentCountByTypeGroupDateRange(email, startDate, endDate, title, name);
+    }
+
+    @GetMapping("/rejected/{email}/{startDate}/{endDate}/{title}/{name}")
+    public int getUserRejectedDocumentCountByTypeGroupDateRange(@PathVariable final String email,
+                                                                 @PathVariable final Date startDate, @PathVariable final Date endDate,
+                                                                 @PathVariable final String title, @PathVariable final String name) {
+        return documentService.returnUserRejectedDocumentCountByTypeGroupDateRange(email, startDate, endDate, title, name);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/find/specs")

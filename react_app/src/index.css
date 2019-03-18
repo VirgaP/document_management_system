@@ -148,6 +148,10 @@ margin-top: 5%;
   text-align: center;
 }
 
+.alert-notsubmitted{
+  margin-left: 10%;
+}
+
 #signed-in-user{
   position: relative;
   left: 45%;
@@ -718,6 +722,15 @@ color: white;
 
 #btn-statistics button{
   margin-left:2%;
+}
+
+#statistics-radio-group{
+  margin-left: 1px;
+  margin-top: 2%;
+}
+
+#statistics-radio-group p{
+  margin-right: 9%;
 }
 
 /* #admin-sarch-form .col-lg-6:nth-child() {

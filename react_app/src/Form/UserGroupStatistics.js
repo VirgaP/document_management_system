@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import { Input, Button, Icon, Radio, DatePicker, Select } from 'antd';
+import { Input, Button, Icon, notification, Radio, DatePicker, Select } from 'antd';
 import moment from 'moment';
 
 const Search = Input.Search;
@@ -31,6 +31,8 @@ export class UserGroupStatistics extends Component {
         }; 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.fetchSubmittedCount = this.fetchSubmittedCount.bind(this);
+        this.fetchConfirmedCount = this.fetchConfirmedCount.bind(this);
+        this.fetchRejectedCount = this.fetchRejectedCount.bind(this);
         this.resetSearch  = this.resetSearch.bind(this);
     }
 
@@ -82,7 +84,7 @@ export class UserGroupStatistics extends Component {
     }   
 
     fetchSubmittedCount(){
-        axios.get(`http://localhost:8099/api/documents/${this.state.email}/${this.state.startDate}/${this.state.endDate}/${this.state.typeTitle}/${this.state.groupName}`)
+        axios.get(`http://localhost:8099/api/documents/submitted/${this.state.email}/${this.state.startDate}/${this.state.endDate}/${this.state.typeTitle}/${this.state.groupName}`)
         .then(result => {
         
         this.setState({result: result.data, status:"pateikti(-as)"});
@@ -92,6 +94,31 @@ export class UserGroupStatistics extends Component {
           console.log(error);
         });
     }
+
+    fetchConfirmedCount(){
+        axios.get(`http://localhost:8099/api/documents/confirmed/${this.state.email}/${this.state.startDate}/${this.state.endDate}/${this.state.typeTitle}/${this.state.groupName}`)
+        .then(result => {
+        
+        this.setState({result: result.data, status:"patvirtinti(-as)"});
+        console.log("RESULT", result.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
+    fetchRejectedCount(){
+        axios.get(`http://localhost:8099/api/documents/rejected/${this.state.email}/${this.state.startDate}/${this.state.endDate}/${this.state.typeTitle}/${this.state.groupName}`)
+        .then(result => {
+        
+        this.setState({result: result.data, status:"atmesti(-as)"});
+        console.log("RESULT", result.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
 
     handleTypeSelectChange(value) {  
         console.log("selected ", value)
@@ -111,11 +138,28 @@ export class UserGroupStatistics extends Component {
         }
 
     handleSubmit(){
-        if(this.state.radioValue === "submitted") {
+        // if(this.state.radioValue === "submitted") {
+        //     this.fetchSubmittedCount()
+        // }else {
+        //     return null
+        // }
+        switch (this.state.radioValue) {
+            case 'submitted':
             this.fetchSubmittedCount()
-        }else {
-            return null
-        }
+            break;
+            case 'confirmed':
+            this.fetchConfirmedCount()
+            break;
+            case 'rejected':
+            this.fetchRejectedCount()
+            break;
+            default:
+            notification.error({
+                message: 'Prašome užpildyti visus paieškos laukus',
+                description: 'Abrkadabra - Dokumentų valdymo sistema - 2019'
+              });
+              return null;
+          }
        
     }
 
@@ -186,7 +230,7 @@ export class UserGroupStatistics extends Component {
                 </Select>
             </div>
         </div>
-        <span>
+        <span className="row" id="statistics-radio-group"><p>Pasirinkite dokumento būseną: </p>
             <RadioGroup onChange={this.onRadioChange} value={this.state.radioValue}>
             <Radio value={"submitted"}>Pateiktas</Radio>
             <Radio value={"confirmed"}>Patvirtintas</Radio>  
@@ -197,7 +241,7 @@ export class UserGroupStatistics extends Component {
       </div>
       {this.state.result &&
       <div className="container" id="statistics-search-result">
-        <p>Per užklausos laikotarpį nuo {this.state.startDateString} iki {this.state.startDateString} grupei {this.state.groupName.toUpperCase()} {this.state.status} {[this.state.result]} dokumentų tipo {this.state.typeTitle.toUpperCase()} dokumentai(-as)</p>
+        <p>Per užklausos laikotarpį nuo {this.state.startDateString} iki {this.state.endDateString} grupei {this.state.groupName.toUpperCase()} {this.state.status} {[this.state.result]} dokumentai (-as) {this.state.typeTitle.toUpperCase()}.</p>
       </div>
       }
       </section>

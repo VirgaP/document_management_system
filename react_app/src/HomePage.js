@@ -27,7 +27,9 @@ export class HomePage extends Component {
           submittedCount: 0,
           confirmedCount: 0,
           rejectedCount:0,
-          documents:[]
+          documents:[],
+          notSubmitted:'',
+          isActive: true,
         }; 
         
         const user = props.currentUser;
@@ -43,13 +45,13 @@ export class HomePage extends Component {
                     allCount: response.data[0],
                     submittedCount: response.data[1],
                     confirmedCount: response.data[2],
-                    rejectedCount: response.data[3]
+                    rejectedCount: response.data[3],
+                    notSubmitted: response.data[0] - response.data[1]
                 });
                 console.log("all count ", this.state.allCount)
                 console.log("subimmted ", this.state.submittedCount)
                 console.log("confirmed ", this.state.confirmedCount)
                 console.log("rejected ", this.state.rejectedCount)
-              
             })
             .catch(error => {
                 this.setState({
@@ -66,7 +68,6 @@ export class HomePage extends Component {
           .catch(function (error) {
             console.log(error);
           });
-
       }
 
       handleDownlaod = (index, filename) => {
@@ -94,14 +95,33 @@ export class HomePage extends Component {
                 console.log(error);
           }); 
         }
+
+        hideAlert() {
+          this.setState({
+            isActive: false,
+          });
+        }
       
   render() {
+    console.log('not submitted ', this.state.notSubmitted)
     
     return ( 
       <div className="container homepage" id="homepage-container">
       <div id="signed-in-user">
       <span>Sveiki, {this.state.user.name + ' ' + this.state.user.surname}</span>
       </div>
+      {this.state.isActive && 
+      <div>
+      {this.state.notSubmitted > 0 && 
+      <div className="alert alert-warning alert-dismissible fade show alert-notsubmitted" role="alert" id="myAlert">Jūsų siunčiamų dokumentų dėžutėje yra {this.state.notSubmitted} nepateiktas(-i) dokumentas(-ai)
+      <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={() => this.hideAlert()}>
+      <span aria-hidden="true">&times;</span>
+      </button>
+      </div> 
+      }
+      </div>
+      }
+    
       {this.state.user.admin &&
       <div className="user-search-container">
       <UserSearch/>
