@@ -12,7 +12,12 @@
 
 html,body{
   margin:0 !important;
-  overflow-x:hidden
+  overflow: auto;
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Helvetica Neue',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+}
+p{
+  font-size: 14px;
+  line-height: 22px;
 }
 
 .ant-layout-content {
@@ -30,6 +35,7 @@ html,body{
   width: 100%;
   margin-left: 13%;
   background-color:rgba(0, 0, 0, 0.05);
+  z-index: 999;
 }
 .ant-menu-item{
   left: 3%;
@@ -100,16 +106,19 @@ left: 58%;
 
 
 #instructions-container{
-  margin-left: 5%;
-  height: 90vh;
-  overflow: auto;
+  margin-top: 3%;
+  margin-left: 10%;
+  height: 95vh;
+  /* overflow: auto; */
   padding-bottom: 5%;
+  width: 90%;
 }
 
 #list_container{
   width: 80%;
   height: 90vh;
-  overflow: auto;
+  margin-top: 3%;
+  /* overflow: auto; */
 }
 
 #single_item_container{
@@ -131,9 +140,10 @@ margin-top: 5%;
   margin-bottom:10%;
   /* width: 80%; */
   max-width: 100%;
-  /* height: 95vh; */
-  height: 100%;
-  /* overflow: auto; */
+  height: 95vh;
+  z-index: inherit;
+  /* max-height: 100%; */
+  /* overflow-x: auto; */
   padding-bottom:3%;
   text-align: center;
 }
@@ -270,26 +280,6 @@ ul#attachements li{
   color: white;
 }
 
-#submitted{
-  background-color: lightskyblue;
-  color: white;
-}
-#notsubmitted{
-  background-color: lightcoral;
-  color: white;
-}
-#confirmed{
-  background-color: lightseagreen;
-  color: white;
-}
-#not-confirmed{
-  background-color: lightcoral;
-  color: white;
-}
-#rejected{
-  background-color: red;
-  color: white;
-}
 
 .new-document{
   padding-top: 3%;
@@ -319,50 +309,54 @@ ul#attachements li{
 .user-groups ul {
   padding-left: 20%;
 }
-.user-description{
-  background-color: white;
-  padding-top:5%;
- }
- .user-description div{
-   margin-left: 5%;
- }
+
+ .user-description th{
+  background-color: #ececec;
+  padding: 1%;
  
- .user-description p{
-   font-size: 18px;
  }
+ .user-description td{
+   font-size: 18px;
+   padding-right: 5%;
+   padding-top:3%;
+ }
+
  .add-group{
   background-color: white;
   padding-left:2%;
  }
- #user {
-  width: 80%;
-}
+
 .single-user{
-  margin:'auto';
-  padding-top: 3%;
+  margin-left: 10% !important;
+  width: 80%;
+  margin-top: 5%;
   margin-bottom:5%;
   padding-bottom:3%;
 }
 
+.add-user-group-select{
+  width: 43%;
+  margin-bottom: 2%;
+}
+
 .user_document_list{
-  overflow-x:auto;
+  /* overflow-x:auto; */
   background-color: white;
-  padding-top: 3%;
-  margin-top: 3%;
   margin-bottom:3%;
-  width: 70%;
+  width: 90%;
   padding-bottom:3%;
 }
 .item-list{
   background-color: white;
-  padding-top: 3%;
-  overflow-x:auto;
+  
   margin-top: 3%;
   margin-bottom:3%;
   /* width: 80%; */
   /* height: 20%; */
   padding-bottom:3%;
+  overflow-x:auto;
 }
+
 #customFile .custom-file-control:lang(en)::after {
   content: "Pasirinkti...";
 }
@@ -452,18 +446,20 @@ code {
   color: green
 }
 .user-documents-table th{
-  background-color: lightblue !important;
+  background-color:#f0f5ff !important;
+  border-top:solid 1px #adc6ff;
+
 }
 
 .received-documents-table th{
-  background-color: lightgreen !important;
+  background-color: #f6ffed !important;
+  border-top: solid 1px #b7eb8f;
 }
 
 .reject-message{
-  
   margin-bottom: 10px;
-  
 }
+
 .reject-message p {
   margin: auto;
   font-size: 12px;
@@ -481,9 +477,6 @@ code {
   text-align: center;
   height: 50px;
 }
-/* .container {
-  min-height:100%;
-  /* position:relative; */
 
 .login-container {
   max-width: 50%;
@@ -493,8 +486,15 @@ code {
   margin-bottom: 10%
 }
 
-.login-form-button {
-  width: 80%;
+.login-container{
+  border: solid 1px  #adc6ff;;
+  padding: 5%;
+  border-radius: 5px;
+  background-color:#f0f5ff; 
+  margin: auto;
+  -webkit-box-shadow: 10px 13px 27px -2px rgba(209,204,232,1);
+-moz-box-shadow: 10px 13px 27px -2px rgba(209,204,232,1);
+box-shadow: 10px 13px 27px -2px rgba(209,204,232,1);
 }
 
 .signup-container {
@@ -666,13 +666,64 @@ color: white;
 
 }
 
-#components-form-demo-advanced-search .ant-advanced-search-form {
-  padding: 24px;
-  background: #fbfbfb;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
+.ant-calendar-picker-clear {
+  opacity: 1;
+  }
+
+#date-range-search{
+  /* position: static; */
+  display: inline;
+}
+#search-btn{
+  /* position: relative */
 }
 
+#admin-search-form{
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background-color:rgba(0, 0, 0, 0.05);
+  padding: 3%;
+  margin-top: 3%;
+}
+#admin-search-form h5{
+  margin-bottom: 3%;
+}
+#statistics-search-form{
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background-color:#f0f5ff; 
+  padding: 3%;
+  margin-top: 3%;
+  margin-left:10%; 
+  max-width: 80%;
+}
+
+#statistics-search-form h5{
+  margin-left: 2%;
+  margin-bottom: 3%;
+}
+#statistics-search-result{
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background-color:#f0f5ff; 
+  padding: 3%;
+  margin-top: 3%;
+  margin-left:10%; 
+  max-width: 80%;
+}
+#btn-statistics{
+  position:relative;
+  left: 470px;
+}
+
+#btn-statistics button{
+  margin-left:2%;
+}
+
+/* #admin-sarch-form .col-lg-6:nth-child() {
+  margin-top: 1%;
+  background-color: red;
+} */
 @media (min-width: 992px) {
   
 }

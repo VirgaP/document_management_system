@@ -4,7 +4,7 @@ import { Button, notification, Icon, Modal, Row, Col } from 'antd';
 import {Link} from 'react-router-dom'
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
-import FormInModal from './FormInModal';
+import FormInModal from './Form/FormInModal';
 
 export class SingleReceivedDocument extends Component {
     constructor(props) {

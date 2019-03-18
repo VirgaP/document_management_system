@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import it.akademija.dto.UserDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -73,6 +74,9 @@ public class DocumentService {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private DocumentAndTypeSpecification specification;
+
     @Transactional
     public List<DocumentDTO> getDocumentsPage(int page, int limit) {
         List<DocumentDTO> returnValue = new ArrayList<>();
@@ -96,6 +100,48 @@ public class DocumentService {
         return returnValue;
     }
 
+    @Transactional
+    public int returnUserReceivedDocumentCountByTypeGroupDateRange(String email, Date startDate, Date endDate, String title, String name){
+        return documentRepository.findReceivedUserDocumentCountByGroupTypeDateRange(email, startDate, endDate, title, name);
+    }
+
+    @Transactional
+    public Page<DocumentDTO> findDocumentsByNumberOrStatus(DocumentListRequest request, Pageable pageable) {
+        Page<Document> documentPage = pagedDocumentRepository.findAll(specification.getFilter(request), pageable);
+        final Page<DocumentDTO> documentDTOPage = documentPage.map(this::convertToDocumentDto);
+
+        return documentDTOPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> findByType(String title, Pageable pageable ){
+        Page<Document> documentPage = pagedDocumentRepository.findAllDocumentsByType(title, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> findUserDocumentByDateRange(String email, Date startDate, Date endDate, Pageable pageable ){
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserDocumentsDateRangePage(email, startDate, endDate, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> findByDateRange(Date startDate, Date endDate, Pageable pageable ){
+        Page<Document> documentPage = pagedDocumentRepository.getAllBetweenDates(startDate, endDate, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+    @Transactional
+    public Page<DocumentDTO> findUserDocumentBytTitle(String email, String title, Pageable pageable ){
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserDocumentsByTitle(email, title, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
+
+
 
     @Transactional
     public Page<DocumentDTO> listByPage(Pageable pageable) {
@@ -103,6 +149,7 @@ public class DocumentService {
         final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
         return documentDtoPage;
     }
+
 
     @Transactional
     public Page<DocumentDTO> pagedAllUserDocuments(String email, Pageable pageable) {
@@ -220,12 +267,15 @@ public class DocumentService {
                 new Date()
         );
         document.setType(type);
-        log.info(document.getTitle() + "type set");
+        log.info(document.getTitle() + " type set");
 
-//        document.addDbFile(file);
-        document.getDbFiles().add(file);
-        log.info(document.getDbFiles().add(file) + "file added");
-//        file.setDocument(document);
+
+        document.addDbFile(file);
+
+        file.setDocument(document);
+
+//        document.getDbFiles().add(file);
+        log.info(document.getDbFiles().add(file) + " file added");
 
         documentRepository.save(document);
         log.info(document.getTitle() + "has been saved");
@@ -234,7 +284,7 @@ public class DocumentService {
 
         userDocument.setUser(user);//ok
 
-        userDocument.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));//jei sutampa pavadinimas jpa nesupranta pagal kuri ieskoti, pakiesi i findbyunuique numbet
+        userDocument.setDocument(document);
 
         userDocumentRepository.save(userDocument);
 
@@ -247,7 +297,9 @@ public class DocumentService {
         List<File> files = document.getDbFiles();
 
         file.setDocument(document);
+
         document.addDbFile(file);
+
         fileRepository.save(file);
 
         ListIterator<File> listIterator = files.listIterator();

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
-import UserProvider from './UserProvider';
-import UserContext from './UserContext';
-import {notification, Icon, Checkbox, Menu, Dropdown, Select } from 'antd';
+import {notification, Icon, Checkbox, Tag, Dropdown, Select } from 'antd';
 import { checkServerIdentity } from 'tls';
 
 const Option = Select.Option;
@@ -63,17 +61,12 @@ export class SingleType extends Component {
       }
 
     handleSelectChange(e) {  
-      console.log("event", e)
-
         this.setState({ groupName: e });
-        // this.setState({ groupName: e.target.value });
-        console.log("groupName", this.state.groupName)
-      }
+    }
 
     handleChangeSend(event){
       const senders = (event.target.value == "siuntejai" ? true : false)
       this.toggleSendChecked()
-      // console.log('select send', event.target.value)
         this.setState({ 
           send : senders,
         });
@@ -81,7 +74,6 @@ export class SingleType extends Component {
 
     handleChangeReceive(event){
       const receivers = (event.target.value == "gavejai" ? true : false)
-      console.log('select receive', receivers)
       this.toggleReceiveChecked()
             // this.setState({ receive : event.target.value });
             this.setState({ 
@@ -117,7 +109,6 @@ export class SingleType extends Component {
     handleRemove(index) {
       let typeGroups = this.state.typeGroups
       let groupIdx = this.state.typeGroups.findIndex((group) => group.name === index); //find array elem index by name/index
-      console.log("Index", groupIdx)
       const newList = this.state.typeGroups.splice(groupIdx, 1); //delets element and returns removed element
        this.setState({ typeGroups: [...typeGroups] }); 
 
@@ -209,9 +200,9 @@ export class SingleType extends Component {
                     {(this.state.typeGroups.length == 0) ? <span>Dokumentas grupei nepriskirtas</span> : 
                     <ul>{this.state.typeGroups.map((element) => 
                        
-                       (<li id="group-name" key={element.group.name}>{element.group.name} &nbsp;
-                       {element.receive.toString() === 'true' ? 'Gavėjai' : '' } &nbsp;
-                       {element.send.toString() === 'true' ? 'Siuntėjai' : '' }
+                       (<li id="group-name" key={element.group.name}><Tag color={"geekblue"}>{element.group.name}</Tag> &nbsp;
+                       {element.receive.toString() === 'true' ? <Tag>Gavėjai</Tag> : '' } &nbsp;
+                       {element.send.toString() === 'true' ? <Tag>Siuntėjai</Tag> : '' }
                        &nbsp;<Icon type="close-circle" 
                   onClick={this.handleRemove.bind(this, element.group.name)}/>
                       </li>))}</ul>}
@@ -235,15 +226,6 @@ export class SingleType extends Component {
                   <Select.Option key={group.name} value={group.name}>{group.name}</Select.Option>
                 ))}
               </Select>
-
-            {/* <div>
-                <label className="control-label">Pasirinkite vartotojų grupę</label>
-                <select value={this.state.groupName} onChange={this.handleSelectChange} 
-                className="form-control" id="ntype" required>
-                  <option value="">...</option>
-                    {options}
-                </select>
-            </div> */}
             <span>
             <Checkbox checked={this.state.checked1} id="gavejai"  onChange={this.handleChangeReceive} value="gavejai" required>Gavėjai</Checkbox>
             <Checkbox checked={this.state.checked} id="siuntejai" onChange={this.handleChangeSend} value="siuntejai" required>Siuntėjai</Checkbox>

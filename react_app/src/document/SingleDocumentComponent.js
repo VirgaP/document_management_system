@@ -16,10 +16,10 @@ const SingleDocumentComponent = (props) => (
           <p>{props.document.createdDate}</p>
           <pre>Sukūrimo data</pre>
           </Col>
-          <Col span={12}>      
+          {props.document.submittedDate && <Col span={12}>      
           <p>{props.document.submittedDate ? props.document.submittedDate : "..."}</p>
           <pre>Pateikimo data</pre>
-        </Col>
+        </Col>}
      </Row>
      <Row>
         <Col span={12}>

@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Button, notification, Icon } from 'antd';
+import { Button, notification, Icon, Tag } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
-import UserProvider from './UserProvider';
-import UserContext from './UserContext';
 import AddGroup from './AddGroup';
 import UserDocumentListContainer from './UserDocumentListContainer'
 import {jszip} from 'jszip';
 import {Link} from 'react-router-dom';
-import ReceivedUserDocuments from './ReceivedUserDocuments'
 import SingleUserComponent from './user/SingleUserComponent';
 
 
@@ -67,7 +64,6 @@ export class SingleUser extends Component {
         var newGroup = {name};
         var newArray = this.state.userGroups.slice();       
         newArray.push(newGroup);   
-        console.log("NEW ARRAY", newArray)
         this.setState({userGroups:[...newArray]})
       }
   
@@ -76,7 +72,6 @@ export class SingleUser extends Component {
           .then(response => {
             console.log("Response", response);
             const responseStatus = response.status
-           console.log(responseStatus)
            if(responseStatus >= 200 && responseStatus < 300){ 
             notification.success({
               message: 'Abrkadabra - Dokumentų valdymo sistema - 2019',
@@ -113,22 +108,19 @@ export class SingleUser extends Component {
            .catch(function (error) {
                console.log(error);
            }); 
-       }
-  
-      
+       }  
     render() {
       return (
-        <div className="container" id="user">
         <div className="container single-user">
               <SingleUserComponent user={this.state.user}/>                
               <div className="container user-groups"> 
               <div className="row"> 
                 {String(this.state.currentUser) === 'true'?
                 
-                <div className="col-lg-6 col-md-6">
+                <div className="col-lg-4 col-md-4">
                       <h5>Vartotojo grupės: </h5>                    
                     {(!this.state.userGroups.length) ? <span>Vartotojas nerpriskirtas grupei</span> : 
-                        <ul>{this.state.userGroups.map((group) => (<li key={group.id}>{group.name}
+                        <ul>{this.state.userGroups.map((group) => (<li key={group.id}><Tag>{group.name}</Tag>
                   &nbsp;<Icon type="close-circle" onClick={this.handleRemove.bind(this, group.name)}/>
                         </li>))}</ul>}
                 </div> : 
@@ -147,16 +139,13 @@ export class SingleUser extends Component {
                         }
                   </div> 
                 </div>        
-                    
-              {/* <h4>Gauti dokumentai</h4>
-                      <ReceivedUserDocuments email={this.state.id}/> */}
-              <div className="card-footer">
+              
+              <div id="delete-user">
               
                     {String(this.state.currentUser) === 'true'?
                  <Button type="danger" onClick={this.DeleteUser.bind(this)}> Trinti vartototoją </Button>
                       : <span></span> }   
                  </div>
-          </div>
           </div>
               
       );

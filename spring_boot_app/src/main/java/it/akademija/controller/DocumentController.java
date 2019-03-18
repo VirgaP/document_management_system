@@ -1,10 +1,12 @@
 package it.akademija.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Joiner;
+import it.akademija.dto.UserDTO;
 import it.akademija.entity.Document;
 import it.akademija.entity.User;
 import it.akademija.service.*;
@@ -48,6 +50,12 @@ public class DocumentController {
     }
 
 
+    @GetMapping("{email}/{startDate}/{endDate}/{title}/{name}")
+    public int getUserReceivedDocumentCountByTypeGroupDateRange(@PathVariable final String email,
+                                                                @PathVariable final Date startDate, @PathVariable final Date endDate,
+                                                                @PathVariable final String title, @PathVariable final String name) {
+        return documentService.returnUserReceivedDocumentCountByTypeGroupDateRange(email, startDate, endDate, title, name);
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/find/specs")
     @ResponseBody
@@ -69,28 +77,39 @@ public class DocumentController {
         return documentRepository.findAll(spec);
     }
 
+    @RequestMapping(
+            value = "/findByNumberOrStatus",
+            method = RequestMethod.GET)
+    public Page<DocumentDTO> getDocumentsByNumberOrStatus(DocumentListRequest request, Pageable pageable) {
+        return documentService.findDocumentsByNumberOrStatus(request, pageable);
+    }
 
-//    @RequestMapping(value="user", method = RequestMethod.GET)
-//    public @ResponseBody item getitem(@RequestParam("data") String itemid)
+    @GetMapping("/{startDate}/{endDate}")
+    public Page<DocumentDTO> getDocumentsInDateRange(@PathVariable final Date startDate, @PathVariable final Date endDate, Pageable pageable) {
+        return documentService.findByDateRange(startDate, endDate, pageable);
+    }
+
+
+    @GetMapping("{email}/{startDate}/{endDate}")
+    public Page<DocumentDTO> getDUserocumentsInDateRange(@PathVariable final String email, @PathVariable final Date startDate, @PathVariable final Date endDate, Pageable pageable) {
+        return documentService.findUserDocumentByDateRange(email, startDate, endDate, pageable);
+    }
+
+    @GetMapping("/{email}/{title}/all")
+    public Page<DocumentDTO> allDocumentsByTypePaged(@PathVariable final String email, @PathVariable final String title, Pageable pageable) {
+        return documentService.findUserDocumentBytTitle(email, title, pageable);
+    }
 
 //    @ResponseBody item getitem(@RequestParam Map<String, String> queryParameters) //alows optional parameters
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/findDocument/{number}")
-//    @ResponseBody
-//    public List<User> searchDocument(@PathVariable final String number) {
-//
-////        Document filter = new Document();
-////        filter.setUniqueNumber(number);
-////        Specification<Document> spec = new DocumentSearchSpecification(filter);
-////
-////        List<User> result = userRepository.findAll(spec);
-////
-//        return null;
-//    }
+    @GetMapping("/{title}/all")
+    public Page<DocumentDTO> allDocumentsByTypePaged(@PathVariable final String title, Pageable pageable) {
+        return documentService.pagedAllUserDocuments(title, pageable);
+    }
 
     @GetMapping("/test")
     public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {
-        log.info("returning documentService.lisByPage");
+        log.info("returning documentService.listByPage");
 
         return documentService.listByPage(pageable);
     }

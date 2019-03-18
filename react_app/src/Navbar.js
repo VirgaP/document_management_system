@@ -31,15 +31,15 @@ class Navbar extends Component {
       >
         <Menu.Item key="/pagrindinis">
           <Link to="/pagrindinis">
-              <Icon type="home" className="nav-icon" /> Pagrindinis
+              <Icon style={{ fontSize: '16px' }} type="home" className="nav-icon" /> Pagrindinis
           </Link>
         </Menu.Item>
         <Menu.Item key="logout">
-              <Icon type="logout" /> Atsijungti
+              <Icon style={{ fontSize: '16px'}} type="logout" /> Atsijungti
         </Menu.Item>
         <Menu.Item id="icon-info">
           <Link to="/informacija">
-              <Icon type="info-circle" />
+              <Icon style={{ fontSize: '16px'}} type="info-circle" />
           </Link>
         </Menu.Item>
         {/* {this.props.currentUser.admin === true ? <AdminSubMenu/> : ''} */}

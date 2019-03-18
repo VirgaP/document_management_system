@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Type from './Type';
 import {Icon, notification} from 'antd';
 import {Link} from 'react-router-dom';
-import InputFormModal from './InputFormModal';
+import InputFormModal from './Form/InputFormModal';
 
 
 export class TypeListContainer extends Component {

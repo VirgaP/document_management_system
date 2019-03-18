@@ -94,23 +94,17 @@ export class UserSearch extends Component {
       
     const {result, data} = this.state
     return (
-      <div className="container" id="user-search-form">
-      <div>
-        <Search
+      <div className="container" id="admin-search-form">
+      <h5>Vartotojo paieška</h5>
+      <Search
       placeholder="Įveskite vartotojo el.pašto adresą arba pavardę"
       onSearch={value => this.handleSearch(value)}
     //   style={{ width: 400 }}
       enterButton
-    /> 
-    </div>
-    <br></br>
-        {/* {data.length > 0 &&
-        <Table dataSource={data} columns={columns} rowKey={record => record.email} pagination={this.state.pagination}
-        // pagination={false}
-        /> } */}
-        
+      /> 
+        <br></br><br></br>   
         <Table dataSource={data} columns={columns} rowKey={record => record.email} pagination={this.state.pagination} scroll={{ y: 200 }}
-        locale={{ emptyText: 'Duomenis negauti, prašome įvesti paieškos raktažodį' }}
+        locale={{ emptyText: 'Duomenys negauti, prašome įvesti paieškos raktažodį' }}
         // pagination={false}
         /> 
       </div>

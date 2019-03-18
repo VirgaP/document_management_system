@@ -15,37 +15,6 @@ import static org.springframework.data.jpa.domain.Specification.where;
 @Component
 public class UserSpecification extends BaseSpecification<User, UserListRequest>{
 
-
-//    private User filter;
-//
-//    public UserSpecification(User filter) {
-//        super();
-//        this.filter = filter;
-//    }
-
-
-//    public Predicate toPredicate(Root<User> root, CriteriaQuery<?> cq,
-//                                 CriteriaBuilder cb) {
-//
-//        Predicate p = cb.disjunction();
-//
-//        if (filter.getEmail() != null) {
-//            p.getExpressions().add(cb.equal(root.get("email"), filter.getEmail()));
-//        }
-//
-//        if (filter.getSurname() != null && filter.getName() != null) {
-//            p.getExpressions().add(cb.and(
-//                    cb.equal(root.get("surname"), filter.getSurname()),
-//                    cb.equal(root.get("name"), filter.getName())
-//            ));
-//        }
-//
-//
-//        return p;
-//
-//    }
-
-
     @Override
     public Specification<User> getFilter(UserListRequest request) {
         return (root, query, cb) -> {
@@ -76,27 +45,5 @@ public class UserSpecification extends BaseSpecification<User, UserListRequest>{
             );
         };
     }
-
-//    private UserSearchCriteria criteria;
-//
-//    public UserSpecification(UserSearchCriteria userSearchCriteria) {
-//
-//    }
-//
-//    @Override
-//    public Predicate toPredicate
-//            (Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-//
-//         if (criteria.getOperation().equalsIgnoreCase(":")) {
-//            if (root.get(criteria.getKey()).getJavaType() == String.class) {
-//                return builder.like(
-//                        root.<String>get(criteria.getKey()), "%" + criteria.getValue() + "%");
-//            } else {
-//                return builder.equal(root.get(criteria.getKey()), criteria.getValue());
-//            }
-//        }
-//        return null;
-//    }
-
 
 }

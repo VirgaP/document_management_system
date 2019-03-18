@@ -1,16 +1,5 @@
 package it.akademija.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -19,13 +8,17 @@ import it.akademija.entity.Type;
 import it.akademija.entity.TypeGroup;
 import it.akademija.payload.IncomingRequestBody;
 import it.akademija.service.TypeService;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-@Slf4j
+import java.util.List;
+
 @RestController
 @Api(value="type")
 @RequestMapping(value = "/api/types")
 public class TypeController {
+
 
     private final TypeService typeService;
 
@@ -37,7 +30,6 @@ public class TypeController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value="Get list of types", notes="Returns list of types")
     public List<TypeDTO> getTypes() {
-        log.info("Returns the list of types");
 
         return typeService.getTypes();
     }
@@ -45,28 +37,28 @@ public class TypeController {
     @RequestMapping(path = "/typeGroup", method = RequestMethod.GET)
     @ApiOperation(value="Get list of types", notes="Returns list of types mapped to groups")
     public List<TypeGroup> getTypesByGroup() {
-        log.info("Returns list of types mapped to groups");
+
         return typeService.getGroupTypes();
     }
 
     @RequestMapping(path = "/{email}/userDocumentTypes", method = RequestMethod.GET)
     @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
     public List<Type> getSenderTypesByUser(@PathVariable final String email) {
-        log.info("Returns list of document types mapped to user");
+
         return typeService.getUserSenderGroupTypes(email);
     }
 
     @RequestMapping(path = "/{email}/userReceivedDocumentTypes", method = RequestMethod.GET)
     @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
     public List<Type> getReceiverTypesByUser(@PathVariable final String email) {
-        log.info("Returns the user's with this email: "+ email+ "documents");
+
+        System.out.println("TIPAI " + typeService.getUserReceiverGroupTypes(email));
         return typeService.getUserReceiverGroupTypes(email);
     }
 
     @RequestMapping(path = "/{title}", method = RequestMethod.GET)
     @ApiOperation(value="Get type ", notes="Returns type")
     public TypeDTO getType(@PathVariable final String title){
-        log.info("Returns this type: "+ title);
         return typeService.getTypeByTitle(title);
     }
 
@@ -82,7 +74,7 @@ public class TypeController {
     public void createType(
             @ApiParam(value="Type data", required=true)
             @RequestBody final IncomingRequestBody requestBody){
-        log.info("The type was created");
+
         typeService.createType(requestBody);
     }
 
@@ -94,7 +86,6 @@ public class TypeController {
             @ApiParam(value="Type data", required=true)
             @PathVariable final String title)
     {
-        log.info("The type: "+ title+" deleted");
         typeService.deleteType(title);
     }
 
@@ -106,7 +97,6 @@ public class TypeController {
             @ApiParam(value = "Type data", required = true)
             @RequestBody IncomingRequestBody requestBody,
             @PathVariable final String title){
-        log.info(" This type: "+ title+ "is updated");
         typeService.editType(requestBody, title);
     }
 
@@ -117,7 +107,6 @@ public class TypeController {
             @ApiParam(value="Type data", required=true)
             @PathVariable final String title,
             @RequestBody final IncomingRequestBody requestBody){
-       log.info("Users groups has been added to "+ title+ " document type");
 
         typeService.addUserGroup(title, requestBody);
     }
@@ -129,7 +118,6 @@ public class TypeController {
             @PathVariable final String title,
             @PathVariable final String groupName
     ){
-        log.info("Users group "+ groupName+ " deleted");
         typeService.removeUserGroup(title, groupName);
     }
 

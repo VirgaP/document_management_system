@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import 'antd/dist/antd.css';
 import axios from 'axios';
-import SingleInput from './components/singleInput'
+import SingleInput from '../components/singleInput'
 import { Redirect } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { signup, checkEmailAvailability } from './security/apiUtil';
+import { signup, checkEmailAvailability } from '../security/apiUtil';
 import { 
   NAME_MIN_LENGTH, NAME_MAX_LENGTH, 
   SURNAME_MIN_LENGTH, SURNAME_MAX_LENGTH, 
   EMAIL_MAX_LENGTH,
   PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH
-} from './index';
+} from '../index';
 import { Form, Input, Button, notification } from 'antd';
 
 const FormItem = Form.Item;

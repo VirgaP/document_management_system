@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { Button, Modal, Row } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
-import UserProvider from './UserProvider';
-import UserContext from './UserContext';
 import AddGroup from './AddGroup';
 import {Link} from 'react-router-dom'
-import {notification, Icon, Popconfirm, Col } from 'antd';
+import {notification, Popconfirm, Col } from 'antd';
 import SingleDocumentComponent from './document/SingleDocumentComponent';
 import FileDownloadContainer from './FileDownloadContainer';
 
@@ -18,7 +16,6 @@ export class SingleDocument extends Component {
           
         this.state = {
            number: this.props.match.params.number, 
-          //  email:'user@email.com',
            document: {},
            userDocument:[],
            user:[],
@@ -63,16 +60,15 @@ export class SingleDocument extends Component {
         })
         .catch(function (error) {
           console.log(error);
-        });
-
-      }
-
+        }); 
+     
+      } 
+      
       handleResultChange(value) {
         var fileName = value;
         var newFile ={fileName}
         var newArray = this.state.userFiles.slice();       
         newArray.push(newFile);   
-        console.log("NEW ARRAY", newArray)
         this.setState({userFiles:[...newArray]})
 
       }

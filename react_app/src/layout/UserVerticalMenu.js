@@ -73,7 +73,7 @@ export class UserVerticalMenu extends Component {
       <div>
        <nav className="navigation">
         <ul className="mainmenu">
-          <li><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon style={{ fontSize: '26px', color: '#08c' }} theme="outlined" type="idcard" /> </Link></li>
+          <li><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon style={{ fontSize: '32px', color: '#4D4E4C' }} theme="outlined" type="idcard" /> </Link></li>
           <li><a href="#">Dokumentai</a>
             <ul className="submenu">
               <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Sukurti</Link></li>
@@ -84,6 +84,7 @@ export class UserVerticalMenu extends Component {
             </ul>
           </li>
           <li><Link to={'/naujas-dokumentas'}>Kurti dokumentą</Link></li>  
+          <li><Link to={`/${this.props.currentUser.email}/statistika`}>Statistika</Link></li>  
           {this.props.currentUser.admin && 
           <li><a href="#">Vartotojai</a>
           <ul className="submenu">
@@ -92,20 +93,11 @@ export class UserVerticalMenu extends Component {
           </ul>
           </li>}
           {this.props.currentUser.admin && 
-          <li><Link to={'/grupes'}>Grupės</Link>
-          <ul className="submenu">
-            <li><Link to={'/nauja-grupe'}>Kurti grupę</Link></li>
-            <li><Link to={'/visos-grupes'}>Vartotojų grupės</Link></li>
-          </ul>
-          </li>}
+          <li><Link to={'/visos-grupes'}>Vartotojų grupės</Link></li>}
            {this.props.currentUser.admin && 
-          <li><a href="#">Tipai</a>
-          <ul className="submenu">
-            <li><Link to={'/naujas-tipas'}>Kurti tipą</Link></li>
-            <li><Link to={'/visi-tipai'}>Dokumentų tipai</Link></li>
-          </ul>
-          </li>}
-          {this.props.currentUser.admin && <li><Link to={'/visi-dokumentai'}>Vartotojų dokumentai</Link></li>}
+          <li><Link to={'/visi-tipai'}>Dokumentų tipai</Link></li>}
+          {this.props.currentUser.admin && 
+          <li><Link to={'/visi-dokumentai'}>Vartotojų dokumentai</Link></li>}
         </ul>
       </nav> 
       </div> 

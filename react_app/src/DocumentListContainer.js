@@ -1,4 +1,3 @@
-import Institution from './Institution';  
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Table, Tag, Input, Button } from 'antd';

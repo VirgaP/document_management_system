@@ -18,6 +18,10 @@ public class DocumentListRequest {
 
     public String title;
 
+    public boolean confirmed;
+
+    public boolean submitted;
+
 
     public String getSearch() {
         return search;
@@ -66,5 +70,21 @@ public class DocumentListRequest {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public boolean isSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
     }
 }

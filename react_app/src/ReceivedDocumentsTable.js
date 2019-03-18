@@ -19,7 +19,8 @@ export class ReceivedDocumentsTable extends Component {
             page:'',
             filterDropdownVisible: false,
             searchText: '',
-            filteredInfo: null
+            filteredInfo: null,
+            documentTypes:[]
             }
         }
         onInputChange = (e) => {
@@ -28,6 +29,23 @@ export class ReceivedDocumentsTable extends Component {
     
         componentDidMount() {
             this.fetch();
+
+            axios.get(`http://localhost:8099/api/types/${this.state.email}/userReceivedDocumentTypes`)
+          .then(result => {
+            console.log("tipas", result)
+           const tipai = result.data;
+           var documentTypes = [];
+           tipai.forEach(element => {
+             documentTypes.push(element.title);
+           });
+ 
+           this.setState({ 
+             documentTypes
+           })
+         })
+         .catch(function (error) {
+             console.log(error);
+           }); 
         }
     
         onSearch = () => {

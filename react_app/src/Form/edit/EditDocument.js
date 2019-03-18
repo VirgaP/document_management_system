@@ -18,9 +18,6 @@ export class EditDocument extends Component {
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSelectChange = this.handleSelectChange.bind(this);
-
-        console.log("PROPS", this.props)
-        console.log("PARAMS NO", this.props.match.params.number)
       }
 
       setRedirect = () => {
@@ -30,7 +27,7 @@ export class EditDocument extends Component {
       }
       renderRedirect = () => {
         if (this.state.redirect) {
-          return <Redirect to='/' />
+          return <Redirect to={`/dokumentas/${this.state.number}`} />
         }
       }
 

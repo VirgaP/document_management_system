@@ -3,8 +3,6 @@ import { Button, Card } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
 import {Link } from "react-router-dom";
-import UserProvider from './UserProvider';
-import UserContext from './UserContext';
 
 export class SingleGroup extends Component {
     constructor(props) {

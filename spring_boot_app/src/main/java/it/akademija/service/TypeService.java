@@ -49,14 +49,14 @@ public class TypeService {
 
     @Transactional
     public List<Type> getUserSenderGroupTypes(String email) {
-        log.info("Returns user's group types");
+        log.info("Returns user's sending group types: ");
         return typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
     }
 
     @Transactional
     public List<Type> getUserReceiverGroupTypes(String email) {
-        log.info("Returns user's, whose email: "+ email);
-        return typeRepository.getUserGroupTypes(email).stream().collect(Collectors.toList());
+        log.info("Returns user's receiving group types: "+ email);
+        return typeRepository.getUserReceivingGroupTypes(email).stream().collect(Collectors.toList());
     }
 
     @Transactional

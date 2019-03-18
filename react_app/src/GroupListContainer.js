@@ -1,11 +1,9 @@
 import Group from './Group';  
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
-import UserGroupFormContainer from './UserGroupFormContainer';
 import {Icon, notification} from 'antd';
 import {Link} from 'react-router-dom';
-import InputFormModal from './InputFormModal';
+import InputFormModal from './Form/InputFormModal';
 
 export class GroupListContainer extends Component {
   constructor(props) {

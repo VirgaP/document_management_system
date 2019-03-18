@@ -78,14 +78,14 @@ export class AddGroup extends Component {
   render() {
     const options = this.state.groups.map((group)=> <option key={group.name}>{group.name}</option>)
     return (
-      <div className="col-lg-6 col-md-6 add-group">
+      <div className="col-lg-8 col-md-8 add-group">
 
         <h6>Pridėti vartotojo grupę</h6>
             <form onSubmit={this.handleSubmit}>
             <div >
             <label className="control-label">Pasirinkite vartotojo grupę</label>
                 <select value={this.state.name} onChange={this.handleSelectChange} 
-                className="form-control" id="ntype" required>
+                className="form-control add-user-group-select" id="ntype" required>
                   <option value="">...</option>
                     {options}
                 </select>

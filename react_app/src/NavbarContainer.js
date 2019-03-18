@@ -13,44 +13,38 @@ import { ACCESS_TOKEN } from './index';
 import './index.css';
 import axios from 'axios';
 import Login from './security/Login';
-import TypeForm from './TypeFormContainer';
+import TypeForm from './Form/TypeFormContainer';
 import DocumentList, { DocumentListContainer } from './DocumentListContainer';
 import LoadingIndicator from './layout/LoadingIndicator'
 import PrivateRoute from './security/PrivateRoute';
-import UserGroupFormContainer from './UserGroupFormContainer';
+import UserGroupFormContainer from './Form/UserGroupFormContainer';
 import { Layout, notification } from 'antd';
 import SingleUser from './SingleUser';
-import UserProvider from './UserProvider';
-import Registration from './Registration';
+import Registration from './Form/Registration';
 import HomePage from './HomePage';
 import SingleGroup from './SingleGroup';
 import Navbar from './Navbar'
-import EditGroup from './EditGroup';
+import EditGroup from './Form/edit/EditGroup';
 import SingleType from './SingleType';
-import EditType from './EditType';
+import EditType from './Form/edit/EditType';
 import UserListContainer from './UserListContainer'
 import Form from './Form/FormComponent';
-import EditDocument from './EditDocument';
+import EditDocument from './Form/edit/EditDocument';
 import SingleDocument from './SingleDocument';
-import UserHomePage from './UserHomePage';
-import Nowhere from './Nowhere';
-import Footer from './Footer';
-import UserContext from './UserContext';
+import Nowhere from './layout/Nowhere';
 import UserDocumentListContainer from './UserDocumentListContainer';
-import { AuthProvider } from './context/AuthContext';
 import SingleReceivedDocument from './SingleReceivedDocument';
 import ReceivedUserDocuments, { DocumentContext } from './ReceivedUserDocuments';
 import GroupListContainer from './GroupListContainer';
 import TypeListContainer from './TypeListContainer';
-import DocumentProvider from './ReceivedUserDocuments'
 import AdminRoute from './security/AdminRoute';
-import EditUser from './EditUser';
+import EditUser from './Form/edit/EditUser';
 import UserVerticalMenu from './layout/UserVerticalMenu';
 import UsersTable from './UsersTable';
 import UserDocumentTable from './UserDocumentTable';
 import ReceivedDocumentsTable from './ReceivedDocumentsTable';
-import GroupsPage from './layout/GroupsPage';
 import InstructionsAdmin from './layout/InstructionsAdmin';
+import UserGroupStatistics from './Form/UserGroupStatistics';
 
 const { Content } = Layout;
 
@@ -167,24 +161,18 @@ class App extends Component {
                 <PrivateRoute path="/gautas/dokumentas/:number" component={SingleReceivedDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 
                 <PrivateRoute path="/redaguoti/dokumentas/:number" component={EditDocument} isAuthenticated={isAuthenticated} />
                 <PrivateRoute path="/mano-dokumentai" component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
-                
                 <PrivateRoute path="/gauti/dokumentai" component={ReceivedDocumentsTable} isAuthenticated={isAuthenticated}  currentUser={this.state.currentUser} />
-              
-                <PrivateRoute path="/:email/dokumentai" component={UserDocumentTable} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
-               
+                <PrivateRoute path="/:email/dokumentai" component={UserDocumentTable} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>            
                 <AdminRoute path="/naujas-tipas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeForm}/>
                 <AdminRoute path='/visi-tipai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeListContainer}/>
                 <AdminRoute path="/tipas/:title" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={SingleType}/>}/>                 
-                <AdminRoute path="/redaguoti/tipas/:title" component={EditType} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> }/>   
-               
+                <AdminRoute path="/redaguoti/tipas/:title" component={EditType} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> }/>              
                 {/* <PrivateRoute path="/gauti/vartotojas/:email/" component={ReceivedUserDocuments} isAuthenticated={isAuthenticated}  currentUser={this.state.currentUser} /> */}
-               
                 <PrivateRoute path='/siusti/vartotojas/:email/' component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <AdminRoute path='/visi-dokumentai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={DocumentListContainer}/>
                 <AdminRoute path="/naujas-vartotojas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={Registration}/>
                 <AdminRoute path="/nauja-grupe" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserGroupFormContainer}/>
                 <AdminRoute path='/visos-grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupListContainer}/>
-                <AdminRoute path='/grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupsPage}/>
                 <AdminRoute path="/grupe/:name" isAdmin={isAdmin} isAuthenticated={isAuthenticated}  component={SingleGroup}/> 
                 <AdminRoute path="/redaguoti/grupe/:name" component={EditGroup} isAdmin={isAdmin} isAuthenticated={isAuthenticated} /> 
                 {/* <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/> */}
@@ -192,6 +180,7 @@ class App extends Component {
                 <AdminRoute path="/redaguoti/vartotojas/:email" component={EditUser} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> 
                 <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>
                 <PrivateRoute path="/vartotojas/:email" component={SingleUser} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
+                <PrivateRoute path='/:email/statistika'  component={UserGroupStatistics} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />
                 <Route path="*" component={Nowhere}/>  
               </Switch>
               </div>

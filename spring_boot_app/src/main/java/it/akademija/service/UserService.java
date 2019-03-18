@@ -106,7 +106,7 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
-        log.info("Returns user "+ user);
+        log.info("Returns user mapped to UserDTO"+ user);
         return userDTO;
     }
 

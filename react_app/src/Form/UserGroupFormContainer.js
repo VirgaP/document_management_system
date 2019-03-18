@@ -1,13 +1,9 @@
 import React, {Component} from 'react';   
-import SingleInput from './components/singleInput';
+import SingleInput from './../components/singleInput';
 import axios from 'axios';
 import 'antd/dist/antd.css';
-import { TITLE_MIN_LENGTH, TITLE_MAX_LENGTH } from './index';
+import { TITLE_MIN_LENGTH, TITLE_MAX_LENGTH } from './../index';
  import { Form, Input, Button, notification } from 'antd';
-
-
-import UserDocumentListContainer from './UserDocumentListContainer';
-import GroupListContainer from './GroupListContainer';
 const FormItem = Form.Item;
 
 class UserGroupFormContainer extends Component {  

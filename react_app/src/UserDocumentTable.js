@@ -1,4 +1,3 @@
-import Institution from './Institution';  
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Table, Tag, Input, Button, Icon, notification, Form, Select, Option, Menu } from 'antd';
@@ -39,7 +38,6 @@ export class UserDocumentTable extends Component {
         if (prevState.url!== this.state.url) {
             this.fetch();
         }
-        console.log(this.state.url)
     }
 
     onSearch = () => {
@@ -222,7 +220,7 @@ export class UserDocumentTable extends Component {
             <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted`}>PATEIKTI</Option>
             <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed`}>PATVIRTINTI</Option>
             <Option value={`http://localhost:8099/api/documents/${this.state.email}/rejected`}>ATMESTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/all`}>VISI SUKURTI</Option>
+            {/* <Option value={`http://localhost:8099/api/documents/${this.state.email}/all`}>VISI SUKURTI</Option> */}
         </Select>
     </div>
     <Table
@@ -232,7 +230,6 @@ export class UserDocumentTable extends Component {
         dataSource={this.state.data}
         pagination={this.state.pagination}
         loading={this.state.loading}
-        // expandedRowRender={record => <p style={{ margin: 0 }}>{record.userDocuments.map(item=>item.message) }</p>}
         onChange={this.handleTableChange}
         scroll={{ y: 360 }}
       />

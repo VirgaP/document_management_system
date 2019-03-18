@@ -12,7 +12,8 @@ class Login extends Component {
         const AntWrappedLoginForm = Form.create()(LoginForm)
         return (
             <div className="login-container">
-                <h3 className="page-title">Prisijungimas</h3>
+                <h6 className="page-title">DOKUMENTŲ VALDYMO SISTEMA ABRAKADABRA</h6>
+                <br></br>
                 <div className="login-content">
                     <AntWrappedLoginForm onLogin={this.props.onLogin} />
                 </div>
@@ -51,13 +52,13 @@ class LoginForm extends Component {
                 });
             }
         });
-        //redirects in index.js 
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            
+            <Form onSubmit={this.handleSubmit}>
                 <FormItem>
                     {getFieldDecorator('email', {
                         rules: [{ required: true, message: 'Įveskite el.pašto adresą.' }],
@@ -82,7 +83,7 @@ class LoginForm extends Component {
                 )}
                 </FormItem>
                 <FormItem>
-                    <Button type="primary" htmlType="submit" size="large" className="login-form-button">Prisijungti</Button>
+                    <Button type="primary" htmlType="submit" size="large" className="login-form-button" block>Prisijungti</Button>
                 </FormItem>
             </Form>
         );

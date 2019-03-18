@@ -1,13 +1,23 @@
 import React from 'react';
+import { Row, Col } from 'antd';
 
 
 const SingleUserComponent = (props) => (
     <div className="user-description container">
-    <div className="row"><p>{props.user.name}</p></div>
-    <div className="row"><pre>Pavardė: </pre><p>{props.user.surname}</p></div>
-    <div className="row"><pre>El.paštas: </pre><p>{props.user.email}</p></div>
-    <div className="row"><pre>Vartotojo įgaliojimai sistemoje: </pre>{String(props.user.admin) === 'true' ? <p>administratorius</p>:<p>vartototojas</p>}</div>
-
+    <table>
+  <tr>
+    <th>Vardas:</th>
+    <th>Pavardė:</th>
+    <th>El. paštas:</th>
+    <th>Įgaliojimai:</th>
+  </tr>
+  <tr>
+    <td>{props.user.name}</td>
+    <td>{props.user.surname}</td>
+    <td>{props.user.email}</td>
+    <td>{String(props.user.admin) === 'true' ? 'administratorius': 'vartototojas'}</td>
+  </tr>
+</table> 
 </div>
   );
   

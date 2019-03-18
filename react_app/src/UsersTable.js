@@ -1,4 +1,3 @@
-import Institution from './Institution';  
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Table, Tag, Input, Button , Icon} from 'antd';
@@ -189,7 +188,8 @@ export class UsersTable extends Component {
             render: userGroups => (
               <span>
                 {userGroups.map(tag => {
-                  return <Tag color='geekblue' key={tag.name}>{tag.name.toUpperCase()}</Tag>;
+                  return  <Link to={`grupe/${tag.name}`}>
+                  <Tag color='geekblue' key={tag.name}>{tag.name.toUpperCase()}</Tag></Link>;
                 })}
               </span>
             ),
