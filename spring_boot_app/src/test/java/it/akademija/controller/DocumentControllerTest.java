@@ -17,19 +17,20 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import it.akademija.FileStorageProperties;
 import it.akademija.dto.DocumentDTO;
 import it.akademija.entity.Document;
-import it.akademija.entity.Group;
 import it.akademija.entity.User;
 import it.akademija.entity.UserDocument;
 import it.akademija.exceptions.ResourceNotFoundException;
+import it.akademija.payload.RequestDocument;
 import it.akademija.repository.DBFileRepository;
 import it.akademija.repository.DocumentRepository;
 import it.akademija.repository.FileRepository;
@@ -132,6 +133,25 @@ public class DocumentControllerTest {
     }
 
     @Test
+    public void shouldLoadAllPagedUserDocuments() {
+        User existingUser = createUser();
+        Page<DocumentDTO> result = documentController.userAllDocumentsPaged(existingUser.getEmail(), PageRequest.of(0,10));
+
+        Assert.assertEquals(0, result.getTotalPages());
+        Assert.assertEquals(0, result.getTotalElements());
+
+        List<Document> existingDocuments = createDocuments(random.nextInt(50));
+        List<UserDocument> existingUserDocuments = userDocumentRepository.saveAll(DocumentTestingUtils.userDocumentFrom(existingUser, existingDocuments));
+
+        int pageSize = Math.abs(random.nextInt(7));
+
+        result = documentController.userAllDocumentsPaged(existingUser.getEmail(), PageRequest.of(1,pageSize));
+        Assert.assertEquals(Math.ceil(existingUserDocuments.size()/ (double) pageSize), result.getTotalPages(), 0.000000001);
+        Assert.assertEquals(existingUserDocuments.size(), result.getTotalElements());
+        assert result.getNumberOfElements() == pageSize || result.getNumberOfElements() == existingUserDocuments.size();
+    }
+
+    @Test
     public void shouldLoadDocument() {
         Document existingDocument = createDocument();
 
@@ -147,6 +167,108 @@ public class DocumentControllerTest {
         expectedException.expectMessage("No document exists with unique number " + nonExistingDocumentNumber);
 
         documentController.getDocument(nonExistingDocumentNumber);
+    }
+
+    @Test
+    public void shouldReturnUserSubmittedDocumentCount() {
+        User existingUser = createUser();
+
+        List<Document> documents = createDocuments(random.nextInt(50));
+        List<UserDocument> existingNonSubmittedUserDocuments = userDocumentRepository.saveAll(
+                setSubmitted(DocumentTestingUtils.userDocumentFrom(existingUser, documents), false));
+
+        int result = documentController.userSubmittedDocumentCount(existingUser.getEmail());
+        assert result == 0;
+
+        documents = createDocuments(random.nextInt(50));
+        List<UserDocument> existingSubmittedUserDocuments = userDocumentRepository.saveAll(
+                setSubmitted(DocumentTestingUtils.userDocumentFrom(existingUser, documents), true));
+
+        result = documentController.userSubmittedDocumentCount(existingUser.getEmail());
+        assert result == existingSubmittedUserDocuments.size();
+    }
+
+    @Test
+    public void shouldReturnUseConfirmedDocumentCount() {
+        User existingUser = createUser();
+
+        List<Document> documents = createDocuments(random.nextInt(50));
+        List<UserDocument> existingNonConfirmedUserDocuments = userDocumentRepository.saveAll(
+                setConfirmed(DocumentTestingUtils.userDocumentFrom(existingUser, documents), false));
+
+        int result = documentController.userConfirmedDocumentCount(existingUser.getEmail());
+        assert result == 0;
+
+        documents = createDocuments(random.nextInt(50));
+        List<UserDocument> existingConfirmedUserDocuments = userDocumentRepository.saveAll(
+                setConfirmed(DocumentTestingUtils.userDocumentFrom(existingUser, documents), true));
+
+        result = documentController.userConfirmedDocumentCount(existingUser.getEmail());
+        assert result == existingConfirmedUserDocuments.size();
+    }
+
+    @Test
+    public void shouldReturnUserRejectedDocumentCount() {
+        User existingUser = createUser();
+
+        List<Document> documents = createDocuments(random.nextInt(50));
+        List<UserDocument> existingNonRejectedUserDocuments = userDocumentRepository.saveAll(
+                setRejected(DocumentTestingUtils.userDocumentFrom(existingUser, documents), false));
+
+        int result = documentController.userRejectedDocumentCount(existingUser.getEmail());
+        Assert.assertEquals(0, result);
+
+        documents = createDocuments(random.nextInt(50));
+        List<UserDocument> existingRejectedUserDocuments = userDocumentRepository.saveAll(
+                setRejected(DocumentTestingUtils.userDocumentFrom(existingUser, documents), true));
+
+        result = documentController.userRejectedDocumentCount(existingUser.getEmail());
+        Assert.assertEquals(existingRejectedUserDocuments.size(), result);
+    }
+
+    @Test
+    public void shouldCreateDocument() {
+        RequestDocument requestDocument = DocumentTestingUtils.randomRequestDocument();
+        documentController.createDocument(requestDocument);
+
+        List<Document> documents = documentRepository.findAll();
+        Assert.assertEquals(1, documents.size());
+        Assert.assertTrue(DocumentTestingUtils.matches(documents.get(0), requestDocument));
+    }
+
+    @Test
+    public void shouldLoadAllDocuments() {
+        Assert.assertThat( documentController.getAllDocuments(), Matchers.hasSize(0));
+        int numberOfDocuments = random.nextInt(30);
+        createDocuments(numberOfDocuments);
+
+        Assert.assertThat( documentController.getAllDocuments(), Matchers.hasSize(numberOfDocuments));
+    }
+
+    @Test
+    public void shouldDeleteDocument() {
+        Document existingDocument = createDocument();
+        Assert.assertThat(documentRepository.findAll(), Matchers.hasSize(1));
+        documentController.deleteDocument(existingDocument.getUniqueNumber());
+        Assert.assertThat(documentRepository.findAll(), Matchers.hasSize(0));
+    }
+
+    private List<UserDocument> setSubmitted(List<UserDocument> docs, boolean submitted) {
+        return docs.stream()
+                .peek(d -> d.setSubmitted(submitted))
+                .collect(Collectors.toList());
+    }
+
+    private List<UserDocument> setConfirmed(List<UserDocument> docs, boolean confirmed) {
+        return docs.stream()
+                .peek(d -> d.setConfirmed(confirmed))
+                .collect(Collectors.toList());
+    }
+
+    private List<UserDocument> setRejected(List<UserDocument> docs, boolean rejected) {
+        return docs.stream()
+                .peek(d -> d.setRejected(rejected))
+                .collect(Collectors.toList());
     }
 
     private Document createDocument() {

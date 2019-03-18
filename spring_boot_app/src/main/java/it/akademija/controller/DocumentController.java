@@ -152,7 +152,7 @@ public class DocumentController {
 
     @GetMapping("/{email}/rejectedCount")
     public int userRejectedDocumentCount(@PathVariable final String email) {
-        return documentService.returnAllUserDocumentCount(email);
+        return documentRepository.getUserRejectedDocumentCount(email);
     }
 
     @RequestMapping(path="/new", method = RequestMethod.POST)

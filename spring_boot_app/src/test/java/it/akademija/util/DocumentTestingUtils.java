@@ -13,6 +13,7 @@ import it.akademija.dto.DocumentDTO;
 import it.akademija.entity.Document;
 import it.akademija.entity.User;
 import it.akademija.entity.UserDocument;
+import it.akademija.payload.RequestDocument;
 
 public class DocumentTestingUtils {
 
@@ -39,6 +40,17 @@ public class DocumentTestingUtils {
 
         document.setCreatedDate(Date.valueOf(created));
         document.setSubmittedDate(Date.valueOf(submitted));
+
+        return document;
+    }
+
+    public static RequestDocument randomRequestDocument() {
+        RequestDocument document = new RequestDocument();
+        document.setTitle(RandomStringUtils.randomAlphabetic(5, 8));
+        document.setDescription(RandomStringUtils.randomAlphabetic(15, 80));
+
+        document.setUniqueNumber(String.valueOf(uniqueNumber));
+        uniqueNumber += 1;
 
         return document;
     }
@@ -70,9 +82,9 @@ public class DocumentTestingUtils {
         }
 
         List<UserDocument> userDocuments = new ArrayList<>();
-        for (int i = 0; i < random.nextInt(6); i++) {
+        for (int i = 0; i < documents.size(); i++) {
             userDocuments.add(userDocumentFrom(user,
-                    documents.get(random.nextInt(documents.size()))));
+                    documents.get(i)));
         }
         return userDocuments;
     }
@@ -82,6 +94,12 @@ public class DocumentTestingUtils {
                 document.getTitle().equals(dto.getTitle()) &&
                 document.getCreatedDate().equals(dto.getCreatedDate()) &&
                 document.getSubmittedDate().equals(dto.getSubmittedDate()) &&
+                document.getDescription().equals(dto.getDescription());
+    }
+
+    public static boolean matches(Document document, RequestDocument dto) {
+        return document.getUniqueNumber().equals(dto.getUniqueNumber()) &&
+                document.getTitle().equals(dto.getTitle()) &&
                 document.getDescription().equals(dto.getDescription());
     }
 
