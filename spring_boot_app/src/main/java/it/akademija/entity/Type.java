@@ -1,10 +1,17 @@
 package it.akademija.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Type {
@@ -22,7 +29,7 @@ public class Type {
             mappedBy = "primaryKey.type",
             cascade = CascadeType.MERGE,
             orphanRemoval = true)
-    private List<TypeGroup> typeGroups = new ArrayList<>();
+    private List<TypeGroup> typeGroups = new CopyOnWriteArrayList<>();
 
 
     public Type(Long id, String title) {
@@ -63,7 +70,8 @@ public class Type {
     }
 
     public void removeGroup(Group group) {
-        this.typeGroups.remove(group);
+        this.typeGroups.stream().filter(tg -> tg.getGroup().getName().equals(group.getName()))
+                .forEach(tg -> typeGroups.remove(tg));
         group.getGroupUsers().remove(this);
     }
 

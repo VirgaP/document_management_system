@@ -1,14 +1,28 @@
 package it.akademija.entity;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.NaturalId;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.annotations.NaturalId;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.*;
 
 @Entity
 @Table(name = "admin_group")
@@ -25,7 +39,7 @@ public class Group implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "primaryKey.group",
             cascade = CascadeType.MERGE)
-    private List<TypeGroup> typeGroups = new ArrayList<>();
+    private List<TypeGroup> typeGroups = new CopyOnWriteArrayList<>();
 
 
     @JsonBackReference
@@ -44,6 +58,12 @@ public class Group implements Serializable {
 
     public List<TypeGroup> getTypeGroups() {
         return typeGroups;
+    }
+
+    public void removeType(Type type) {
+        typeGroups.stream().filter(tg -> tg.getType().getTitle().equals(type.getTitle()))
+                .forEach(tg -> typeGroups.remove(tg));
+        type.getTypeGroups().remove(this);
     }
 
     public void setTypeGroups(List<TypeGroup> typeGroups) {

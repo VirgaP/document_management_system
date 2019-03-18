@@ -10,24 +10,38 @@ import it.akademija.dto.UserDTO;
 import it.akademija.entity.Document;
 import it.akademija.entity.User;
 import it.akademija.service.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.google.common.base.Joiner;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.akademija.dto.DocumentDTO;
+import it.akademija.entity.Document;
 import it.akademija.payload.RequestDocument;
 import it.akademija.payload.RequestMessage;
 import it.akademija.repository.DocumentRepository;
+import it.akademija.service.DocumentService;
+import it.akademija.service.DocumentSpecificationsBuilder;
+import it.akademija.service.SearchOperation;
+import it.akademija.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -39,15 +53,14 @@ public class DocumentController {
     private ApplicationEventPublisher eventPublisher;
     private final DocumentRepository documentRepository;
 
-
-
     @Autowired
     public DocumentController(DocumentService documentService, UserService userService, ApplicationEventPublisher eventPublisher, DocumentRepository documentRepository) {
         this.documentService = documentService;
         this.userService = userService;
         this.eventPublisher = eventPublisher;
+
         this.documentRepository = documentRepository;
-    }
+}
 
 
     @GetMapping("/submitted/{email}/{startDate}/{endDate}/{title}/{name}")
@@ -91,6 +104,7 @@ public class DocumentController {
         return documentRepository.findAll(spec);
     }
 
+
     @RequestMapping(
             value = "/findByNumberOrStatus",
             method = RequestMethod.GET)
@@ -124,14 +138,11 @@ public class DocumentController {
     @GetMapping("/test")
     public Page<DocumentDTO> pathParamDocuments(Pageable pageable) {
         log.info("returning documentService.listByPage");
-
         return documentService.listByPage(pageable);
     }
 
     @GetMapping("/count")
     public Long documentCount() {
-        //logger.info("returns documentCount");
-
         return documentService.returnCount();
     }
 
@@ -182,7 +193,7 @@ public class DocumentController {
 
     @GetMapping("/{email}/rejectedCount")
     public int userRejectedDocumentCount(@PathVariable final String email) {
-        return documentService.returnAllUserDocumentCount(email);
+        return documentRepository.getUserRejectedDocumentCount(email);
     }
 
     @RequestMapping(path="/new", method = RequestMethod.POST)
@@ -196,14 +207,14 @@ public class DocumentController {
     @RequestMapping(path="/{email}/documents", method = RequestMethod.GET)
     @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
     List<DocumentDTO> getAllUserDocuments( @PathVariable final String email) {
-        //logger.info("returns all users documents filtered using email");
+        log.info("User documents filtered using email {}", email);
         return documentService.getAllUserDocuments(email);
     }
 
     @RequestMapping(path="/{email}/received/documents", method = RequestMethod.GET)
     @ApiOperation(value = "Get all user documents", notes = "Returns list of all documents associated with user")
     List<DocumentDTO> getAllUserReceivedDocuments( @PathVariable final String email) {
-        //logger.info("Returns all received documents filtered using email");
+        log.info("Returns all received documents filtered using email: {}", email);
         return documentService.getAllUserReceivedDocuments(email);
     }
 
@@ -219,7 +230,7 @@ public class DocumentController {
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value = "Get all documents", notes = "Returns list of all documents in database")
     List<DocumentDTO> getAllDocuments() {
-        //logger.info("Returns list of all documents in database");
+        //log.info("Returns list of all documents in database");
         return documentService.getAll();
     }
 
@@ -228,7 +239,7 @@ public class DocumentController {
     @ApiOperation(value = "Get one document", notes = "Returns one document by number")
     public DocumentDTO getDocument(
             @PathVariable final String uniqueNumber) {
-        //logger.info ("The document No: " + uniqueNumber+ " has been returned");
+        log.info ("The document No: " + uniqueNumber+ " has been returned");
         return documentService.getDocumentByTitle(uniqueNumber);
     }
 
@@ -240,7 +251,7 @@ public class DocumentController {
             @RequestBody RequestDocument request,
             @PathVariable final String uniqueNumber){
         documentService.updateDocument(request, uniqueNumber);
-        //logger.info("The document No: " + uniqueNumber + "has been updated");
+        log.info("The document No: " + uniqueNumber + "has been updated");
     }
 
     @RequestMapping(path = "/{uniqueNumber}", method = RequestMethod.DELETE)
@@ -248,7 +259,7 @@ public class DocumentController {
     @ApiOperation(value = "Delete document", notes = "Deletes document by number")
     void deleteDocument(@PathVariable final String uniqueNumber) {
         documentService.deleteDocument(uniqueNumber);
-        //logger.info("The document No: " +  uniqueNumber+ "has been deleted");
+        log.info("The document No: " +  uniqueNumber+ "has been deleted");
 
     }
 

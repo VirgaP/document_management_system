@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import it.akademija.entity.User;
 import it.akademija.repository.UserRepository;
-import it.akademija.util.TestingUtils;
+import it.akademija.util.UserTestingUtils;
 
 /**
  * Unit tests for {@link CustomUserDetailsService}
@@ -54,7 +54,7 @@ public class CustomUserDetailsServiceTest {
     public void shouldFailToFindByEmailIfNoUserExists() {
         Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(null);
 
-        String randomEmail = TestingUtils.randomEmail();
+        String randomEmail = UserTestingUtils.randomEmail();
 
         expectedException.expect(UsernameNotFoundException.class);
         expectedException.expectMessage("User not found with email : " + randomEmail);
@@ -64,7 +64,7 @@ public class CustomUserDetailsServiceTest {
 
     @Test
     public void shouldSucceedIfUserWasFoundById() {
-        User existingUser = TestingUtils.randomUser();
+        User existingUser = UserTestingUtils.randomUser();
         Long existingUserId = existingUser.getId();
         Mockito.when(userRepository.findById(existingUserId)).thenReturn(Optional.of(existingUser));
 
@@ -76,7 +76,7 @@ public class CustomUserDetailsServiceTest {
 
     @Test
     public void shouldSucceedIfUserWasFoundByEmail() {
-        User existingUser = TestingUtils.randomUser();
+        User existingUser = UserTestingUtils.randomUser();
         String existingEmail = existingUser.getEmail();
         Mockito.when(userRepository.findByEmail(existingEmail)).thenReturn(existingUser);
 

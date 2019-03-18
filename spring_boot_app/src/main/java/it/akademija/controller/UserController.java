@@ -77,7 +77,8 @@ public class UserController {
             @ApiParam(value="User data", required=true)
             @RequestBody final RequestUser requestUser){
 
-        log.info("The user created with email:" + requestUser.getEmail());
+        log.info("The user {} created", requestUser);
+
         userService.createUser(requestUser);
     }
 
@@ -100,14 +101,13 @@ public class UserController {
     @GetMapping("/user/checkEmailAvailability")
     public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
         Boolean isAvailable = !userRepository.existsByEmail(email);
-        log.info("Availability of email: "+ email+ " checked");
+        log.info("Availability of email:{}checked", email);
         return new UserIdentityAvailability(isAvailable);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ApiOperation(value="Get all users", notes="Returns list of all users")
     public List<UserDTO> getAllUsers() {
-        log.info("Returns list of all users");
         return userService.getUserWithoutDocuments();
     }
 
@@ -119,16 +119,14 @@ public class UserController {
     @RequestMapping(path = "/emails", method = RequestMethod.GET)
     @ApiOperation(value="Get all emails", notes="Returns list of all emails")
     public List<UserDTO> getAllUsersEmails() {
-        log.info("Returns list of all emails");
-
-        return userService.getUserEmails();
+       return userService.getUserEmails();
     }
 
     @RequestMapping(path = "/{email}", method = RequestMethod.GET)
     @ApiOperation(value = "Get one user", notes = "Returns one user by email")
     public UserDTO getUser(
             @PathVariable final String email) {
-        log.info("Returns the user, who's email: "+ email);
+        log.info("Returns the user, who's email: {}", email);
         return userService.getUser(email);
     }
 

@@ -36,7 +36,7 @@ public class DBFileStorageService {
         try {
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
-                log.info("File: "+ fileName+ " filename validation");
+                //log.info("File: "+ fileName+ " filename validation");
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
@@ -44,7 +44,7 @@ public class DBFileStorageService {
 
             return dbFileRepository.save(dbFile);
         } catch (IOException ex) {
-            log.info("File:" + fileName+ " storage validation");
+            //log.info("File:" + fileName+ " storage validation");
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
@@ -60,7 +60,7 @@ public class DBFileStorageService {
     }
 
     public List<String> getUserFileNames(String email) {
-        log.info("Returns user's {} files' names", email);
+        //log.info("Returns user's {} files' names", email);
        List<DBFile> dbFiles = dbFileRepository.findAllUserFiles(email);
        List<String> filenames = new ArrayList<>();
 

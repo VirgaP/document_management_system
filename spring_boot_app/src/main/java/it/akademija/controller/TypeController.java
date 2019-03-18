@@ -8,12 +8,14 @@ import it.akademija.entity.Type;
 import it.akademija.entity.TypeGroup;
 import it.akademija.payload.IncomingRequestBody;
 import it.akademija.service.TypeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @Api(value="type")
 @RequestMapping(value = "/api/types")
@@ -52,14 +54,13 @@ public class TypeController {
     @ApiOperation(value="Get list of user documents types", notes="Returns list of document types mapped to user")
     public List<Type> getReceiverTypesByUser(@PathVariable final String email) {
 
-        System.out.println("TIPAI " + typeService.getUserReceiverGroupTypes(email));
         return typeService.getUserReceiverGroupTypes(email);
     }
 
     @RequestMapping(path = "/{title}", method = RequestMethod.GET)
     @ApiOperation(value="Get type ", notes="Returns type")
     public TypeDTO getType(@PathVariable final String title){
-        return typeService.getTypeByTitle(title);
+         return typeService.getTypeByTitle(title);
     }
 
     @RequestMapping(path = "/groups/{title}", method = RequestMethod.GET)
@@ -75,6 +76,7 @@ public class TypeController {
             @ApiParam(value="Type data", required=true)
             @RequestBody final IncomingRequestBody requestBody){
 
+        log.info("The type {} was created", requestBody);
         typeService.createType(requestBody);
     }
 
@@ -84,8 +86,8 @@ public class TypeController {
     @ApiOperation(value="Type data", notes="Deletes type by title")
     public void deleteType(
             @ApiParam(value="Type data", required=true)
-            @PathVariable final String title)
-    {
+            @PathVariable final String title) {
+        log.info("The type {} deleted", title);
         typeService.deleteType(title);
     }
 
@@ -97,6 +99,7 @@ public class TypeController {
             @ApiParam(value = "Type data", required = true)
             @RequestBody IncomingRequestBody requestBody,
             @PathVariable final String title){
+        log.info(" Type {} is updated", title);
         typeService.editType(requestBody, title);
     }
 
@@ -114,10 +117,10 @@ public class TypeController {
     @RequestMapping(path = "/{title}/{groupName}/remove", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value="Remove group", notes="Remove group form type groups list")
-    public void removeTypeFromDocument(
+    public void removeUserGroup(
             @PathVariable final String title,
-            @PathVariable final String groupName
-    ){
+            @PathVariable final String groupName){
+        log.info("Type {} of group {} deleted", title, groupName);
         typeService.removeUserGroup(title, groupName);
     }
 

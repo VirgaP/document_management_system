@@ -69,7 +69,6 @@ public class FileController {
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        //log.info("These files: "+ files???????);
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
@@ -130,7 +129,6 @@ public class FileController {
             }
             zippedOut.finish();
         } catch (Exception e) {
-            log.info("ZipOutputStream exception");
             // Exception handling goes here
         }
     }
@@ -147,7 +145,7 @@ public class FileController {
         } catch (IOException e) {
             e.printStackTrace();
             //Do something when exception is thrown
-            log.info("IOException is catched");
+            //log.info("IOException is catched");
         }
         return new ResponseEntity<>(output.getData(), output.getHeaders(), HttpStatus.OK);
     }

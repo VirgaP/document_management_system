@@ -43,17 +43,18 @@ import it.akademija.repository.PagedUserRepository;
 import it.akademija.repository.UserRepository;
 import it.akademija.security.UserPrincipal;
 import it.akademija.service.UserService;
-import it.akademija.util.TestingUtils;
+import it.akademija.util.UserTestingUtils;
 
-/**
- * Integration tests for {@link UserController}
- */
+// Integration tests for UserController and UserService
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserControllerTest {
 
     private static final String TEST_GROUP_ONE = "testGroupOne";
     private static final String TEST_GROUP_TWO = "testGroupTwo";
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -67,20 +68,20 @@ public class UserControllerTest {
     @Autowired
     private GroupRepository groupRepository;
 
-
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     private UserService userService;
     private UserController userController;
     private PasswordEncoder passwordEncoder;
-    private EntityManager em;
     private UserSpecification userSpecification;
 
     @Before
     public void setUp() {
+        userSpecification = new UserSpecification();
         passwordEncoder = new BCryptPasswordEncoder(10);
-        userService = new UserService(em, userRepository, documentRepository, groupRepository, pagedUserRepository, passwordEncoder, userSpecification);
+        userService = new UserService(entityManager, userRepository, documentRepository, groupRepository, pagedUserRepository,
+                passwordEncoder, userSpecification);
         userController = new UserController(userService, userRepository);
 
         // add preexisting user groups
@@ -98,7 +99,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldPassIfEmailNotTaken() {
-        String nonExistingEmail = TestingUtils.randomEmail();
+        String nonExistingEmail = UserTestingUtils.randomEmail();
 
         UserIdentityAvailability result = userController.checkEmailAvailability(nonExistingEmail);
         Assert.assertTrue(result.getAvailable());
@@ -111,7 +112,7 @@ public class UserControllerTest {
         List<UserDTO> foundUsers = userController.getAllUsers();
         Assert.assertTrue(foundUsers.size() == 10);
 
-        boolean userMatch = TestingUtils.usersMatch(existingUsers, foundUsers);
+        boolean userMatch = UserTestingUtils.usersMatch(existingUsers, foundUsers);
         Assert.assertTrue(userMatch);
     }
 
@@ -134,12 +135,12 @@ public class UserControllerTest {
 
         UserDTO userDTO = userController.getUser(existingUser.getEmail());
 
-        Assert.assertTrue(TestingUtils.usersMatch(existingUser, userDTO));
+        Assert.assertTrue(UserTestingUtils.usersMatch(existingUser, userDTO));
     }
 
     @Test
     public void shouldFailToGetNonExistingUser() {
-        String nonExistingEmail = TestingUtils.randomEmail();
+        String nonExistingEmail = UserTestingUtils.randomEmail();
 
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage("User with email " + nonExistingEmail + " does not exist!");
@@ -159,7 +160,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldFailToDeleteNonExistentUser() {
-        String nonExistingEmail = TestingUtils.randomEmail();
+        String nonExistingEmail = UserTestingUtils.randomEmail();
 
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage("User with email " + nonExistingEmail + " does not exist!");
@@ -204,12 +205,12 @@ public class UserControllerTest {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Input of email of group name cannot be null.");
 
-        userController.removeGroupFromUser(TestingUtils.randomEmail(), null);
+        userController.removeGroupFromUser(UserTestingUtils.randomEmail(), null);
     }
 
     @Test
     public void shouldFailToRemoveExistingGroupFromNonExistingUser() {
-        String email = TestingUtils.randomEmail();
+        String email = UserTestingUtils.randomEmail();
 
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage("User with email " + email + " does not exist!");
@@ -251,7 +252,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldFailToAddExistingGroupToNonExistingUser() {
-        String nonExistingEmail = TestingUtils.randomEmail();
+        String nonExistingEmail = UserTestingUtils.randomEmail();
 
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage("User with email " + nonExistingEmail + " does not exist!");
@@ -265,18 +266,18 @@ public class UserControllerTest {
         User existingUser = createUser();
         String email = existingUser.getEmail();
 
-        RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
+        RequestUser requestUser = UserTestingUtils.randomUserUpdateRequest(email);
         userController.updateUser(requestUser, email);
 
         User loadedUser = userRepository.findByEmail(email);
 
-        Assert.assertTrue(TestingUtils.usersMatch(loadedUser, requestUser, email));
+        Assert.assertTrue(UserTestingUtils.usersMatch(loadedUser, requestUser, email));
     }
 
     @Test
     public void shouldFailToEdiNonExistingUser() {
-        String email = TestingUtils.randomEmail();
-        RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
+        String email = UserTestingUtils.randomEmail();
+        RequestUser requestUser = UserTestingUtils.randomUserUpdateRequest(email);
 
         expectedException.expect(ResourceNotFoundException.class);
         expectedException.expectMessage("User with email " + email + " does not exist!");
@@ -289,7 +290,7 @@ public class UserControllerTest {
         User existingUser = createUser();
         String email = existingUser.getEmail();
 
-        RequestUser requestUser = TestingUtils.randomUserUpdateRequest(email);
+        RequestUser requestUser = UserTestingUtils.randomUserUpdateRequest(email);
         // fields not updated
         requestUser.setAdmin(null);
         requestUser.setName(null);
@@ -303,7 +304,7 @@ public class UserControllerTest {
         Assert.assertEquals(existingUser.getAdmin(), loadedUser.getAdmin());
         Assert.assertEquals(existingUser.getName(), loadedUser.getName());
         // check updated fields
-        Assert.assertTrue(TestingUtils.usersMatch(loadedUser, requestUser, email));
+        Assert.assertTrue(UserTestingUtils.usersMatch(loadedUser, requestUser, email));
     }
 
     @Test
@@ -327,15 +328,15 @@ public class UserControllerTest {
         combinesPagedUsers.addAll(pageTwo.getContent());
 
         // make sure correct users are returned in the expected order
-        Assert.assertTrue(TestingUtils.usersMatchInOrder(existingUsers, combinesPagedUsers));
+        Assert.assertTrue(UserTestingUtils.usersMatchInOrder(existingUsers, combinesPagedUsers));
     }
 
     @Test
     public void shouldReturnDtoOfCurrentUser() {
-        UserPrincipal currentUser = TestingUtils.randomUserPrincipal();
+        UserPrincipal currentUser = UserTestingUtils.randomUserPrincipal();
         UserDTO currentUserDTO = userController.getCurrentUser(currentUser);
 
-        Assert.assertTrue(TestingUtils.usersMatch(currentUser, currentUserDTO));
+        Assert.assertTrue(UserTestingUtils.usersMatch(currentUser, currentUserDTO));
     }
 
     @Test
@@ -396,7 +397,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldFailToDownloadCsvOfNonExistingUser() throws IOException {
-        String email = TestingUtils.randomEmail();
+        String email = UserTestingUtils.randomEmail();
 
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
         StringWriter stringWriter = new StringWriter();
@@ -423,17 +424,17 @@ public class UserControllerTest {
     private List<User> createUsers(int numberOfUsers) {
         List<User> users = new ArrayList<>();
         for (int i = 0; i < numberOfUsers; i++) {
-            users.add(userRepository.save(TestingUtils.randomUser()));
+            users.add(userRepository.save(UserTestingUtils.randomUser()));
         }
         return users;
     }
 
     private User createUser() {
-        return userRepository.save(TestingUtils.randomUser());
+        return userRepository.save(UserTestingUtils.randomUser());
     }
 
     private User createUserWithTestGroups() {
-        User user = TestingUtils.randomUser();
+        User user = UserTestingUtils.randomUser();
         user.addGroup(groupRepository.findByname(TEST_GROUP_ONE));
         user.addGroup(groupRepository.findByname(TEST_GROUP_TWO));
         return userRepository.save(user);
