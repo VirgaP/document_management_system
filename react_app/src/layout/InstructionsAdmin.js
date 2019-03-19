@@ -10,6 +10,7 @@ export class InstructionsAdmin extends Component {
       }
   render() {
     return (
+      <section>
       <div className="container" id="instructions-container">
       <h4>Dokumentų valdymo sistemos instrukcija</h4>
       <p>Administratoriaus atmintinė</p>
@@ -33,6 +34,7 @@ export class InstructionsAdmin extends Component {
         </Panel>
       </Collapse>
       </div>
+      </section>
     )
   }
 }

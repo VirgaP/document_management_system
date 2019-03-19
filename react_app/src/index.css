@@ -165,19 +165,12 @@ margin-top: 5%;
   margin-left: 5%;
 }
 
-
+#homepage-download-btn{
+  margin-left: 10%;
+}
 .user-search-container{
   margin-left: 10%;
   /* width: 50%; */
-}
-
-#hp1, #hp2, #hp3, #hp4 {
-  background-color: white;
-  padding: 15px;
-  font-size: 24px;
-  margin: auto;
-  border-radius:10px;
-  text-align: center;
 }
 .single-document-display{
   margin:'auto';

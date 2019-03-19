@@ -76,7 +76,7 @@ export class UserVerticalMenu extends Component {
           <li><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon style={{ fontSize: '32px', color: '#4D4E4C' }} theme="outlined" type="idcard" /> </Link></li>
           <li><a href="#">Dokumentai</a>
             <ul className="submenu">
-              <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Sukurti</Link></li>
+              <li><Link to={`/${this.props.currentUser.email}/dokumentai`}>Siunčiami</Link></li>
               <li>
                 <Link to={'/gauti/dokumentai'}>Gauti</Link>
                 {/* <Badge count={this.state.count} showZero /> */}

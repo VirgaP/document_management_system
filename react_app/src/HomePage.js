@@ -4,8 +4,6 @@ import { Button, Icon, Badge } from 'antd';
 import 'antd/dist/antd.css';
 import {Link} from 'react-router-dom'
 import ZipDownload from './ZipDownload';
-import InstructionsAdmin from './layout/InstructionsAdmin';
-import UserDocumentTable from './UserDocumentTable';
 import UserDocumentCountDisplay from './user/UserDocumentCountDisplay';
 import UserSearch from './Form/UserSearch';
 import reqwest from 'reqwest';
@@ -36,7 +34,7 @@ export class HomePage extends Component {
           console.log("props", user) 
           console.log("COUNT ", this.props.count)
     }
-   
+
       componentDidMount = () => { 
         axios.get(`http://localhost:8099/api/users/${this.state.email}/test/info`)
             .then(response => {
@@ -48,10 +46,6 @@ export class HomePage extends Component {
                     rejectedCount: response.data[3],
                     notSubmitted: response.data[0] - response.data[1]
                 });
-                console.log("all count ", this.state.allCount)
-                console.log("subimmted ", this.state.submittedCount)
-                console.log("confirmed ", this.state.confirmedCount)
-                console.log("rejected ", this.state.rejectedCount)
             })
             .catch(error => {
                 this.setState({
@@ -138,29 +132,10 @@ export class HomePage extends Component {
       <UserDocumentCountDisplay allCount={this.state.allCount} submittedCount={this.state.submittedCount} 
       confirmedCount={this.state.confirmedCount} rejectedCount={this.state.rejectedCount}/>      
       
-        <div className="container homepage-link-list">
-          {/* <div className="row">
-          <div className="col-lg-3 col-md-3" id="hp1"><Link to={`/vartotojas/${this.props.currentUser.email}`}> <Icon type="idcard" /> Vartotojo paskyra</Link></div>
-          <div className="col-lg-3 col-md-3" id="hp2"> <Link to={'/naujas-dokumentas'}><Icon type="file-add" /> Kurti naują dokumentą</Link></div>
-          <div className="col-lg-3 col-md-3" id="hp3"><Link to={`/siusti/vartotojas/${this.props.currentUser.email}`}><Icon type="folder" /> Sukurti dokumentai</Link></div>
-          <div className="col-lg-3 col-md-3" id="hp4"> 
-          <Badge count={this.state.count} showZero>
-          <Link to={{
-            pathname: `/gauti/vartotojas/${this.props.currentUser.email}`,
-            state: { 
-              documentsReceived: this.state.documentsReceived,
-              count: this.state.count
-            }
-          }}>Gauti</Link>&nbsp;&nbsp;&nbsp;  
-            <a href="#" className="head-example" />
-          </Badge>
-          
-          {/* <span className="badge badge-pill badge-primary">{this.state.count}</span> */}
-          {/* </div>
-          </div>  */} 
+        <div className="container" id="homepage-download-btn">
           <div className="row">
           <ZipDownload email={this.state.email} />
-          <button className="btn btn-default" onClick={this.handleDownlaod.bind(this)}>Gauti csv</button> 
+          <button className="btn btn-light" onClick={this.handleDownlaod.bind(this)}>Atsisiųsti dokumentų aprašą</button> 
           </div>
         </div>       
       </div>   
