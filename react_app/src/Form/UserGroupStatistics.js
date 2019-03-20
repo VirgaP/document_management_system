@@ -296,7 +296,6 @@ export class UserGroupStatistics extends Component {
       {this.state.resultUser &&
       <div className="container" id="statistics-search-result">
       <span id="top-users-list"><ul>{this.state.resultUser.map(item=><li>Vartotojas {item[0]} pateikė {item[1]} dokumentą (-us)</li>)}</ul></span>
-      <p>Vartotojai nerasti. Patikslinkite užklausą ir bandykite dar kartą.</p>
       </div>
       }
       </section>

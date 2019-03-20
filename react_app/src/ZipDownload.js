@@ -36,7 +36,7 @@ export class ZipDownload extends Component {
   render() {
     return (
       <div>
-         <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiusti archyva</button> 
+         <button className="btn btn-primary" onClick={this.handleZip.bind(this)}>Atisiųsti archyvą</button> 
       </div>
     )
   }

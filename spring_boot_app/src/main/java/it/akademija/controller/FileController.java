@@ -1,12 +1,15 @@
 package it.akademija.controller;
 
+import io.swagger.models.Response;
 import it.akademija.util.BinaryOutputWrapper;
 import it.akademija.util.FileUtil;
 import it.akademija.entity.File;
 import it.akademija.payload.UploadFileResponse;
 import it.akademija.repository.FileRepository;
 import it.akademija.service.FileStorageService;
+import jdk.nashorn.internal.ir.RuntimeNode;
 import lombok.extern.slf4j.Slf4j;
+import org.h2.util.IOUtils;
 import org.hibernate.engine.jdbc.StreamUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -19,13 +22,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.websocket.server.PathParam;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 @Slf4j
@@ -44,6 +53,7 @@ public class FileController {
     @Autowired
     private FileUtil fileUtil;
 
+    private static final String OUTPUT_FOLDER = "./uploads";
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
@@ -75,14 +85,11 @@ public class FileController {
                 .collect(Collectors.toList());
     }
 
-//    @GetMapping("/download/{fileId}")
     @GetMapping("/download/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        // Load file as Resource
-//        String fileName = fileRepository.findByFileName(fileId).getFileName();
+ 
         Resource resource = fileStorageService.loadFileAsResource(fileName);
 
-        // Try to determine file's content type
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
@@ -90,11 +97,9 @@ public class FileController {
             log.info("Could not determine file type.");
         }
 
-        // Fallback to the default content type if type could not be determined
         if(contentType == null) {
             contentType = "application/octet-stream";
         }
-
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
@@ -105,47 +110,43 @@ public class FileController {
     @GetMapping("/downloadZip/{email}")
     public void downloadFile(@PathVariable String email, HttpServletResponse response) {
 
-        response.setContentType("application/octet-stream");
+        response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment;filename=download.zip");
         response.setStatus(HttpServletResponse.SC_OK);
 
         List<String> fileNames = fileRepository.findAllUserFilesNames(email);
 
-        System.out.println("############# file size ###########" + fileNames.size());
-
-        try (ZipOutputStream zippedOut = new ZipOutputStream(response.getOutputStream())) {
+        try (ZipOutputStream zippedOut = new ZipOutputStream(response.getOutputStream()))
+        {
             for (String file : fileNames) {
-                FileSystemResource resource = new FileSystemResource(file);
+
+                Resource resource = fileStorageService.loadFileAsResource(file);
 
                 ZipEntry e = new ZipEntry(resource.getFilename());
                 // Configure the zip entry, the properties of the file
                 e.setSize(resource.contentLength());
                 e.setTime(System.currentTimeMillis());
-                // etc.
                 zippedOut.putNextEntry(e);
                 // And the content of the resource:
                 StreamUtils.copy(resource.getInputStream(), zippedOut);
                 zippedOut.closeEntry();
             }
             zippedOut.finish();
+
         } catch (Exception e) {
-            // Exception handling goes here
+            e.printStackTrace();
         }
     }
 
     @GetMapping("/zip/{email}")
-    public ResponseEntity<?> generatePDF(@PathVariable String email) {
+    public ResponseEntity<?> generateZip(@PathVariable String email) {
         BinaryOutputWrapper output = new BinaryOutputWrapper();
         List<String> fileNames = fileRepository.findAllUserFilesNames(email);
         try {
-//            String inputFile = "sample.pdf";
-//            output = fileUtil.prepDownloadAsPDF(inputFile);
-            //or invoke prepDownloadAsZIP(...) with a list of filenames
             output = fileUtil.prepDownloadAsZIP(fileNames);
         } catch (IOException e) {
             e.printStackTrace();
-            //Do something when exception is thrown
-            //log.info("IOException is catched");
+
         }
         return new ResponseEntity<>(output.getData(), output.getHeaders(), HttpStatus.OK);
     }

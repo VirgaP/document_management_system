@@ -44,7 +44,7 @@ public class FileUtil {
         ZipOutputStream zipOutputStream = new ZipOutputStream(byteOutputStream);
 
         for(String filename: filenames) {
-            File file = new File(filename);
+            File file = new File("./uploads" + filename);
             zipOutputStream.putNextEntry(new ZipEntry(filename));
             FileInputStream fileInputStream = new FileInputStream(file);
             IOUtils.copy(fileInputStream, zipOutputStream);
