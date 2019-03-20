@@ -11,10 +11,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import it.akademija.dto.UserDTO;
+import it.akademija.repository.DocumentRepository;
 import org.hibernate.annotations.NaturalId;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @SqlResultSetMapping(name = "userDocumentDetails", classes = {
@@ -37,6 +38,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
                 "email"})
 })
 public class User {
+    @Autowired
+    DocumentRepository documentRepository;
 
     private Long id;
 
@@ -92,12 +95,6 @@ public class User {
     }
 
 
-//    public User(String name, String surname, String email, boolean admin) {
-//        this.name = name;
-//        this.surname = surname;
-//        this.email = email;
-//        this.admin = admin;
-//    }
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",

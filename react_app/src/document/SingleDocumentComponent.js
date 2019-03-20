@@ -1,10 +1,9 @@
+/* eslint-disable no-unused-expressions */
 import React from 'react';
 import {Card, Row, Col} from 'antd';
 
-
 const SingleDocumentComponent = (props) => (
-  
-   
+
     <Card className="document-description" id="document-card" title={props.document.title} bordered={false}>
       <Row className="reject-message">
       {props.userDocument.map(el=>el.rejected &&
@@ -12,13 +11,21 @@ const SingleDocumentComponent = (props) => (
       )}
       </Row>
       <Row>
-        <Col span={12}>
+        <Col span={6}>
           <p>{props.document.createdDate}</p>
           <pre>Sukūrimo data</pre>
           </Col>
-          {props.document.submittedDate && <Col span={12}>      
+          {props.document.submittedDate && <Col span={6}>      
           <p>{props.document.submittedDate ? props.document.submittedDate : "..."}</p>
           <pre>Pateikimo data</pre>
+        </Col>}
+        {props.document.confirmedDate && <Col span={6}>      
+          <p>{props.document.confirmedDate ? props.document.confirmedDate : "..."}</p>
+          <pre>Patvirtinimo data</pre>
+        </Col>}
+        {props.document.rejectedDate && <Col span={6}>      
+          <p>{props.document.rejectedDate ? props.document.rejectedDate : "..."}</p>
+          <pre>Atemtimo data</pre>
         </Col>}
      </Row>
      <Row>
@@ -56,23 +63,6 @@ const SingleDocumentComponent = (props) => (
         </Col>
        </Row>
       </Card>
-    //   <div className="status">
-    // <h5>Dokumento būsena: </h5>
-    // <div className="row">
-    //   <br></br>
-    // {props.userDocument.map(el=>(String (el.saved)) === 'true' && <span className="document-status" id="saved">Sukurtas</span>
-    // )} <br></br> 
-    // { props.userDocument.map(el=>(String (el.submitted)) === 'true' && <span className="document-status" id="submitted">Pateiktas</span>  
-    // // : <span className="document-status" id="notsubmitted">Nepateiktas</span>
-    // )} <br></br> 
-    // {props.userDocument.map(el=>(String (el.confirmed)) === 'true' && <span className="document-status" id="confirmed">Patvirtintas</span> 
-    // // : <span className="document-status" id="not-confirmed">Nepatvirtintas</span>  
-    // )} <br></br> 
-    // {props.userDocument.map(el=>(String (el.rejected)) === 'true' && <span className="document-status" id="rejected">Atmestas</span> 
-    // )} 
-
-    //  </div>
-    //  </div>
   );
   
   export default SingleDocumentComponent;  

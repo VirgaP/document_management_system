@@ -23,7 +23,9 @@ export class SingleUser extends Component {
            groupsArray:[],
            email:'',
            allDocumentsCount:'',
-           submittedDocumentsCount:''
+           submittedDocumentsCount:0,
+           confirmedDocumentsCount:0,
+           rejectedDocumentsCount:0
         }
         console.log('PROPS', props)
         console.log("id", this.state.id);
@@ -53,6 +55,21 @@ export class SingleUser extends Component {
             const submittedDocumentsCount = submitted.length
             this.setState({submittedDocumentsCount});
           console.log('count submitted', submittedDocumentsCount)
+          let confirmed = [];
+          result.data.userDocuments.forEach(function(item){
+            if(item.confirmed == true){
+              confirmed.push(item) }
+            })
+            const confirmedDocumentsCount = confirmed.length
+            this.setState({confirmedDocumentsCount});
+
+            let rejected = [];
+          result.data.userDocuments.forEach(function(item){
+            if(item.rejected == true){
+              rejected.push(item) }
+            })
+            const rejectedDocumentsCount = rejected.length
+            this.setState({rejectedDocumentsCount});
           })
           .catch(function (error) {
             console.log(error);
@@ -112,7 +129,12 @@ export class SingleUser extends Component {
     render() {
       return (
         <div className="container single-user">
-              <SingleUserComponent user={this.state.user}/>                
+              <SingleUserComponent user={this.state.user} 
+              allDocumentsCount={this.state.allDocumentsCount}
+              submittedDocumentsCount={this.state.submittedDocumentsCount}
+              confirmedDocumentsCount={this.state.confirmedDocumentsCount}
+              rejectedDocumentsCount={this.state.rejectedDocumentsCount}
+              />                
               <div className="container user-groups"> 
               <div className="row"> 
                 {String(this.state.currentUser) === 'true'?

@@ -13,10 +13,7 @@ export class UsersTable extends Component {
         pagination: {},
         loading: false,
         page:'',
-        filterDropdownVisible: false,
-        searchText: '',
-        submitted: [],
-        filteredInfo: null
+    
       }
     }
 
@@ -28,32 +25,7 @@ export class UsersTable extends Component {
         this.fetch();
     }
 
-    onSearch = () => {
-        const { searchText } = this.state;
-        const reg = new RegExp(searchText, 'gi');
-        this.setState({
-          filterDropdownVisible: false,
-          data: this.state.data.map((record) => {
-            const match = record.email.match(reg);
-            if (!match) {
-              return null;
-            }
-            return {
-              ...record,
-              name: (
-                <span>
-                  {record.name.split(reg).map((text, i) => (
-                    i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
-                  ))}
-                </span>
-              ),
-            };
-          }).filter(record => !!record),
-        });
-      }
-
     handleTableChange = (pagination, filters, sorter, value) => {
-      console.log("VALUE", value)
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
@@ -68,7 +40,6 @@ export class UsersTable extends Component {
          page: pagination.current,
           ...filters,
         });
-        console.log("filter ", filters)
       }
     
       fetch = (params = {}) => {
@@ -99,93 +70,30 @@ export class UsersTable extends Component {
         });
       }
 
-      clearFilters = () => {
-        this.setState({ filteredInfo: null, searchText: null });
-      }
-
   render() {
-
-    let { filteredInfo, searchText } = this.state;
-    filteredInfo = filteredInfo || {};
-    searchText = searchText || {};
 
     const columns = [{
         title: 'Vardas',
         dataIndex: 'name',
-        // sorter: true,
-        width: '15%',
+        width: '20%',
       },
       {
         title: 'Pavardė',
         dataIndex: 'surname',
         // sorter: true,
-        width: '15%',
+        width: '20%',
       },
       {
         title: 'El.paštas',
         dataIndex: 'email',
         render: email =><Link to={`/vartotojas/${email}`}>{email}</Link>,
-             filterDropdown: (
-            <div className="custom-filter-dropdown">
-              <Input
-                placeholder="Įveskite el.paštą"
-                value={this.state.searchText}
-                onChange={this.onInputChange}
-                onPressEnter={this.onSearch}
-              />
-              <Button type="primary" onClick={this.onSearch}>Ieškoti</Button>
-            </div>
-          ),
-          filterDropdownVisible: this.state.filterDropdownVisible || null,
-          onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }),
-        width: '15%',
-      }
-      ,{
-        title: 'Viso sukurta',
-        dataIndex: 'userDocuments',
-        key: 'all',
-        render: userDocuments => userDocuments.length,
-        filters: [
-          { text: '> 10', value: 10 },
-          // { text: '< 10', value: 10 },
-        ],
-        filteredValue: filteredInfo.all || null,
-        onFilter: (value, record) => record.userDocuments.length > value,
-        width: '10%',
+        width: '25%',
       }, 
       {
-        title: 'Pateikti',
-        dataIndex: 'userDocuments',
-        key: 'submitted',
-        render: userDocuments => userDocuments.map(item => {
-          let submitted =[];
-          if(item.submitted == true){
-            submitted.push(item) 
-            console.log("DATA", submitted.length)
-          } 
-          return submitted.length
-        }),
-        width: '10%',
-      }, 
-      {
-        title: 'Patvirtinti',
-        dataIndex: 'userDocuments',
-        key: 'confirmed',
-        render: userDocuments => userDocuments.map(item => {
-          let confirmed =[];
-          if(item.confirmed == true){
-            confirmed.push(item) 
-            console.log("DATA", confirmed.length)
-          } 
-          return confirmed.length
-        }),
-        width: '10%',
-      },
-      {
-            title: 'Grupės',
-            dataIndex: 'userGroups',
-            key: 'groups',
-            render: userGroups => (
+        title: 'Grupės',
+        dataIndex: 'userGroups',
+        key: 'groups',
+        render: userGroups => (
               <span>
                 {userGroups.map(tag => {
                   return  <Link to={`grupe/${tag.name}`}>
@@ -193,7 +101,7 @@ export class UsersTable extends Component {
                 })}
               </span>
             ),
-            width: '25%',
+            width: '30%',
           },
       {
         title: '',
@@ -209,10 +117,11 @@ export class UsersTable extends Component {
     <div className="container" id="list_container">
     <div className="container user_document_list">
         <div className="table-operations">
-          <Button onClick={this.clearFilters}>Išvalyti filtravimą</Button>
+        <h5>Sistemoje registruoti vartotojai</h5>
         </div>
  
     <Table
+        style={{width: "100%"}}
         columns={columns}
         rowKey={record => record.email}
         dataSource={this.state.data}

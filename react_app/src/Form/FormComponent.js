@@ -5,7 +5,6 @@ import SingleInput from '../components/singleInput';
 import UploadFile from '../UploadFile';
 import {notification } from 'antd';
 import 'antd/dist/antd.css';
-import UserProvider from '../UserProvider';
 
 
 class Form extends Component {
@@ -19,6 +18,8 @@ class Form extends Component {
         documents: [],
         groups: [],
         userGroups:[],
+        userType:[],
+        serTypes:[],
         redirect: false,
         types: [],
         typeTitle: '',
@@ -31,7 +32,6 @@ class Form extends Component {
         file:null,
         fileName: '',
         displayAddFiles: false,
-        newFileName:''
       };
 
       console.log("form", props)
@@ -45,11 +45,28 @@ class Form extends Component {
     }
   
     componentDidMount = () => {
+      axios.get('http://localhost:8099/api/types/typeGroup')
+      .then(result => {
+          const types = result.data;
+          this.setState({ 
+            types
+          })
+          console.log("tipai", types)
+          var groups = [];
+          types.forEach(element => {
+            groups.push(element.group.name);
+          });
+          this.setState({
+            groups
+          })
+        })
+        .catch(function (error) {
+            console.log(error);
+          }); 
 
         axios.get(`http://localhost:8099/api/types/${this.state.email}/userDocumentTypes`)
          .then(result => {
           const tipai = result.data;
-          console.log("result ", result)
           var documentTypes = [];
           tipai.forEach(element => {
             documentTypes.push(element.title);
@@ -90,7 +107,7 @@ class Form extends Component {
   handleSubmit(e) {
       e.preventDefault();
 
-  const uniqueNumber = this.state.date + '-' + this.state.user.name.charAt(0).toUpperCase() + this.state.user.name.charAt(0).toUpperCase();
+  const uniqueNumber = this.state.date + '-' + this.state.email;
 
   console.log("Tipas ", this.state.typeTitle);
   console.log('Pavadinimas ', this.state.title);
@@ -103,6 +120,8 @@ class Form extends Component {
     console.log(response.data)
   })
   this.handleClearForm(e);   
+  // const fileName = this.state.date + '-' + this.state.file.name; 
+  // console.log("FILENAME PLUS DATE", this.state.fileName);
 
   axios.post('http://localhost:8099/api/documents/new', {
    
@@ -111,8 +130,7 @@ class Form extends Component {
     typeTitle: this.state.typeTitle,
     email:this.state.email,
     uniqueNumber: uniqueNumber,
-    // fileName: this.state.file.name
-    fileName: this.state.newFileName
+    fileName: this.state.file.name
       })
       .then(response => {
           console.log("Response", response);
@@ -143,19 +161,12 @@ class Form extends Component {
 onChange(e) {
   this.setState({file:e.target.files[0]})
 
-  let file = e.target.files[0];
-  let fileExt = file.name.split('.')[file.name.split('.').length-1];
-  let fileNameWithoutExt = file.name.replace(`.${fileExt}`,'');
-  let newFileName = fileNameWithoutExt + '_' + this.state.date + '.' + fileExt;
-  this.setState({newFileName: newFileName})
-
   switch (e.target.name) {
     // Updated this
     case 'selectedFile':
       if(e.target.files.length > 0) {
           // Accessed .name from file 
           this.setState({ fileName: e.target.files[0].name });
-          
       }
     break;
     default:
@@ -163,24 +174,16 @@ onChange(e) {
    }
 }
 fileUpload(file){
-
   const url = 'http://localhost:8099/api/file/uploadFile';
-  // const formData = new FormData();
-  var file = new File(['foo'], 'text.txt', {type:'text/plain'});
-  var formdata = new FormData();
-  // this will override the file name
-  formdata.append('file', file, this.state.newFileName);
-  for(let entry of formdata.entries()) {
-    console.log(entry);
-  }
-  // formData.append('file',file)
-  // formData.append('fileName', this.state.date + this.state.file.name)
+  const formData = new FormData();
+  formData.append('file',file)
+  formData.append('fileName', this.state.date + + this.state.user.name.charAt(0).toUpperCase() + this.state.user.name.charAt(0).toUpperCase())
   const config = {
       headers: {
           'content-type': 'multipart/form-data'
       }
   }
-  return  axios.post(url, formdata,config)
+  return  axios.post(url, formData,config)
 }
 
   render() {
@@ -205,6 +208,7 @@ fileUpload(file){
             name={'title'}
             controlFunc={this.handleDocumentTitleChange}
             content={this.state.title}
+            placeholder={'Dokumento pavadinimas'}
            /> 
           <SingleInput 
             inputType={'text'}
@@ -212,6 +216,7 @@ fileUpload(file){
             name={'description'}
             controlFunc={this.handleDocumentDescriptionChange}
             content={this.state.description}
+            placeholder={'Dokumento aprasymas'}
            /> 
           <div>
               <label className="control-label">Pasirinkite dokumento tipą</label>
@@ -243,9 +248,3 @@ const username = {
 }
 
 export default Form;
-//updater method
-// this.setState(prevState => ({
-//     array: [...prevState.array, newElement]
-// }))
-
-

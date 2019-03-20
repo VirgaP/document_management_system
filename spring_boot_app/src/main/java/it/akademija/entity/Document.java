@@ -27,6 +27,10 @@ public class Document implements Serializable {
 
     private Date submittedDate;
 
+    private Date confirmedDate;
+
+    private Date rejectedDate;
+
     private List<UserDocument> userDocuments = new ArrayList<UserDocument>();
 
     private List<File> dbFiles = new ArrayList<>();
@@ -50,6 +54,28 @@ public class Document implements Serializable {
 
     public void setSubmittedDate(Date submittedDate) {
         this.submittedDate = submittedDate;
+    }
+
+
+    @Column(name = "CONFIRMED_DATE")
+    @Temporal(TemporalType.DATE)
+    public Date getConfirmedDate() {
+        return confirmedDate;
+    }
+
+    public void setConfirmedDate(Date confirmedDate) {
+        this.confirmedDate = confirmedDate;
+    }
+
+
+    @Column(name = "REJECTED_DATE")
+    @Temporal(TemporalType.DATE)
+    public Date getRejectedDate() {
+        return rejectedDate;
+    }
+
+    public void setRejectedDate(Date rejectedDate) {
+        this.rejectedDate = rejectedDate;
     }
 
     public Document() {
@@ -87,7 +113,7 @@ public class Document implements Serializable {
     @OneToMany(
             mappedBy = "primaryKey.document",
             cascade = CascadeType.MERGE,
-            fetch=FetchType.EAGER,
+//            fetch=FetchType.EAGER,
             orphanRemoval = true)
     public List<UserDocument> getUserDocuments() {
         return userDocuments;
@@ -155,7 +181,7 @@ public class Document implements Serializable {
     }
 
 
-    @OneToMany(mappedBy = "document", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @JsonIgnore
     public List<File> getDbFiles() {

@@ -1,12 +1,12 @@
 package it.akademija.service;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import it.akademija.dto.TopGroupUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +57,16 @@ public class UserService {
         return userDtoPage;
     }
 
+    @Transactional
+    public List<Object[]> getUsersByGroupSubmittedDocuments(String email, String group) {
+        List<Object[]> list = userRepository.getUsersByGroupSubmittedDocuments(email, group);
+        System.out.println("listas " + list);
+//        for (Object[] obj : list) {
+//            String key = (String) obj[0];
+//            String value = (String) obj[1];
+//        }
+        return list;
+    }
 
     @Transactional
     public List<UserDTO> getUserWithoutDocuments() {
@@ -81,7 +91,7 @@ public class UserService {
       int confirmedCount = documentRepository.getUserConfirmedDocumentCount(email);
       int rejectedCount = documentRepository.getUserRejectedDocumentCount(email);
 
-        countArray  [0] = allCount;
+        countArray [0] = allCount;
         countArray [1] = submittedCount;
         countArray [2] = confirmedCount;
         countArray [3] =rejectedCount;
@@ -93,12 +103,11 @@ public class UserService {
     public Page<UserDTO> listUsersByPage(Pageable pageable) {
         Page<User> userPage = pagedUserRepository.findAll(pageable);
         final Page<UserDTO> userDtoPage = userPage.map(this::convertToUserDto);
-        //log.info("Returns userDtoPage");
         return userDtoPage;
     }
 
     private UserDTO convertToUserDto(final User user) {
-         final UserDTO userDTO = new UserDTO(
+        final UserDTO userDTO = new UserDTO(
                 user.getName(),
                 user.getSurname(),
                 user.getEmail(),
@@ -106,14 +115,13 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
-        log.info("Returns user mapped to UserDTO"+ user);
+        log.info("Returns user mapped to UserDTO "+ user);
         return userDTO;
     }
 
 
     @Transactional
     public List<UserDTO> getUserEmails() {
-        //log.info("Returns user's emails");
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserDTO(
@@ -135,7 +143,7 @@ public class UserService {
                 user.getUserGroups(),
                 user.getUserDocuments()
         );
-        //log.info("Found {} user", user.getEmail());
+        log.info("Found {} user", user.getEmail());
         return userDTO;
     }
 
@@ -178,7 +186,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(password));
         }
 
-        //log.info("Saving user's email");
+        log.info("Saving user's email");
         userRepository.save(user);
 
     }
@@ -186,7 +194,7 @@ public class UserService {
     @Transactional
     public void deleteUser(String email){
         User user = getExistingUser(email);
-        log.info("User {} has been deleted", email);
+        log.info("User {} has been deleted " +  email);
 
         userRepository.delete(user);
     }
@@ -216,7 +224,6 @@ public class UserService {
         Set<Group> userGroups = user.getUserGroups();
 
         if (!userGroups.contains(group)) {
-            //log.error("Group with name "+ groupName + " is not found in the database");
             throw new ResourceNotFoundException("the group is not found");
         } else {
             log.info("User {} has been removed from group {}", email, groupName);

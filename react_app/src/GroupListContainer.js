@@ -116,10 +116,6 @@ export class GroupListContainer extends Component {
     const{input}= this.state
     var rows = [];
 
-    // if(rows.length  === 0){
-    //   <span>Vartotojų grupė nesukurta</span>
-    // }
-
     this.state.groups.map((group) => (
       rows.push(<Group group={group} key={group.name} deleteGroup={this.deleteGroup}/>)  
     ));

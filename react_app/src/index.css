@@ -144,7 +144,7 @@ margin-top: 5%;
   z-index: inherit;
   /* max-height: 100%; */
   /* overflow-x: auto; */
-  padding-bottom:3%;
+  padding-bottom:5%;
   text-align: center;
 }
 
@@ -167,10 +167,18 @@ margin-top: 5%;
 
 #homepage-download-btn{
   margin-left: 10%;
+  padding-bottom: 5%;
+  margin-top: 5%;
 }
+
 .user-search-container{
   margin-left: 10%;
   /* width: 50%; */
+}
+
+#top-users-list{
+  height: 3vh;
+  overflow-x: auto;
 }
 .single-document-display{
   margin:'auto';
@@ -307,16 +315,21 @@ ul#attachements li{
   padding-left: 20%;
 }
 
- .user-description th{
-  background-color: #ececec;
-  padding: 1%;
- 
- }
  .user-description td{
    font-size: 18px;
    padding-right: 5%;
    padding-top:3%;
  }
+
+ #user-description-table tr:nth-child(odd){
+   font-weight: bold;
+ }
+
+ #user-description-table{
+  width: 80%;
+  border: solid 1px lightgrey;
+ }
+
 
  .add-group{
   background-color: white;
@@ -335,6 +348,13 @@ ul#attachements li{
   width: 43%;
   margin-bottom: 2%;
 }
+
+#group-user-search button{
+ padding-left: 3%;
+ padding-right: 5%;
+ /* margin-right: 5%; */
+}
+
 
 .user_document_list{
   /* overflow-x:auto; */
@@ -685,6 +705,10 @@ color: white;
 #admin-search-form h5{
   margin-bottom: 3%;
 }
+
+#statistics{
+  padding-bottom: 5%;
+}
 #statistics-search-form{
   border: 1px solid #d9d9d9;
   border-radius: 6px;
@@ -698,6 +722,7 @@ color: white;
 #statistics-search-form h5{
   margin-left: 2%;
   margin-bottom: 3%;
+  margin-top: 4%;
 }
 #statistics-search-result{
   border: 1px solid #d9d9d9;
@@ -710,7 +735,7 @@ color: white;
 }
 #btn-statistics{
   position:relative;
-  left: 470px;
+  left: 20px;
 }
 
 #btn-statistics button{

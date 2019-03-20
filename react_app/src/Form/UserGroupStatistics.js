@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import { Input, Button, Icon, notification, Radio, DatePicker, Select } from 'antd';
 import moment from 'moment';
+import { reverse } from 'dns';
 
 const Search = Input.Search;
 const RadioGroup = Radio.Group;
@@ -11,6 +12,10 @@ const { MonthPicker, RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
 const Option = Select.Option;
+
+const ASC = 'ascending';
+const DSC = 'descending';
+
 export class UserGroupStatistics extends Component {
     constructor(props) {
         super(props);
@@ -27,13 +32,16 @@ export class UserGroupStatistics extends Component {
           startDateString:'',
           endDateString:'',
           radioValue:'',
-          status:''
+          status:'',
+          resultUser:'',
+          topUsers:[]
         }; 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.fetchSubmittedCount = this.fetchSubmittedCount.bind(this);
         this.fetchConfirmedCount = this.fetchConfirmedCount.bind(this);
         this.fetchRejectedCount = this.fetchRejectedCount.bind(this);
         this.resetSearch  = this.resetSearch.bind(this);
+        this.handleUserSearchsubmit = this.handleUserSearchsubmit.bind(this);
     }
 
     componentDidMount = () => {
@@ -87,7 +95,7 @@ export class UserGroupStatistics extends Component {
         axios.get(`http://localhost:8099/api/documents/submitted/${this.state.email}/${this.state.startDate}/${this.state.endDate}/${this.state.typeTitle}/${this.state.groupName}`)
         .then(result => {
         
-        this.setState({result: result.data, status:"pateikti(-as)"});
+        this.setState({result: result.data, status:"gavo"});
         console.log("RESULT", result.data)
         })
         .catch(function (error) {
@@ -99,7 +107,7 @@ export class UserGroupStatistics extends Component {
         axios.get(`http://localhost:8099/api/documents/confirmed/${this.state.email}/${this.state.startDate}/${this.state.endDate}/${this.state.typeTitle}/${this.state.groupName}`)
         .then(result => {
         
-        this.setState({result: result.data, status:"patvirtinti(-as)"});
+        this.setState({result: result.data, status:"patvirtino"});
         console.log("RESULT", result.data)
         })
         .catch(function (error) {
@@ -111,14 +119,13 @@ export class UserGroupStatistics extends Component {
         axios.get(`http://localhost:8099/api/documents/rejected/${this.state.email}/${this.state.startDate}/${this.state.endDate}/${this.state.typeTitle}/${this.state.groupName}`)
         .then(result => {
         
-        this.setState({result: result.data, status:"atmesti(-as)"});
+        this.setState({result: result.data, status:"atmetė"});
         console.log("RESULT", result.data)
         })
         .catch(function (error) {
           console.log(error);
         });
     }
-
 
     handleTypeSelectChange(value) {  
         console.log("selected ", value)
@@ -138,11 +145,7 @@ export class UserGroupStatistics extends Component {
         }
 
     handleSubmit(){
-        // if(this.state.radioValue === "submitted") {
-        //     this.fetchSubmittedCount()
-        // }else {
-        //     return null
-        // }
+       
         switch (this.state.radioValue) {
             case 'submitted':
             this.fetchSubmittedCount()
@@ -163,6 +166,24 @@ export class UserGroupStatistics extends Component {
        
     }
 
+    handleUserSearchsubmit(){
+      axios.get(`http://localhost:8099/api/users/${this.state.email}/${this.state.groupName}/userDocuments`)
+      .then(result => {       
+      this.setState({resultUser: result.data});
+      result.data.map(item=> {
+        let name = item[0]
+        let count = item[1]
+        let topUser = { name: name, count: count };
+  
+        return this.state.topUsers.push(topUser)
+        })
+        console.log("TOP users ", this.state.topUsers)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
     resetSearch(e){
         
         this.setState({ 
@@ -174,20 +195,25 @@ export class UserGroupStatistics extends Component {
             startDateString:'',
             endDateString:'',
             radioValue:'',
-            status:''
+            status:'',
+            count:[],
+            resultUser:''
         });
     }
 
+    resetUserSearch(){
+      this.setState({
+        resultUser: '',
+        // topUsers:[],
+        groupName: null,
+      })
+    } 
+  
   render() {
-    
-    console.log("group in state ", this.state.groupName)
-    console.log("start date in state ", this.state.startDate)
-    console.log("end date in state ", this.state.endDate)
-    console.log("radio in state ", this.state.radioValue)
     return (
-        <section>
+        <section id="statistics">
         <div className="container" id="statistics-search-form">
-                <span id="btn-statistics">
+                <span className="row" id="btn-statistics">
                <Button  type="primary" icon="search" onClick={this.handleSubmit}>Pateikti užklausą</Button>
                <Button  onClick={this.resetSearch}>Išvalyti duomenis</Button>
                </span>
@@ -241,7 +267,36 @@ export class UserGroupStatistics extends Component {
       </div>
       {this.state.result &&
       <div className="container" id="statistics-search-result">
-        <p>Per užklausos laikotarpį nuo {this.state.startDateString} iki {this.state.endDateString} grupei {this.state.groupName.toUpperCase()} {this.state.status} {[this.state.result]} dokumentai (-as) {this.state.typeTitle.toUpperCase()}.</p>
+        <p>Per laikotarpį nuo <em>{this.state.startDateString}</em> iki <em>{this.state.endDateString}</em> grupė {this.state.groupName.toUpperCase()} {this.state.status} <strong>{[this.state.result]}</strong> dokumentus (-ą) {this.state.typeTitle.toUpperCase()}.</p>
+      </div>
+      }
+      <div className="container" id="statistics-search-form">
+      <h5>Vartotojų pateikusių dokumentus grupei statistika</h5>
+        <div className="row" id="group-user-search">
+            <br></br><br></br> 
+            <div className="col-lg-2 col-sm-3">
+               <Button  type="primary" icon="search" onClick={this.handleUserSearchsubmit}>Pateikti užklausą</Button>
+               </div>
+               <div className="col-lg-2 col-sm-3">
+               <Button  onClick={this.resetSearch}>Išvalyti duomenis</Button>
+               </div>
+            <div className="col-lg-8 col-sm-6">
+                <Select        
+                style={{ width: '100%' }}
+                placeholder="Pasirinkite grupę"
+                onChange={value=>this.handleGroupSelectChange(value)} 
+                required>
+                    {this.state.userGroups.map((group) => (
+                    <Select.Option key={group.name} value={group.name}>{group.name}</Select.Option>
+                    ))}
+                </Select>
+            </div>
+        </div>
+      </div>
+      {this.state.resultUser &&
+      <div className="container" id="statistics-search-result">
+      <span id="top-users-list"><ul>{this.state.resultUser.map(item=><li>Vartotojas {item[0]} pateikė {item[1]} dokumentą (-us)</li>)}</ul></span>
+      <p>Vartotojai nerasti. Patikslinkite užklausą ir bandykite dar kartą.</p>
       </div>
       }
       </section>

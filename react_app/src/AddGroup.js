@@ -82,10 +82,10 @@ export class AddGroup extends Component {
 
         <h6>Pridėti vartotojo grupę</h6>
             <form onSubmit={this.handleSubmit}>
-            <div >
+            <div className="add-user-group-select">
             <label className="control-label">Pasirinkite vartotojo grupę</label>
                 <select value={this.state.name} onChange={this.handleSelectChange} 
-                className="form-control add-user-group-select" id="ntype" required>
+                className="form-control" id="ntype" required>
                   <option value="">...</option>
                     {options}
                 </select>

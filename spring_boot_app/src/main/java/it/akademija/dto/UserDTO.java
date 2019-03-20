@@ -5,15 +5,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import it.akademija.repository.UserRepository;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import it.akademija.entity.Group;
 import it.akademija.entity.UserDocument;
 import it.akademija.repository.DocumentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserDTO {
 
-    private DocumentRepository documentRepository;
 
     private String name;
 
@@ -72,13 +73,11 @@ public class UserDTO {
         this.surname = surname;
     }
 
-    public UserDTO(String name, String surname, String email, boolean admin, String name1, String title) {
-        this.admin = admin;
+    public UserDTO(String email, String name, String surname, List<UserDocument> userDocuments) {
         this.email = email;
         this.name = name;
         this.surname = surname;
-        this.userGroupName = name1;
-        this.userDocumentTitle = title;
+        this.userDocuments = userDocuments;
     }
 
     public String getName() {
@@ -172,8 +171,7 @@ public class UserDTO {
 
     public void setSubmittedCount(int submittedCount) {
 
-//        this.submittedCount = submittedCount;
-        this.submittedCount = documentRepository.getUserSubmittedDocumentCount(this.email);
+        this.submittedCount = submittedCount;
     }
 
     public int getConfirmedCount() {

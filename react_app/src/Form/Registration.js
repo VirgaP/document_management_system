@@ -54,20 +54,6 @@ class Register extends Component {
           console.log(error);
         });
 
-        axios.get('http://localhost:8099/api/users/emails')
-        .then(result => {
-            const emailsRegistered = result.data;
-          
-            let emails = [];
-            emailsRegistered.filter(el=>emails.push(el.email));
-          this.setState({ 
-            emails
-          })
-          console.log(emails);
-      })
-          .catch(function (error) {
-              console.log(error);
-            });
   }
 
 

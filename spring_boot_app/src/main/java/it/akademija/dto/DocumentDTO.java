@@ -20,6 +20,10 @@ public class DocumentDTO {
 
     private Date submittedDate;
 
+    private Date confirmedDate;
+
+    private Date rejectedDate;
+
     private String number;
 
     private List<UserDocument> userDocuments = new ArrayList<>();
@@ -31,24 +35,28 @@ public class DocumentDTO {
     public DocumentDTO() {
     }
 
-    public DocumentDTO(String title, String number, String description, Date createdDate, Date submittedDate, Type type, List<UserDocument> userDocuments, List<File> dbFiles) {
+    public DocumentDTO(String title, String number, String description, Date createdDate, Date submittedDate, Date confirmedDate, Date rejectedDate, Type type, List<UserDocument> userDocuments, List<File> dbFiles) {
         this.title = title;
         this.number = number;
         this.description = description;
         this.createdDate = createdDate;
         this.submittedDate = submittedDate;
+        this.confirmedDate = confirmedDate;
+        this.rejectedDate = rejectedDate;
         this.type = type;
         this.userDocuments = userDocuments;
         this.dbFiles = dbFiles;
     }
 
 
-    public DocumentDTO(String title, String number, String description, Date createdDate, Date submittedDate, Type type) {
+    public DocumentDTO(String title, String number, String description, Date createdDate, Date submittedDate, Date confirmedDate, Date rejectedDate, Type type) {
         this.title = title;
         this.number = number;
         this.description = description;
         this.createdDate = createdDate;
         this.submittedDate = submittedDate;
+        this.confirmedDate=confirmedDate;
+        this.rejectedDate=rejectedDate;
         this.type = type;
     }
 
@@ -115,5 +123,21 @@ public class DocumentDTO {
 
     public void setDbFiles(List<File> dbFiles) {
         this.dbFiles = dbFiles;
+    }
+
+    public Date getConfirmedDate() {
+        return confirmedDate;
+    }
+
+    public void setConfirmedDate(Date confirmedDate) {
+        this.confirmedDate = confirmedDate;
+    }
+
+    public Date getRejectedDate() {
+        return rejectedDate;
+    }
+
+    public void setRejectedDate(Date rejectedDate) {
+        this.rejectedDate = rejectedDate;
     }
 }

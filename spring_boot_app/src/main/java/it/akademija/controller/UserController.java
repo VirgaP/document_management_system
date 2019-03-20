@@ -2,9 +2,11 @@ package it.akademija.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import it.akademija.dto.TopGroupUser;
 import it.akademija.service.UserListRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,18 +54,12 @@ public class UserController {
         return userService.findAllUsersByEmailOrSurname(request, pageable);
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/findUsers/{email}")
-//    @ResponseBody
-//    public List<User> search(@PathVariable final String email) {
-//
-//        User filter = new User();
-//        filter.setEmail(email);
-//        Specification<User> spec = new UserSpecification(filter);
-//
-//        List<User> result = userRepository.findAll(spec);
-//
-//        return result;
-//    }
+    @GetMapping("/{email}/{name}/userDocuments")
+    public List<Object[]> findUsersBySubmittedDocuments(@PathVariable final String email, @PathVariable final String name) {
+
+        return userService.getUsersByGroupSubmittedDocuments(email, name);
+    }
+
 
     @GetMapping("/{email}/test/info")
     public int [] userSubmittedDocumentCount(@PathVariable final String email) {

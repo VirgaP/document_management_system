@@ -129,9 +129,6 @@ export class HomePage extends Component {
       <div className="user-search-container">
       <UserDocumentSearch user={this.state.user}/>
       </div>
-      <UserDocumentCountDisplay allCount={this.state.allCount} submittedCount={this.state.submittedCount} 
-      confirmedCount={this.state.confirmedCount} rejectedCount={this.state.rejectedCount}/>      
-      
         <div className="container" id="homepage-download-btn">
           <div className="row">
           <ZipDownload email={this.state.email} />

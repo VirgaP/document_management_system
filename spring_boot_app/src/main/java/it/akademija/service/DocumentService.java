@@ -76,28 +76,6 @@ public class DocumentService {
     @Autowired
     private DocumentAndTypeSpecification specification;
 
-    @Transactional
-    public List<DocumentDTO> getDocumentsPage(int page, int limit) {
-        List<DocumentDTO> returnValue = new ArrayList<>();
-        Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<Document> documents = pagedDocumentRepository.findAll(pageableRequest);
-        List<Document> documentEntities = documents.getContent();
-        for (Document documentEntity : documentEntities) {
-            DocumentDTO documentDTO = new DocumentDTO(
-                    documentEntity.getTitle(),
-                    documentEntity.getUniqueNumber(),
-                    documentEntity.getDescription(),
-                    documentEntity.getCreatedDate(),
-                    documentEntity.getSubmittedDate(),
-                    documentEntity.getType(),
-                    documentEntity.getUserDocuments(),
-                    documentEntity.getDbFiles()
-            );
-            BeanUtils.copyProperties(documentEntity, documentDTO);
-            returnValue.add(documentDTO);
-        }
-        return returnValue;
-    }
 
     @Transactional
     public int returnUserSubmittedDocumentCountByTypeGroupDateRange(String email, Date startDate, Date endDate, String title, String name){
@@ -209,6 +187,8 @@ public class DocumentService {
                 document.getDescription(),
                 document.getCreatedDate(),
                 document.getSubmittedDate(),
+                document.getConfirmedDate(),
+                document.getRejectedDate(),
                 document.getType(),
                 document.getUserDocuments(),
                 document.getDbFiles()
@@ -253,6 +233,8 @@ public class DocumentService {
                         document.getDescription(),
                         document.getCreatedDate(),
                         document.getSubmittedDate(),
+                        document.getConfirmedDate(),
+                        document.getRejectedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -276,15 +258,12 @@ public class DocumentService {
                 new Date()
         );
         document.setType(type);
-        log.info(document.getTitle() + " type set");
+        log.info(document.getTitle() + "type set");
 
-
-        document.addDbFile(file);
-
-        file.setDocument(document);
-
-//        document.getDbFiles().add(file);
-        log.info(document.getDbFiles().add(file) + " file added");
+//        document.addDbFile(file);
+        document.getDbFiles().add(file);
+        log.info(document.getDbFiles().add(file) + "file added");
+//        file.setDocument(document);
 
         documentRepository.save(document);
         log.info(document.getTitle() + "has been saved");
@@ -293,7 +272,7 @@ public class DocumentService {
 
         userDocument.setUser(user);//ok
 
-        userDocument.setDocument(document);
+        userDocument.setDocument(documentRepository.findByuniqueNumber(requestDocument.getUniqueNumber()));//jei sutampa pavadinimas jpa nesupranta pagal kuri ieskoti, pakiesi i findbyunuique numbet
 
         userDocumentRepository.save(userDocument);
 
@@ -328,6 +307,8 @@ public class DocumentService {
                 document.getDescription(),
                 document.getCreatedDate(),
                 document.getSubmittedDate(),
+                document.getConfirmedDate(),
+                document.getRejectedDate(),
                 document.getType(),
                 document.getUserDocuments(),
                 document.getDbFiles()
@@ -344,6 +325,8 @@ public class DocumentService {
                         document.getDescription(),
                         document.getCreatedDate(),
                         document.getSubmittedDate(),
+                        document.getConfirmedDate(),
+                        document.getRejectedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -362,6 +345,8 @@ public class DocumentService {
                         document.getDescription(),
                         document.getCreatedDate(),
                         document.getSubmittedDate(),
+                        document.getConfirmedDate(),
+                        document.getRejectedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -381,6 +366,8 @@ public class DocumentService {
                         document.getDescription(),
                         document.getCreatedDate(),
                         document.getSubmittedDate(),
+                        document.getConfirmedDate(),
+                        document.getRejectedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -399,6 +386,8 @@ public class DocumentService {
                         document.getDescription(),
                         document.getCreatedDate(),
                         document.getSubmittedDate(),
+                        document.getConfirmedDate(),
+                        document.getRejectedDate(),
                         document.getType(),
                         document.getUserDocuments(),
                         document.getDbFiles()
@@ -450,7 +439,6 @@ public class DocumentService {
     public void submitDocument(String number, String email){
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
-//        UserDocument userDocument = userDocumentRepository.findByUserEmailAndDocumentNumber(email, number);
 
         document.setSubmittedDate(new Date());
         UserDocument userDocument = new UserDocument();
@@ -468,6 +456,7 @@ public class DocumentService {
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
 
+        document.setConfirmedDate(new Date());
         UserDocument userDocument = new UserDocument();
         userDocument.setUser(user);
         userDocument.setDocument(document);
@@ -483,6 +472,7 @@ public class DocumentService {
     public void rejectDocument(String number, String email, RequestMessage request){
         Document document = documentRepository.findByuniqueNumber(number);
         User user = userRepository.findByEmail(email);
+        document.setRejectedDate(new Date());
 
         UserDocument userDocument = new UserDocument();
 
