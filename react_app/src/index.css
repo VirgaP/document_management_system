@@ -105,14 +105,24 @@ left: 58%;
   -webkit-transition: all 0.5s ease-out;
 }
 
-
 #instructions-container{
   margin-top: 3%;
   margin-left: 10%;
-  height: 95vh;
+  padding-bottom: 2%;
+  width: 90%;
+}
+
+#instructions-container-user{
+  margin-left: 10%;
+  /* height: 95vh; */
   /* overflow: auto; */
   padding-bottom: 5%;
   width: 90%;
+}
+
+#instructions{
+ height: 95vh; 
+ overflow: auto;
 }
 
 #list_container{

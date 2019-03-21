@@ -243,7 +243,7 @@ export class UserDocumentTable extends Component {
             <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted, SUBMITTED_DATE, desc, submittedDate`}>PATEIKTI</Option>
             <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed, CONFIRMED_DATE, desc, confirmedDate`}>PATVIRTINTI</Option>
             <Option value={`http://localhost:8099/api/documents/${this.state.email}/rejected, REJECTED_DATE, desc, rejectedDate`}>ATMESTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/all, created_Date, desc, createdDate`}>VISI SUKURTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/allCreated, created_Date, desc, createdDate`}>VISI SUKURTI</Option>
         </Select>
     </div>
     <Table

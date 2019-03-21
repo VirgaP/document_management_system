@@ -43,9 +43,8 @@ import UserVerticalMenu from './layout/UserVerticalMenu';
 import UsersTable from './UsersTable';
 import UserDocumentTable from './UserDocumentTable';
 import ReceivedDocumentsTable from './ReceivedDocumentsTable';
-import InstructionsAdmin from './layout/InstructionsAdmin';
 import UserGroupStatistics from './Form/UserGroupStatistics';
-import UserInstructions from './layout/UserInstructions';
+import Instructions from './layout/Instructions';
 
 const { Content } = Layout;
 
@@ -155,8 +154,8 @@ class App extends Component {
               <Route exact path="/" render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
                {/* <Route path='/pagrindinis' render={(props) => <HomePage isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
                 </Route>         */}
-                <PrivateRoute path='/pagrindinis'  component={HomePage} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />
-                <PrivateRoute path='/informacija' component={()=>this.state.isAdmin?<InstructionsAdmin/>: <UserInstructions/>} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
+                <PrivateRoute path='/pagrindinis' component={HomePage} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />
+                <PrivateRoute path='/informacija' component={Instructions} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <PrivateRoute path="/naujas-dokumentas" component={Form} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/>
                 <PrivateRoute path="/dokumentas/:number" component={SingleDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 
                 <PrivateRoute path="/gautas/dokumentas/:number" component={SingleReceivedDocument} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser} />}/> 
@@ -168,7 +167,6 @@ class App extends Component {
                 <AdminRoute path='/visi-tipai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={TypeListContainer}/>
                 <AdminRoute path="/tipas/:title" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={SingleType}/>}/>                 
                 <AdminRoute path="/redaguoti/tipas/:title" component={EditType} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> }/>              
-                {/* <PrivateRoute path="/gauti/vartotojas/:email/" component={ReceivedUserDocuments} isAuthenticated={isAuthenticated}  currentUser={this.state.currentUser} /> */}
                 <PrivateRoute path='/siusti/vartotojas/:email/' component={UserDocumentListContainer} isAuthenticated={isAuthenticated} currentUser={this.state.currentUser}/>
                 <AdminRoute path='/visi-dokumentai' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={DocumentListContainer}/>
                 <AdminRoute path="/naujas-vartotojas" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={Registration}/>
@@ -176,7 +174,6 @@ class App extends Component {
                 <AdminRoute path='/visos-grupes' isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={GroupListContainer}/>
                 <AdminRoute path="/grupe/:name" isAdmin={isAdmin} isAuthenticated={isAuthenticated}  component={SingleGroup}/> 
                 <AdminRoute path="/redaguoti/grupe/:name" component={EditGroup} isAdmin={isAdmin} isAuthenticated={isAuthenticated} /> 
-                {/* <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/> */}
                 <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UsersTable}/>
                 <AdminRoute path="/redaguoti/vartotojas/:email" component={EditUser} isAdmin={isAdmin} isAuthenticated={isAuthenticated}/> 
                 <AdminRoute path="/vartotojai" isAdmin={isAdmin} isAuthenticated={isAuthenticated} component={UserListContainer}/>

@@ -155,7 +155,7 @@ public class DocumentController {
         return documentService.returnCount();
     }
 
-    @GetMapping("/{email}/all")
+    @GetMapping("/{email}/allCreated")
     public Page<DocumentDTO> userAllDocumentsPaged(@PathVariable final String email, Pageable pageable) {
         return documentService.pagedAllUserDocuments(email, pageable);
     }

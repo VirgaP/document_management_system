@@ -275,7 +275,7 @@ public class DocumentService {
 //        document.addDbFile(file);
         document.getDbFiles().add(file);
         log.info(document.getDbFiles().add(file) + "file added");
-//        file.setDocument(document);
+        file.setDocument(document);
 
         documentRepository.save(document);
         log.info(document.getTitle() + "has been saved");
@@ -298,7 +298,7 @@ public class DocumentService {
 
         file.setDocument(document);
 
-        document.addDbFile(file);
+//        document.addDbFile(file);
 
         fileRepository.save(file);
 

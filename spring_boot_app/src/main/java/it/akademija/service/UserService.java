@@ -61,10 +61,6 @@ public class UserService {
     public List<Object[]> getUsersByGroupSubmittedDocuments(String email, String group) {
         List<Object[]> list = userRepository.getUsersByGroupSubmittedDocuments(email, group);
         System.out.println("listas " + list);
-//        for (Object[] obj : list) {
-//            String key = (String) obj[0];
-//            String value = (String) obj[1];
-//        }
         return list;
     }
 

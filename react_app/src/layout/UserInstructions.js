@@ -10,7 +10,7 @@ export class UserInstructions extends Component {
       }
   render() { 
     return (
-       <div className="container" id="instructions-container">
+       <div className="container" id="instructions-container-user">
         <h4>Dokumentų valdymo sistemos instrukcija</h4>
         <p>Vartotojo atmintinė</p>
           <Collapse id="accordion" onChange={this.callback}>
@@ -37,7 +37,7 @@ export class UserInstructions extends Component {
                 Atsidariusiame lange nurodykite dokumento atmetimo priežastį ir spauskite SIŲSTI ATSAKYMĄ.<br></br>
                  </p>
           </Panel>
-          <Panel header="Statistika" key="1">
+          <Panel header="Statistika" key="4">
               <p>Norėdami peržiūrėti dokumentų statistiką vartotojo paskyros kairiajame meniu pasirinkite STATISTIKA. Atsidariusioje statistikos formoje nurodykite periodą, pasirinkto dokumento tipą bei pažymėkite būseną. Paspauskite PATEIKTI UŽKLAUSĄ.<br></br>
               Norint surasti vartotojų, kurie pateikė dokumentus tam tikrai grupei, statistiką, žemesnėje formoje pasirinkite grupę ir paspauskite PATEIKTI UŽKLAUSĄ.<br></br>
               </p>

@@ -86,28 +86,4 @@ export function getReceivedDocuments (email) {
         method: 'GET'
     })
 }
-// export function getUserProfile(username) {
-//     return request({
-//         url: API_BASE_URL + "/users/" + username,
-//         method: 'GET'
-//     });
-// }
 
-// export function getUserCreatedPolls(username, page, size) {
-//     page = page || 0;
-//     size = size || POLL_LIST_SIZE;
-
-//     return request({
-//         url: API_BASE_URL + "/users/" + username + "/polls?page=" + page + "&size=" + size,
-//         method: 'GET'
-//     });
-// }
-
-// export function getUserVotedPolls(username, page, size) {
-//     page = page || 0;
-//     size = size || POLL_LIST_SIZE;
-
-//     return request({
-//         url: API_BASE_URL + "/users/" + username + "/votes?page=" + page + "&size=" + size,
-//         method: 'GET'
-//     });
