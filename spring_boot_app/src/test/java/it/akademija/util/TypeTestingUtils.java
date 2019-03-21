@@ -1,18 +1,12 @@
 package it.akademija.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
 import it.akademija.dto.TypeDTO;
-import it.akademija.entity.Group;
 import it.akademija.entity.Type;
-import it.akademija.entity.TypeGroup;
 
 public class TypeTestingUtils {
 

@@ -132,24 +132,6 @@ public class DocumentControllerTest {
         Assert.assertThat(result, Matchers.hasSize(existingUserDocuments.size()));
     }
 
-    @Test
-    public void shouldLoadAllPagedUserDocuments() {
-        User existingUser = createUser();
-        Page<DocumentDTO> result = documentController.userAllDocumentsPaged(existingUser.getEmail(), PageRequest.of(0,10));
-
-        Assert.assertEquals(0, result.getTotalPages());
-        Assert.assertEquals(0, result.getTotalElements());
-
-        List<Document> existingDocuments = createDocuments(random.nextInt(50));
-        List<UserDocument> existingUserDocuments = userDocumentRepository.saveAll(DocumentTestingUtils.userDocumentFrom(existingUser, existingDocuments));
-
-        int pageSize = Math.abs(random.nextInt(7));
-
-        result = documentController.userAllDocumentsPaged(existingUser.getEmail(), PageRequest.of(1,pageSize));
-        Assert.assertEquals(Math.ceil(existingUserDocuments.size()/ (double) pageSize), result.getTotalPages(), 0.000000001);
-        Assert.assertEquals(existingUserDocuments.size(), result.getTotalElements());
-        assert result.getNumberOfElements() == pageSize || result.getNumberOfElements() == existingUserDocuments.size();
-    }
 
     @Test
     public void shouldLoadDocument() {

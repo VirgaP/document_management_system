@@ -19,9 +19,7 @@ import it.akademija.entity.User;
 import it.akademija.repository.UserRepository;
 import it.akademija.util.UserTestingUtils;
 
-/**
- * Unit tests for {@link CustomUserDetailsService}
- */
+
 public class CustomUserDetailsServiceTest {
 
     @InjectMocks
