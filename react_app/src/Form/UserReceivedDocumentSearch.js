@@ -98,8 +98,6 @@ export class UserReceivedDocumentSearch extends Component {
         title: 'Gavimo data',
         dataIndex: 'submittedDate',
         key: 'submitted_Date',
-        sorter: true,
-        defaultSortOrder: 'desc',
         render: submittedDate => submittedDate,
         width: '20%',
       },
@@ -120,7 +118,6 @@ export class UserReceivedDocumentSearch extends Component {
       <div>
       <div className="container" id="admin-search-form">
       <h5>Vartotojo gautų dokumentų paieška</h5>
-      {/* <button className="btn btn-info" onClick={this.resetSearch}>Reset</button> */}
       <div className="row">
       <div className="col-lg-6">     
       <Search

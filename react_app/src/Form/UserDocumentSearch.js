@@ -96,27 +96,6 @@ export class UserDocumentSearch extends Component {
             
         }
 
-        handleTableChange = (pagination, filters, sorter, value) => {
-          const pager = { ...this.state.pagination };
-          pager.current = pagination.current;
-          this.setState({
-            pagination: pager,
-            page: this.state.page, 
-            filteredInfo: filters,
-            searchText: value  
-          });
-          
-          const desc = (sorter.order == "descend" ? "desc" : "asc");
-          this.fetch({
-           results: pagination.pageSize,
-           page: pagination.current,
-           sort: "created_Date" + decodeURIComponent("%2c")+desc,
-           sortOrder: decodeURIComponent("%2c")+desc,
-            ...filters,
-          });
-          console.log("filter ", filters)
-  
-        }
 
   render() {
     const columns = [{
@@ -139,8 +118,6 @@ export class UserDocumentSearch extends Component {
         title: 'Sukūrimo data',
         dataIndex: 'createdDate',
         key: 'created_Date',
-        sorter: true,
-        defaultSortOrder: 'desc',
         render: createdDate => createdDate,
         width: '20%',
       },
@@ -196,7 +173,6 @@ export class UserDocumentSearch extends Component {
         rowKey={record => record.number} 
         pagination={this.state.pagination} 
         scroll={{ y: 200 }}
-        onChange={this.handleTableChange}
         locale={{ emptyText: 'Duomenys negauti, prašome įvesti paieškos raktažodį' }}
         /> 
       </div>

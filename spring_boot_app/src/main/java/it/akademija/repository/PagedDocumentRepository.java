@@ -22,7 +22,7 @@ public interface PagedDocumentRepository extends PagingAndSortingRepository<Docu
     @Query(value="select * FROM document d join user_document ud ON (d.id = ud.document_id) WHERE ud.submitted = true", nativeQuery = true)
     Page<Document> findAllSubmittedPage(Pageable pageable);
 
-    @Query(value="select * FROM document d join user_document ud ON (d.id = ud.document_id) join user u ON (ud.user_id = u.id) WHERE u.email=:email", nativeQuery = true)
+    @Query(value="select * FROM document d join user_document ud ON (d.id = ud.document_id) join user u ON (ud.user_id = u.id) WHERE u.email=:email AND  ud.saved = true", nativeQuery = true)
     Page<Document> findAllUserDocumentsPage(@Param("email") String email, Pageable pageable);
 
     @Query(value="select * FROM document d join user_document ud ON (d.id = ud.document_id) join user u ON (ud.user_id = u.id) WHERE u.email=:email AND  ud.submitted = true", nativeQuery = true)

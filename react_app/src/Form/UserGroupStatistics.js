@@ -272,15 +272,16 @@ export class UserGroupStatistics extends Component {
       }
       <div className="container" id="statistics-search-form">
       <h5>Vartotojų pateikusių dokumentus grupei statistika</h5>
-        <div className="row" id="group-user-search">
+      <div id="group-user-search">
+        <div className="row no-gutters">
             <br></br><br></br> 
-            <div className="col-lg-2 col-sm-3">
+            <div className="col-2 col-sm-3">
                <Button  type="primary" icon="search" onClick={this.handleUserSearchsubmit}>Pateikti užklausą</Button>
                </div>
-               <div className="col-lg-2 col-sm-3">
+               <div className="col-2 col-sm-3">
                <Button  onClick={this.resetSearch}>Išvalyti duomenis</Button>
                </div>
-            <div className="col-lg-8 col-sm-6">
+            <div className="col-8 col-sm-6">
                 <Select        
                 style={{ width: '100%' }}
                 placeholder="Pasirinkite grupę"
@@ -291,6 +292,7 @@ export class UserGroupStatistics extends Component {
                     ))}
                 </Select>
             </div>
+        </div>
         </div>
       </div>
       {this.state.resultUser &&

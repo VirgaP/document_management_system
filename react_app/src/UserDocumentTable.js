@@ -23,6 +23,7 @@ export class UserDocumentTable extends Component {
         header: 'Nepateikti dokumentai',
         dateSort:'created_Date,desc',
         direction:'',
+        dateParam:'createdDate',
         url: `http://localhost:8099/api/documents/${this.props.match.params.email}/notSubmitted`
         }
         // const baseUrl = `http://localhost:8099/api/documents/${this.props.match.params.email}`; 
@@ -82,6 +83,7 @@ export class UserDocumentTable extends Component {
          page: pagination.current,
         //  sort: "created_Date" + decodeURIComponent("%2c")+desc,
          sort: this.state.dateSort + decodeURIComponent("%2c")+desc,
+        // sort: this.state.dateSort.concat(',', this.state.order),
          sortOrder: decodeURIComponent("%2c")+desc,
           ...filters,
         });
@@ -100,9 +102,7 @@ export class UserDocumentTable extends Component {
             size: 10,
             // sort: 'confirmed_Date,desc',
             sort: this.state.dateSort,
-            order: this.state.direction,
-            // sort: this.state.dateSort + decodeURIComponent("%2c") + this.state.direction,
-            // sort: this.state.dateSort+this.state.direction,
+            // order: this.state.direction,
             ...params,
           },
           type: 'json',
@@ -146,15 +146,20 @@ export class UserDocumentTable extends Component {
     handleFilter=(value , event)=>{
 
       var array = value.split(",");
-      alert(array[1]);
-      console.log("filter value " + value)
-      console.log("filter array " + array)
+      
+      let newDateSort = array[1];
+      let newDirection = array[2];
+      let newDateParam = array[3]
+      const trimmedDate = newDateSort.substr(1)
+      const trimmedDirection = newDirection.substr(1)
+      const trimmedDateParam = newDateParam.substr(1)
+      console.log("newdate ", trimmedDateParam)
     
         this.setState({
-            // url: value,
             url: array[0],
-            // dateSort: array[1],
-            direction: array[2],
+            dateParam: trimmedDateParam,
+            dateSort: trimmedDate,
+            direction: trimmedDirection,
             header: ''
         })
     }
@@ -164,6 +169,8 @@ export class UserDocumentTable extends Component {
     let { filteredInfo, searchText } = this.state;
     filteredInfo = filteredInfo || {};
     searchText = searchText || {};
+
+    const dateToRender = this.state.dateParam
 
     const columns = [{
         title: 'Pavadinimas',
@@ -196,11 +203,12 @@ export class UserDocumentTable extends Component {
         width: '20%',
       }, {
         title: 'Data',
-        dataIndex: 'createdDate',
-        key: 'created_Date',
+        dataIndex: this.state.dateParam,
+        key: 'date',
         sorter: true,
         defaultSortOrder: 'desc',
-        render: createdDate => createdDate,
+        // render: createdDate => createdDate,
+        render: dateToRender => dateToRender,
         width: '20%',
       },
       {
@@ -231,11 +239,11 @@ export class UserDocumentTable extends Component {
     <div className="table-operations">
     <h4>{this.state.header}</h4>
         <Select style={{ width: 240}} placeholder = "Pasirinkite dokumento būseną" onSelect={(value, event) => this.handleFilter(value, event)}>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/notSubmitted`}>NEPATEIKTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted, SUBMITTED_DATE`}>PATEIKTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed, CONFIRMED_DATE, desc`}>PATVIRTINTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/rejected,  REJECTED_DATE`}>ATMESTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/all`}>VISI SUKURTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/notSubmitted, created_Date, desc, createdDate`}>NEPATEIKTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted, SUBMITTED_DATE, desc, submittedDate`}>PATEIKTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed, CONFIRMED_DATE, desc, confirmedDate`}>PATVIRTINTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/rejected, REJECTED_DATE, desc, rejectedDate`}>ATMESTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/all, created_Date, desc, createdDate`}>VISI SUKURTI</Option>
         </Select>
     </div>
     <Table

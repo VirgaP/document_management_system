@@ -34,7 +34,6 @@ class Form extends Component {
         displayAddFiles: false,
       };
 
-      console.log("form", props)
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleClearForm = this.handleClearForm.bind(this);
       this.handleDocumentTitleChange = this.handleDocumentTitleChange.bind(this);
@@ -75,7 +74,6 @@ class Form extends Component {
           this.setState({ 
             documentTypes
           })
-          console.log("DOKU TIPAI", documentTypes)
       
         })
         .catch(function (error) {
@@ -107,14 +105,7 @@ class Form extends Component {
   handleSubmit(e) {
       e.preventDefault();
 
-  const uniqueNumber = this.state.date + '-' + this.state.email;
-
-  console.log("Tipas ", this.state.typeTitle);
-  console.log('Pavadinimas ', this.state.title);
-  console.log('Aprasymas ', this.state.description)
-  console.log('Email ', this.state.email)
-  console.log('Number', uniqueNumber)
-  console.log("Filename", this.state.fileName)
+  const uniqueNumber = this.state.date + '-' + this.state.user.name.charAt(0).toUpperCase() + this.state.user.surname.charAt(0).toUpperCase();
 
   this.fileUpload(this.state.file).then((response)=>{
     console.log(response.data)
