@@ -21,6 +21,8 @@ export class UserDocumentTable extends Component {
         searchText: '',
         filteredInfo: null,
         header: 'Nepateikti dokumentai',
+        dateSort:'created_Date,desc',
+        direction:'',
         url: `http://localhost:8099/api/documents/${this.props.match.params.email}/notSubmitted`
         }
         // const baseUrl = `http://localhost:8099/api/documents/${this.props.match.params.email}`; 
@@ -78,7 +80,8 @@ export class UserDocumentTable extends Component {
         this.fetch({
          results: pagination.pageSize,
          page: pagination.current,
-         sort: "created_Date" + decodeURIComponent("%2c")+desc,
+        //  sort: "created_Date" + decodeURIComponent("%2c")+desc,
+         sort: this.state.dateSort + decodeURIComponent("%2c")+desc,
          sortOrder: decodeURIComponent("%2c")+desc,
           ...filters,
         });
@@ -95,7 +98,11 @@ export class UserDocumentTable extends Component {
           method: 'get',
           data: {
             size: 10,
-            sort: 'created_Date,desc',
+            // sort: 'confirmed_Date,desc',
+            sort: this.state.dateSort,
+            order: this.state.direction,
+            // sort: this.state.dateSort + decodeURIComponent("%2c") + this.state.direction,
+            // sort: this.state.dateSort+this.state.direction,
             ...params,
           },
           type: 'json',
@@ -113,7 +120,6 @@ export class UserDocumentTable extends Component {
         });
       }
     
-
       deleteDocument(number){
         alert("Ar tikrai norite ištrinti šį dokumentą?")
         axios.delete(`http://localhost:8099/api/documents/${number}`)
@@ -138,8 +144,17 @@ export class UserDocumentTable extends Component {
     }
 
     handleFilter=(value , event)=>{
+
+      var array = value.split(",");
+      alert(array[1]);
+      console.log("filter value " + value)
+      console.log("filter array " + array)
+    
         this.setState({
-            url: value, 
+            // url: value,
+            url: array[0],
+            // dateSort: array[1],
+            direction: array[2],
             header: ''
         })
     }
@@ -217,10 +232,10 @@ export class UserDocumentTable extends Component {
     <h4>{this.state.header}</h4>
         <Select style={{ width: 240}} placeholder = "Pasirinkite dokumento būseną" onSelect={(value, event) => this.handleFilter(value, event)}>
             <Option value={`http://localhost:8099/api/documents/${this.state.email}/notSubmitted`}>NEPATEIKTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted`}>PATEIKTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed`}>PATVIRTINTI</Option>
-            <Option value={`http://localhost:8099/api/documents/${this.state.email}/rejected`}>ATMESTI</Option>
-            {/* <Option value={`http://localhost:8099/api/documents/${this.state.email}/all`}>VISI SUKURTI</Option> */}
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/submitted, SUBMITTED_DATE`}>PATEIKTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/confirmed, CONFIRMED_DATE, desc`}>PATVIRTINTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/rejected,  REJECTED_DATE`}>ATMESTI</Option>
+            <Option value={`http://localhost:8099/api/documents/${this.state.email}/all`}>VISI SUKURTI</Option>
         </Select>
     </div>
     <Table

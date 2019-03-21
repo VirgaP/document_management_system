@@ -25,6 +25,7 @@ p{
   margin-top:5%;
   height:auto;
   background-color: white !important;
+  overflow-y: hidden;
 
 }
 .ant-layout{
@@ -137,16 +138,21 @@ margin-top: 5%;
   position: static;
   margin: auto;
   padding-top: 3%;
-  margin-bottom:10%;
+  /* margin-bottom: 2%; */
   /* width: 80%; */
   max-width: 100%;
-  height: 95vh;
+  height: 100vh;
   z-index: inherit;
+  overflow: auto;
   /* max-height: 100%; */
   /* overflow-x: auto; */
   padding-bottom:5%;
   text-align: center;
 }
+
+/* #homepage-container{
+  margin-bottom: 10%;
+} */
 
 .alert-notsubmitted{
   margin-left: 10%;
@@ -154,7 +160,7 @@ margin-top: 5%;
 
 #signed-in-user{
   position: relative;
-  left: 45%;
+  left: 40%;
   top: -20px;
 }
 
@@ -167,7 +173,7 @@ margin-top: 5%;
 
 #homepage-download-btn{
   margin-left: 10%;
-  padding-bottom: 5%;
+  padding-bottom: 2%;
   margin-top: 5%;
 }
 

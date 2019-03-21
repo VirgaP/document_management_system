@@ -55,4 +55,10 @@ public interface PagedDocumentRepository extends PagingAndSortingRepository<Docu
     @Query(value="select * FROM document d join user_document ud ON (d.id = ud.document_id) join user u ON (ud.user_id = u.id) WHERE u.email=:email AND d.title like %:title%", nativeQuery = true)
     Page<Document> findAllUserDocumentsByTitle(@Param("email") String email, @Param("title") String title, Pageable pageable);
 
+    @Query(value="select * FROM document d join user_document ud ON (d.id = ud.document_id) WHERE ud.submitted = true AND d.type_id IN (SELECT t.id FROM type t JOIN type_group tg ON (t.id = tg.type_id) JOIN users_groups ug ON (tg.group_id=ug.group_id) JOIN user u ON (ug.user_id = u.id) WHERE u.email=:email AND lower(d.title) like %:title% AND receive=true group by t.id)", nativeQuery = true)
+    Page<Document> findAllUserReceivedDocumentsByTitle(@Param("email") String email, @Param("title") String title, Pageable pageable);
+
+
+    @Query(value="select * FROM document d join user_document ud ON (d.id = ud.document_id) WHERE ud.submitted = true AND d.type_id IN (SELECT t.id FROM type t JOIN type_group tg ON (t.id = tg.type_id) JOIN users_groups ug ON (tg.group_id=ug.group_id) JOIN user u ON (ug.user_id = u.id) WHERE u.email=:email AND d.submitted_Date BETWEEN :startDate AND :endDate AND receive=true group by t.id)", nativeQuery = true)
+    Page<Document> findAllUserReceivedDocumentsDateRange(@Param("email") String email, @Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageable);
 }

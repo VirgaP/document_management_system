@@ -14,7 +14,7 @@ const dateFormat = 'YYYY/MM/DD';
 
 const Option = Select.Option;
 
-export class UserDocumentSearch extends Component {
+export class UserReceivedDocumentSearch extends Component {
     constructor(props) {
         super(props);
        
@@ -23,47 +23,10 @@ export class UserDocumentSearch extends Component {
           data: [],
           pagination: {},
           page:'',
-          radioValue:'',
           startDate:{},
           endDate:{},
-          documentTypes: [],
-          typeTitle:''
-
         }; 
     }
-
-
-        fetch = (params = {}) => {
-        const {page}=this.state
-    
-        this.setState({ loading: true });
-        reqwest({
-            url: `http://localhost:8099/api/documents/${this.props.user.email}/${params}/all`,
-            method: 'get',
-            data: {
-            size: 10,
-            search: params,
-            sort: 'created_Date,desc',
-            ...params,
-            },
-            type: 'json',
-        }).then((data) => {
-        console.log("data resp ", data)
-            const pagination = { ...this.state.pagination };
-            // Read total count from server
-            pagination.total = data.totalElements;
-            
-            this.setState({
-            loading: false,
-            data: data.content,
-            page: data.number,
-            pagination,
-            });
-        });
-        }
-        handleSearch(value){
-            value.length !== 0 && this.fetch(value)     
-        }
 
         handleDateRange = (date, dateString) => {
             console.log("dates ", date, dateString)
@@ -77,7 +40,7 @@ export class UserDocumentSearch extends Component {
                 endDate: myEndDate,
             })
 
-            axios.get(`http://localhost:8099/api/documents/${this.props.user.email}/${myStartDate}/${myEndDate}`)
+            axios.get(`http://localhost:8099/api/documents/received/${this.props.user.email}/${myStartDate}/${myEndDate}`)
             .then(result => {
             console.log("search url", result)
             this.setState({data: result.data.content})
@@ -91,31 +54,27 @@ export class UserDocumentSearch extends Component {
                 console.log(error);
             });
         } 
+
+        handleSearchByTitle(value){
+            const newValue = value.toLowerCase()
+            console.log("new value ", newValue)
+            axios.get(`http://localhost:8099/api/documents/received/${this.props.user.email}/${newValue}`)
+            .then(result => {
+            console.log("search url", result)
+            this.setState({data: result.data.content})
+            if(result.data.content.length === 0){
+            return notification.error({
+                message: 'Dokumentas nerastas. Bandykite dar kartą.',
+                }); 
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
         
         resetSearch(){
             
-        }
-
-        handleTableChange = (pagination, filters, sorter, value) => {
-          const pager = { ...this.state.pagination };
-          pager.current = pagination.current;
-          this.setState({
-            pagination: pager,
-            page: this.state.page, 
-            filteredInfo: filters,
-            searchText: value  
-          });
-          
-          const desc = (sorter.order == "descend" ? "desc" : "asc");
-          this.fetch({
-           results: pagination.pageSize,
-           page: pagination.current,
-           sort: "created_Date" + decodeURIComponent("%2c")+desc,
-           sortOrder: decodeURIComponent("%2c")+desc,
-            ...filters,
-          });
-          console.log("filter ", filters)
-  
         }
 
   render() {
@@ -136,12 +95,12 @@ export class UserDocumentSearch extends Component {
         render: type => type.title,
         width: '20%',
       }, {
-        title: 'Sukūrimo data',
-        dataIndex: 'createdDate',
-        key: 'created_Date',
+        title: 'Gavimo data',
+        dataIndex: 'submittedDate',
+        key: 'submitted_Date',
         sorter: true,
         defaultSortOrder: 'desc',
-        render: createdDate => createdDate,
+        render: submittedDate => submittedDate,
         width: '20%',
       },
       {
@@ -152,28 +111,21 @@ export class UserDocumentSearch extends Component {
             item.rejected && <Tag color="volcano" key={item.document.uniqueNumber}>Atmestas</Tag> ||
             item.confirmed && <Tag color="green" key={item.document.uniqueNumber}>Patvirtintas</Tag>
             ),
-        width: '15%',
-      },
-      {
-        title: '',
-        dataIndex: 'userDocuments',
-        key: 'edit',
-        render: userDocuments => userDocuments.map(item=>item.submitted === false ? <Link to={`/redaguoti/dokumentas/${item.document.uniqueNumber}`}>
-        <Icon type="edit" /></Link> : <Icon type="edit" disable/>),
-        width: '5%',
+        width: '20%',
       },
     ];
       
     const {result, data} = this.state
     return (
+      <div>
       <div className="container" id="admin-search-form">
-      <h5>Vartotojo siunčiamų dokumentų paieška</h5>
+      <h5>Vartotojo gautų dokumentų paieška</h5>
       {/* <button className="btn btn-info" onClick={this.resetSearch}>Reset</button> */}
       <div className="row">
       <div className="col-lg-6">     
       <Search
       placeholder="Įveskite dokumento pavadinimą"
-      onSearch={value => this.handleSearch(value)}
+      onSearch={value => this.handleSearchByTitle(value)}
       enterButton
       /> 
       </div>
@@ -192,17 +144,15 @@ export class UserDocumentSearch extends Component {
     </div>
     <br></br>
     <div>
-        <Table dataSource={data} columns={columns} 
-        rowKey={record => record.number} 
-        pagination={this.state.pagination} 
-        scroll={{ y: 200 }}
-        onChange={this.handleTableChange}
+        <Table dataSource={data} columns={columns} rowKey={record => record.number} pagination={this.state.pagination} scroll={{ y: 200 }}
         locale={{ emptyText: 'Duomenys negauti, prašome įvesti paieškos raktažodį' }}
+        // pagination={false}
         /> 
       </div>
     </div>
+</div>
     )
   }
 }
 
-export default UserDocumentSearch
+export default UserReceivedDocumentSearch

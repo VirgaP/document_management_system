@@ -128,7 +128,19 @@ public class DocumentService {
         return documentDtoPage;
     }
 
+    @Transactional
+    public Page<DocumentDTO> findUserReceivedDocumentsBytTitle(String email, String title, Pageable pageable ){
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserReceivedDocumentsByTitle(email, title, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
 
+    @Transactional
+    public Page<DocumentDTO> findUserReceivedDocumentByDateRange(String email, Date startDate, Date endDate, Pageable pageable ){
+        Page<Document> documentPage = pagedDocumentRepository.findAllUserReceivedDocumentsDateRange(email, startDate, endDate, pageable);
+        final Page<DocumentDTO> documentDtoPage = documentPage.map(this::convertToDocumentDto);
+        return documentDtoPage;
+    }
 
     @Transactional
     public Page<DocumentDTO> listByPage(Pageable pageable) {

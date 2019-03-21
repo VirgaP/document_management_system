@@ -124,11 +124,20 @@ public class DocumentController {
     }
 
     @GetMapping("/{email}/{title}/all")
-    public Page<DocumentDTO> allDocumentsByTypePaged(@PathVariable final String email, @PathVariable final String title, Pageable pageable) {
+    public Page<DocumentDTO> allDocumentsByTitlePaged(@PathVariable final String email, @PathVariable final String title, Pageable pageable) {
         return documentService.findUserDocumentBytTitle(email, title, pageable);
     }
 
-//    @ResponseBody item getitem(@RequestParam Map<String, String> queryParameters) //alows optional parameters
+
+    @GetMapping("/received/{email}/{startDate}/{endDate}")
+    public Page<DocumentDTO> getUserReceivedDocumentsInDateRange(@PathVariable final String email, @PathVariable final Date startDate, @PathVariable final Date endDate, Pageable pageable) {
+        return documentService.findUserReceivedDocumentByDateRange(email, startDate, endDate, pageable);
+    }
+
+    @GetMapping("/received/{email}/{title}")
+    public Page<DocumentDTO> getUserReceivedDocumentsByTitlePaged(@PathVariable final String email, @PathVariable final String title, Pageable pageable) {
+        return documentService.findUserReceivedDocumentsBytTitle(email, title, pageable);
+    }
 
     @GetMapping("/{title}/all")
     public Page<DocumentDTO> allDocumentsByTypePaged(@PathVariable final String title, Pageable pageable) {

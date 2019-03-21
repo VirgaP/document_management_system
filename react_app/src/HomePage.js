@@ -9,6 +9,7 @@ import UserSearch from './Form/UserSearch';
 import reqwest from 'reqwest';
 import DocumentSearch from './Form/DocumentSearch';
 import UserDocumentSearch from './Form/UserDocumentSearch';
+import UserReceivedDocumentSearch from './Form/UserReceivedDocumentSearch';
 
 
 export class HomePage extends Component {
@@ -128,6 +129,9 @@ export class HomePage extends Component {
       }
       <div className="user-search-container">
       <UserDocumentSearch user={this.state.user}/>
+      </div>
+      <div className="user-search-container">
+      <UserReceivedDocumentSearch user={this.state.user}/>
       </div>
         <div className="container" id="homepage-download-btn">
           <div className="row">
