@@ -207,16 +207,16 @@ public class DocumentControllerTest {
         result = documentController.userRejectedDocumentCount(existingUser.getEmail());
         Assert.assertEquals(existingRejectedUserDocuments.size(), result);
     }
-
-    @Test
-    public void shouldCreateDocument() {
-        RequestDocument requestDocument = DocumentTestingUtils.randomRequestDocument();
-        documentController.createDocument(requestDocument);
-
-        List<Document> documents = documentRepository.findAll();
-        Assert.assertEquals(1, documents.size());
-        Assert.assertTrue(DocumentTestingUtils.matches(documents.get(0), requestDocument));
-    }
+//
+//    @Test
+//    public void shouldCreateDocument() {
+//        RequestDocument requestDocument = DocumentTestingUtils.randomRequestDocument();
+//        documentController.createDocument(requestDocument);
+//
+//        List<Document> documents = documentRepository.findAll();
+//        Assert.assertEquals(1, documents.size());
+//        Assert.assertTrue(DocumentTestingUtils.matches(documents.get(0), requestDocument));
+//    }
 
     @Test
     public void shouldLoadAllDocuments() {
